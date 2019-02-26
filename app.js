@@ -1,9 +1,3 @@
-
-
-
-
-
-
 window.onload = function() {
     const SCOPES = [
         "https://www.googleapis.com/auth/fitness.activity.read",
@@ -16,7 +10,6 @@ window.onload = function() {
       let accessToken = "";
       
       function gapiAllStreams(res) {
-        console.log(res);
         const endTime = String(Math.floor(Date.now() * Math.pow(10, 6)));
         const dataSetId = "0-"+endTime;
 
@@ -57,7 +50,6 @@ window.onload = function() {
           gapi.auth2.authorize(params, gapiAuthorizationResponse);
       }
 
-      console.log("hello")
       gapiLoaded();
 }
 

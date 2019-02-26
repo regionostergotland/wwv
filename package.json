@@ -1,0 +1,28 @@
+{
+  "name": "wwv",
+  "version": "0.0.1",
+  "description": "World Wide Vård health application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./scripts/start.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.ida.liu.se/davla860/kandidat_grupp5_kod.git"
+  },
+  "keywords": [
+    "Blockchain",
+    "Cryptocurrency",
+    "Innovative",
+    "Paradigmshift",
+    "Health",
+    "Well-being",
+    "Bleeding-Edge"
+  ],
+  "author": "Grupp 5",
+  "license": "MIT",
+  "devDependencies": {
+    "pushstate-server": "^3.1.0"
+  }
+}
