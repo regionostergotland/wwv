@@ -55,3 +55,6 @@ window.onload = function() {
 
 
 
+
+
+git filter-branch --force --index-filter 'git rm --cached --ignore-unmatch apikey.js' --prune-empty --tag-name-filter cat -- --all
