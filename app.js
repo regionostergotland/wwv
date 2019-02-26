@@ -15,54 +15,77 @@ function convertTime(unix_timestamp) {
   const mi = date.getMinutes();
   return [
     date.getFullYear(),
-    "-",
+    "/",
     (mm > 9 ? "" : "0") + mm,
     "/",
     (dd > 9 ? "" : "0") + dd,
-    " - ",
+    " ",
     (hh > 9 ? "" : "0") + hh,
     ":",
     (mi > 9 ? "" : "0") + mi
   ].join("");
 }
 
-function addListItem(startTime, endTime, value, list) {
-  
-  const ele = document.createElement("li");
-  ele.innerHTML = startTime + " - " + endTime + " - " + JSON.stringify(value);
-  list.appendChild(ele);
-  
+function addListItem(startTime, endTime, value, table) {
+  const tr = document.createElement("tr");
+  const start = document.createElement("td");
+  start.innerHTML = startTime;
+  const end = document.createElement("td");
+  end.innerHTML = endTime;
+  const val = document.createElement("td");
+  val.innerHTML = JSON.stringify(value);
+
+  tr.appendChild(start);
+  tr.appendChild(end);
+  tr.appendChild(val);
+  table.appendChild(tr);
 }
 
 function addEntry(data) {
-    
-    const list = document.createElement("ul");
-    const header = document.createElement("h2");
-    header.innerHTML = data.dataSourceId;
-    document.body.appendChild(header);
+  const container = document.createElement("div");
+
+  const header = document.createElement("h2");
+  const table = document.createElement("table");
+  const h1 = document.createElement("th");
+  h1.innerHTML = "Start Time";
+  const h2 = document.createElement("th");
+  h2.innerHTML = "End Time";
+  const h3 = document.createElement("th");
+  h3.innerHTML = "Value";
+  const tr = document.createElement("tr");
+  tr.appendChild(h1);
+  tr.appendChild(h2);
+  tr.appendChild(h3);
+  table.appendChild(tr);
+
+  header.innerHTML = data.dataSourceId;
   data.point.forEach(dataPoint => {
     addListItem(
-        convertTime(Number(dataPoint.startTimeNanos) / Math.pow(10, 6)),
-        convertTime(Number(dataPoint.endTimeNanos) / Math.pow(10, 6)),
-        dataPoint.value,
-        list
+      convertTime(Number(dataPoint.startTimeNanos) / Math.pow(10, 6)),
+      convertTime(Number(dataPoint.endTimeNanos) / Math.pow(10, 6)),
+      dataPoint.value,
+      table
     );
   });
-  document.body.appendChild(list);
+  container.appendChild(header);
+  container.appendChild(table);
+
+  container.classList.add("container");
+  document.body.appendChild(container);
 }
 
 function gapiAllStreams(res) {
   // UNIX start and end times.
-  const weekInMs =  7 * 24 * 3600 * 1000;
+  const weekInMs = 7 * 24 * 3600 * 1000;
 
   // convert to nanoSec and string the results
-  const startTime = String( ( Date.now() - weekInMs ) * Math.pow(10, 6) )
+  const startTime = String((Date.now() - weekInMs) * Math.pow(10, 6));
   const endTime = String(Math.floor(Date.now() * Math.pow(10, 6)));
   const dataSetId = startTime + "-" + endTime;
 
   // Iterate the datasources, and log the result to the console
   res.dataSource.forEach(source => {
-    if (source.dataStreamId.split(":")[0] === "raw"  || true) {
+    if (source.dataStreamId.split(":")[0] === "raw" || true) {
       const url =
         "https://www.googleapis.com/fitness/v1/users/me/dataSources/" +
         source.dataStreamId +
@@ -71,7 +94,6 @@ function gapiAllStreams(res) {
         "?access_token=" +
         accessToken;
 
-        
       fetch(url)
         .then(response => response.json())
         .then(addEntry)
