@@ -6,19 +6,26 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatToolbarModule } from '@angular/material';
 import { MatIconModule } from '@angular/material/icon';
 import { WwvToolbarComponent } from './wwv-toolbar/wwv-toolbar.component';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { WwvHomeComponent } from './wwv-home/wwv-home.component';
-import {MatCardModule} from '@angular/material/card';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatCardModule } from '@angular/material/card';
+import { MatGridListModule} from '@angular/material/grid-list';
 import { WwvSourcesComponent } from './wwv-sources/wwv-sources.component';
 import { AppRoutingModule } from './app-routing.module';
+import { WwvCategoryPickerComponent } from './wwv-category-picker/wwv-category-picker.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialogModule, MatNativeDateModule, } from "@angular/material";
 
 @NgModule({
   declarations: [
     AppComponent,
     WwvToolbarComponent,
     WwvHomeComponent,
-    WwvSourcesComponent
+    WwvSourcesComponent,
+    WwvCategoryPickerComponent
   ],
   imports: [
     BrowserModule,
@@ -28,7 +35,13 @@ import { AppRoutingModule } from './app-routing.module';
     MatButtonModule,
     MatCardModule,
     MatGridListModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDialogModule,
+    MatNativeDateModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,0 +1,32 @@
+<div class="centering">
+<div layout="row" layout-align="center center" class="card-height">
+
+  <mat-card class="example-card">
+    <mat-card-content *ngFor="let category of categories">
+      <section class="example-section">
+        <mat-checkbox class="example-margin">{{category}}</mat-checkbox>
+      </section>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="example-card">
+    <mat-card-content class="date-card">
+      <section class="example-section">
+        <mat-form-field>
+          <input matInput [matDatepicker]="start" placeholder="Startdatum">
+          <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+          <mat-datepicker #start></mat-datepicker>
+        </mat-form-field>
+      </section>
+      <section class="example-section">
+      <mat-form-field>
+        <input matInput [matDatepicker]="end" placeholder="Slutdatum">
+        <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
+        <mat-datepicker #end></mat-datepicker>
+      </mat-form-field>
+      </section>
+    </mat-card-content>
+  </mat-card>
+
+</div>
+</div>
