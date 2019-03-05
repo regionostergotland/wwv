@@ -10,10 +10,16 @@ export interface StateSpec {
     enum_opts: string[];
 }
 
+export interface State {
+    id: string;
+    input; // TODO string?
+}
+
 export interface CategorySpec {
     id: string;
     data: string[];
     states: StateSpec[];
+    // TODO localization / display string
 }
 
 export interface DataList {
@@ -24,13 +30,13 @@ export interface DataList {
 export interface RawData {
     time: string[]; // TODO datetime type?
     data: DataList[]; 
+    // TODO unit?
     // TODO granularity?
 }
 
 export interface ProcessedData {
-    time: string[];
-    data: DataList[];
-    states;
+    data: RawData;
+    states: State[];
 }
 
 export interface Category {
