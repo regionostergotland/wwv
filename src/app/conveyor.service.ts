@@ -81,12 +81,16 @@ export class Conveyor {
 
         // TODO merge to current raw (or use list of raws?)
         category.raw = platform.getData(categoryId, spec.data, start, end);
+        category.processed = {
+            "data" : category.raw,
+            "states" : null
+        };
     }
 
-    public getData(categoryId:string): RawData { // TODO ProcessedData
+    public getData(categoryId:string): ProcessedData {
         let cat = this.getCategory(categoryId);
         if (cat) {
-            return cat.raw;
+            return cat.processed;
         } else {
             return null;
         }
