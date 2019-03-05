@@ -4,7 +4,7 @@ import { Category, StateType, StateSpec,
 export class Ehr {
     private categories: CategorySpec[] = [
         {
-            "id" : "blood-pressure",
+            "id" : "blood-pressure", // TODO use IDs from archetype?
             "data" : ["systolic", "diastolic"],
             "states" : [
                 {
@@ -13,7 +13,6 @@ export class Ehr {
                     "enum_opts" : [ "standing", "lying" ],
                 }
             ]
-            
         },
         {
             "id" : "bodyweight",
