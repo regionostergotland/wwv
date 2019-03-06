@@ -4,7 +4,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 @Component({
   selector: 'app-wwv-category-picker',
   templateUrl: './wwv-category-picker.component.html',
-  styleUrls: ['./wwv-category-picker.component.css']
+  styleUrls: ['./wwv-category-picker.component.scss']
 })
 export class WwvCategoryPickerComponent implements OnInit {
 

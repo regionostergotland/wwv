@@ -4,7 +4,7 @@ import { Source } from '../source'
 @Component({
   selector: 'app-wwv-sources',
   templateUrl: './wwv-sources.component.html',
-  styleUrls: ['./wwv-sources.component.css']
+  styleUrls: ['./wwv-sources.component.scss']
 })
 export class WwvSourcesComponent implements OnInit {
 
