@@ -12,7 +12,7 @@ export interface StateSpec {
 
 export interface State {
     id: string;
-    input; // TODO string?
+    input: string; // TODO string?
 }
 
 export interface CategorySpec {
@@ -35,7 +35,7 @@ export interface RawData {
 }
 
 export interface ProcessedData {
-    data: RawData;
+    raw: RawData;
     states: State[];
 }
 

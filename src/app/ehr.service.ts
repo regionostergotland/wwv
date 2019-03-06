@@ -41,10 +41,43 @@ export class Ehr {
         return cats;
     }
 
-    public sendData(data: Category[]) {
-        // TODO fill template from processedData
-        console.log("sending:\n");
-        console.log(data);
+    public sendData(categories: Category[]) {
+        // TODO modify for actual template
+        let template: any = {
+            "ctx": {
+                "language": "sv",
+                "territory": "SE",
+            },
+            "self_monitor": {
+                "self_monitor": []
+            }
+        };
+
+        for (let i = 0; i < categories.length; i++) {
+            let cat = categories[i];
+
+            let arch: any = {};
+            arch.time = cat.processed.raw.time;
+            for (let j = 0; j < cat.processed.raw.data.length; j++) {
+                let data = cat.processed.raw.data[j];
+                arch[data.id] = data.values;
+            }
+
+            for (let j = 0; j < cat.processed.states.length; j++) {
+                let state = cat.processed.states[j];
+                arch[state.id] = state.input;
+            }
+
+            let template_cat: any = {};
+            template_cat[cat.spec.id] = [
+                { "any_event" : [ arch ] }
+            ];
+
+            template.self_monitor.self_monitor.push(template_cat);
+        }
+
+        console.log("sending:");
+        console.log(JSON.stringify(template, null, 2));
     }
 
     public authenticate() { }

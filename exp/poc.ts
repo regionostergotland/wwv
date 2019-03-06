@@ -13,4 +13,7 @@ conv.fetchData(platform, category, "0", "1");
 let data = conv.getData(category);
 console.log(data);
 
+data.states[0].input = "standing";
+conv.setData(category, data);
+
 conv.sendData();

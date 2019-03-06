@@ -1,4 +1,4 @@
-import { Category, CategorySpec, RawData, ProcessedData } from './shared/interface'
+import { Category, CategorySpec, State, RawData, ProcessedData } from './shared/interface'
 import { Ehr } from './ehr.service'
 import { Platform } from './platform.service'
 import { PlatformGoogleFit } from './google_fit.service'
@@ -70,30 +70,43 @@ export class Conveyor {
 
         let spec = this.ehr.getCategorySpec(categoryId);
         let category: Category = this.getCategory(categoryId);
+
         if (!category) {
+            let raw = platform.getData(categoryId, spec.data, start, end);
+            let states: State[] = [];
+            for (let i = 0; i < spec.states.length; i++) {
+                states.push({
+                    "id": spec.states[i].id,
+                    "input": ""
+                });
+            }
+
             category = {
                 "spec": spec,
-                "raw": null,
-                "processed": null,
+                "raw": raw,
+                "processed": {
+                    "raw" : raw,
+                    "states" : states,
+                },
             };
-            this.categories.push(category);
-        }
 
-        // TODO merge to current raw (or use list of raws?)
-        category.raw = platform.getData(categoryId, spec.data, start, end);
-        category.processed = {
-            "data" : category.raw,
-            "states" : null
-        };
+            this.categories.push(category);
+        } else {
+            // TODO merge to current raw/processed (or use list of raws?)
+        }
     }
 
-    public getData(categoryId:string): ProcessedData {
+    public getData(categoryId: string): ProcessedData {
         let cat = this.getCategory(categoryId);
         if (cat) {
             return cat.processed;
         } else {
             return null;
         }
+    }
+
+    public setData(categoryId: string, data: ProcessedData) {
+        this.getCategory(categoryId).processed = data;
     }
 
     public sendData() {
