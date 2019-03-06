@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 @Component({
-  selector: 'app-wwv-category-picker',
-  templateUrl: './wwv-category-picker.component.html',
-  styleUrls: ['./wwv-category-picker.component.scss']
+  selector: 'app-category-picker',
+  templateUrl: './category-picker.component.html',
+  styleUrls: ['./category-picker.component.scss']
 })
-export class WwvCategoryPickerComponent implements OnInit {
+export class CategoryPickerComponent implements OnInit {
 
   constructor(private adapter: DateAdapter<any>) {
     this.adapter.setLocale('sv');

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WwvSourcesComponent } from './wwv-sources.component';
+import { SourcesComponent } from './sources.component';
 
-describe('WwvSourcesComponent', () => {
-  let component: WwvSourcesComponent;
-  let fixture: ComponentFixture<WwvSourcesComponent>;
+describe('SourcesComponent', () => {
+  let component: SourcesComponent;
+  let fixture: ComponentFixture<SourcesComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WwvSourcesComponent ]
+      declarations: [ SourcesComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WwvSourcesComponent);
+    fixture = TestBed.createComponent(SourcesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
