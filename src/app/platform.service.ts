@@ -16,7 +16,12 @@ export abstract class Platform {
     public abstract getData(category: string, dataTypes: string[],
                             start: string, end: string): RawData;
 
-    public isImplemented(catSpec: CategorySpec): boolean {
+    // can be overridden to check if available for logged in user
+    public isAvailable(catSpec: CategorySpec): boolean {
+        return this.isImplemented(catSpec);
+    }
+
+    protected isImplemented(catSpec: CategorySpec): boolean {
         let impl = null;
         for (let i = 0; i < this.implemented.length; i++) {
             if (this.implemented[i].category == catSpec.id) {

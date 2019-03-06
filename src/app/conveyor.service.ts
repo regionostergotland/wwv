@@ -53,7 +53,7 @@ export class Conveyor {
         for (let i = 0; i < catsAll.length; i++ ) {
             let catId = catsAll[i];
             let spec: CategorySpec = this.ehr.getCategorySpec(catId);
-            if (platform.isImplemented(spec)) {
+            if (platform.isAvailable(spec)) {
                 catsAvailable.push(catId);
             }
         }

@@ -14,6 +14,6 @@ let data = conv.getData(category);
 console.log(data);
 
 data.states[0].input = "standing";
-conv.setData(category, data);
+//conv.setData(category, data); // changes by reference above
 
 conv.sendData();

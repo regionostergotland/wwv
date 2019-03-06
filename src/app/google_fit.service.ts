@@ -1,4 +1,4 @@
-import { RawData } from './shared/interface'
+import { CategorySpec, RawData } from './shared/interface'
 import { Platform } from './platform.service'
 
 export class PlatformGoogleFit extends Platform {
@@ -8,6 +8,12 @@ export class PlatformGoogleFit extends Platform {
         this.implemented.push(
             { category: "blood-pressure", data: ["systolic", "diastolic"] }
         );
+    }
+
+    // @override
+    public isAvailable(catSpec: CategorySpec): boolean {
+        // TODO check metadata if categories has any data
+        return this.isImplemented(catSpec);
     }
 
     public getData(category: string, dataTypes: string[],
