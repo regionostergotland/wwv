@@ -17,7 +17,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule, MatNativeDateModule, } from "@angular/material";
+import { MatDialogModule, MatNativeDateModule, } from '@angular/material';
+import { MatStepperModule } from '@angular/material/stepper';
+import { InfoComponent } from './info/info.component';
+import { HelpComponent } from './help/help.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,9 @@ import { MatDialogModule, MatNativeDateModule, } from "@angular/material";
     ToolbarComponent,
     HomeComponent,
     SourcesComponent,
-    CategoryPickerComponent
+    CategoryPickerComponent,
+    InfoComponent,
+    HelpComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +46,8 @@ import { MatDialogModule, MatNativeDateModule, } from "@angular/material";
     MatInputModule,
     MatFormFieldModule,
     MatDialogModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent]
