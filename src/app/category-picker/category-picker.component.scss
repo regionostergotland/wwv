@@ -1,4 +1,4 @@
-.example-card {
+  .example-card {
   max-width: 200px;
   margin-left: 20px;
   margin-right: 20px;
@@ -21,6 +21,13 @@
   justify-content: center;
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
 .date-card {
   height: 100%;
 }
@@ -40,5 +47,5 @@
 }
 
 .next-button {
-  margin: 10px 10px;
+  margin: 20px 20px;
 }

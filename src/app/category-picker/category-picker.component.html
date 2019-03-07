@@ -1,6 +1,7 @@
+<div class="column">
+  <p>Välj vilken typ av data du vill importera och mellan vilka datum</p>
 <div class="centering">
 <div layout="row" layout-align="center center" class="card-height">
-
   <mat-card class="example-card">
     <mat-card-content *ngFor="let category of categories">
       <section class="example-section">
@@ -30,10 +31,14 @@
 
 </div>
 
-<div class="next-button">
-  <!-- TODO change routerlink to what it should be (not home)   -->
-  <button *ngIf="startDate && endDate && chosenCategories.length > 0" mat-raised-button color="primary" routerLink="/home">Nästa steg</button>
-  <button *ngIf="!startDate || !endDate || chosenCategories.length === 0" mat-raised-button color="grey">Nästa steg</button>
+  <div class="next-button">
+    <!-- TODO change routerlink to what it should be (not home)   -->
+    <button *ngIf="startDate && endDate && chosenCategories.length > 0" mat-raised-button color="primary" routerLink="/home">Nästa steg</button>
+    <button *ngIf="!startDate || !endDate || chosenCategories.length === 0" mat-raised-button color="grey">Nästa steg</button>
+  </div>
+
 </div>
+
+
 
 </div>
