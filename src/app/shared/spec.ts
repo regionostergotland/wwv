@@ -1,17 +1,18 @@
-interface CategorySpec {
+export interface CategorySpec {
+    id: string,
     label: string,
     description: string,
     dataTypes: Map<string, DataType>
 }
 
-enum DataTypeEnum {
+export enum DataTypeEnum {
     TEXT,
     DATE_TIME,
     CODED_TEXT,
     QUANTITY
 }
 
-abstract class DataType {
+export abstract class DataType {
     readonly type: DataTypeEnum;
     readonly label: string;
     readonly description: string;
@@ -25,7 +26,7 @@ abstract class DataType {
     public abstract isValid(value: any): boolean;
 }
 
-class DataTypeDateTime extends DataType {
+export class DataTypeDateTime extends DataType {
     constructor(type: DataTypeEnum, label: string, description: string) {
         super(type, label, description);
     }
@@ -35,7 +36,7 @@ class DataTypeDateTime extends DataType {
     }
 }
 
-class DataTypeText extends DataType {
+export class DataTypeText extends DataType {
     constructor(type: DataTypeEnum, label: string, description: string) {
         super(type, label, description);
     }
@@ -45,13 +46,13 @@ class DataTypeText extends DataType {
     }
 }
 
-interface DataTypeCodedTextOpt {
+export interface DataTypeCodedTextOpt {
     readonly id: string;
     readonly label: string;
     readonly description: string;
 }
 
-class DataTypeCodedText extends DataTypeText {
+export class DataTypeCodedText extends DataTypeText {
     public readonly options: DataTypeCodedTextOpt[];
 
     constructor(type: DataTypeEnum, label: string, description: string,
@@ -68,7 +69,7 @@ class DataTypeCodedText extends DataTypeText {
     }
 }
 
-class DataTypeQuantity extends DataType {
+export class DataTypeQuantity extends DataType {
     public readonly unit: string;
     public readonly magnitude_min: number;
     public readonly magnitude_max: number;
@@ -89,7 +90,7 @@ class DataTypeQuantity extends DataType {
     }
 }
 
-class DataPoint {
+export class DataPoint {
     public removed: boolean;
 
     private values: Map<string, any>; 
@@ -137,14 +138,14 @@ class DataPoint {
     }
 }
 
-enum MathFunctionEnum {
+export enum MathFunctionEnum {
     ACTUAL,
     MEDIAN,
     MEAN,
     TOTAL,
 }
 
-class Category {
+export class Category {
     private original: DataPoint[];
     private width: number; // TODO special type
     private mathFunction: MathFunctionEnum;
@@ -170,42 +171,3 @@ class Category {
         this.mathFunction = mathFunction;
     }
 }
-
-let dystolic: DataTypeQuantity = new DataTypeQuantity(
-    DataTypeEnum.QUANTITY,
-    "Undertryck",
-    "Dystoliskt undertryck av blod",
-    "mm[Hg]", 0, 1000
-);
-
-let position: DataTypeCodedText = new DataTypeCodedText(
-    DataTypeEnum.CODED_TEXT,
-    "Position",
-    "Position vid mätning.",
-    [
-        {
-            "id": "standing", 
-            "label": "Stående",
-            "description": "notheunoehu"
-        },
-        {
-            "id": "lying",
-            "label": "Liggandes",
-            "description": "soetauhnotheunoehu"
-        }
-    ]
-);
-
-let blood: CategorySpec = {
-    "label" : "Blodtryck",
-    "description" : "onestuhosnehunoethu",
-    "dataTypes" : new Map<string, DataType>([
-        [ "dystolic", dystolic ],
-        [ "position", position ],
-    ])
-}
-
-let point = new DataPoint(blood);
-point.set("position", "standing");
-console.log(point.getValues());
-console.log(point.getDataType("position"));

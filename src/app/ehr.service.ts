@@ -1,48 +1,62 @@
-import { Category, StateType, StateSpec,
-         CategorySpec, ProcessedData } from './shared/interface'
+import { Category, CategorySpec, DataPoint } from './shared/spec'
 
 export class Ehr {
     private categories: CategorySpec[] = [
         {
-            "id" : "blood-pressure", // TODO use IDs from archetype?
-            "data" : ["systolic", "diastolic"],
-            "states" : [
-                {
-                    "id" : "position",
-                    "input_type" : StateType.ENUM,
-                    "enum_opts" : [ "standing", "lying" ],
-                }
-            ]
+            "id" : "blood-pressure",
+            "label" : "Blodtryck",
+            "description" : "onestuhosnehunoethu",
+            "dataTypes" : new Map<string, DataType>([
+                [ 
+                    "dystolic",
+                    new DataTypeQuantity(
+                        DataTypeEnum.QUANTITY,
+                        "Undertryck",
+                        "Dystoliskt undertryck av blod",
+                        "mm[Hg]", 0, 1000
+                    )
+                ],
+                [ 
+                    "position",
+                    new DataTypeCodedText(
+                        DataTypeEnum.CODED_TEXT,
+                        "Position",
+                        "Position vid mätning.",
+                        [
+                            {
+                                "id": "standing", 
+                                "label": "Stående",
+                                "description": "notheunoehu"
+                            },
+                            {
+                                "id": "lying",
+                                "label": "Liggandes",
+                                "description": "soetauhnotheunoehu"
+                            }
+                        ]
+                    )
+                ],
+            ])
         },
-        {
-            "id" : "bodyweight",
-            "data" : ["weight"],
-            "states" : [],
-        }
     ];
 
     public getCategorySpec(categoryId: string): CategorySpec {
-        for (let i = 0; i < this.categories.length; i++) {
-            let spec = this.categories[i];
-            if (spec.id = categoryId) {
-                return spec;
-            }
-        }
-        return null;
-        //return this.categories.find(e => e.id == categoryId);
+        return this.categories.find(e => e.id == categoryId);
     }
 
     public getCategories(): string[] {
         let cats = []
 
-        for (let i = 0; i < this.categories.length; i++) {
-            cats[i] = this.categories[i].id;
+        for (let cat of this.categories) {
+            cats.push(cat.id);
         }
+
         return cats;
     }
 
-    public sendData(categories: Category[]) {
+    public sendData(categoryId: string, points: DataPoints) {
         // TODO modify for actual template
+        /*
         let template: any = {
             "ctx": {
                 "language": "sv",
@@ -78,6 +92,7 @@ export class Ehr {
 
         console.log("sending:");
         console.log(JSON.stringify(template, null, 2));
+         */
     }
 
     public authenticate() { }
