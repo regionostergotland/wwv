@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,7 +18,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule, MatNativeDateModule, } from '@angular/material';
+import { MatDialogModule, MatNativeDateModule, } from "@angular/material";
 import { MatStepperModule } from '@angular/material/stepper';
 import { InfoComponent } from './info/info.component';
 import { HelpComponent } from './help/help.component';
@@ -34,6 +35,7 @@ import { HelpComponent } from './help/help.component';
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatIconModule,
