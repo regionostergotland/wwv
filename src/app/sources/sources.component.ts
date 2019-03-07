@@ -8,14 +8,22 @@ import { Source } from '../source';
 })
 export class SourcesComponent implements OnInit {
 
+  sources: Source[] = [
+    {
+      name: 'Google Fit',
+      imageUrl: 'https://www.gstatic.com/images/branding/product/1x/gfit_512dp.png',
+      routerLink: '/catpicker'
+    },
+    {
+      name: 'Withings',
+      imageUrl: 'http://resources.mynewsdesk.com/image/upload/c_limit,dpr_1.0,f_auto,h_700,q_auto,w_690/jymhygjz5t7hzld9qe6j.jpg',
+      routerLink: '/catpicker'
+    }
+  ];
+
   constructor() { }
 
   ngOnInit() {
   }
-
-  sources : Source[] = [
-    {name: 'Google Fit', imageUrl: 'https://www.gstatic.com/images/branding/product/1x/gfit_512dp.png'},
-    {name: 'Withings', imageUrl: 'http://resources.mynewsdesk.com/image/upload/c_limit,dpr_1.0,f_auto,h_700,q_auto,w_690/jymhygjz5t7hzld9qe6j.jpg'}
-  ];
 
 }
