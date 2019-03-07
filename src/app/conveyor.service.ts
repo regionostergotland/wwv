@@ -1,7 +1,7 @@
 import { Category, CategorySpec, DataPoint } from './shared/spec'
 import { Ehr } from './ehr.service'
 import { Platform } from './platform.service'
-import { PlatformGoogleFit } from './google_fit.service'
+import { PlatformGoogleFit } from './platform-google-fit.service'
 
 export class Conveyor {
     private readonly platforms: Map<string, Platform>;
