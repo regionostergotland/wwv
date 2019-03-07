@@ -6,6 +6,7 @@ import { CategoryPickerComponent } from './category-picker/category-picker.compo
 import { InfoComponent } from './info/info.component';
 import { HelpComponent} from './help/help.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import {HealthListItemsComponent} from './health-list-items/health-list-items.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'help', component: HelpComponent },
   { path: 'sidebar', component: SidebarComponent },
   { path: 'sidebar/:id', component: SidebarComponent },
+  { path: 'health-list', component: HealthListItemsComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
