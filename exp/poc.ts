@@ -10,10 +10,7 @@ console.log("available categories for " + platform + ": " + categories);
 let category = categories[0];
 
 conv.fetchData(platform, category, "0", "1");
-let data = conv.getData(category);
+let data = conv.getPoints(category);
 console.log(data);
-
-data.states[0].input = "standing";
-//conv.setData(category, data); // changes by reference above
 
 conv.sendData();

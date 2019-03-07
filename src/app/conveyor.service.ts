@@ -1,76 +1,56 @@
-import { Category, CategorySpec } from './shared/spec'
+import { Category, CategorySpec, DataPoint } from './shared/spec'
 import { Ehr } from './ehr.service'
 import { Platform } from './platform.service'
 import { PlatformGoogleFit } from './google_fit.service'
 
 export class Conveyor {
-    private platforms: Map<string, Platform>;
+    private readonly platforms: Map<string, Platform>;
     private categories: Map<string, Category>;
-    private ehr: Ehr = null;
+    private readonly ehr: Ehr;
 
     constructor() {
         this.ehr = new Ehr();
-        this.platforms.set("google-fit", new PlatformGoogleFit());
+        this.categories = new Map<string, Category>();
+        this.platforms = new Map<string, Platform>([
+            [ "google-fit", new PlatformGoogleFit() ]
+        ]);
     }
 
     public getPlatforms(): string[] {
-        return this.platforms.keys();
+        return Array.from(this.platforms.keys());
     }
 
     public getCategories(platformId: string): string[] {
-        let platform: Platform = this.platform.get(platformId);
-        let catsAvailable: string[] = [];
-        let catsAll: string[] = this.ehr.getCategories();
-
-        for (let catId of catsAll) {
-            let spec: CategorySpec = this.ehr.getCategorySpec(catId);
-            if (platform.isAvailable(spec)) {
-                catsAvailable.push(catId);
-            }
-        }
-
-        return catsAvailable;
+        let platform: Platform = this.platforms.get(platformId);
+        let categoryIds: string[] = this.ehr.getCategories();
+        return categoryIds.filter(id => platform.isAvailable(id));
     }
 
     public fetchData(platformId: string, categoryId: string,
                      start: string, end: string) {
-        /*
-        let platform = this.getPlatform(platformId);
-        if (!platform) {
-            return;
+        if (!this.platforms.has(platformId)) {
+            throw TypeError("platform "+platformId+"not available");
+        }
+        if (!this.categories.has(categoryId)) {
+            this.categories.set(categoryId, new Category());
         }
 
+        let platform = this.platforms.get(platformId);
         let spec = this.ehr.getCategorySpec(categoryId);
-        let category: Category = this.getCategory(categoryId);
+        let dataPoints = platform.getData(spec, start, end);
+        let category = this.categories.get(categoryId);
 
-        if (!category) {
-            let raw = platform.getData(categoryId, spec.data, start, end);
-            let states: State[] = [];
-            for (let i = 0; i < spec.states.length; i++) {
-                states.push({
-                    "id": spec.states[i].id,
-                    "input": ""
-                });
-            }
-
-            category = {
-                "spec": spec,
-                "raw": raw,
-                "processed": {
-                    "raw" : raw,
-                    "states" : states,
-                },
-            };
-
-            this.categories.push(category);
-        } else {
-            // TODO merge to current raw/processed (or use list of raws?)
-        }
-         */
+        category.addPoints(dataPoints);
     }
 
-    public getPoints(categoryId: string): DataPoints[] {
-        return this.categories.get(categoryId).getPoints();
+    public getPoints(categoryId: string): DataPoint[] {
+        let category = this.categories.get(categoryId);
+
+        if (category) {
+            return category.getPoints();
+        } else {
+            throw TypeError("category with id "+categoryId+" not available.");
+        }
     }
 
     public addPoint(categoryId: string, point: DataPoint) {
@@ -84,3 +64,5 @@ export class Conveyor {
         }
     }
 }
+
+let conveyor = new Conveyor();

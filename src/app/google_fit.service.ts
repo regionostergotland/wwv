@@ -1,10 +1,11 @@
-import { DataPoint } from './shared/spec'
+import { DataPoint, CategorySpec } from './shared/spec'
 import { Platform } from './platform.service'
 
 export class PlatformGoogleFit extends Platform {
     constructor() {
+        super();
         this.implemented.push(
-            { category: "blood-pressure", data: ["time", "systolic", "diastolic"] }
+            { category: "blood-pressure", dataTypes: ["time", "systolic", "diastolic"] }
         );
     }
 
@@ -14,16 +15,27 @@ export class PlatformGoogleFit extends Platform {
         return this.isImplemented(categoryId);
     }
 
-    public getData(category: string, dataTypes: string[],
+    public getData(categorySpec: CategorySpec,
                    start: string, end: string): DataPoint[] {
-        if (category === 'blood-pressure') {
-            return {
-                time: ["123", "124"],
-                data: [
-                    { "id" : "systolic", "values" : [ 120, 140 ] },
-                    { "id" : "diastolic", "values" : [ 140, 160 ] }
-                ]
-            }
+        if (categorySpec.id === 'blood-pressure') {
+            return [
+                new DataPoint(categorySpec,
+                    [
+                        [ "time", new Date() ],
+                        [ "systolic", 10 ],
+                        [ "diastolic", 20 ],
+                    ]
+                ),
+                new DataPoint(categorySpec,
+                    [
+                        [ "time", new Date() ],
+                        [ "systolic", 10 ],
+                        [ "diastolic", 20 ],
+                    ]
+                )
+            ];
+        } else {
+            throw TypeError("unimplemented");
         }
     }
 }

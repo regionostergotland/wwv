@@ -27,8 +27,8 @@ export abstract class DataType {
 }
 
 export class DataTypeDateTime extends DataType {
-    constructor(type: DataTypeEnum, label: string, description: string) {
-        super(type, label, description);
+    constructor(label: string, description: string) {
+        super(DataTypeEnum.DATE_TIME, label, description);
     }
 
     public isValid(value: any): boolean {
@@ -37,8 +37,8 @@ export class DataTypeDateTime extends DataType {
 }
 
 export class DataTypeText extends DataType {
-    constructor(type: DataTypeEnum, label: string, description: string) {
-        super(type, label, description);
+    constructor(label: string, description: string) {
+        super(DataTypeEnum.TEXT, label, description);
     }
 
     public isValid(value: any): boolean {
@@ -52,12 +52,12 @@ export interface DataTypeCodedTextOpt {
     readonly description: string;
 }
 
-export class DataTypeCodedText extends DataTypeText {
+export class DataTypeCodedText extends DataType {
     public readonly options: DataTypeCodedTextOpt[];
 
-    constructor(type: DataTypeEnum, label: string, description: string,
+    constructor(label: string, description: string,
                 options: DataTypeCodedTextOpt[]) {
-        super(type, label, description);
+        super(DataTypeEnum.CODED_TEXT, label, description);
         this.options = options;
     }
 
@@ -74,9 +74,9 @@ export class DataTypeQuantity extends DataType {
     public readonly magnitude_min: number;
     public readonly magnitude_max: number;
 
-    constructor(type: DataTypeEnum, label: string, description: string,
+    constructor(label: string, description: string,
                 unit: string, magnitude_min: number, magnitude_max: number) {
-        super(type, label, description);
+        super(DataTypeEnum.QUANTITY, label, description);
         this.unit = unit;
         this.magnitude_min = magnitude_min;
         this.magnitude_max = magnitude_max;
@@ -128,7 +128,9 @@ export class DataPoint {
     }
 
     public setMultiple(values) {
-        // TODO
+        for (let [typeId, value] of values) {
+            this.set(typeId, value);
+        }
     }
 
     public getCodedTextOptions(typeId: string): DataTypeCodedTextOpt[] {
@@ -146,9 +148,12 @@ export enum MathFunctionEnum {
 }
 
 export class Category {
-    private original: DataPoint[];
+    private original: DataPoint[] = [];
     private width: number; // TODO special type
     private mathFunction: MathFunctionEnum;
+    // TODO store category spec?
+
+    constructor() { }
 
     public getPoints(): DataPoint[] {
         // TODO process
@@ -156,11 +161,14 @@ export class Category {
     }
 
     public addPoint(point: DataPoint): void {
+        // TODO check if points of category type
         this.original.push(point);
     }
 
     public addPoints(points: DataPoint[]): void {
-        this.original.push.apply(points);
+        for (let point of points) {
+            this.addPoint(point);
+        }
     }
 
     public setWidth(width: number): void {

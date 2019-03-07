@@ -1,4 +1,7 @@
-import { Category, CategorySpec, DataPoint } from './shared/spec'
+import { Category, CategorySpec, DataPoint,
+         DataTypeEnum, DataType,
+         DataTypeDateTime, DataTypeQuantity,
+         DataTypeCodedText } from './shared/spec'
 
 export class Ehr {
     private categories: CategorySpec[] = [
@@ -8,18 +11,31 @@ export class Ehr {
             "description" : "onestuhosnehunoethu",
             "dataTypes" : new Map<string, DataType>([
                 [ 
-                    "dystolic",
+                    "time",
+                    new DataTypeDateTime(
+                        "Tid",
+                        "Tidpunkt vid mätning",
+                    )
+                ],
+                [ 
+                    "systolic",
                     new DataTypeQuantity(
-                        DataTypeEnum.QUANTITY,
+                        "Övertryck",
+                        "Systoliskt undertryck av blod",
+                        "mm[Hg]", 0, 1000
+                    )
+                ],
+                [ 
+                    "diastolic",
+                    new DataTypeQuantity(
                         "Undertryck",
-                        "Dystoliskt undertryck av blod",
+                        "Diastoliskt undertryck av blod",
                         "mm[Hg]", 0, 1000
                     )
                 ],
                 [ 
                     "position",
                     new DataTypeCodedText(
-                        DataTypeEnum.CODED_TEXT,
                         "Position",
                         "Position vid mätning.",
                         [
@@ -54,8 +70,7 @@ export class Ehr {
         return cats;
     }
 
-    public sendData(categoryId: string, points: DataPoints) {
-        // TODO modify for actual template
+    public sendData(categoryId: string, points: DataPoint[]) {
         /*
         let template: any = {
             "ctx": {
