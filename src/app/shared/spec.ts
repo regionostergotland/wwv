@@ -1,132 +1,128 @@
-// SPECIFICATIONS
-
-export interface CategorySpec {
-    id: string,
+interface CategorySpec {
     label: string,
     description: string,
-    dataTypes: DataType[]
+    dataTypes: Map<string, DataType>
 }
 
 enum DataTypeEnum {
-    DV_TEXT,
-    DV_CODED_TEXT,
-    DV_QUANTITY
+    TEXT,
+    DATE_TIME,
+    CODED_TEXT,
+    QUANTITY
 }
 
-export interface DataType {
-    id: string;
-    type: DataTypeEnum;
-}
+abstract class DataType {
+    readonly type: DataTypeEnum;
+    readonly label: string;
+    readonly description: string;
 
-export interface DataTypeText extends DataType {}
-
-export interface DataTypeCodedTextOpt {
-    id: string;
-    label: string;
-    description: string;
-}
-
-export interface DataTypeCodedText extends DataTypeText {
-    options: DataTypeCodedTextOpt[];
-}
-
-export interface DataTypeQuantity extends DataType {
-    unit: string;
-    magnitude_min: number;
-    magnitute_max: number;
-}
-
-// DATA STRUCTURES
-
-    /*
-export interface Category {
-    point {
-        dystolic: 52
-        systolic: 344
-        time: igår
-        position: hej hej
+    constructor(type: DataTypeEnum, label: string, description: string) {
+        this.type = type;
+        this.label = label;
+        this.description = description;
     }
 
-    points: point[];
+    public abstract isValid(value: any): boolean;
 }
-     */
 
-    /*
-class Category {
-    private spec: categorySpec;
-    private points: any[];
-
-    constructor(catSpec: CategorySpec) {
-        this.spec = catSpec;
+class DataTypeDateTime extends DataType {
+    constructor(type: DataTypeEnum, label: string, description: string) {
+        super(type, label, description);
     }
 
-    public addPoint(point: DataPoint): void {
-        // validation
+    public isValid(value: any): boolean {
+        return (value instanceof Date);
     }
 }
-     */
+
+class DataTypeText extends DataType {
+    constructor(type: DataTypeEnum, label: string, description: string) {
+        super(type, label, description);
+    }
+
+    public isValid(value: any): boolean {
+        return (typeof value === "string");
+    }
+}
+
+interface DataTypeCodedTextOpt {
+    readonly id: string;
+    readonly label: string;
+    readonly description: string;
+}
+
+class DataTypeCodedText extends DataTypeText {
+    public readonly options: DataTypeCodedTextOpt[];
+
+    constructor(type: DataTypeEnum, label: string, description: string,
+                options: DataTypeCodedTextOpt[]) {
+        super(type, label, description);
+        this.options = options;
+    }
+
+    public isValid(value: any): boolean {
+        if (typeof value !== "string") {
+            return false;
+        }
+        return this.options.some(e => e.id === value);
+    }
+}
+
+class DataTypeQuantity extends DataType {
+    public readonly unit: string;
+    public readonly magnitude_min: number;
+    public readonly magnitude_max: number;
+
+    constructor(type: DataTypeEnum, label: string, description: string,
+                unit: string, magnitude_min: number, magnitude_max: number) {
+        super(type, label, description);
+        this.unit = unit;
+        this.magnitude_min = magnitude_min;
+        this.magnitude_max = magnitude_max;
+    }
+
+    public isValid(value: any): boolean {
+        if (typeof value !== "number") {
+            return false;
+        }
+        return this.magnitude_min <= value && value <= this.magnitude_max;
+    }
+}
 
 class DataPoint {
+    public removed: boolean;
+
     private values: Map<string, any>; 
-    private types: Map<string, DataType>;
+    private readonly types: Map<string, DataType>; 
 
     constructor(catSpec: CategorySpec, values=[]) {
-        this.types = new Map<string, DataType>();
         this.values = new Map<string, any>();
-        for (let i = 0; i < catSpec.dataTypes.length; i++) {
-            let dataType: DataType = catSpec.dataTypes[i];
-            this.types.set(dataType.id, dataType);
-            this.values.set(dataType.id, null);
+        this.types = catSpec.dataTypes;
+
+        for (let id of catSpec.dataTypes.keys()) {
+            this.values.set(id, null)
         }
 
         this.setMultiple(values);
     }
 
-    public getValues(typeId: string): object {
-        return Object.create(this.values);
+    public getValues(): object {
+        return new Map(this.values);
     }
 
-    private static isValid(dataType: DataType, value: any) {
-        let validators: Map<DataTypeEnum, any> = new Map(
-            [
-                [ DataTypeEnum.DV_TEXT,         DataPoint.isValidText ],
-                [ DataTypeEnum.DV_CODED_TEXT,   DataPoint.isValidCodedText ],
-                [ DataTypeEnum.DV_QUANTITY ,    DataPoint.isValidQuantity ],
-            ]
-        );
-        return validators.get(dataType.type)(dataType, value);
+    public getValue(typeId: string): any {
+        return this.values.get(typeId);
     }
 
-    private static isValidText(_: DataType, value: any): boolean {
-        return (typeof value === "string");
-    }
-
-    private static isValidCodedText(dataType: DataTypeCodedText,
-                                    value: any): boolean {
-        if (typeof value !== "string") {
-            return false;
-        }
-        return dataType.options.some(e => e.id === value);
-    }
-
-    private static isValidQuantity(dataType: DataTypeQuantity,
-                                  value: any): boolean {
-        if (typeof value !== "number") {
-            return false;
-        }
-        return dataType.magnitude_min <= value && 
-                                         value <= dataType.magnitute_max;
+    public getDataType(typeId: string): DataType {
+        return this.types.get(typeId);
     }
 
     public set(typeId: string, value: any) {
-        if (!this.values.has(typeId)) {
-            throw new TypeError("data type '" + typeId +
-                                "' does not exist in point");
-        }
-
-        let dataType: DataType = this.types.get(typeId);
-        if (!DataPoint.isValid(dataType, value)) {
-            throw new TypeError("invalid value for datatype");
+        if (this.types.get(typeId).isValid(value)) {
+            this.values.set(typeId, value)
+        } else {
+            throw TypeError("invalid type");
         }
     }
 
@@ -141,18 +137,52 @@ class DataPoint {
     }
 }
 
-let dystolic: DataTypeQuantity = {
-    "id" : "dystolic",
-    "type" : DataTypeEnum.DV_QUANTITY,
-    "unit" : "mm[Hg]",
-    "magnitude_min" : 0,
-    "magnitute_max" : 1000,
+enum MathFunctionEnum {
+    ACTUAL,
+    MEDIAN,
+    MEAN,
+    TOTAL,
 }
 
-let position: DataTypeCodedText = {
-    "id" : "position",
-    "type" : DataTypeEnum.DV_CODED_TEXT,
-    "options" : [ 
+class Category {
+    private original: DataPoint[];
+    private width: number; // TODO special type
+    private mathFunction: MathFunctionEnum;
+
+    public getPoints(): DataPoint[] {
+        // TODO process
+        return this.original;
+    }
+
+    public addPoint(point: DataPoint): void {
+        this.original.push(point);
+    }
+
+    public addPoints(points: DataPoint[]): void {
+        this.original.push.apply(points);
+    }
+
+    public setWidth(width: number): void {
+        this.width = width;
+    }
+
+    public setMathFunction(mathFunction: MathFunctionEnum): void {
+        this.mathFunction = mathFunction;
+    }
+}
+
+let dystolic: DataTypeQuantity = new DataTypeQuantity(
+    DataTypeEnum.QUANTITY,
+    "Undertryck",
+    "Dystoliskt undertryck av blod",
+    "mm[Hg]", 0, 1000
+);
+
+let position: DataTypeCodedText = new DataTypeCodedText(
+    DataTypeEnum.CODED_TEXT,
+    "Position",
+    "Position vid mätning.",
+    [
         {
             "id": "standing", 
             "label": "Stående",
@@ -163,16 +193,19 @@ let position: DataTypeCodedText = {
             "label": "Liggandes",
             "description": "soetauhnotheunoehu"
         }
-    ],
-}
+    ]
+);
 
 let blood: CategorySpec = {
-    "id" : "blood-pressure",
     "label" : "Blodtryck",
     "description" : "onestuhosnehunoethu",
-    "dataTypes" : [ dystolic, position ]
+    "dataTypes" : new Map<string, DataType>([
+        [ "dystolic", dystolic ],
+        [ "position", position ],
+    ])
 }
 
-let point: DataPoint = new DataPoint(blood);
-point.set("dystolic", 10);
+let point = new DataPoint(blood);
 point.set("position", "standing");
+console.log(point.getValues());
+console.log(point.getDataType("position"));
