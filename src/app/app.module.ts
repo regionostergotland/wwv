@@ -18,10 +18,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule, MatNativeDateModule, } from "@angular/material";
+import { MatDialogModule, MatNativeDateModule, } from '@angular/material';
 import { MatStepperModule } from '@angular/material/stepper';
 import { InfoComponent } from './info/info.component';
 import { HelpComponent } from './help/help.component';
+import { MatListModule } from '@angular/material/list';
+import { HealthListItemsComponent } from './health-list-items/health-list-items.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { HelpComponent } from './help/help.component';
     SourcesComponent,
     CategoryPickerComponent,
     InfoComponent,
-    HelpComponent
+    HelpComponent,
+    HealthListItemsComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,8 @@ import { HelpComponent } from './help/help.component';
     MatFormFieldModule,
     MatDialogModule,
     MatNativeDateModule,
-    MatStepperModule
+    MatStepperModule,
+    MatListModule
   ],
   providers: [],
   bootstrap: [AppComponent]
