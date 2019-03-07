@@ -9,7 +9,6 @@ import { WwvHomeComponent } from './wwv-home/wwv-home.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ListViewComponent } from './list-view/list-view.component';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
