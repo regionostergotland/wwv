@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 const listItems: ListItem[] = [
   {header: 'Blodtryck',
@@ -65,6 +65,9 @@ const listItems: ListItem[] = [
   styleUrls: ['./health-list-items.component.scss']
 })
 export class HealthListItemsComponent implements OnInit {
+
+  @Input() selectedCategory: string;
+
   dataSource = listItems;
   displayedColumns: string[] = [];
   constructor() {
@@ -77,6 +80,7 @@ export class HealthListItemsComponent implements OnInit {
 
   ngOnInit() {
   }
+
 }
 
 
@@ -88,10 +92,4 @@ export class ListItemPart {
 export class ListItem {
   header: string;
   parts: ListItemPart[];
-}
-
-export class HealthList {
-  header: string;
-  data: string[];
-  comps: number[];
 }

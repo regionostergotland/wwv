@@ -9,6 +9,7 @@ import { NgModule }             from '@angular/core';
 export class SidebarComponent implements OnInit {
 
   title = "Kategorier";
+  selectedCategory: String;
 
   userCategories: string[] = [
     'blood pressure',
@@ -19,6 +20,10 @@ export class SidebarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+  }
+
+  selectCategory(category: String): void {
+    this.selectedCategory = category;
   }
 
 

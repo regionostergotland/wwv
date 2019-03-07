@@ -3,23 +3,28 @@
   <mat-sidenav #sidenav #drawer mode="side" opened role="navigation" autosize class="example-sidenav">
 
     <mat-nav-list>
-      <h2>{{title}}</h2>
-      <mat-divider></mat-divider>
-      <div *ngFor="let category of userCategories">
-        <mat-list-item routerLink="/sidebar/{{category}}">{{category}}</mat-list-item>
 
+      <mat-list-item (click)="selectCategory(None)">
+        <h2>{{title}}</h2>
+      </mat-list-item>
+
+      <mat-divider></mat-divider>
+
+      <div *ngFor="let category of userCategories">
+        <mat-list-item (click)="selectCategory(category)" routerLink="/sidebar/{{category}}">{{category}}</mat-list-item>
         <mat-divider></mat-divider>
       </div>
     </mat-nav-list>
 
-    <button mat-stroked-button color="accent">Lägg till egen kategori</button>
-    <button mat-stroked-button color="accent">Lägg till app-data</button>
+    <button class="margin" mat-stroked-button color="accent">Lägg till egen kategori</button>
+    <button class="margin" mat-stroked-button color="accent">Lägg till app-data</button>
 
   </mat-sidenav>
 
   <mat-sidenav-content>
 
     <!-- här kommer listor vara -->
+    <app-health-list-items *ngIf="selectedCategory" [selectedCategory]="selectedCategory"></app-health-list-items>
 
   </mat-sidenav-content>
 
