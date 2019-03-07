@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Source } from '../source'
+import { Source } from '../source';
 
 @Component({
-  selector: 'app-wwv-sources',
-  templateUrl: './wwv-sources.component.html',
-  styleUrls: ['./wwv-sources.component.scss']
+  selector: 'app-sources',
+  templateUrl: './sources.component.html',
+  styleUrls: ['./sources.component.scss']
 })
-export class WwvSourcesComponent implements OnInit {
+export class SourcesComponent implements OnInit {
 
   constructor() { }
 

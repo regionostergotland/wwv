@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WwvHomeComponent } from './wwv-home.component';
+import { WwvCategoryPickerComponent } from './wwv-category-picker.component';
 
-describe('WwvHomeComponent', () => {
-  let component: WwvHomeComponent;
-  let fixture: ComponentFixture<WwvHomeComponent>;
+describe('CategoryPickerComponent', () => {
+  let component: WwvCategoryPickerComponent;
+  let fixture: ComponentFixture<WwvCategoryPickerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ WwvHomeComponent ]
+      declarations: [ WwvCategoryPickerComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(WwvHomeComponent);
+    fixture = TestBed.createComponent(WwvCategoryPickerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
