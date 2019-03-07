@@ -1,10 +1,11 @@
+<div class="column">
+  <p>Välj vilken typ av data du vill importera och mellan vilka datum</p>
 <div class="centering">
 <div layout="row" layout-align="center center" class="card-height">
-
   <mat-card class="example-card">
     <mat-card-content *ngFor="let category of categories">
       <section class="example-section">
-        <mat-checkbox class="example-margin">{{category}}</mat-checkbox>
+        <mat-checkbox class="example-margin" (change)="updateChosenCategories(category, $event)">{{category}}</mat-checkbox>
       </section>
     </mat-card-content>
   </mat-card>
@@ -13,14 +14,14 @@
     <mat-card-content class="date-card">
       <section class="example-section">
         <mat-form-field>
-          <input matInput [matDatepicker]="start" placeholder="Startdatum">
+          <input matInput [(ngModel)]="startDate" [matDatepicker]="start" placeholder="Startdatum">
           <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
           <mat-datepicker #start></mat-datepicker>
         </mat-form-field>
       </section>
       <section class="example-section">
       <mat-form-field>
-        <input matInput [matDatepicker]="end" placeholder="Slutdatum">
+        <input matInput [(ngModel)]="endDate" [matDatepicker]="end" placeholder="Slutdatum">
         <mat-datepicker-toggle matSuffix [for]="end"></mat-datepicker-toggle>
         <mat-datepicker #end></mat-datepicker>
       </mat-form-field>
@@ -29,4 +30,15 @@
   </mat-card>
 
 </div>
+
+  <div class="next-button">
+    <!-- TODO change routerlink to what it should be (not home)   -->
+    <button *ngIf="startDate && endDate && chosenCategories.length > 0" mat-raised-button color="primary" routerLink="/sidebar">Nästa steg</button>
+    <button *ngIf="!startDate || !endDate || chosenCategories.length === 0" mat-raised-button color="grey">Nästa steg</button>
+  </div>
+
+</div>
+
+
+
 </div>

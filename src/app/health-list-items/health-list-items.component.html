@@ -1,0 +1,8 @@
+<mat-list role="list" *ngFor="let items of listItems">
+  <mat-list-item>
+    <div *ngFor="let itemPart of items.parts" style="margin-right: 5px">
+      <div *ngIf="itemPart.comp === 1"> <mat-form-field><input matInput placeholder={{itemPart.data}}></mat-form-field> </div>
+      <div *ngIf="itemPart.comp === 2"> <p>{{itemPart.data}}</p> </div>
+    </div>
+  </mat-list-item>
+</mat-list>

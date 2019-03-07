@@ -1,11 +1,10 @@
-.example-card {
+  .example-card {
   max-width: 200px;
   margin-left: 20px;
   margin-right: 20px;
   margin-top: 20px;
   text-align: center;
   flex-direction: column;
-  text-align: center;
 }
 
 .item-card-container {
@@ -19,6 +18,13 @@
 .centering {
   display: flex;
   justify-content: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .date-card {
@@ -37,4 +43,8 @@
 
 .example-margin {
   margin: 0 10px;
+}
+
+.next-button {
+  margin: 20px 20px;
 }
