@@ -1,3 +1,5 @@
+<h1>{{selectedCategory}}</h1>
+
 <mat-list role="list" *ngFor="let items of listItems">
   <mat-list-item>
     <div *ngFor="let itemPart of items.parts" style="margin-right: 5px">
@@ -6,3 +8,33 @@
     </div>
   </mat-list-item>
 </mat-list>
+
+<table mat-table [dataSource]="dataSource[0].parts" class="mat-elevation-z8">
+
+  <!-- TODO fix the incredibly ugly code here, just awful -->
+
+  <ng-container *ngFor="let item of dataSource" matColumnDef={{item.header}}>
+    <th mat-header-cell *matHeaderCellDef> {{item.header}} </th>
+    <td mat-cell *matCellDef="let part; let i = index;">
+      <div *ngIf="item.parts[i].comp === 1">
+        <p> {{item.parts[i].data}} </p>
+      </div>
+      <div *ngIf="item.parts[i].comp === 2">
+        <mat-form-field><input matInput placeholder={{item.parts[i].data}}></mat-form-field>
+      </div>
+      <div *ngIf="item.parts[i].comp === 3">
+        <mat-form-field>
+          <mat-select placeholder={{item.parts[i].data}}>
+            <mat-option *ngFor="let option of item.parts[i].data.split(',')" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+

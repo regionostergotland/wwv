@@ -6,6 +6,8 @@ import { CategoryPickerComponent } from './category-picker/category-picker.compo
 import { InfoComponent } from './info/info.component';
 import { HelpComponent} from './help/help.component';
 import { InspectionComponent} from './inspection/inspection.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import {HealthListItemsComponent} from './health-list-items/health-list-items.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -14,11 +16,14 @@ const routes: Routes = [
   { path: 'info', component: InfoComponent },
   { path: 'help', component: HelpComponent },
   { path: 'inspection', component: InspectionComponent },
+  { path: 'sidebar', component: SidebarComponent },
+  { path: 'sidebar/:id', component: SidebarComponent },
+  { path: 'health-list', component: HealthListItemsComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes) ],
+  imports: [ RouterModule.forRoot(routes), RouterModule ],
   exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

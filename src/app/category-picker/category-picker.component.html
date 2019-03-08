@@ -33,7 +33,7 @@
 
   <div class="next-button">
     <!-- TODO change routerlink to what it should be (not home)   -->
-    <button *ngIf="startDate && endDate && chosenCategories.length > 0" mat-raised-button color="primary" routerLink="/home">Nästa steg</button>
+    <button *ngIf="startDate && endDate && chosenCategories.length > 0" mat-raised-button color="primary" routerLink="/sidebar">Nästa steg</button>
     <button *ngIf="!startDate || !endDate || chosenCategories.length === 0" mat-raised-button color="grey">Nästa steg</button>
   </div>
 

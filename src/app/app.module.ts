@@ -3,30 +3,54 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatToolbarModule } from '@angular/material';
-import { MatIconModule } from '@angular/material/icon';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import { MatButtonModule } from '@angular/material/button';
-import { HomeComponent } from './home/home.component';
-import { MatCardModule } from '@angular/material/card';
-import { MatGridListModule} from '@angular/material/grid-list';
 import { SourcesComponent } from './sources/sources.component';
+import { HomeComponent } from './home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { CategoryPickerComponent } from './category-picker/category-picker.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatDialogModule, MatNativeDateModule, } from '@angular/material';
-import { MatStepperModule } from '@angular/material/stepper';
 import { InfoComponent } from './info/info.component';
 import { HelpComponent } from './help/help.component';
-import { MatListModule } from '@angular/material/list';
 import { HealthListItemsComponent } from './health-list-items/health-list-items.component';
 import { InspectionComponent } from './inspection/inspection.component';
-import { MatTableModule } from '@angular/material/table';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { MatAutocompleteModule,
+    MatBadgeModule,
+    MatBottomSheetModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatChipsModule,
+    MatDatepickerModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatExpansionModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
+    MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
+    MatStepperModule,
+    MatTableModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatTreeModule,
+    MatFormFieldModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -38,28 +62,53 @@ import { MatExpansionModule } from '@angular/material/expansion';
     InfoComponent,
     HelpComponent,
     HealthListItemsComponent,
-    InspectionComponent
+    InspectionComponent,
+    SidebarComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatButtonModule,
-    MatCardModule,
-    MatGridListModule,
     AppRoutingModule,
+    FormsModule,
+
+    MatAutocompleteModule,
+    MatBadgeModule,
+    MatBottomSheetModule,
+    MatButtonModule,
+    MatButtonToggleModule,
+    MatCardModule,
     MatCheckboxModule,
+    MatChipsModule,
     MatDatepickerModule,
-    MatInputModule,
-    MatFormFieldModule,
     MatDialogModule,
+    MatDividerModule,
+    MatGridListModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatMenuModule,
     MatNativeDateModule,
+    MatPaginatorModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
+    MatRadioModule,
+    MatRippleModule,
+    MatSelectModule,
+    MatSidenavModule,
+    MatSliderModule,
+    MatSlideToggleModule,
+    MatSnackBarModule,
+    MatSortModule,
     MatStepperModule,
     MatListModule,
-    MatTableModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTabsModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatTreeModule,
+    MatFormFieldModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
