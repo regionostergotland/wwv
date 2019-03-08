@@ -5,6 +5,7 @@ import { SourcesComponent } from './sources/sources.component';
 import { CategoryPickerComponent } from './category-picker/category-picker.component';
 import { InfoComponent } from './info/info.component';
 import { HelpComponent} from './help/help.component';
+import { InspectionComponent} from './inspection/inspection.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'catpicker', component: CategoryPickerComponent },
   { path: 'info', component: InfoComponent },
   { path: 'help', component: HelpComponent },
+  { path: 'inspection', component: InspectionComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 

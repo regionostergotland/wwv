@@ -24,6 +24,9 @@ import { InfoComponent } from './info/info.component';
 import { HelpComponent } from './help/help.component';
 import { MatListModule } from '@angular/material/list';
 import { HealthListItemsComponent } from './health-list-items/health-list-items.component';
+import { InspectionComponent } from './inspection/inspection.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,8 @@ import { HealthListItemsComponent } from './health-list-items/health-list-items.
     CategoryPickerComponent,
     InfoComponent,
     HelpComponent,
-    HealthListItemsComponent
+    HealthListItemsComponent,
+    InspectionComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +57,9 @@ import { HealthListItemsComponent } from './health-list-items/health-list-items.
     MatDialogModule,
     MatNativeDateModule,
     MatStepperModule,
-    MatListModule
+    MatListModule,
+    MatTableModule,
+    MatExpansionModule
   ],
   providers: [],
   bootstrap: [AppComponent]
