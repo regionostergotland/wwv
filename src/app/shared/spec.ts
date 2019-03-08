@@ -47,7 +47,7 @@ export class DataTypeText extends DataType {
 }
 
 export interface DataTypeCodedTextOpt {
-    readonly id: string;
+    readonly code: string;
     readonly label: string;
     readonly description: string;
 }
@@ -65,7 +65,7 @@ export class DataTypeCodedText extends DataType {
         if (typeof value !== "string") {
             return false;
         }
-        return this.options.some(e => e.id === value);
+        return this.options.some(e => e.code === value);
     }
 }
 
@@ -120,10 +120,14 @@ export class DataPoint {
     }
 
     public set(typeId: string, value: any) {
-        if (this.types.get(typeId).isValid(value)) {
-            this.values.set(typeId, value)
+        if (this.values.has(typeId)) {
+            if (this.types.get(typeId).isValid(value)) {
+                this.values.set(typeId, value)
+            } else {
+                throw TypeError("invalid type");
+            }
         } else {
-            throw TypeError("invalid type");
+            throw TypeError("type not available");
         }
     }
 

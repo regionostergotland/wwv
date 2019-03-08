@@ -40,12 +40,12 @@ export class Ehr {
                         "Position vid mätning.",
                         [
                             {
-                                "id": "standing", 
+                                "code": "standing",
                                 "label": "Stående",
                                 "description": "notheunoehu"
                             },
                             {
-                                "id": "lying",
+                                "code": "lying",
                                 "label": "Liggandes",
                                 "description": "soetauhnotheunoehu"
                             }
