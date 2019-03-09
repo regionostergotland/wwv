@@ -1,9 +1,37 @@
+
+
+
 # Wwv
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.4.
+Angular CLI verison 7.3.4.
+
+## Stilguide
+
+Se stilguide.pdf som baseras på https://angular.io/guide/styleguide
+
+## TypeDoc
+Använd [TypeDoc](https://typedoc.org/)  för att dokumentera kod. Exempel:
+
+```TypeScript
+  /**
+   * This is a test function that returns 42
+   * @param number discardable number
+   * @returns the number 42
+   */
+  testFunction(nr: number) : number {
+    return 42;
+  }
+```
+
+Ange kommanot `npm run docs` för att generera dokumentation för projektet. Öppna docs/index.html
+i en webbläsare för att se resultatet. Konfiguration finns i typedoc.json.
+
+
+Läs genom [guiden](https://typedoc.org/guides/doccomments/) (2 min läsning) för 
+mer info. Funktionskommentarer skrivs på engelska.
+
 
 ## Development server
-
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
