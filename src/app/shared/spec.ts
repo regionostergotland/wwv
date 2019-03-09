@@ -62,9 +62,6 @@ export class DataTypeCodedText extends DataType {
     }
 
     public isValid(value: any): boolean {
-        if (typeof value !== "string") {
-            return false;
-        }
         return this.options.some(e => e.code === value);
     }
 }
@@ -92,56 +89,19 @@ export class DataTypeQuantity extends DataType {
 
 export class DataPoint {
     public removed: boolean;
+    private point: Map<string, any>; 
 
-    private values: Map<string, any>; 
-    private readonly types: Map<string, DataType>; 
-
-    constructor(catSpec: CategorySpec, values=[]) {
-        this.values = new Map<string, any>();
-        this.types = catSpec.dataTypes;
-
-        for (let id of catSpec.dataTypes.keys()) {
-            this.values.set(id, null)
-        }
-
-        this.setMultiple(values);
+    constructor(values=[]) {
+        this.removed = false;
+        this.point = new Map<string, any>(values);
     }
 
-    public getValues(): object {
-        return new Map(this.values);
-    }
-
-    public getValue(typeId: string): any {
-        return this.values.get(typeId);
-    }
-
-    public getDataType(typeId: string): DataType {
-        return this.types.get(typeId);
-    }
-
-    public set(typeId: string, value: any) {
-        if (this.values.has(typeId)) {
-            if (this.types.get(typeId).isValid(value)) {
-                this.values.set(typeId, value)
-            } else {
-                throw TypeError("invalid type");
-            }
-        } else {
-            throw TypeError("type not available");
-        }
-    }
-
-    public setMultiple(values) {
-        for (let [typeId, value] of values) {
-            this.set(typeId, value);
-        }
-    }
-
-    public getCodedTextOptions(typeId: string): DataTypeCodedTextOpt[] {
-        // TODO throw exception?
-        let codedTextDataType = this.types.get(typeId) as DataTypeCodedText;
-        return codedTextDataType.options;
-    }
+    // wrap Map methods because Map can't be extended
+    public get(typeId: string): any { return this.point.get(typeId); }
+    public set(typeId: string, value: any) { this.point[typeId] = value; }
+    public values() { return this.point.values(); }
+    public keys() { return this.point.keys(); }
+    public entries() { return this.point.entries(); }
 }
 
 export enum MathFunctionEnum {
@@ -151,28 +111,56 @@ export enum MathFunctionEnum {
     TOTAL,
 }
 
-export class Category {
-    private original: DataPoint[] = [];
-    private width: number; // TODO special type
+export class DataList {
+    public readonly spec: CategorySpec;
+
+    private points: DataPoint[];
+
+    // TODO use these for processing
+    private width: number;
     private mathFunction: MathFunctionEnum;
-    // TODO store category spec?
 
-    constructor() { }
+    constructor(spec: CategorySpec) {
+        this.spec = spec;
 
-    public getPoints(): DataPoint[] {
-        // TODO process
-        return this.original;
+        this.points = [];
+
+        this.width = 0;
+        this.mathFunction = MathFunctionEnum.ACTUAL;
     }
 
-    public addPoint(point: DataPoint): void {
-        // TODO check if points of category type
-        this.original.push(point);
+    public addPoint(point: DataPoint) {
+        for (let [typeId, value] of point.entries()) {
+            if (!this.getDataType(typeId).isValid(value)) {
+                throw TypeError(value+" invalid value for "+typeId);
+            }
+        }
+        this.points.push(point);
     }
 
-    public addPoints(points: DataPoint[]): void {
+    public addPoints(points: DataPoint[]) {
         for (let point of points) {
             this.addPoint(point);
         }
+    }
+
+    public getPoints(): DataPoint[] {
+        let points = this.points.slice();
+        // TODO process
+        return points;
+    }
+
+    public getDataType(typeId: string): DataType {
+        if (this.spec.dataTypes.has(typeId)) {
+            return this.spec.dataTypes.get(typeId);
+        } else {
+            throw TypeError("invalid type id -- "+typeId);
+        }
+    }
+
+    public setPoints(points: DataPoint[]) {
+        this.points = [];
+        this.addPoints(points);
     }
 
     public setWidth(width: number): void {

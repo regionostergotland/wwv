@@ -1,16 +1,16 @@
-import { Category, CategorySpec, DataPoint } from './shared/spec'
+import { CategorySpec, DataList, DataPoint } from './shared/spec'
 import { Ehr } from './ehr.service'
 import { Platform } from './platform.service'
 import { PlatformGoogleFit } from './platform-google-fit.service'
 
 export class Conveyor {
-    private readonly platforms: Map<string, Platform>;
-    private categories: Map<string, Category>;
     private readonly ehr: Ehr;
+    private readonly platforms: Map<string, Platform>;
+    private categories: Map<string, DataList>;
 
     constructor() {
         this.ehr = new Ehr();
-        this.categories = new Map<string, Category>();
+        this.categories = new Map<string, DataList>();
         this.platforms = new Map<string, Platform>([
             [ "google-fit", new PlatformGoogleFit() ]
         ]);
@@ -32,37 +32,29 @@ export class Conveyor {
             throw TypeError("platform "+platformId+"not available");
         }
         if (!this.categories.has(categoryId)) {
-            this.categories.set(categoryId, new Category());
+            let spec = this.ehr.getCategorySpec(categoryId);
+            this.categories.set(categoryId, new DataList(spec));
         }
 
         let platform = this.platforms.get(platformId);
-        let spec = this.ehr.getCategorySpec(categoryId);
-        let dataPoints = platform.getData(spec, start, end);
+        let dataPoints = platform.getData(categoryId, start, end);
         let category = this.categories.get(categoryId);
 
         category.addPoints(dataPoints);
     }
 
-    public getPoints(categoryId: string): DataPoint[] {
-        let category = this.categories.get(categoryId);
-
-        if (category) {
-            return category.getPoints();
-        } else {
-            throw TypeError("category with id "+categoryId+" not available.");
-        }
+    public getDataList(categoryId: string): DataList {
+        return this.categories.get(categoryId);
     }
 
-    public addPoint(categoryId: string, point: DataPoint) {
-        this.categories.get(categoryId).addPoint(point);
+    public setDataList(categoryId: string, list: DataList) {
+        this.categories.set(categoryId, list);
     }
 
     public sendData() {
         // TODO authenticate
-        for (let [id, category] of this.categories.entries()) {
-            this.ehr.sendData(id, category.getPoints());
+        for (let category of this.categories.values()) {
+            this.ehr.sendData(category);
         }
     }
 }
-
-let conveyor = new Conveyor();

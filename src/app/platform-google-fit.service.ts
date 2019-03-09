@@ -15,18 +15,18 @@ export class PlatformGoogleFit extends Platform {
         return this.isImplemented(categoryId);
     }
 
-    public getData(categorySpec: CategorySpec,
+    public getData(categoryId: string,
                    start: string, end: string): DataPoint[] {
-        if (categorySpec.id === 'blood-pressure') {
+        if (categoryId === 'blood-pressure') {
             return [
-                new DataPoint(categorySpec,
+                new DataPoint(
                     [
                         [ "time", new Date() ],
                         [ "systolic", 10 ],
                         [ "diastolic", 20 ],
                     ]
                 ),
-                new DataPoint(categorySpec,
+                new DataPoint(
                     [
                         [ "time", new Date() ],
                         [ "systolic", 10 ],

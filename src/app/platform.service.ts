@@ -1,4 +1,4 @@
-import { CategorySpec, DataPoint } from './shared/spec'
+import { DataPoint } from './shared/spec'
 
 interface Implementation {
     category: string,
@@ -8,7 +8,7 @@ interface Implementation {
 export abstract class Platform {
     protected implemented: Implementation[] = [];
 
-    public abstract getData(categorySpec: CategorySpec,
+    public abstract getData(categoryId: string,
                             start: string, end: string): DataPoint[];
 
     // can be overridden to check if available for logged in user

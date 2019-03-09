@@ -1,10 +1,10 @@
-import { Category, CategorySpec, DataPoint,
+import { CategorySpec, DataList, DataPoint,
          DataTypeEnum, DataType,
          DataTypeDateTime, DataTypeQuantity,
          DataTypeCodedText } from './shared/spec'
 
 export class Ehr {
-    private categories: CategorySpec[] = [
+    private readonly categories: CategorySpec[] = [
         {
             "id" : "blood-pressure",
             "label" : "Blodtryck",
@@ -70,7 +70,7 @@ export class Ehr {
         return cats;
     }
 
-    public sendData(categoryId: string, points: DataPoint[]) {
+    public sendData(list: DataList) {
         /*
         let template: any = {
             "ctx": {
