@@ -1,9 +1,14 @@
+import { Injectable } from '@angular/core';
+
 import { CategorySpec, DataList, DataPoint,
          DataTypeEnum, DataType,
          DataTypeDateTime, DataTypeQuantity,
          DataTypeCodedText } from './shared/spec'
 
-export class Ehr {
+@Injectable({
+    providedIn: 'root',
+})
+export class EhrService {
     private readonly categories: CategorySpec[] = [
         {
             "id" : "blood-pressure",
