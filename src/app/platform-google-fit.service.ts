@@ -1,6 +1,12 @@
-import { DataPoint, CategorySpec } from './shared/spec'
-import { Platform } from './platform.service'
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
 
+import { DataPoint, CategorySpec } from './shared/spec';
+import { Platform } from './platform.service';
+
+@Injectable({
+    providedIn: 'root',
+})
 export class PlatformGoogleFit extends Platform {
     constructor() {
         super();
@@ -16,9 +22,9 @@ export class PlatformGoogleFit extends Platform {
     }
 
     public getData(categoryId: string,
-                   start: string, end: string): DataPoint[] {
+                   start: Date, end: Date): Observable<DataPoint[]> {
         if (categoryId === 'blood-pressure') {
-            return [
+            return of([
                 new DataPoint(
                     [
                         [ "time", new Date() ],
@@ -33,7 +39,7 @@ export class PlatformGoogleFit extends Platform {
                         [ "diastolic", 20 ],
                     ]
                 )
-            ];
+            ]);
         } else {
             throw TypeError("unimplemented");
         }

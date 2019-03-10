@@ -28,7 +28,8 @@ export class AppComponent {
     }
 
     getData(category: string) {
-        this.conveyor.fetchData(this.platform, category, "0", "-1");
+        this.conveyor.fetchData(this.platform, category,
+                                new Date(), new Date());
         let data = this.conveyor.getDataList(category);
         this.types = [];
         for (let t of data.spec.dataTypes.keys()) {

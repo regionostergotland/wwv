@@ -1,15 +1,21 @@
-import { DataPoint } from './shared/spec'
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+
+import { DataPoint } from './shared/spec';
 
 interface Implementation {
     category: string,
     dataTypes: string[],
 }
 
+@Injectable({
+    providedIn: 'root',
+})
 export abstract class Platform {
     protected implemented: Implementation[] = [];
 
     public abstract getData(categoryId: string,
-                            start: string, end: string): DataPoint[];
+                            start: Date, end: Date): Observable<DataPoint[]>;
 
     // can be overridden to check if available for logged in user
     public isAvailable(categoryId: string): boolean {

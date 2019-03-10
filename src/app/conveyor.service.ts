@@ -13,10 +13,11 @@ export class Conveyor {
     private categories: Map<string, DataList>;
 
     constructor(
-        private ehrService: EhrService) {
+        private ehrService: EhrService,
+        private _gfit: PlatformGoogleFit) {
         this.categories = new Map<string, DataList>();
         this.platforms = new Map<string, Platform>([
-            [ "google-fit", new PlatformGoogleFit() ]
+            [ "google-fit", this._gfit ]
         ]);
     }
 
@@ -31,7 +32,7 @@ export class Conveyor {
     }
 
     public fetchData(platformId: string, categoryId: string,
-                     start: string, end: string) {
+                     start: Date, end: Date) {
         if (!this.platforms.has(platformId)) {
             throw TypeError("platform "+platformId+"not available");
         }
@@ -41,10 +42,9 @@ export class Conveyor {
         }
 
         let platform = this.platforms.get(platformId);
-        let dataPoints = platform.getData(categoryId, start, end);
         let category = this.categories.get(categoryId);
-
-        category.addPoints(dataPoints);
+        platform.getData(categoryId, start, end)
+            .subscribe(dataList => category.addPoints(dataList));
     }
 
     public getDataList(categoryId: string): DataList {
