@@ -1,6 +1,5 @@
 
 
-
 # Wwv
 
 Angular CLI verison 7.3.4.
@@ -29,6 +28,24 @@ i en webbläsare för att se resultatet. Konfiguration finns i typedoc.json.
 
 Läs genom [guiden](https://typedoc.org/guides/doccomments/) (2 min läsning) för 
 mer info. Funktionskommentarer skrivs på engelska.
+
+
+## Merge Requests
+* Kod ska gå genom testning
+* Följ commitreglerna listade nedan
+* Kod ska följa stilguiden
+* Kod ska godkännas av granskare
+
+
+## Commit regler
+* Separera titel från beskrivande text med ett blanksteg
+* Begränsa commit titel till 50 karaktärer
+* Stor bokstav i början av titel
+* Inga punkter i slutet av titel
+* Skriv imperativt (i imperative mood) i titel
+* Brödtext radlängd ska vara max 72 karaktärer
+* Använd brödtexten för att beskriva varför, inte vad     
+* Commit kommentarer ska vara på engelska
 
 
 ## Development server
