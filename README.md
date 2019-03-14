@@ -1,5 +1,4 @@
 
-
 # Wwv
 
 Angular CLI verison 7.3.4.
@@ -46,6 +45,13 @@ mer info. Funktionskommentarer skrivs på engelska.
 * Brödtext radlängd ska vara max 72 karaktärer
 * Använd brödtexten för att beskriva varför, inte vad     
 * Commit kommentarer ska vara på engelska
+
+## Granskingspointers 
+* Se till att kooden som granskas: 
+* Följer koden stilguiden 
+* Följer rådande arkitektur 
+* Har tillräckliga tester 
+* Följer commitregler 
 
 
 ## Development server
