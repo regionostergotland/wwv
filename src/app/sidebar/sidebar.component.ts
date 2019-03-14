@@ -12,9 +12,9 @@ export class SidebarComponent implements OnInit {
   selectedCategory: String;
 
   userCategories: string[] = [
-    'blood pressure',
-    'weight',
-    'steps'
+    'Blood pressure',
+    'Weight',
+    'Steps'
   ];
 
   constructor() { }

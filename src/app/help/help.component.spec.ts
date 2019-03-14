@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material';
 
 import { HelpComponent } from './help.component';
 
@@ -8,7 +10,11 @@ describe('HelpComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HelpComponent ]
+      declarations: [ HelpComponent ],
+      imports: [
+        BrowserAnimationsModule,
+        MatCardModule
+      ]
     })
     .compileComponents();
   }));
