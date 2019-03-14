@@ -1,8 +1,8 @@
 export interface CategorySpec {
-    id: string,
-    label: string,
-    description: string,
-    dataTypes: Map<string, DataType>
+    id: string;
+    label: string;
+    description: string;
+    dataTypes: Map<string, DataType>;
 }
 
 export enum DataTypeEnum {
@@ -42,7 +42,7 @@ export class DataTypeText extends DataType {
     }
 
     public isValid(value: any): boolean {
-        return (typeof value === "string");
+        return (typeof value === 'string');
     }
 }
 
@@ -80,7 +80,7 @@ export class DataTypeQuantity extends DataType {
     }
 
     public isValid(value: any): boolean {
-        if (typeof value !== "number") {
+        if (typeof value !== 'number') {
             return false;
         }
         return this.magnitude_min <= value && value <= this.magnitude_max;
@@ -89,9 +89,9 @@ export class DataTypeQuantity extends DataType {
 
 export class DataPoint {
     public removed: boolean;
-    private point: Map<string, any>; 
+    private point: Map<string, any>;
 
-    constructor(values=[]) {
+    constructor(values= []) {
         this.removed = false;
         this.point = new Map<string, any>(values);
     }
@@ -130,22 +130,22 @@ export class DataList {
     }
 
     public addPoint(point: DataPoint) {
-        for (let [typeId, value] of point.entries()) {
+        for (const [typeId, value] of point.entries()) {
             if (!this.getDataType(typeId).isValid(value)) {
-                throw TypeError(value+" invalid value for "+typeId);
+                throw TypeError(value + ' invalid value for ' + typeId);
             }
         }
         this.points.push(point);
     }
 
     public addPoints(points: DataPoint[]) {
-        for (let point of points) {
+        for (const point of points) {
             this.addPoint(point);
         }
     }
 
     public getPoints(): DataPoint[] {
-        let points = this.points.slice();
+        const points = this.points.slice();
         // TODO process
         return points;
     }
@@ -154,7 +154,7 @@ export class DataList {
         if (this.spec.dataTypes.has(typeId)) {
             return this.spec.dataTypes.get(typeId);
         } else {
-            throw TypeError("invalid type id -- "+typeId);
+            throw TypeError('invalid type id -- ' + typeId);
         }
     }
 

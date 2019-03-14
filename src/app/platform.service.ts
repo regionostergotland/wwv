@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { DataPoint } from './shared/spec';
 
 interface Implementation {
-    category: string,
-    dataTypes: string[],
+    category: string;
+    dataTypes: string[];
 }
 
 @Injectable({

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CategorySpec, DataList, DataPoint,
          DataTypeEnum, DataType,
          DataTypeDateTime, DataTypeQuantity,
-         DataTypeCodedText } from './shared/spec'
+         DataTypeCodedText } from './shared/spec';
 
 @Injectable({
     providedIn: 'root',
@@ -11,48 +11,48 @@ import { CategorySpec, DataList, DataPoint,
 export class EhrService {
     private readonly categories: CategorySpec[] = [
         {
-            "id" : "blood-pressure",
-            "label" : "Blodtryck",
-            "description" : "onestuhosnehunoethu",
-            "dataTypes" : new Map<string, DataType>([
-                [ 
-                    "time",
+            id : 'blood-pressure',
+            label : 'Blodtryck',
+            description : 'onestuhosnehunoethu',
+            dataTypes : new Map<string, DataType>([
+                [
+                    'time',
                     new DataTypeDateTime(
-                        "Tid",
-                        "Tidpunkt vid mätning",
+                        'Tid',
+                        'Tidpunkt vid mätning',
                     )
                 ],
-                [ 
-                    "systolic",
+                [
+                    'systolic',
                     new DataTypeQuantity(
-                        "Övertryck",
-                        "Systoliskt undertryck av blod",
-                        "mm[Hg]", 0, 1000
+                        'Övertryck',
+                        'Systoliskt undertryck av blod',
+                        'mm[Hg]', 0, 1000
                     )
                 ],
-                [ 
-                    "diastolic",
+                [
+                    'diastolic',
                     new DataTypeQuantity(
-                        "Undertryck",
-                        "Diastoliskt undertryck av blod",
-                        "mm[Hg]", 0, 1000
+                        'Undertryck',
+                        'Diastoliskt undertryck av blod',
+                        'mm[Hg]', 0, 1000
                     )
                 ],
-                [ 
-                    "position",
+                [
+                    'position',
                     new DataTypeCodedText(
-                        "Position",
-                        "Position vid mätning.",
+                        'Position',
+                        'Position vid mätning.',
                         [
                             {
-                                "code": "standing",
-                                "label": "Stående",
-                                "description": "notheunoehu"
+                                code: 'standing',
+                                label: 'Stående',
+                                description: 'notheunoehu'
                             },
                             {
-                                "code": "lying",
-                                "label": "Liggandes",
-                                "description": "soetauhnotheunoehu"
+                                code: 'lying',
+                                label: 'Liggandes',
+                                description: 'soetauhnotheunoehu'
                             }
                         ]
                     )
@@ -66,9 +66,9 @@ export class EhrService {
     }
 
     public getCategories(): string[] {
-        let cats = []
+        const cats = [];
 
-        for (let cat of this.categories) {
+        for (const cat of this.categories) {
             cats.push(cat.id);
         }
 

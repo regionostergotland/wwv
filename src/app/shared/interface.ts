@@ -1,7 +1,7 @@
 export enum StateType {
-    ENUM = "enum",
-    QUANTITY = "quantity",
-    TEXT = "text"
+    ENUM = 'enum',
+    QUANTITY = 'quantity',
+    TEXT = 'text'
 }
 
 export interface StateSpec {
@@ -29,7 +29,7 @@ export interface DataList {
 
 export interface RawData {
     time: string[]; // TODO datetime type?
-    data: DataList[]; 
+    data: DataList[];
     // TODO unit?
     // TODO granularity?
 }
@@ -40,7 +40,7 @@ export interface ProcessedData {
 }
 
 export interface Category {
-    spec: CategorySpec,
-    raw: RawData,
-    processed: ProcessedData
+    spec: CategorySpec;
+    raw: RawData;
+    processed: ProcessedData;
 }

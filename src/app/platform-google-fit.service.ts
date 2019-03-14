@@ -11,7 +11,7 @@ export class PlatformGoogleFit extends Platform {
     constructor() {
         super();
         this.implemented.push(
-            { category: "blood-pressure", dataTypes: ["time", "systolic", "diastolic"] }
+            { category: 'blood-pressure', dataTypes: ['time', 'systolic', 'diastolic'] }
         );
     }
 
@@ -27,21 +27,21 @@ export class PlatformGoogleFit extends Platform {
             return of([
                 new DataPoint(
                     [
-                        [ "time", new Date() ],
-                        [ "systolic", 10 ],
-                        [ "diastolic", 20 ],
+                        [ 'time', new Date() ],
+                        [ 'systolic', 10 ],
+                        [ 'diastolic', 20 ],
                     ]
                 ),
                 new DataPoint(
                     [
-                        [ "time", new Date() ],
-                        [ "systolic", 10 ],
-                        [ "diastolic", 20 ],
+                        [ 'time', new Date() ],
+                        [ 'systolic', 10 ],
+                        [ 'diastolic', 20 ],
                     ]
                 )
             ]);
         } else {
-            throw TypeError("unimplemented");
+            throw TypeError('unimplemented');
         }
     }
 }
