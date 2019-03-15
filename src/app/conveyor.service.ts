@@ -14,10 +14,10 @@ export class Conveyor {
 
     constructor(
         private ehrService: EhrService,
-        private _gfit: PlatformGoogleFit) {
+        private platGoogleFit: PlatformGoogleFit) {
         this.categories = new Map<string, DataList>();
         this.platforms = new Map<string, Platform>([
-            [ 'google-fit', this._gfit ]
+            [ 'google-fit', this.platGoogleFit ]
         ]);
     }
 

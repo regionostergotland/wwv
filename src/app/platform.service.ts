@@ -23,6 +23,6 @@ export abstract class Platform {
     }
 
     protected isImplemented(categoryId: string): boolean {
-        return this.implemented.some(e => e.category == categoryId);
+        return this.implemented.some(e => e.category === categoryId);
     }
 }

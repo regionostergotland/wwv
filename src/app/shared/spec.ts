@@ -68,22 +68,22 @@ export class DataTypeCodedText extends DataType {
 
 export class DataTypeQuantity extends DataType {
     public readonly unit: string;
-    public readonly magnitude_min: number;
-    public readonly magnitude_max: number;
+    public readonly magnitudeMin: number;
+    public readonly magnitudeMax: number;
 
     constructor(label: string, description: string,
-                unit: string, magnitude_min: number, magnitude_max: number) {
+                unit: string, magnitudeMin: number, magnitudeMax: number) {
         super(DataTypeEnum.QUANTITY, label, description);
         this.unit = unit;
-        this.magnitude_min = magnitude_min;
-        this.magnitude_max = magnitude_max;
+        this.magnitudeMin = magnitudeMin;
+        this.magnitudeMax = magnitudeMax;
     }
 
     public isValid(value: any): boolean {
         if (typeof value !== 'number') {
             return false;
         }
-        return this.magnitude_min <= value && value <= this.magnitude_max;
+        return this.magnitudeMin <= value && value <= this.magnitudeMax;
     }
 }
 

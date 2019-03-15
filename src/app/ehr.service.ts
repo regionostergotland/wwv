@@ -62,7 +62,7 @@ export class EhrService {
     ];
 
     public getCategorySpec(categoryId: string): CategorySpec {
-        return this.categories.find(e => e.id == categoryId);
+        return this.categories.find(e => e.id === categoryId);
     }
 
     public getCategories(): string[] {
