@@ -18,6 +18,7 @@ import {
 } from '@angular/material';
 
 import { CategoryPickerComponent } from './category-picker.component';
+import { By } from '@angular/platform-browser';
 
 describe('CategoryPickerComponent', () => {
   let component: CategoryPickerComponent;
@@ -27,7 +28,7 @@ describe('CategoryPickerComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ CategoryPickerComponent ],
       imports: [
-        //NgModule,
+        // NgModule,
         FormsModule,
         BrowserAnimationsModule,
         RouterTestingModule,
@@ -56,4 +57,14 @@ describe('CategoryPickerComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  // it('should click change value', async(() => {
+  //   fixture.detectChanges();
+  //
+  //   fixture.whenStable().then(() => {
+  //     const inEl = fixture.debugElement.query(By.css('#cat'));
+  //     expect(inEl.nativeElement.checked).toBe(false);
+  //   });
+  // }));
+
 });

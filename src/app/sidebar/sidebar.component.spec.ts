@@ -13,7 +13,15 @@ describe('SidebarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ SidebarComponent, HealthListItemsComponent ],
-      imports: [BrowserAnimationsModule, MatSelectModule, MatTableModule, MatFormFieldModule, RouterTestingModule, MatCardModule, MatSidenavModule, MatListModule]
+      imports: [
+        BrowserAnimationsModule,
+        MatSelectModule,
+        MatTableModule,
+        MatFormFieldModule,
+        RouterTestingModule,
+        MatCardModule,
+        MatSidenavModule,
+        MatListModule]
     })
     .compileComponents();
   }));

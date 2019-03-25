@@ -51,7 +51,7 @@ export class CategoryPickerComponent implements OnInit {
   * connected to the category checkboxes
   * */
   updateChosenCategories(category: string, event): void {
-    let boxChecked: boolean = event.checked;
+    const boxChecked: boolean = event.checked;
 
     if (boxChecked) {
       this.chosenCategories.push(category);

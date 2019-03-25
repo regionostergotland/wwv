@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NgModule }             from '@angular/core';
+import { NgModule } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,8 +8,8 @@ import { NgModule }             from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
-  title = "Kategorier";
-  selectedCategory: String;
+  title = 'Kategorier';
+  selectedCategory: string;
 
   userCategories: string[] = [
     'Blood pressure',
@@ -22,7 +22,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
   }
 
-  selectCategory(category: String): void {
+  selectCategory(category: string): void {
     this.selectedCategory = category;
   }
 
