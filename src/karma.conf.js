@@ -31,7 +31,7 @@ module.exports = function (config) {
     customLaunchers: {
       Chrome_no_sandbox: {
         base: 'ChromeHeadless',
-        flags: ['--no-sandbox ----downlevelIteration']
+        flags: ['--no-sandbox']
       }
     },
     concurrency: Infinity,
