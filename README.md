@@ -1,7 +1,7 @@
 
 # Wwv
 
-Angular CLI verison 7.3.4.
+ Angular CLI verison 7.3.4.
 
 ## Stilguide
 
