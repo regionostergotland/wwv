@@ -25,7 +25,7 @@ Ange kommanot `npm run docs` för att generera dokumentation för projektet. Öp
 i en webbläsare för att se resultatet. Konfiguration finns i typedoc.json.
 
 
-Läs genom [guiden](https://typedoc.org/guides/doccomments/) (2 min läsning) för 
+Läs genom [guiden](https://typedoc.org/guides/doccomments/) (2 min läsning) för
 mer info. Funktionskommentarer skrivs på engelska.
 
 
@@ -46,13 +46,24 @@ mer info. Funktionskommentarer skrivs på engelska.
 * Använd brödtexten för att beskriva varför, inte vad     
 * Commit kommentarer ska vara på engelska
 
-## Granskingspointers 
-* Se till att kooden som granskas: 
-* Följer koden stilguiden 
-* Följer rådande arkitektur 
-* Har tillräckliga tester 
-* Följer commitregler 
+## Granskingspointers
+* Se till att kooden som granskas:
+* Följer koden stilguiden
+* Följer rådande arkitektur
+* Har tillräckliga tester
+* Följer commitregler
 
+## Kodstruktur
+I src/app finns kodfilerna till projektet samlade. Conveyor är centralpunkten
+till projektets moduler då den sammakopplar de olika delarna och ligger därför
+direkt i src/app. I shared/spec.ts så beskrivs datatyperna som kommer användas
+genom projektet och är till stora delar direkta tillämpningar av openEHRs
+standarder för att underlätta vid inskickning och vid framtida underhåll av
+projektet. I platform/ samlas både den abstrakta föräldraklassen platform och
+dess barn som i nuläget är platform-google-fit. Det gör att framtida
+implementationer av andra plattformer lätt kan skapas som barn till platform och
+inte behöva ändringar i andra delar av koden. I ehr/ så samlas implementationen
+mot ***REMOVED*** system enligt openEHRs standard.
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
