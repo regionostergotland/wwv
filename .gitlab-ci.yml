@@ -17,7 +17,7 @@ job 1:
   stage: test
   script: 
     - node_modules/.bin/ng test --karmaConfig="src/.gitlab-ci.karma.conf.js" 
-    - node_modules/.bin/ng e2e --karmaConfig="e2e/.gitlab-ci.protractor.conf.js"
+    - node_modules/.bin/ng e2e --protractorConfig="e2e/.gitlab-ci.protractor.conf.js"
     - node_modules/.bin/ng lint
 
 release_job:
