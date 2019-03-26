@@ -31,8 +31,7 @@ export class Conveyor {
         return categoryIds.filter(id => platform.isAvailable(id));
     }
 
-    public fetchData(platformId: string, categoryId: string,
-                     start: Date, end: Date) {
+    public fetchData(platformId: string, categoryId: string, start: Date, end: Date) {
         if (!this.platforms.has(platformId)) {
             throw TypeError('platform ' + platformId + 'not available');
         }
