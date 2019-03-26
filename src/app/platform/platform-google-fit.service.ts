@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { DataPoint, CategorySpec } from './shared/spec';
+import { DataPoint, CategorySpec } from '../shared/spec';
 import { Platform } from './platform.service';
 
 @Injectable({

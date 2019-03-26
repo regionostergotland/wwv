@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { CategorySpec, DataList, DataPoint } from './shared/spec';
-import { EhrService } from './ehr.service';
-import { Platform } from './platform.service';
-import { PlatformGoogleFit } from './platform-google-fit.service';
+import { EhrService } from './ehr/ehr.service';
+import { Platform } from './platform/platform.service';
+import { PlatformGoogleFit } from './platform/platform-google-fit.service';
 
 @Injectable({
     providedIn: 'root'
@@ -37,6 +37,7 @@ export class Conveyor {
         }
         if (!this.categories.has(categoryId)) {
             const spec = this.ehrService.getCategorySpec(categoryId);
+            //check that categoryId is available to ehrService?
             this.categories.set(categoryId, new DataList(spec));
         }
 
