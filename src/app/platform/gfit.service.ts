@@ -66,8 +66,10 @@ export class GfitService extends Platform {
     }
 
     /**
-     * This function GETs the activity metadata for the user,
-     * and checks which categories are available to the user
+     * This function GETs the activity metadata for the user and parses this data to 
+     * add categories that are available to the user. It then returns an empty observable
+     * so that isAvailable() is notified when this function has finished executing and
+     * the vector containing available categories has been updated.
      */
     private getActivities(): Observable<any> {
         return this.http.get(
@@ -81,8 +83,6 @@ export class GfitService extends Platform {
                 });
                 return EMPTY;
             }));
-
-
       }
     
 
@@ -94,16 +94,26 @@ export class GfitService extends Platform {
      */
     // @override
     public isAvailable(categoryId: string): Observable<boolean> {
-        // TODO check metadata if categories has any data
         if(!this.dataIsFetched){
-            return this.getActivities().pipe(map(_ => {
-                 return this.isImplemented(categoryId) && this.available.includes(categoryId)
-                }));
+            this.dataIsFetched = true;
+            return this.getActivities().pipe(map(_ => 
+                 this.isImplemented(categoryId) && this.available.includes(categoryId)
+                ));
         }
-        else
+        else {
             return of(this.isImplemented(categoryId) && this.available.includes(categoryId));
+        }
     }
 
+    /**
+     * This function GETs the data for a specified category and time interval. 
+     * The data is then converted to an internal format, and returned within an observable.
+     * @param categoryId category for which data is to be fetched
+     * @param start start of time interval for which data is to be fetched
+     * @param end end of time interval for which data is to fetched
+     * @returns an observable containing data that has been converted to 
+     * our internal format
+     */
     public getData(categoryId: string,
                    start: Date, end: Date): Observable<DataPoint[]> { 
         const weekInMs = 7 * 24 * 3600 * 1000 * 14; 
@@ -119,7 +129,7 @@ export class GfitService extends Platform {
             this.messageService.addMsg("Fetching blood pressure...");
             let bloodUrl = this.baseUrl + "raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input" + tail;
             //Return an observable with the converted data
-            return this.http.get(bloodUrl).pipe(map(res => { return this.convertData(res, categoryId) } ));
+            return this.http.get(bloodUrl).pipe(map(res => this.convertData(res, categoryId)));
         } 
         else if(categoryId === 'weight') {
             this.messageService.addMsg("Fetching weight data...");
@@ -130,6 +140,13 @@ export class GfitService extends Platform {
         }
     }
 
+    /**
+     * This function converts data from the default JSON-format which is returned
+     * by Google, to our internal representation (which varies depending on category) 
+     * @param res result from http.get-request (json file)
+     * @param categoryId specifies which category the data belongs to 
+     * @returns an array containing the converted DataPoint(s)
+     */
     public convertData(res: any, categoryId: string): DataPoint[] {
         this.messageService.addMsg("Converting data...");
         let points: DataPoint[] = [];
