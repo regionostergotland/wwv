@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {DateAdapter} from '@angular/material/core';
 import { Conveyor } from '../conveyor.service';
-import { EhrService } from '../ehr.service';
 import { CategorySpec } from '../shared/spec';
 
 @Component({
@@ -12,7 +11,7 @@ import { CategorySpec } from '../shared/spec';
 
 export class CategoryPickerComponent implements OnInit {
 
-  constructor(private adapter: DateAdapter<any>, private conveyor: Conveyor, private ehrService: EhrService) {
+  constructor(private adapter: DateAdapter<any>, private conveyor: Conveyor) {
     this.adapter.setLocale('sv');
   }
 
@@ -60,9 +59,9 @@ export class CategoryPickerComponent implements OnInit {
    */
   getCategories() {
     let cat: CategorySpec;
-    for (const entry of this.categoryIds) {
-      cat = this.ehrService.getCategorySpec(entry);
-      this.categories.push([entry, cat.label]);
+    for (const id of this.categoryIds) {
+      cat = this.conveyor.getCategorySpec(id);
+      this.categories.push([id, cat.label]);
     }
   }
 

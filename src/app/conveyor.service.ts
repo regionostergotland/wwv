@@ -55,6 +55,10 @@ export class Conveyor {
         this.categories.set(categoryId, list);
     }
 
+    public getCategorySpec(categoryId: string) {
+        return this.ehrService.getCategorySpec(categoryId);
+    }
+
     public sendData() {
         // TODO authenticate
         for (const category of this.categories.values()) {

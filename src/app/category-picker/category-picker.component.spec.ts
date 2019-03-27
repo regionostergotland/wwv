@@ -73,13 +73,18 @@ describe('CategoryPickerComponent', () => {
     }
   });
 
-  // it('should click change value', async(() => {
-  //   fixture.detectChanges();
-  //
-  //   fixture.whenStable().then(() => {
-  //     const inEl = fixture.debugElement.query(By.css('#cat'));
-  //     expect(inEl.nativeElement.checked).toBe(false);
-  //   });
-  // }));
+  it('checked box should add category to chosen', async(() => {
+    const lengthBefore: number = component.chosenCategories.length;
+    const checkBoxElement: HTMLElement = fixture.debugElement.query(By.css('#check-box label')).nativeElement;
+    checkBoxElement.click();
+    fixture.detectChanges();
+    // number of chosen categories should increase
+    expect(component.chosenCategories.length).toBeGreaterThan(lengthBefore);
+    checkBoxElement.click();
+    fixture.detectChanges();
+    // length should go back to before
+    expect(component.chosenCategories.length).toEqual(lengthBefore);
+  }));
+
 
 });
