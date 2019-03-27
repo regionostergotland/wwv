@@ -5,6 +5,8 @@
   </h1>
 </div>
 
+<button (click)="signIn()">Sign in</button>
+
 <button (click)="getPlatforms()">Get platforms</button>
 <h2>Platforms</h2>
 <ul>
@@ -12,6 +14,8 @@
         <button (click)="getCategories(platform)">{{platform}}</button>
     </li>
 </ul>
+
+<button (click)="showCategories()">Show categories</button>
 
 <h2>Categories</h2>
 <ul>
@@ -34,5 +38,7 @@
         </td>
     </tr>
 </table>
+
+<app-messages></app-messages>
 
 <router-outlet></router-outlet>

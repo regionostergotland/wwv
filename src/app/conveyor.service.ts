@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CategorySpec, DataList, DataPoint } from './shared/spec';
 import { EhrService } from './ehr.service';
 import { Platform } from './platform.service';
-import { PlatformGoogleFit } from './platform-google-fit.service';
+import { GfitService } from './gfit.service';
 
 @Injectable({
     providedIn: 'root'
@@ -14,10 +14,10 @@ export class Conveyor {
 
     constructor(
         private ehrService: EhrService,
-        private platGoogleFit: PlatformGoogleFit) {
+        private gfitService: GfitService) {
         this.categories = new Map<string, DataList>();
         this.platforms = new Map<string, Platform>([
-            [ 'google-fit', this.platGoogleFit ]
+            [ 'google-fit', this.gfitService ]
         ]);
     }
 
@@ -44,7 +44,7 @@ export class Conveyor {
         const platform = this.platforms.get(platformId);
         const category = this.categories.get(categoryId);
         platform.getData(categoryId, start, end)
-            .subscribe(dataList => category.addPoints(dataList));
+            .subscribe(res => category.addPoints(platform.convertData(res, categoryId)));
     }
 
     public getDataList(categoryId: string): DataList {

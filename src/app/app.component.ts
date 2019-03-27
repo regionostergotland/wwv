@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 
 import { Conveyor } from './conveyor.service';
 import { DataList, DataPoint } from './shared/spec';
+import { GfitService } from './gfit.service';
 
 @Component({
     selector: 'app-root',
@@ -16,11 +17,19 @@ export class AppComponent {
     types: string[] = [];
     points: any[][] = [];
 
-    constructor(private conveyor: Conveyor) { }
+    constructor(private conveyor: Conveyor, private gfitService: GfitService) { }
 
     getPlatforms(): void {
         this.platforms = this.conveyor.getPlatforms();
     }
+
+    signIn(): void {
+        this.gfitService.signIn();
+    }
+
+    showCategories(): void{
+        this.gfitService.isAvailable("blood-pressure");
+    }    
 
     getCategories(platform: string): void {
         this.platform = platform;
