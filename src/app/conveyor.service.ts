@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 
 import { CategorySpec, DataList, DataPoint } from './shared/spec';
-import { EhrService } from './ehr.service';
-import { Platform } from './platform.service';
-import { GfitService } from './gfit.service';
+import { EhrService } from './ehr/ehr.service';
+import { Platform } from './platform/platform.service';
+import { GfitService } from './platform/gfit.service';
+import { of, Observable, EMPTY } from 'rxjs';
+import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
+
 
 @Injectable({
     providedIn: 'root'
@@ -31,8 +34,7 @@ export class Conveyor {
         return categoryIds.filter(id => platform.isAvailable(id));
     }
 
-    public fetchData(platformId: string, categoryId: string,
-                     start: Date, end: Date) {
+    public fetchData(platformId: string, categoryId: string, start: Date, end: Date): Observable<any> {
         if (!this.platforms.has(platformId)) {
             throw TypeError('platform ' + platformId + 'not available');
         }
@@ -42,9 +44,9 @@ export class Conveyor {
         }
 
         const platform = this.platforms.get(platformId);
-        const category = this.categories.get(categoryId);
-        platform.getData(categoryId, start, end)
-            .subscribe(res => category.addPoints(platform.convertData(res, categoryId)));
+        const category: DataList = this.getDataList(categoryId);
+        //Add points to category and return an empty observable for the GUI to subscribe to
+        return platform.getData(categoryId, start, end).pipe(map( res => { category.addPoints(res); return EMPTY }))
     }
 
     public getDataList(categoryId: string): DataList {

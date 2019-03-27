@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { DataPoint, CategorySpec } from './shared/spec';
+import { DataPoint, CategorySpec } from '../shared/spec';
 import { Platform } from './platform.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of, observable, forkJoin } from 'rxjs';
+import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { GoogleAuthService } from 'ng-gapi';
 import GoogleUser = gapi.auth2.GoogleUser;
-import { MessageService } from './message.service';
+import { MessageService } from '../message.service';
 
 @Injectable({
     providedIn: 'root',
@@ -69,16 +69,20 @@ export class GfitService extends Platform {
      * This function GETs the activity metadata for the user,
      * and checks which categories are available to the user
      */
-    async getActivities() {
-        this.activities = await this.http.get(
-            this.baseUrl + "?access_token=" + this.getToken()).toPromise(); 
-        this.activities.dataSource.forEach(source => { 
-            if (source.dataStreamId.split(":")[0] === "raw") { //As of now, we only want raw data
-                this.available.push(this.urlToId.get(source.dataType.name));
-                this.messageService.addMsg("Now available: " + this.urlToId.get(source.dataType.name));
-            }              
-        });
-        this.dataIsFetched = true;
+    private getActivities(): Observable<any> {
+        return this.http.get(
+            this.baseUrl + "?access_token=" + this.getToken()).pipe(map(res => { 
+                this.activities = res; 
+                this.activities.dataSource.forEach(source => { 
+                    if (source.dataStreamId.split(":")[0] === "raw") { //As of now, we only want raw data
+                        this.available.push(this.urlToId.get(source.dataType.name));
+                        this.messageService.addMsg("Now available: " + this.urlToId.get(source.dataType.name));
+                    }              
+                });
+                return EMPTY;
+            }));
+
+
       }
     
 
@@ -89,17 +93,19 @@ export class GfitService extends Platform {
      * @returns true if category is available, false if not
      */
     // @override
-    public isAvailable(categoryId: string): boolean {
+    public isAvailable(categoryId: string): Observable<boolean> {
         // TODO check metadata if categories has any data
         if(!this.dataIsFetched){
-            this.getActivities();
-            this.messageService.addMsg("Fetched activities");
+            return this.getActivities().pipe(map(_ => {
+                 return this.isImplemented(categoryId) && this.available.includes(categoryId)
+                }));
         }
-        return this.isImplemented(categoryId) && this.available.includes(categoryId);
+        else
+            return of(this.isImplemented(categoryId) && this.available.includes(categoryId));
     }
 
     public getData(categoryId: string,
-                   start: Date, end: Date): Observable<any> { 
+                   start: Date, end: Date): Observable<DataPoint[]> { 
         const weekInMs = 7 * 24 * 3600 * 1000 * 14; 
         const startTime = String((Date.now() - weekInMs) * Math.pow(10, 6));
         const endTime = String(Math.floor(Date.now() * Math.pow(10, 6)));
@@ -112,7 +118,8 @@ export class GfitService extends Platform {
         if (categoryId === 'blood-pressure') {
             this.messageService.addMsg("Fetching blood pressure...");
             let bloodUrl = this.baseUrl + "raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input" + tail;
-            return this.http.get(bloodUrl);
+            //Return an observable with the converted data
+            return this.http.get(bloodUrl).pipe(map(res => { return this.convertData(res, categoryId) } ));
         } 
         else if(categoryId === 'weight') {
             this.messageService.addMsg("Fetching weight data...");

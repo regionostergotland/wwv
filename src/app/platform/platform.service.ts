@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { DataPoint } from './shared/spec';
+import { DataPoint } from '../shared/spec';
 
 interface Implementation {
     category: string;
@@ -20,9 +20,8 @@ export abstract class Platform {
     public abstract signOut(): void;
 
     // can be overridden to check if available for logged in user
-    public isAvailable(categoryId: string): boolean {
-        return this.isImplemented(categoryId);
-    }
+    public abstract isAvailable(categoryId: string): Observable<boolean> 
+    
 
     protected isImplemented(categoryId: string): boolean {
         return this.implemented.some(e => e.category === categoryId);
