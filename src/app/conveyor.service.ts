@@ -37,7 +37,6 @@ export class Conveyor {
         }
         if (!this.categories.has(categoryId)) {
             const spec = this.ehrService.getCategorySpec(categoryId);
-            //check that categoryId is available to ehrService?
             this.categories.set(categoryId, new DataList(spec));
         }
 
