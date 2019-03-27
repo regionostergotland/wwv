@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 
 import { CategorySpec, DataList, DataPoint } from './shared/spec';
-import { EhrService } from './ehr.service';
-import { Platform } from './platform.service';
-import { PlatformGoogleFit } from './platform-google-fit.service';
+import { EhrService } from './ehr/ehr.service';
+import { Platform } from './platform/platform.service';
+import { PlatformGoogleFit } from './platform/platform-google-fit.service';
 
 @Injectable({
     providedIn: 'root'
