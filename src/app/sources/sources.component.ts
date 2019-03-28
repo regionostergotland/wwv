@@ -5,6 +5,20 @@ import { Conveyor } from '../conveyor.service';
 const googleFit = 'google-fit';
 const withings = 'withings';
 
+const availableSources: Map<string, Source> = new Map<string, Source>([
+        [googleFit, {
+          id: googleFit,
+          name: 'Google Fit',
+          imageUrl: 'https://www.gstatic.com/images/branding/product/1x/gfit_512dp.png',
+          routerLink: '/catpicker'
+        }],
+        [withings, {
+          id: withings,
+          name: 'Withings',
+          imageUrl: 'http://resources.mynewsdesk.com/image/upload/c_limit,dpr_1.0,f_auto,h_700,q_auto,w_690/jymhygjz5t7hzld9qe6j.jpg',
+          routerLink: '/catpicker'
+        }]]);
+
 @Component({
   selector: 'app-sources',
   templateUrl: './sources.component.html',
@@ -14,20 +28,6 @@ export class SourcesComponent implements OnInit {
 
   sources: Source[] = [];
 
-  availableSources: Map<string, Source> = new Map<string, Source>([
-    [googleFit, {
-      id: googleFit,
-      name: 'Google Fit',
-      imageUrl: 'https://www.gstatic.com/images/branding/product/1x/gfit_512dp.png',
-      routerLink: '/catpicker'
-    }],
-    [withings, {
-      id: withings,
-      name: 'Withings',
-      imageUrl: 'http://resources.mynewsdesk.com/image/upload/c_limit,dpr_1.0,f_auto,h_700,q_auto,w_690/jymhygjz5t7hzld9qe6j.jpg',
-      routerLink: '/catpicker'
-    }]]);
-
   constructor(private conveyor: Conveyor) {
     this.addSources();
   }
@@ -35,12 +35,15 @@ export class SourcesComponent implements OnInit {
   ngOnInit() {
   }
 
+  /*
+  * Adds all platforms of the conveyor to the sources list.
+  * */
   addSources() {
     const platforms = this.conveyor.getPlatforms();
     this.sources = [];
     for (const platform of platforms) {
-      if (this.availableSources.has(platform)) {
-        this.sources.push(this.availableSources.get(platform));
+      if (availableSources.has(platform)) {
+        this.sources.push(availableSources.get(platform));
       } else {
         this.sources.push({
           id: platform,
