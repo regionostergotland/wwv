@@ -23,7 +23,11 @@ export class SidebarComponent implements OnInit {
   }
 
   selectCategory(category: string): void {
-    this.selectedCategory = category;
+      this.selectedCategory = category;
+  }
+
+  getCategoryLabel(categoryId: string): string {
+      return this.conveyor.getCategorySpec(categoryId).label;
   }
 
 
