@@ -21,33 +21,6 @@ export class CategoryPickerComponent implements OnInit {
   startDate: Date;
   endDate: Date;
 
-  // categories: string[] = [
-  //   'blood pressure',
-  //   'weight',
-  //   'steps',
-  //   'blood sugar',
-  //   'something else',
-  //   'blood pressure',
-  //   'weight',
-  //   'steps',
-  //   'blood sugar',
-  //   'something else',
-  //   'blood pressure',
-  //   'weight',
-  //   'steps',
-  //   'blood sugar',
-  //   'something else',
-  //   'blood pressure',
-  //   'weight',
-  //   'steps',
-  //   'blood sugar',
-  //   'something else',
-  //   'blood pressure',
-  //   'weight',
-  //   'steps',
-  //   'blood sugar',
-  //   'something else'
-  // ];
 
   ngOnInit() {
     this.categoryIds = this.conveyor.getCategories('google-fit');
@@ -72,12 +45,11 @@ export class CategoryPickerComponent implements OnInit {
     const boxChecked: boolean = event.checked;
 
     if (boxChecked) {
-      this.chosenCategories.push(category);
+        this.conveyor.selectCategory(category);
     } else {
-      this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
+        this.conveyor.unSelectCategory(category);
     }
-
-    console.log(this.chosenCategories.toString());
+    console.log(this.conveyor.getSelectedCategories());
   }
 
 }
