@@ -24,8 +24,12 @@ export class CategoryPickerComponent implements OnInit {
 
   ngOnInit() {
     this.platformId = this.conveyor.getSelectedPlatform();
-    this.categoryIds = this.conveyor.getCategories(this.platformId);
-    this.getCategories();
+
+    // finns det en platform
+    if (this.platformId) {
+      this.categoryIds = this.conveyor.getCategories(this.platformId);
+      this.getCategories();
+    }
   }
 
   /**
@@ -53,7 +57,6 @@ export class CategoryPickerComponent implements OnInit {
   }
 
   validateSelections(): boolean {
-      console.log(this.startDate, this.endDate, this.conveyor.getSelectedCategories().length);
       return(this.startDate && this.endDate && this.conveyor.getSelectedCategories().length > 0);
   }
 
