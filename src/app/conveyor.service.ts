@@ -24,7 +24,7 @@ export class Conveyor {
         ]);
     }
 
-    public signIn(platformId: string):void {
+    public signIn(platformId: string): void {
         const platform: Platform = this.platforms.get(platformId);
         platform.signIn();
     }
@@ -55,8 +55,8 @@ export class Conveyor {
 
         const platform = this.platforms.get(platformId);
         const category: DataList = this.getDataList(categoryId);
-        //Add points to category and return an empty observable for the GUI to subscribe to
-        return platform.getData(categoryId, start, end).pipe(map( res => { category.addPoints(res); return EMPTY }))
+        // Add points to category and return an empty observable for the GUI to subscribe to
+        return platform.getData(categoryId, start, end).pipe(map( res => { category.addPoints(res); return EMPTY; }));
     }
 
     public getDataList(categoryId: string): DataList {

@@ -31,9 +31,9 @@ export class AppComponent {
         this.conveyor.signOut(platform);
     }
 
-    showCategories(): void{
-        this.gfitService.isAvailable("blood-pressure");
-    }    
+    showCategories(): void {
+        this.gfitService.isAvailable('blood-pressure');
+    }
 
     getCategories(platform: string): void {
         this.platform = platform;
@@ -41,7 +41,7 @@ export class AppComponent {
     }
 
     getData(category: string) {
-        
+
         this.conveyor.fetchData(this.platform, category,
                                 new Date(), new Date()).subscribe(_ => {
 
@@ -57,9 +57,9 @@ export class AppComponent {
                                             values.push(v);
                                         }
                                         this.points.push(values);
-                                    }                                    
-                                } 
+                                    }
+                                }
                             );
-        
+
     }
 }

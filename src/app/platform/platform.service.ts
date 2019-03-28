@@ -20,8 +20,8 @@ export abstract class Platform {
     public abstract signOut(): void;
 
     // can be overridden to check if available for logged in user
-    public abstract isAvailable(categoryId: string): Observable<boolean> 
-    
+    public abstract isAvailable(categoryId: string): Observable<boolean>;
+
 
     protected isImplemented(categoryId: string): boolean {
         return this.implemented.some(e => e.category === categoryId);
@@ -32,6 +32,6 @@ export abstract class Platform {
 
 
     public abstract convertData(res: any, categoryId: string): DataPoint[];
-    
+
 
 }
