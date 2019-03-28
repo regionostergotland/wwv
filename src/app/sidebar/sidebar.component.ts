@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgModule } from '@angular/core';
+import { Conveyor } from '../conveyor.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -11,15 +12,14 @@ export class SidebarComponent implements OnInit {
   title = 'Kategorier';
   selectedCategory: string;
 
-  userCategories: string[] = [
-    'Blood pressure',
-    'Weight',
-    'Steps'
-  ];
+  userCategories: string[];
 
-  constructor() { }
+  constructor(private conveyor: Conveyor) {
+
+  }
 
   ngOnInit() {
+      this.userCategories = this.conveyor.getSelectedCategories();
   }
 
   selectCategory(category: string): void {
