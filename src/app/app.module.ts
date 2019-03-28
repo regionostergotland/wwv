@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
+import { HttpClientModule } from '@angular/common/http';
+import { MessagesComponent } from './messages/messages.component';
+
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { SourcesComponent } from './sources/sources.component';
 import { HomeComponent } from './home/home.component';
@@ -52,6 +55,24 @@ import { MatAutocompleteModule,
     MatTreeModule,
     MatFormFieldModule } from '@angular/material';
 
+import {
+  GoogleApiModule,
+  GoogleApiService,
+  GoogleAuthService,
+  NgGapiClientConfig,
+  NG_GAPI_CONFIG,
+  GoogleApiConfig
+} from 'ng-gapi';
+
+const gapiClientConfig: NgGapiClientConfig = {
+  client_id: '***REMOVED***.apps.googleusercontent.com',
+  discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],
+  scope: [
+    'https://www.googleapis.com/auth/fitness.blood_pressure.read',
+    'https://www.googleapis.com/auth/fitness.body.read'
+  ].join(' ')
+};
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,7 +84,8 @@ import { MatAutocompleteModule,
     HelpComponent,
     HealthListItemsComponent,
     InspectionComponent,
-    SidebarComponent
+    SidebarComponent, 
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -108,7 +130,15 @@ import { MatAutocompleteModule,
     MatTooltipModule,
     MatTreeModule,
     MatFormFieldModule,
-    MatTableModule
+    MatTableModule,
+
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    GoogleApiModule.forRoot({
+      provide: NG_GAPI_CONFIG,
+      useValue: gapiClientConfig
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CategorySpec, DataList, DataPoint,
          DataTypeEnum, DataType,
          DataTypeDateTime, DataTypeQuantity,
-         DataTypeCodedText } from './shared/spec';
+         DataTypeCodedText } from '../shared/spec';
 
 @Injectable({
     providedIn: 'root',
