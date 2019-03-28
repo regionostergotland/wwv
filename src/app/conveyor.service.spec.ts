@@ -2,9 +2,15 @@ import { TestBed } from '@angular/core/testing';
 
 import { Conveyor } from './conveyor.service';
 import { DataList } from './shared/spec';
+import { GoogleAuthService } from 'ng-gapi';
 
 describe('Conveyor', () => {
-  beforeEach(() => TestBed.configureTestingModule({}));
+  beforeEach(() =>
+   TestBed.configureTestingModule({
+     providers: [
+       GoogleAuthService
+     ]
+   }));
 
   it('should be created', () => {
     const service: Conveyor = TestBed.get(Conveyor);
