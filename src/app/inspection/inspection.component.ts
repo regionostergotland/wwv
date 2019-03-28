@@ -1,36 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DataSource } from '@angular/cdk/table';
-
-export interface BloodPressure {
-  systolic: number;
-  diastolic: number;
-  date: string;
-  time: string;
-  sittingLying: string;
-}
-
-export interface Weight {
-  date: string;
-  time: string;
-}
-
-const BP_DATA: BloodPressure[] = [
-  {systolic: 120, diastolic: 80, date: '2019-10-02', time: '13:00', sittingLying: 'sittande'},
-  {systolic: 110, diastolic: 90, date: '2019-10-06', time: '15:00', sittingLying: 'sittande'},
-  {systolic: 120, diastolic: 80, date: '2019-10-02', time: '19:45', sittingLying: 'liggande'},
-  {systolic: 140, diastolic: 100, date: '2019-10-07', time: '13:00', sittingLying: 'liggande'},
-  {systolic: 100, diastolic: 60, date: '2018-02-05', time: '17:00', sittingLying: 'sittande'},
-  {systolic: 120, diastolic: 80, date: '2019-10-02', time: '14:30', sittingLying: 'liggande'},
-];
-
-const WEIGHT_DATA: Weight[] = [
-  {date: '2019-01-10', time: '13:30'},
-  {date: '2002-01-10', time: '15:00'},
-  {date: '2011-11-23', time: '17:30'}
-];
-
-const BPCOLS: string[] = ['systolic', 'diastolic', 'date', 'time', 'sittingLying'];
-const WeightCOLS: string[] = ['date', 'time'];
+import { DataList, DataPoint } from '../shared/spec';
+import { Conveyor } from '../conveyor.service';
 
 @Component({
   selector: 'app-inspection',
@@ -39,14 +9,69 @@ const WeightCOLS: string[] = ['date', 'time'];
 })
 export class InspectionComponent implements OnInit {
 
-  categories: string[] = ['blood pressure', 'weight'];
+  categories: string[] = [];
 
-  displayedColumns: string[] = BPCOLS;
-  dataSource = BP_DATA;
+  constructor(private conveyor: Conveyor) { 
+  
+    for (let platform of conveyor.getPlatforms()) {
+      for (let category of conveyor.getCategories(platform)) {
+        this.categories.push(category);
+        conveyor.fetchData(platform, category, new Date(), new Date()); //TODO: remove this later
+      }
+    }
 
-  constructor() { }
+  }
 
   ngOnInit() {
+  }
+
+  getLabel(category: string): string {
+    return this.conveyor.getCategorySpec(category).label;
+  }
+
+  getData(category: string): DataPoint[] {
+    return this.conveyor.getDataList(category).getPoints();
+  }
+
+  getDate(date: Date): string {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day =  date.getDate();
+    return (day + '/' + month + '/' + year);
+  }
+
+  getTime(date: Date): string {
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    if (minutes < 10) {
+      return (hours + ':0' + minutes);
+    } else {
+      return (hours + ':' + minutes);
+    }
+  }
+
+  /*
+  * Returns the columns which should be displayed in the table depending on which
+  * category it is
+  */
+  getDisplayedColumns(category: string): string[] {
+    let result: string[] = [];
+    switch (category) {
+      case 'blood-pressure': 
+        result = ['systolic', 'diastolic', 'date', 'time', 'position'];
+        break;
+      default: 
+        result = [];
+    }
+    return result; 
+  }
+
+  getNumberOfValues(category: string) {
+    return this.conveyor.getDataList(category).getPoints().length;
+  }
+
+  sendData() {
+    this.conveyor.sendData();
   }
 
 }

@@ -30,7 +30,11 @@ export class Conveyor {
         const categoryIds: string[] = this.ehrService.getCategories();
         return categoryIds.filter(id => platform.isAvailable(id));
     }
-
+//////////////////////////////////////////////////////////////
+    public getCategorySpec(categoryId: string): CategorySpec {
+        return this.ehrService.getCategorySpec(categoryId);
+    }
+//////////////////////////////////////////////////////////////
     public fetchData(platformId: string, categoryId: string,
                      start: Date, end: Date) {
         if (!this.platforms.has(platformId)) {
