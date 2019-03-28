@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DateAdapter} from '@angular/material/core';
 import { Conveyor } from '../conveyor.service';
 import { CategorySpec } from '../shared/spec';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-category-picker',
@@ -11,7 +12,7 @@ import { CategorySpec } from '../shared/spec';
 
 export class CategoryPickerComponent implements OnInit {
 
-  constructor(private adapter: DateAdapter<any>, private conveyor: Conveyor) {
+  constructor(private adapter: DateAdapter<any>, private conveyor: Conveyor, private router: Router) {
     this.adapter.setLocale('sv');
   }
 
@@ -58,6 +59,13 @@ export class CategoryPickerComponent implements OnInit {
 
   validateSelections(): boolean {
       return(this.startDate && this.endDate && this.conveyor.getSelectedCategories().length > 0);
+  }
+
+  getData() {
+    // TODO change blood pressure to array of categories
+    this.conveyor.fetchData(this.platformId, 'blood-pressure', this.startDate, this.endDate).subscribe(_=> 
+      this.router.navigateByUrl('/sidebar')
+    );
   }
 
 

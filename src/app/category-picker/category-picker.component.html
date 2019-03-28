@@ -33,7 +33,7 @@
 
   <div class="next-button">
     <!-- TODO change routerlink to what it should be (not home)   -->
-    <button *ngIf="validateSelections()" mat-raised-button color="primary" routerLink="/sidebar">Nästa steg</button>
+    <button *ngIf="validateSelections()" mat-raised-button color="primary" (click)='getData()'>Nästa steg</button>
     <button *ngIf="!validateSelections()" mat-raised-button color="grey">Nästa steg</button>
   </div>
 

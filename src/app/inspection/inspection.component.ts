@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataList, DataPoint } from '../shared/spec';
 import { Conveyor } from '../conveyor.service';
+import { getTreeNoValidDataSourceError } from '@angular/cdk/tree';
 
 @Component({
   selector: 'app-inspection',
@@ -16,7 +17,6 @@ export class InspectionComponent implements OnInit {
     for (let platform of conveyor.getPlatforms()) {
       for (let category of conveyor.getCategories(platform)) {
         this.categories.push(category);
-        conveyor.fetchData(platform, category, new Date(), new Date()); //TODO: remove this later
       }
     }
 

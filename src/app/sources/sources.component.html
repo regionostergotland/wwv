@@ -2,7 +2,7 @@
 <div layout="row" layout-align="center center" class="card-height"
   *ngFor="let source of sources">
 
-  <mat-card class="example-card">
+  <mat-card class="example-card" (click)="conveyor.selectPlatform(source.id); conveyor.signIn(source.id)" routerLink={{source.routerLink}}>
     <mat-card-header>
       <mat-card-title>{{source.name}}</mat-card-title>
     </mat-card-header>
@@ -11,7 +11,7 @@
     </mat-card-content>
     <mat-card-actions>
       <div style="text-align:center;">
-        <button (click)="conveyor.selectPlatform(source.id)" mat-button routerLink={{source.routerLink}}>Välj</button>
+        <button mat-button>Välj</button>
       </div>
     </mat-card-actions>
   </mat-card>
