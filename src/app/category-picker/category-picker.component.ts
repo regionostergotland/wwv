@@ -43,7 +43,6 @@ export class CategoryPickerComponent implements OnInit {
   * */
   updateChosenCategories(category: string, event): void {
     const boxChecked: boolean = event.checked;
-
     if (boxChecked) {
         this.conveyor.selectCategory(category);
     } else {
@@ -51,5 +50,11 @@ export class CategoryPickerComponent implements OnInit {
     }
     console.log(this.conveyor.getSelectedCategories());
   }
+
+  validateSelections(): boolean {
+      console.log(this.startDate, this.endDate, this.conveyor.getSelectedCategories().length);
+      return(this.startDate && this.endDate && this.conveyor.getSelectedCategories().length > 0);
+  }
+
 
 }
