@@ -20,10 +20,11 @@ export class CategoryPickerComponent implements OnInit {
   categoryIds: string[] = [];
   startDate: Date;
   endDate: Date;
-
+  private platformId = '';
 
   ngOnInit() {
-    this.categoryIds = this.conveyor.getCategories('google-fit');
+    this.platformId = this.conveyor.getSelectedPlatform();
+    this.categoryIds = this.conveyor.getCategories(this.platformId);
     this.getCategories();
   }
 

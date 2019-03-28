@@ -12,6 +12,7 @@ export class Conveyor {
     private readonly platforms: Map<string, Platform>;
     private categories: Map<string, DataList>;
     private selectedCategories: string[];
+    private selectedPlatform: string;
 
     constructor(
         private ehrService: EhrService,
@@ -88,5 +89,13 @@ export class Conveyor {
         for (const category of this.categories.values()) {
             this.ehrService.sendData(category);
         }
+    }
+
+    public selectPlatform(platformId: string) {
+      this.selectedPlatform = platformId;
+    }
+
+    public getSelectedPlatform(): string {
+      return this.selectedPlatform;
     }
 }
