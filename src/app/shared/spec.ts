@@ -98,10 +98,11 @@ export class DataPoint {
 
     // wrap Map methods because Map can't be extended
     public get(typeId: string): any { return this.point.get(typeId); }
-    public set(typeId: string, value: any) { this.point[typeId] = value; }
+    public set(typeId: string, value: any) { this.point.set(typeId, value); }
     public values() { return this.point.values(); }
     public keys() { return this.point.keys(); }
     public entries() { return this.point.entries(); }
+    public has(typeId: string) { return this.point.has(typeId); }
 }
 
 export enum MathFunctionEnum {
