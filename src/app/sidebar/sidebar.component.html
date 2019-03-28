@@ -11,7 +11,7 @@
       <mat-divider></mat-divider>
 
       <div *ngFor="let category of userCategories">
-        <mat-list-item (click)="selectCategory(category)" routerLink="/sidebar/{{category}}">{{category}}</mat-list-item>
+        <mat-list-item (click)="selectCategory(category)" routerLink="/sidebar/{{category}}">{{getCategoryLabel(category)}}</mat-list-item>
         <mat-divider></mat-divider>
       </div>
     </mat-nav-list>

@@ -91,10 +91,18 @@ export class Conveyor {
         }
     }
 
+    /*
+    * Saves the platform to be fetched from.
+    * @param platformId The chosen platform
+    * */
     public selectPlatform(platformId: string) {
       this.selectedPlatform = platformId;
     }
 
+    /*
+    * Gets the current selected platform.
+    * @returns the currently selected platform.
+    * */
     public getSelectedPlatform(): string {
       return this.selectedPlatform;
     }
