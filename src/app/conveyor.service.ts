@@ -11,11 +11,13 @@ import { PlatformGoogleFit } from './platform-google-fit.service';
 export class Conveyor {
     private readonly platforms: Map<string, Platform>;
     private categories: Map<string, DataList>;
+    private selectedCategories: string[];
 
     constructor(
         private ehrService: EhrService,
         private platGoogleFit: PlatformGoogleFit) {
         this.categories = new Map<string, DataList>();
+        this.selectedCategories = [];
         this.platforms = new Map<string, Platform>([
             [ 'google-fit', this.platGoogleFit ]
         ]);
@@ -29,6 +31,28 @@ export class Conveyor {
         const platform: Platform = this.platforms.get(platformId);
         const categoryIds: string[] = this.ehrService.getCategories();
         return categoryIds.filter(id => platform.isAvailable(id));
+    }
+
+    /*
+    * Removes a selected category from the selected list
+    * */
+    public unSelectCategory(categoryId: string) {
+        if (this.selectedCategories.includes(categoryId)) {
+            this.selectedCategories.splice(this.selectedCategories.indexOf(categoryId), 1);
+        }
+    }
+
+    /*
+    * Adds a new category to the selected list
+    * */
+    public selectCategory(categoryId: string) {
+        if (!this.selectedCategories.includes(categoryId)) {
+            this.selectedCategories.push(categoryId);
+        }
+    }
+
+    public getSelectedCategories(): string[] {
+        return this.selectedCategories;
     }
 
     public fetchData(platformId: string, categoryId: string,
