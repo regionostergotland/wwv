@@ -3,7 +3,10 @@ import { Injectable } from '@angular/core';
 import { CategorySpec, DataList, DataPoint } from './shared/spec';
 import { EhrService } from './ehr/ehr.service';
 import { Platform } from './platform/platform.service';
-import { PlatformGoogleFit } from './platform/platform-google-fit.service';
+import { GfitService } from './platform/gfit.service';
+import { of, Observable, EMPTY } from 'rxjs';
+import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
+
 
 @Injectable({
     providedIn: 'root'
@@ -14,11 +17,21 @@ export class Conveyor {
 
     constructor(
         private ehrService: EhrService,
-        private platGoogleFit: PlatformGoogleFit) {
+        private gfitService: GfitService) {
         this.categories = new Map<string, DataList>();
         this.platforms = new Map<string, Platform>([
-            [ 'google-fit', this.platGoogleFit ]
+            [ 'google-fit', this.gfitService ]
         ]);
+    }
+
+    public signIn(platformId: string): void {
+        const platform: Platform = this.platforms.get(platformId);
+        platform.signIn();
+    }
+
+    public signOut(platformId: string): void {
+        const platform: Platform = this.platforms.get(platformId);
+        platform.signOut();
     }
 
     public getPlatforms(): string[] {
@@ -31,7 +44,7 @@ export class Conveyor {
         return categoryIds.filter(id => platform.isAvailable(id));
     }
 
-    public fetchData(platformId: string, categoryId: string, start: Date, end: Date) {
+    public fetchData(platformId: string, categoryId: string, start: Date, end: Date): Observable<any> {
         if (!this.platforms.has(platformId)) {
             throw TypeError('platform ' + platformId + 'not available');
         }
@@ -41,9 +54,9 @@ export class Conveyor {
         }
 
         const platform = this.platforms.get(platformId);
-        const category = this.categories.get(categoryId);
-        platform.getData(categoryId, start, end)
-            .subscribe(dataList => category.addPoints(dataList));
+        const category: DataList = this.getDataList(categoryId);
+        // Add points to category and return an empty observable for the GUI to subscribe to
+        return platform.getData(categoryId, start, end).pipe(map( res => { category.addPoints(res); return EMPTY; }));
     }
 
     public getDataList(categoryId: string): DataList {

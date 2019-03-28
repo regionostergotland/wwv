@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PlatformGoogleFit } from './platform-google-fit.service';
+import { MessageService } from './message.service';
 
-describe('PlatformGoogleFit', () => {
+describe('MessageService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: PlatformGoogleFit = TestBed.get(PlatformGoogleFit);
+    const service: MessageService = TestBed.get(MessageService);
     expect(service).toBeTruthy();
   });
 });
