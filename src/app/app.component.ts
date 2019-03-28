@@ -23,8 +23,12 @@ export class AppComponent {
         this.platforms = this.conveyor.getPlatforms();
     }
 
-    signIn(): void {
-        this.gfitService.signIn();
+    signIn(platform: string): void {
+        this.conveyor.signIn(platform);
+    }
+
+    signOut(platform: string): void {
+        this.conveyor.signOut(platform);
     }
 
     showCategories(): void{

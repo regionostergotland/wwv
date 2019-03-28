@@ -24,6 +24,16 @@ export class Conveyor {
         ]);
     }
 
+    public signIn(platformId: string):void {
+        const platform: Platform = this.platforms.get(platformId);
+        platform.signIn();
+    }
+
+    public signOut(platformId: string): void {
+        const platform: Platform = this.platforms.get(platformId);
+        platform.signOut();
+    }
+
     public getPlatforms(): string[] {
         return Array.from(this.platforms.keys());
     }

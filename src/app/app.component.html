@@ -5,17 +5,24 @@
   </h1>
 </div>
 
-<button (click)="signIn()">Sign in</button>
-
 <button (click)="getPlatforms()">Get platforms</button>
-<h2>Platforms</h2>
+
+<h2>Sign in</h2>
 <ul>
     <li *ngFor="let platform of platforms">
-        <button (click)="getCategories(platform)">{{platform}}</button>
+        <button (click)="signIn(platform)">{{platform}}</button>
     </li>
 </ul>
 
-<button (click)="showCategories()">Show categories</button>
+
+
+<h2>Platforms</h2>
+<ul>
+    <li *ngFor="let platform of platforms">
+        <button (click)="getCategories(platform)">Get categories</button>
+    </li>
+</ul>
+
 
 <h2>Categories</h2>
 <ul>

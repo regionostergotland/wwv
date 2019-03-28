@@ -18,12 +18,23 @@ export class GfitService extends Platform {
     private dataIsFetched: boolean = false;  
     private activities: any;
     private baseUrl = "https://www.googleapis.com/fitness/v1/users/me/dataSources/";
-    private readonly urlToId: Map<string, string> = new Map(
+
+    //Maps Google Fit's data type names to our internal category names
+    private readonly categoryDataTypeNames: Map<string, string> = new Map(
         [
             ["com.google.blood_pressure", "blood-pressure"],
             ["com.google.weight", "weight"]
         ]
     );
+
+    //Maps internal name for categories to the URL which is used to GET the data
+    private readonly categoryUrl: Map<string, string> = new Map(
+        [
+            ["blood-pressure", "raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input"],
+            ["weight", "raw:com.google.weight:com.google.android.apps.fitness:user_input"]
+        ]
+
+    )
 
     constructor(
         private googleAuth: GoogleAuthService,
@@ -77,8 +88,8 @@ export class GfitService extends Platform {
                 this.activities = res; 
                 this.activities.dataSource.forEach(source => { 
                     if (source.dataStreamId.split(":")[0] === "raw") { //As of now, we only want raw data
-                        this.available.push(this.urlToId.get(source.dataType.name));
-                        this.messageService.addMsg("Now available: " + this.urlToId.get(source.dataType.name));
+                        this.available.push(this.categoryDataTypeNames.get(source.dataType.name));
+                        this.messageService.addMsg("Now available: " + this.categoryDataTypeNames.get(source.dataType.name));
                     }              
                 });
                 return EMPTY;
@@ -120,6 +131,8 @@ export class GfitService extends Platform {
         const startTime = String((Date.now() - weekInMs) * Math.pow(10, 6));
         const endTime = String(Math.floor(Date.now() * Math.pow(10, 6)));
         const dataSetId = startTime + "-" + endTime;
+
+        let url: string = this.baseUrl;
         let tail: string = "/datasets/" +
                             dataSetId +
                             "?access_token=" +
@@ -127,11 +140,12 @@ export class GfitService extends Platform {
 
         if (categoryId === 'blood-pressure') {
             this.messageService.addMsg("Fetching blood pressure...");
-            let bloodUrl = this.baseUrl + "raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input" + tail;
+            url += this.categoryUrl.get(categoryId) + tail;
             //Return an observable with the converted data
-            return this.http.get(bloodUrl).pipe(map(res => this.convertData(res, categoryId)));
+            return this.http.get(url).pipe(map(res => this.convertData(res, categoryId)));
         } 
         else if(categoryId === 'weight') {
+            url += this.categoryUrl.get(categoryId) + tail; 
             this.messageService.addMsg("Fetching weight data...");
         }
         
