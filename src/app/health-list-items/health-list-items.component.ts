@@ -1,6 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DataPoint, DataTypeCodedText, DataTypeCodedTextOpt, DataTypeEnum} from '../shared/spec';
 import {Conveyor} from '../conveyor.service';
+import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
+import {MatDialog} from '@angular/material';
+
 
 @Component({
   selector: 'app-health-list-items',
@@ -31,10 +34,21 @@ export class HealthListItemsComponent implements OnInit {
     return date.toLocaleTimeString('sv-SE');
   }
 
-  constructor(private conveyor: Conveyor) {
+  constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
 
   ngOnInit() {
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddDataPointComponent, {
+      data: this.selectedCategory
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // this.animal = result;
+    });
   }
 
   /**

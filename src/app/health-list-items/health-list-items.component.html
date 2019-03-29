@@ -28,3 +28,5 @@
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
   <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
 </table>
+
+<button mat-stroked-button color="accent" style="text-align: center; width: 100%" (click)="openDialog()">Lägg till datavärde</button>
