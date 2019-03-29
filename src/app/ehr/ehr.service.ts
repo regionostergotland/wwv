@@ -65,7 +65,7 @@ export class EhrService {
             ])
         },
         {
-            id : 'body-weight',
+            id : 'body_weight',
             label : 'Kroppsvikt',
             description : 'Mätning av faktisk kroppsvikt.',
             dataTypes : new Map<string, DataType>([
@@ -143,23 +143,24 @@ export class EhrService {
         };
 
         let spec = list.spec;
-        composition[spec.id] = [ {
+        composition.self_monitoring[spec.id] = [ {
             "any_event": []
         } ];
 
-        let event = composition[spec.id][0].any_event;
+        let event = composition.self_monitoring[spec.id][0].any_event;
 
         for (let point of list.getPoints()) {
             let element: any = {};
 
             for (let [id, value] of point.entries()) {
-                element[id] = spec.dataTypes[id].toRest(value);
+                element[id] = spec.dataTypes.get(id).toRest(value);
             }
 
             event.push(element);
         }
 
-        console.log(JSON.stringify(composition, null, 2));
+        let postData = JSON.stringify(composition, null, 2);
+        console.log(postData);
     }
 
     public authenticate() { }
