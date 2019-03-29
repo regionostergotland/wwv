@@ -144,62 +144,62 @@ export class EhrService {
     }
 
     private createComposition(list: DataList): string {
-        let composition: any = {
-            "ctx": {
-                "language": "en",
-                "territory": "SE",
+        const composition: any = {
+            ctx: {
+                language: 'en',
+                territory: 'SE',
             },
-            "self_monitoring": {}
+            self_monitoring: {}
         };
 
-        let spec = list.spec;
+        const spec = list.spec;
         composition.self_monitoring[spec.id] = [ {
-            "any_event": []
+            any_event: []
         } ];
 
-        let event = composition.self_monitoring[spec.id][0].any_event;
+        const event = composition.self_monitoring[spec.id][0].any_event;
 
-        for (let point of list.getPoints()) {
-            let element: any = {};
+        for (const point of list.getPoints()) {
+            const element: any = {};
 
-            for (let [id, value] of point.entries()) {
+            for (const [id, value] of point.entries()) {
                 element[id] = spec.dataTypes.get(id).toRest(value);
             }
 
             event.push(element);
         }
 
-        let postData = JSON.stringify(composition, null, 2);
+        const postData = JSON.stringify(composition, null, 2);
         console.log(postData);
         return JSON.stringify(composition);
     }
 
     public sendData(list: DataList): Observable<{}> {
-        let baseUrl = "https://rest.ehrscape.com/rest/v1/composition";
-        let params = [
-            ["ehrId", "c0cf738e-67b5-4c8c-8410-f83df4082ac0"],
-            ["templateId", list.spec.templateId],
-            ["format", "STRUCTURED"],
-        ]
-        let url = baseUrl + "?";
-        for (let [key, value] of params) {
-            url += key + "=" + value + "&";
+        const baseUrl = 'https://rest.ehrscape.com/rest/v1/composition';
+        const params = [
+            ['ehrId', 'c0cf738e-67b5-4c8c-8410-f83df4082ac0'],
+            ['templateId', list.spec.templateId],
+            ['format', 'STRUCTURED'],
+        ];
+        let url = baseUrl + '?';
+        for (const [key, value] of params) {
+            url += key + '=' + value + '&';
         }
 
-        let composition = this.createComposition(list);
+        const composition = this.createComposition(list);
 
-        let options = {
+        const options = {
             headers: new HttpHeaders({
                 'Content-Type':  'application/json',
-                'Authorization': 'Basic '+this.basicCredentials
+                Authorization: 'Basic ' + this.basicCredentials
             })
-        }
+        };
 
         console.log(url);
         return this.http.post(url, composition, options);
     }
 
     public authenticateBasic(user: string, pass: string) {
-        this.basicCredentials = btoa(user+":"+pass);
+        this.basicCredentials = btoa(user + ':' + pass);
     }
 }

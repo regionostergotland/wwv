@@ -71,7 +71,7 @@ export class Conveyor {
     }
 
     public authenticateBasic(username: string, password: string) {
-        console.log("authing "+username);
+        console.log('authing ' + username);
         this.ehrService.authenticateBasic(username, password);
     }
 

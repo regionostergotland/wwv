@@ -56,7 +56,7 @@ export class DummyPlatformService extends Platform {
                     ]
                 )
             ]);
-        } else if (categoryId == "body_weight") {
+        } else if (categoryId === 'body_weight') {
             return of([
                 new DataPoint(
                     [
