@@ -11,13 +11,13 @@
       <mat-divider></mat-divider>
 
       <div *ngFor="let category of userCategories">
-        <mat-list-item (click)="selectCategory(category)" routerLink="/sidebar/{{category}}">{{getCategoryLabel(category)}}</mat-list-item>
+        <mat-list-item (click)="selectCategory(category)">{{getCategoryLabel(category)}}</mat-list-item>
         <mat-divider></mat-divider>
       </div>
     </mat-nav-list>
 
     <button class="margin" mat-stroked-button color="accent">Lägg till egen kategori</button>
-    <button class="margin" mat-stroked-button color="accent">Lägg till app-data</button>
+    <button class="margin" mat-stroked-button color="accent" routerLink='/sources' >Lägg till app-data</button>
 
   </mat-sidenav>
 

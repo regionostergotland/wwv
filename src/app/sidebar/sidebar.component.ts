@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgModule } from '@angular/core';
 import { Conveyor } from '../conveyor.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
@@ -14,7 +15,7 @@ export class SidebarComponent implements OnInit {
 
   userCategories: string[];
 
-  constructor(private conveyor: Conveyor) {
+  constructor(private conveyor: Conveyor, private router: Router) {
 
   }
 
@@ -24,6 +25,7 @@ export class SidebarComponent implements OnInit {
 
   selectCategory(category: string): void {
       this.selectedCategory = category;
+      //this.router.navigateByUrl('sidebar/' + category); //TODO see if this will be needed
   }
 
   getCategoryLabel(categoryId: string): string {
