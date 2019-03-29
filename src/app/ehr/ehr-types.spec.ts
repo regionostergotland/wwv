@@ -1,17 +1,46 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { TestBed } from '@angular/core/testing';
+import { DataList, DataTypeText, DataPoint, CategorySpec, DataType,
+  DataTypeDateTime, DataTypeQuantity, DataTypeCodedText } from './ehr-types';
+import { HttpClient, HttpHandler} from '@angular/common/http';
 
-import { CategorySpec, DataList, DataPoint,
-         DataTypeEnum, DataType,
-         DataTypeDateTime, DataTypeQuantity,
-         DataTypeText, DataTypeCodedText } from './ehr-types';
+import {
+  GoogleApiModule,
+  GoogleApiService,
+  GoogleAuthService,
+  NgGapiClientConfig,
+  NG_GAPI_CONFIG
+} from 'ng-gapi';
 
-@Injectable({
-    providedIn: 'root',
-})
-export class EhrService {
-    private readonly categories: CategorySpec[] = [
+
+const gapiClientConfig: NgGapiClientConfig = {
+  client_id: '***REMOVED***.apps.googleusercontent.com',
+  discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],
+  scope: [
+    'https://www.googleapis.com/auth/fitness.blood_pressure.read',
+    'https://www.googleapis.com/auth/fitness.body.read'
+  ].join(' ')
+};
+
+
+describe('Ehr Types', () => {
+  beforeEach(() => TestBed.configureTestingModule({
+    imports: [
+      GoogleApiModule.forRoot({
+        provide: NG_GAPI_CONFIG,
+        useValue: gapiClientConfig
+      })
+    ],
+
+   providers: [
+    GoogleAuthService,
+    GoogleApiService,
+    HttpClient,
+    HttpHandler
+  ]
+  }));
+
+  it('should have true resluts to all valid data points', () => {
+    const categories: CategorySpec[] = [
         {
             id : 'blood_pressure',
             templateId : 'sm_blood-pressure',
@@ -123,83 +152,30 @@ export class EhrService {
         }
     ];
 
-    private basicCredentials: string;
+    const data_list = new DataList(categories[0]);
+    data_list.addPoints([
+        new DataPoint(
+            [
+                [ 'time', new Date() ],
+                [ 'systolic', 10 ],
+                [ 'diastolic', 20 ],
+            ]
+        ),
+        new DataPoint(
+            [
+                [ 'time', new Date() ],
+                [ 'systolic', 11 ],
+                [ 'diastolic', 22 ],
+            ]
+        )
+    ]);
 
-    constructor(
-        private http: HttpClient
-    ) {}
-
-    public getCategorySpec(categoryId: string): CategorySpec {
-        return this.categories.find(e => e.id === categoryId);
+    for (let point of data_list.getPoints()) {
+      for (let [typeId, value] of point.entries()) {
+        expect(data_list.getDataType(typeId).isValid(value)).toBeTruthy();
+      }
     }
+  });
 
-    public getCategories(): string[] {
-        const cats = [];
 
-        for (const cat of this.categories) {
-            cats.push(cat.id);
-        }
-
-        return cats;
-    }
-
-    private createComposition(list: DataList): string {
-        const composition: any = {
-            ctx: {
-                language: 'en',
-                territory: 'SE',
-            },
-            self_monitoring: {}
-        };
-
-        const spec = list.spec;
-        composition.self_monitoring[spec.id] = [ {
-            any_event: []
-        } ];
-
-        const event = composition.self_monitoring[spec.id][0].any_event;
-
-        for (const point of list.getPoints()) {
-            const element: any = {};
-
-            for (const [id, value] of point.entries()) {
-                element[id] = spec.dataTypes.get(id).toRest(value);
-            }
-
-            event.push(element);
-        }
-
-        const postData = JSON.stringify(composition, null, 2);
-        console.log(postData);
-        return JSON.stringify(composition);
-    }
-
-    public sendData(list: DataList): Observable<{}> {
-        const baseUrl = 'https://rest.ehrscape.com/rest/v1/composition';
-        const params = [
-            ['ehrId', 'c0cf738e-67b5-4c8c-8410-f83df4082ac0'],
-            ['templateId', list.spec.templateId],
-            ['format', 'STRUCTURED'],
-        ];
-        let url = baseUrl + '?';
-        for (const [key, value] of params) {
-            url += key + '=' + value + '&';
-        }
-
-        const composition = this.createComposition(list);
-
-        const options = {
-            headers: new HttpHeaders({
-                'Content-Type':  'application/json',
-                Authorization: 'Basic ' + this.basicCredentials
-            })
-        };
-
-        console.log(url);
-        return this.http.post(url, composition, options);
-    }
-
-    public authenticateBasic(user: string, pass: string) {
-        this.basicCredentials = btoa(user + ':' + pass);
-    }
-}
+});

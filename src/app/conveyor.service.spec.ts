@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { Conveyor } from './conveyor.service';
-import { DataList } from './shared/spec';
+import { DataList } from './ehr/ehr-types';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { DataPoint } from '../shared/spec';
+import { DataPoint } from '../ehr/ehr-types';
 
 interface Implementation {
     category: string;

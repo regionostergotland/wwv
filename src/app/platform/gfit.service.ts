@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DataPoint, CategorySpec } from '../shared/spec';
+import { DataPoint, CategorySpec } from '../ehr/ehr-types';
 import { Platform } from './platform.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
