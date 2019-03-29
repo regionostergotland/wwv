@@ -30,8 +30,5 @@ export abstract class Platform {
     public abstract getData(categoryId: string,
                             start: Date, end: Date): Observable<any>;
 
-
     public abstract convertData(res: any, categoryId: string): DataPoint[];
-
-
 }

@@ -4,6 +4,7 @@ import { CategorySpec, DataList, DataPoint } from './shared/spec';
 import { EhrService } from './ehr/ehr.service';
 import { Platform } from './platform/platform.service';
 import { GfitService } from './platform/gfit.service';
+import { DummyPlatformService } from './platform/dummy.service';
 import { of, Observable, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 
@@ -17,10 +18,12 @@ export class Conveyor {
 
     constructor(
         private ehrService: EhrService,
-        private gfitService: GfitService) {
+        private gfitService: GfitService,
+        private dummyPlatformService: DummyPlatformService) {
         this.categories = new Map<string, DataList>();
         this.platforms = new Map<string, Platform>([
-            [ 'google-fit', this.gfitService ]
+            [ 'google-fit', this.gfitService ],
+            [ 'dummy', this.dummyPlatformService ]
         ]);
     }
 
