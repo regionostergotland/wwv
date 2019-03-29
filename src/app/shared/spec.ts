@@ -24,6 +24,7 @@ export abstract class DataType {
     }
 
     public abstract isValid(value: any): boolean;
+    public abstract toRest(value: any): any;
 }
 
 export class DataTypeDateTime extends DataType {
@@ -34,6 +35,10 @@ export class DataTypeDateTime extends DataType {
     public isValid(value: any): boolean {
         return (value instanceof Date);
     }
+
+    public toRest(value: any): any {
+        return [value.toISOString()];
+    }
 }
 
 export class DataTypeText extends DataType {
@@ -43,6 +48,10 @@ export class DataTypeText extends DataType {
 
     public isValid(value: any): boolean {
         return (typeof value === 'string');
+    }
+
+    public toRest(value: any): any {
+        return [value];
     }
 }
 
@@ -64,6 +73,10 @@ export class DataTypeCodedText extends DataType {
     public isValid(value: any): boolean {
         return this.options.some(e => e.code === value);
     }
+
+    public toRest(value: any): any {
+        return [value];
+    }
 }
 
 export class DataTypeQuantity extends DataType {
@@ -84,6 +97,10 @@ export class DataTypeQuantity extends DataType {
             return false;
         }
         return this.magnitudeMin <= value && value <= this.magnitudeMax;
+    }
+
+    public toRest(value: any): any {
+        return [value];
     }
 }
 

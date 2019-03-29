@@ -134,43 +134,32 @@ export class EhrService {
     }
 
     public sendData(list: DataList) {
-        /*
-        let template: any = {
+        let composition: any = {
             "ctx": {
-                "language": "sv",
+                "language": "en",
                 "territory": "SE",
             },
-            "self_monitor": {
-                "self_monitor": []
-            }
+            "self_monitoring": {}
         };
 
-        for (let i = 0; i < categories.length; i++) {
-            let cat = categories[i];
+        let spec = list.spec;
+        composition[spec.id] = [ {
+            "any_event": []
+        } ];
 
-            let arch: any = {};
-            arch.time = cat.processed.raw.time;
-            for (let j = 0; j < cat.processed.raw.data.length; j++) {
-                let data = cat.processed.raw.data[j];
-                arch[data.id] = data.values;
+        let event = composition[spec.id][0].any_event;
+
+        for (let point of list.getPoints()) {
+            let element: any = {};
+
+            for (let [id, value] of point.entries()) {
+                element[id] = spec.dataTypes[id].toRest(value);
             }
 
-            for (let j = 0; j < cat.processed.states.length; j++) {
-                let state = cat.processed.states[j];
-                arch[state.id] = state.input;
-            }
-
-            let template_cat: any = {};
-            template_cat[cat.spec.id] = [
-                { "any_event" : [ arch ] }
-            ];
-
-            template.self_monitor.self_monitor.push(template_cat);
+            event.push(element);
         }
 
-        console.log("sending:");
-        console.log(JSON.stringify(template, null, 2));
-         */
+        console.log(JSON.stringify(composition, null, 2));
     }
 
     public authenticate() { }

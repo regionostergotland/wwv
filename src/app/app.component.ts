@@ -41,10 +41,8 @@ export class AppComponent {
     }
 
     getData(category: string) {
-
         this.conveyor.fetchData(this.platform, category,
                                 new Date(), new Date()).subscribe(_ => {
-
                                     const data = this.conveyor.getDataList(category);
                                     this.types = [];
                                     for (const t of data.spec.dataTypes.keys()) {
@@ -61,5 +59,9 @@ export class AppComponent {
                                 }
                             );
 
+    }
+
+    sendData(): void {
+        this.conveyor.sendData();
     }
 }
