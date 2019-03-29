@@ -51,19 +51,24 @@ describe('Conveyor', () => {
     expect(platforms).toContain('google-fit');
   });
 
-  /*
-  it('should return blood-pressure when calling getCategories', () => {
+  it('should return dummy when calling getPlatforms', () => {
     const service: Conveyor = TestBed.get(Conveyor);
-    const cats = service.getCategories('google-fit');
-    expect(cats).toContain('blood-pressure');
+    const platforms = service.getPlatforms();
+    expect(platforms).toContain('dummy');
+  });
+
+  it('should return blood_pressure when calling getCategories', () => {
+    const service: Conveyor = TestBed.get(Conveyor);
+    const cats = service.getCategories('dummy');
+    expect(cats).toContain('blood_pressure');
   });
 
   it('should return a list of datapoints when calling getDataList', () => {
     const service: Conveyor = TestBed.get(Conveyor);
-    service.fetchData('google-fit', 'blood-pressure', new Date(), new Date());
-    const catlist: DataList = service.getDataList('blood-pressure');
+    service.fetchData('dummy', 'blood_pressure', new Date(), new Date());
+    const catlist: DataList = service.getDataList('blood_pressure');
 
     expect(catlist).toBeDefined();
-  });*/
+  });
 
 });
