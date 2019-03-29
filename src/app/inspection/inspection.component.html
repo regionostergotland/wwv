@@ -9,7 +9,7 @@
     <mat-panel-description>Antal mätvärden: {{getNumberOfValues(category)}}</mat-panel-description>
   </mat-expansion-panel-header>
 
-  <table mat-table [dataSource]="getData(category)">
+  <table mat-table [dataSource]="getData(category)" style="text-align: left">
 
     <ng-container *ngFor="let key of getDisplayedColumns(category)" matColumnDef={{key}}>
       <th mat-header-cell *matHeaderCellDef> {{getColumnLabel(category, key)}} </th>
