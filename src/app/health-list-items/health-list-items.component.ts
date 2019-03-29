@@ -36,46 +36,40 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   constructor(private conveyor: Conveyor) {
-
-    for (const platform of conveyor.getPlatforms()) {
-      for (const category of conveyor.getCategories(platform)) {
-        this.categories.push(category);
-        conveyor.fetchData(platform, category, new Date(), new Date()); // TODO: remove this later
-      }
-    }
-    console.log(this.categories[0]);
   }
 
   ngOnInit() {
   }
 
-  getData(category: string): DataPoint[] {
-    return this.conveyor.getDataList(category).getPoints();
+  /**
+   * Gets all data points from the facade
+   * @returns a list of all datapoints in the category
+   */
+  getData(): DataPoint[] {
+    return this.conveyor.getDataList(this.selectedCategory).getPoints();
   }
 
   /**
    * Gets the label of the id specified.
-   * @param category the category in which the id is in
    * @param labelId the id to fetch the label to
    * @returns a label for the specified id
    */
-  getLabel(category: string, labelId: string): string {
+  getLabel(labelId: string): string {
     if (labelId === 'date') {
       return 'Datum';
     }
-    return this.conveyor.getDataList(category).getDataType(labelId).label;
+    return this.conveyor.getDataList(this.selectedCategory).getDataType(labelId).label;
   }
 
   /**
    * Returns the columns which should be displayed in the table depending on which
    * category it is.
-   * @param category the category to be displayed
    * @returns a list of labels for the specified category
    */
-  getDisplayedColumns(category: string): string[] {
+  getDisplayedColumns(): string[] {
     const result: string[] = [];
-    if (this.getData(category)) {
-      for (const column of Array.from(this.conveyor.getDataList(category).spec.dataTypes.keys())) {
+    if (this.getData()) {
+      for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
         if (column === 'time') {
           result.push('date');
           result.push('time');
@@ -89,25 +83,23 @@ export class HealthListItemsComponent implements OnInit {
 
   /**
    * Gets the type to display in the table.
-   * @param category the category to fetch types from
    * @param key the id to get the label from
    * @returns the type to display in the table
    */
-  getVisualType(category: string, key: string): DataTypeEnum {
+  getVisualType(key: string): DataTypeEnum {
     if (key === 'date') {
       return DataTypeEnum.DATE_TIME;
     }
-    return this.conveyor.getDataList(category).spec.dataTypes.get(key).type;
+    return this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.get(key).type;
   }
 
   /**
    * Gets the options to choose from according to a DataType.
-   * @param category the category to fetch options from
    * @param key the id to to fetch the options from
    * @returns a list of options
    */
-  getOptions(category: string, key: string): DataTypeCodedTextOpt[] {
-    const datatypes: DataTypeCodedText = this.conveyor.getDataList(category).getDataType(key) as DataTypeCodedText;
+  getOptions(key: string): DataTypeCodedTextOpt[] {
+    const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
     return datatypes.options;
   }
 
@@ -143,18 +135,17 @@ export class HealthListItemsComponent implements OnInit {
    * Set all unset data types in a category
    * @param key the data category to be set
    * @param option the option to set
-   * @param category the category the points are in
    */
-  setAllOptions(key: string, option: string, category: string) {
+  setAllOptions(key: string, option: string) {
     let allData = true;
-    for (const point of this.getData(category)) {
+    for (const point of this.getData()) {
       if (!point.has(key)) {
         this.setOption(key, point, option);
         allData = false;
       }
     }
     if (allData) {
-      for (const point of this.getData(category)) {
+      for (const point of this.getData()) {
         this.setOption(key, point, option);
       }
     }
