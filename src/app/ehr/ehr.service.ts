@@ -81,7 +81,7 @@ export class EhrService {
                     new DataTypeQuantity(
                         'Vikt',
                         'Kroppsvikt',
-                        'mm[Hg]', 0, 1000
+                        'kg', 0, 1000
                     )
                 ],
                 [
