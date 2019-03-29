@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { CategorySpec, DataList, DataPoint,
          DataTypeEnum, DataType,
          DataTypeDateTime, DataTypeQuantity,
-         DataTypeCodedText } from '../shared/spec';
+         DataTypeText, DataTypeCodedText } from '../shared/spec';
 
 @Injectable({
     providedIn: 'root',
@@ -11,9 +11,9 @@ import { CategorySpec, DataList, DataPoint,
 export class EhrService {
     private readonly categories: CategorySpec[] = [
         {
-            id : 'blood-pressure',
+            id : 'blood_pressure',
             label : 'Blodtryck',
-            description : 'onestuhosnehunoethu',
+            description : 'Mätning av arteriellt blodtryck.',
             dataTypes : new Map<string, DataType>([
                 [
                     'time',
@@ -26,7 +26,7 @@ export class EhrService {
                     'systolic',
                     new DataTypeQuantity(
                         'Övertryck',
-                        'Systoliskt undertryck av blod',
+                        'Systoliskt övertryck av blod',
                         'mm[Hg]', 0, 1000
                     )
                 ],
@@ -45,20 +45,78 @@ export class EhrService {
                         'Position vid mätning.',
                         [
                             {
-                                code: 'standing',
+                                code: 'at1000',
                                 label: 'Stående',
-                                description: 'notheunoehu'
+                                description: 'Stående under mätning.'
                             },
                             {
-                                code: 'lying',
-                                label: 'Liggandes',
-                                description: 'soetauhnotheunoehu'
+                                code: 'at1001',
+                                label: 'Sittande',
+                                description: 'Sittande under mätning.'
+                            },
+                            {
+                                code: 'at1003',
+                                label: 'Liggande',
+                                description: 'Liggande under mätning.'
                             }
                         ]
                     )
                 ],
             ])
         },
+        {
+            id : 'body-weight',
+            label : 'Kroppsvikt',
+            description : 'Mätning av faktisk kroppsvikt.',
+            dataTypes : new Map<string, DataType>([
+                [
+                    'time',
+                    new DataTypeDateTime(
+                        'Tid',
+                        'Tidpunkt vid mätning',
+                    )
+                ],
+                [
+                    'weight',
+                    new DataTypeQuantity(
+                        'Vikt',
+                        'Kroppsvikt',
+                        'mm[Hg]', 0, 1000
+                    )
+                ],
+                [
+                    'comment',
+                    new DataTypeText(
+                        'Undertryck',
+                        'Diastoliskt undertryck av blod'
+                    )
+                ],
+                [
+                    'state_of_dress',
+                    new DataTypeCodedText(
+                        'Klädsel',
+                        'Klädsel vid mätning.',
+                        [
+                            {
+                                code: 'at0011',
+                                label: 'Lättklädd/underkläder',
+                                description: 'Klädsel som ej bidrar med vikt.'
+                            },
+                            {
+                                code: 'at0013',
+                                label: 'Naken',
+                                description: 'Helt utan kläder.'
+                            },
+                            {
+                                code: 'at0010',
+                                label: 'Fullklädd',
+                                description: 'Klädsel som bidrar med vikt.'
+                            }
+                        ]
+                    )
+                ],
+            ])
+        }
     ];
 
     public getCategorySpec(categoryId: string): CategorySpec {
