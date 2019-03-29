@@ -11,11 +11,7 @@ export class HealthListItemsComponent implements OnInit {
 
   @Input() selectedCategory: string;
 
-  displayedColumns: string[] = [];
   dataTypeEnum = DataTypeEnum;
-  a: number = 1;
-
-  categories: string[] = [];
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -127,7 +123,6 @@ export class HealthListItemsComponent implements OnInit {
    */
   setOption(key: string, point: DataPoint, option: string) {
     point.set(key, option);
-    this.a = this.a + 1;
     console.log(Array.from(point.keys()));
   }
 
