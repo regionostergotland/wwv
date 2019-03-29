@@ -58,10 +58,13 @@ export class AppComponent {
                                     }
                                 }
                             );
+    }
 
+    authenticate(user: string, pass: string): void {
+        this.conveyor.authenticateBasic(user, pass);
     }
 
     sendData(): void {
-        this.conveyor.sendData();
+        this.conveyor.sendData().subscribe();
     }
 }

@@ -1,5 +1,6 @@
 export interface CategorySpec {
     id: string;
+    templateId: string;
     label: string;
     description: string;
     dataTypes: Map<string, DataType>;
@@ -51,7 +52,7 @@ export class DataTypeText extends DataType {
     }
 
     public toRest(value: any): any {
-        return [value];
+        return [ value ];
     }
 }
 
@@ -100,7 +101,10 @@ export class DataTypeQuantity extends DataType {
     }
 
     public toRest(value: any): any {
-        return [value];
+        return [ {
+            "|magnitude": value,
+            "|unit": this.unit
+        }];
     }
 }
 

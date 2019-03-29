@@ -70,10 +70,15 @@ export class Conveyor {
         this.categories.set(categoryId, list);
     }
 
-    public sendData() {
+    public authenticateBasic(username: string, password: string) {
+        console.log("authing "+username);
+        this.ehrService.authenticateBasic(username, password);
+    }
+
+    public sendData(): Observable<{}> {
         // TODO authenticate
         for (const category of this.categories.values()) {
-            this.ehrService.sendData(category);
+            return this.ehrService.sendData(category);
         }
     }
 }

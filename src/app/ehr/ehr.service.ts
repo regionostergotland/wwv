@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 
 import { CategorySpec, DataList, DataPoint,
          DataTypeEnum, DataType,
@@ -12,6 +14,7 @@ export class EhrService {
     private readonly categories: CategorySpec[] = [
         {
             id : 'blood_pressure',
+            templateId : 'sm_blood-pressure',
             label : 'Blodtryck',
             description : 'Mätning av arteriellt blodtryck.',
             dataTypes : new Map<string, DataType>([
@@ -66,6 +69,7 @@ export class EhrService {
         },
         {
             id : 'body_weight',
+            templateId : 'sm_weight',
             label : 'Kroppsvikt',
             description : 'Mätning av faktisk kroppsvikt.',
             dataTypes : new Map<string, DataType>([
@@ -119,6 +123,12 @@ export class EhrService {
         }
     ];
 
+    private basicCredentials: string;
+
+    constructor(
+        private http: HttpClient
+    ) {}
+
     public getCategorySpec(categoryId: string): CategorySpec {
         return this.categories.find(e => e.id === categoryId);
     }
@@ -133,7 +143,7 @@ export class EhrService {
         return cats;
     }
 
-    public sendData(list: DataList) {
+    private createComposition(list: DataList): string {
         let composition: any = {
             "ctx": {
                 "language": "en",
@@ -161,7 +171,35 @@ export class EhrService {
 
         let postData = JSON.stringify(composition, null, 2);
         console.log(postData);
+        return JSON.stringify(composition);
     }
 
-    public authenticate() { }
+    public sendData(list: DataList): Observable<{}> {
+        let baseUrl = "https://rest.ehrscape.com/rest/v1/composition";
+        let params = [
+            ["ehrId", "c0cf738e-67b5-4c8c-8410-f83df4082ac0"],
+            ["templateId", list.spec.templateId],
+            ["format", "STRUCTURED"],
+        ]
+        let url = baseUrl + "?";
+        for (let [key, value] of params) {
+            url += key + "=" + value + "&";
+        }
+
+        let composition = this.createComposition(list);
+
+        let options = {
+            headers: new HttpHeaders({
+                'Content-Type':  'application/json',
+                'Authorization': 'Basic '+this.basicCredentials
+            })
+        }
+
+        console.log(url);
+        return this.http.post(url, composition, options);
+    }
+
+    public authenticateBasic(user: string, pass: string) {
+        this.basicCredentials = btoa(user+":"+pass);
+    }
 }

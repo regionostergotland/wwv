@@ -47,7 +47,11 @@
 </table>
 
 <h1>Send</h1>
-<button (click)="sendData()">Send data</button>
+<label>Username: <input #username /> </label>
+<label>Password: <input type="password" #password /> </label>
+<button (click)="authenticate(username.value, password.value);
+sendData()">
+    Send data</button>
 
 <app-messages></app-messages>
 
