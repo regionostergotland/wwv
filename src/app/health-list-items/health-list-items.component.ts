@@ -15,7 +15,6 @@ export class HealthListItemsComponent implements OnInit {
   @Input() selectedCategory: string;
 
   dataTypeEnum = DataTypeEnum;
-  test: string = 'lying';
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -140,7 +139,6 @@ export class HealthListItemsComponent implements OnInit {
    */
   setOption(key: string, point: DataPoint, option: string) {
     point.set(key, option);
-    console.log(Array.from(point.keys()));
   }
 
   /**
@@ -163,6 +161,12 @@ export class HealthListItemsComponent implements OnInit {
     }
   }
 
+  /**
+   * Gets the option of the chosen DataPoint with the given key.
+   * @param point the DataPoint to get the option from.
+   * @param key the key in the DataPoint to get the option from.
+   * @returns A string representation of the option.
+   */
   getOption(point: DataPoint, key: string): string {
     if (!point.get(key)) {
       point.set(key, '');
