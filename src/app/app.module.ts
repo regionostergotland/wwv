@@ -17,6 +17,7 @@ import { HealthListItemsComponent } from './health-list-items/health-list-items.
 import { InspectionComponent } from './inspection/inspection.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AmazingTimePickerModule } from 'amazing-time-picker';
 
 import { MatAutocompleteModule,
     MatBadgeModule,
@@ -63,6 +64,7 @@ import {
   NG_GAPI_CONFIG,
   GoogleApiConfig
 } from 'ng-gapi';
+import { AddDataPointComponent } from './add-data-point/add-data-point.component';
 
 const gapiClientConfig: NgGapiClientConfig = {
   client_id: '***REMOVED***.apps.googleusercontent.com',
@@ -85,8 +87,8 @@ const gapiClientConfig: NgGapiClientConfig = {
     HelpComponent,
     HealthListItemsComponent,
     InspectionComponent,
-    SidebarComponent, 
-    MessagesComponent
+    SidebarComponent,
+    MessagesComponent, AddDataPointComponent
   ],
   imports: [
     BrowserModule,
@@ -133,6 +135,7 @@ const gapiClientConfig: NgGapiClientConfig = {
     MatFormFieldModule,
     MatTableModule,
 
+    AmazingTimePickerModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
@@ -142,6 +145,7 @@ const gapiClientConfig: NgGapiClientConfig = {
     })
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [AddDataPointComponent]
 })
 export class AppModule { }

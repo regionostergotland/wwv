@@ -1,6 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DataPoint, DataTypeCodedText, DataTypeCodedTextOpt, DataTypeEnum} from '../shared/spec';
 import {Conveyor} from '../conveyor.service';
+import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
+import {MatDialog} from '@angular/material';
+
 
 @Component({
   selector: 'app-health-list-items',
@@ -28,13 +31,26 @@ export class HealthListItemsComponent implements OnInit {
    * @returns a formatted string representing a time
    */
   static getTime(date: Date): string {
-    return date.toLocaleTimeString('sv-SE');
+    return date.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
   }
 
-  constructor(private conveyor: Conveyor) {
+  constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
 
   ngOnInit() {
+  }
+
+  /**
+   * Opens the dialog to add an item in the list stored in the conveyor.
+   */
+  openDialog(): void {
+    const dialogRef = this.dialog.open(AddDataPointComponent, {
+      data: this.selectedCategory
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
   /**
@@ -123,7 +139,6 @@ export class HealthListItemsComponent implements OnInit {
    */
   setOption(key: string, point: DataPoint, option: string) {
     point.set(key, option);
-    console.log(Array.from(point.keys()));
   }
 
   /**
@@ -144,6 +159,19 @@ export class HealthListItemsComponent implements OnInit {
         this.setOption(key, point, option);
       }
     }
+  }
+
+  /**
+   * Gets the option of the chosen DataPoint with the given key.
+   * @param point the DataPoint to get the option from.
+   * @param key the key in the DataPoint to get the option from.
+   * @returns A string representation of the option.
+   */
+  getOption(point: DataPoint, key: string): string {
+    if (!point.get(key)) {
+      point.set(key, '');
+    }
+    return point.get(key);
   }
 
 }

@@ -11,20 +11,21 @@
       <mat-divider></mat-divider>
 
       <div *ngFor="let category of userCategories">
-        <mat-list-item (click)="selectCategory(category)" routerLink="/sidebar/{{category}}">{{getCategoryLabel(category)}}</mat-list-item>
+        <mat-list-item (click)="selectCategory(category)">{{getCategoryLabel(category)}}</mat-list-item>
         <mat-divider></mat-divider>
       </div>
     </mat-nav-list>
 
-    <button class="margin" mat-stroked-button color="accent">Lägg till egen kategori</button>
-    <button class="margin" mat-stroked-button color="accent">Lägg till app-data</button>
+    <button class="wide-button"  style="margin-top: 20px" mat-stroked-button color="accent">Lägg till egen kategori</button>
+    <button class="wide-button" mat-stroked-button color="accent" routerLink='/sources' >Lägg till app-data</button>
 
   </mat-sidenav>
 
   <mat-sidenav-content>
 
     <!-- här kommer listor vara -->
-    <app-health-list-items *ngIf="selectedCategory" [selectedCategory]="selectedCategory"></app-health-list-items>
+    <app-health-list-items *ngIf="selectedCategory" [selectedCategory]="selectedCategory" style="text-align: left"></app-health-list-items>
+    <button class='margin' mat-raised-button color='primary' routerLink='/inspection'>Nästa steg</button>
 
   </mat-sidenav-content>
 

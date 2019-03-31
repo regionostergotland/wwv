@@ -42,9 +42,9 @@ export class SourcesComponent implements OnInit {
   ngOnInit() {
   }
 
-  /*
-  * Adds all platforms of the conveyor to the sources list.
-  * */
+  /**
+   * Adds all platforms of the conveyor to the sources list.
+   */
   addSources() {
     const platforms = this.conveyor.getPlatforms();
     this.sources = [];

@@ -25,6 +25,11 @@ export class CategoryPickerComponent implements OnInit {
 
   ngOnInit() {
     this.platformId = this.conveyor.getSelectedPlatform();
+
+    this.startDate = new Date();
+    this.startDate.setMonth(this.startDate.getMonth()-1);
+    this.endDate = new Date();
+
     // finns det en platform
     if (this.platformId) {
       this.conveyor.getCategories(this.platformId).subscribe(_ => {
@@ -46,9 +51,11 @@ export class CategoryPickerComponent implements OnInit {
     }
   }
 
-  /*
-  * connected to the category checkboxes
-  * */
+  /**
+   * connected to the category checkboxes
+   * @param category The category to update
+   * @param event the checkbox event
+   */
   updateChosenCategories(category: string, event): void {
     const boxChecked: boolean = event.checked;
     if (boxChecked) {
@@ -63,6 +70,9 @@ export class CategoryPickerComponent implements OnInit {
       return(this.startDate && this.endDate && this.conveyor.getSelectedCategories().length > 0);
   }
 
+  /**
+   * Gets data from conveyor.
+   */
   getData() {
     // TODO change blood pressure to array of categories
     this.conveyor.fetchData(this.platformId, 'blood-pressure', this.startDate, this.endDate).subscribe(_ =>

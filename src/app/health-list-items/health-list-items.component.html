@@ -1,4 +1,4 @@
-<h1>{{conveyor.getCategorySpec(selectedCategory).label}}</h1>
+<h1 style="text-align: center">{{conveyor.getCategorySpec(selectedCategory).label}}</h1>
 
 <table mat-table [dataSource]="getData()" class="mat-elevation-z8">
 
@@ -8,7 +8,7 @@
       <div *ngIf="getVisualType(key) === dataTypeEnum.CODED_TEXT">
 
         <mat-form-field>
-          <mat-select (selectionChange)="setOption(key, dataPoint, $event.value)" placeholder={{getLabel(key)}}>
+          <mat-select [value]="getOption(dataPoint, key)" (selectionChange)="setOption(key, dataPoint, $event.value)" placeholder={{getLabel(key)}}>
             <mat-option *ngFor="let option of getOptions(key)" [value]="option.code">
               {{option.label}}
             </mat-option>
@@ -28,3 +28,5 @@
   <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
   <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
 </table>
+
+<button mat-stroked-button color="accent" style="text-align: center; width: 100%" (click)="openDialog()">Lägg till datavärde</button>
