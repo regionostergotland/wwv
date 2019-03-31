@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DataList, DataPoint } from '../shared/spec';
+import { DataPoint } from '../shared/spec';
 import { Conveyor } from '../conveyor.service';
-import { getTreeNoValidDataSourceError } from '@angular/cdk/tree';
 
 @Component({
   selector: 'app-inspection',
