@@ -144,4 +144,8 @@ export class AddDataPointComponent implements OnInit {
       this.setTime(time);
     });
   }
+
+  getCategoryLabel() {
+    return this.conveyor.getCategorySpec(this.selectedCategory).label;
+  }
 }
