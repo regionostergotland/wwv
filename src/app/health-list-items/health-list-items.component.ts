@@ -15,6 +15,7 @@ export class HealthListItemsComponent implements OnInit {
   @Input() selectedCategory: string;
 
   dataTypeEnum = DataTypeEnum;
+  test: string = 'lying';
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -160,6 +161,13 @@ export class HealthListItemsComponent implements OnInit {
         this.setOption(key, point, option);
       }
     }
+  }
+
+  getOption(point: DataPoint, key: string): string {
+    if (!point.get(key)) {
+      point.set(key, '');
+    }
+    return point.get(key);
   }
 
 }
