@@ -48,9 +48,11 @@ export class CategoryPickerComponent implements OnInit {
     }
   }
 
-  /*
-  * connected to the category checkboxes
-  * */
+  /**
+   * connected to the category checkboxes
+   * @param category The category to update
+   * @param event the checkbox event
+   */
   updateChosenCategories(category: string, event): void {
     const boxChecked: boolean = event.checked;
     if (boxChecked) {
@@ -65,6 +67,9 @@ export class CategoryPickerComponent implements OnInit {
       return(this.startDate && this.endDate && this.conveyor.getSelectedCategories().length > 0);
   }
 
+  /**
+   * Gets data from conveyor.
+   */
   getData() {
     // TODO change blood pressure to array of categories
     this.conveyor.fetchData(this.platformId, 'blood-pressure', this.startDate, this.endDate).subscribe(_=> 
