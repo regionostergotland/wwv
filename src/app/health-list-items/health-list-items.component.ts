@@ -31,7 +31,7 @@ export class HealthListItemsComponent implements OnInit {
    * @returns a formatted string representing a time
    */
   static getTime(date: Date): string {
-    return date.toLocaleTimeString('sv-SE');
+    return date.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
   }
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
