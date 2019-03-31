@@ -12,10 +12,11 @@ export class InspectionComponent implements OnInit {
 
   categories: string[] = [];
 
-  constructor(private conveyor: Conveyor) { 
+  constructor(private conveyor: Conveyor) {
   
     for (let platform of conveyor.getPlatforms()) {
-      for (let category of conveyor.getCategories(platform)) {
+      for (let category of conveyor.getAvailableCats(platform)) {
+        console.log(category);
         this.categories.push(category);
       }
     }

@@ -15,13 +15,16 @@ export abstract class Platform {
     protected implemented: Implementation[] = [];
     protected available: string[] = [];
 
-    public abstract signIn(): void;
+    public abstract async signIn();
 
     public abstract signOut(): void;
 
     // can be overridden to check if available for logged in user
     public abstract isAvailable(categoryId: string): Observable<boolean>;
 
+    public abstract getAvailable(): string[];
+
+    public abstract getCategories(): Observable<any>;
 
     protected isImplemented(categoryId: string): boolean {
         return this.implemented.some(e => e.category === categoryId);

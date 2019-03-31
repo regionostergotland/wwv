@@ -70,8 +70,9 @@ const gapiClientConfig: NgGapiClientConfig = {
   scope: [
     'https://www.googleapis.com/auth/fitness.blood_pressure.read',
     'https://www.googleapis.com/auth/fitness.body.read'
-  ].join(' ')
+  ].join(' '),
 };
+
 
 @NgModule({
   declarations: [

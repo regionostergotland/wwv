@@ -25,11 +25,13 @@ export class CategoryPickerComponent implements OnInit {
 
   ngOnInit() {
     this.platformId = this.conveyor.getSelectedPlatform();
-
     // finns det en platform
     if (this.platformId) {
-      this.categoryIds = this.conveyor.getCategories(this.platformId);
-      this.getCategories();
+      this.conveyor.getCategories(this.platformId).subscribe(_ => {
+        this.categoryIds = this.conveyor.getAvailableCats(this.platformId);
+        console.log(this.categoryIds);
+        this.getCategories();
+      });
     }
   }
 
@@ -52,7 +54,7 @@ export class CategoryPickerComponent implements OnInit {
     if (boxChecked) {
         this.conveyor.selectCategory(category);
     } else {
-        this.conveyor.unSelectCategory(category);
+        this.conveyor.unselectCategory(category);
     }
     console.log(this.conveyor.getSelectedCategories());
   }
@@ -63,7 +65,7 @@ export class CategoryPickerComponent implements OnInit {
 
   getData() {
     // TODO change blood pressure to array of categories
-    this.conveyor.fetchData(this.platformId, 'blood-pressure', this.startDate, this.endDate).subscribe(_=> 
+    this.conveyor.fetchData(this.platformId, 'blood-pressure', this.startDate, this.endDate).subscribe(_ =>
       this.router.navigateByUrl('/sidebar')
     );
   }

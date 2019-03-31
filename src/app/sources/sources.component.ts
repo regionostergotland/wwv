@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Source } from '../source';
 import { Conveyor } from '../conveyor.service';
+import { Router } from '@angular/router';
+import { GoogleAuthService } from 'ng-gapi';
+import { GfitService } from '../platform/gfit.service'
 
 const googleFit = 'google-fit';
 const withings = 'withings';
@@ -28,7 +31,11 @@ export class SourcesComponent implements OnInit {
 
   sources: Source[] = [];
 
-  constructor(private conveyor: Conveyor) {
+  constructor(
+    private conveyor: Conveyor,
+    private gfitService: GfitService,
+    private router: Router,
+    private googleAuth: GoogleAuthService) {
     this.addSources();
   }
 
@@ -53,5 +60,11 @@ export class SourcesComponent implements OnInit {
         });
       }
     }
+  }
+
+  async selectPlatform(platformId: string) {
+    this.conveyor.selectPlatform(platformId);
+    await this.conveyor.signIn(platformId);
+    this.router.navigateByUrl('/catpicker');
   }
 }

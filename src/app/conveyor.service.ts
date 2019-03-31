@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-
+import { MessageService } from './message.service';
 import { CategorySpec, DataList, DataPoint } from './shared/spec';
 import { EhrService } from './ehr/ehr.service';
 import { Platform } from './platform/platform.service';
 import { GfitService } from './platform/gfit.service';
 import { of, Observable, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
+import { PlayState } from '@angular/core/src/render3/interfaces/player';
 
 
 @Injectable({
@@ -18,6 +19,7 @@ export class Conveyor {
     private selectedPlatform: string;
 
     constructor(
+        private messageService: MessageService,
         private ehrService: EhrService,
         private gfitService: GfitService) {
         this.categories = new Map<string, DataList>();
@@ -27,9 +29,9 @@ export class Conveyor {
         ]);
     }
 
-    public signIn(platformId: string): void {
+    public async signIn(platformId: string) {
         const platform: Platform = this.platforms.get(platformId);
-        platform.signIn();
+        await platform.signIn();
     }
 
     public signOut(platformId: string): void {
@@ -41,16 +43,28 @@ export class Conveyor {
         return Array.from(this.platforms.keys());
     }
 
-    public getCategories(platformId: string): string[] {
+    public getAvailableCats(platformId: string): string[] {
+        const platform: Platform = this.platforms.get(platformId);
+        const available: string[] = platform.getAvailable();
+        const categoryIds: string[] = this.ehrService.getCategories();
+        return categoryIds.filter(id => available.includes(id));
+    }
+
+    public getCategories(platformId: string): Observable<any> {
         const platform: Platform = this.platforms.get(platformId);
         const categoryIds: string[] = this.ehrService.getCategories();
-        return categoryIds.filter(id => platform.isAvailable(id));
+        console.log("Getting categories");
+        return platform.getCategories().pipe(map(_ => EMPTY ));
+        /*return platform.getAvailable().pipe(map(res => {
+            available = res;
+        }));*/
+        // categoryIds.filter(id => platform.isAvailable(id));
     }
 
     /*
     * Removes a selected category from the selected list
     * */
-    public unSelectCategory(categoryId: string) {
+    public unselectCategory(categoryId: string) {
         if (this.selectedCategories.includes(categoryId)) {
             this.selectedCategories.splice(this.selectedCategories.indexOf(categoryId), 1);
         }
@@ -108,7 +122,7 @@ export class Conveyor {
     * @param platformId The chosen platform
     * */
     public selectPlatform(platformId: string) {
-      this.selectedPlatform = platformId;
+        this.selectedPlatform = platformId;
     }
 
     /*
@@ -116,6 +130,7 @@ export class Conveyor {
     * @returns the currently selected platform.
     * */
     public getSelectedPlatform(): string {
-      return this.selectedPlatform;
+        console.log("Returning " + this.selectedPlatform);
+        return this.selectedPlatform;
     }
 }
