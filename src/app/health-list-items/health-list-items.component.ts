@@ -40,6 +40,9 @@ export class HealthListItemsComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Opens the dialog to add an item in the list stored in the conveyor.
+   */
   openDialog(): void {
     const dialogRef = this.dialog.open(AddDataPointComponent, {
       data: this.selectedCategory
@@ -47,7 +50,6 @@ export class HealthListItemsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      // this.animal = result;
     });
   }
 

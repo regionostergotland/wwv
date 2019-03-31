@@ -32,8 +32,8 @@ export class InspectionComponent implements OnInit {
 
   constructor(private conveyor: Conveyor) {
 
-    for (let platform of conveyor.getPlatforms()) {
-      for (let category of conveyor.getCategories(platform)) {
+    for (const platform of conveyor.getPlatforms()) {
+      for (const category of conveyor.getCategories(platform)) {
         this.categories.push(category);
       }
     }
@@ -43,10 +43,20 @@ export class InspectionComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Get the human readable label of the chosen category.
+   * @param category the category to get the label to
+   * @returns a human readable string of the category
+   */
   getLabel(category: string): string {
     return this.conveyor.getCategorySpec(category).label;
   }
 
+  /**
+   * Get a list of all the DataPoints of a chosen category.
+   * @param category the category to get points from
+   * @returns a list of all points in the chosen categories
+   */
   getData(category: string): DataPoint[] {
     return this.conveyor.getDataList(category).getPoints();
   }
@@ -101,10 +111,18 @@ export class InspectionComponent implements OnInit {
     return point.get(key);
   }
 
+  /**
+   * Get the number of values in a chosen category.
+   * @param category the category to get values from
+   * @returns the number of values in the chosen category
+   */
   getNumberOfValues(category: string) {
     return this.conveyor.getDataList(category).getPoints().length;
   }
 
+  /**
+   * Send all the data stored in the conveyor.
+   */
   sendData() {
     this.conveyor.sendData();
   }

@@ -26,7 +26,7 @@
     </div>
     <div *ngIf="getVisualType(key) === dataTypeEnum.DATE_TIME && key === 'time'">
       <mat-form-field>
-        <input #time (click)="open()" matInput  [(ngModel)]="clockTime"/>
+        <input #time (click)="openTimePicker()" matInput  [(ngModel)]="clockTime"/>
       </mat-form-field>
     </div>
     <div *ngIf="getVisualType(key) === dataTypeEnum.DATE_TIME && key != 'time' && key != 'date'">

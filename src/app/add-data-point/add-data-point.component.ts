@@ -30,6 +30,9 @@ export class AddDataPointComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * The method to be fired when the dialog isn't clicked on but something else is clicked.
+   */
   onNoClick(): void {
     this.dialogRef.close();
   }
@@ -103,16 +106,30 @@ export class AddDataPointComponent implements OnInit {
     return datatypes.options;
   }
 
+  /**
+   * Gets the minimum of a range of a DataTypeQuantity.
+   * @param key the key of the datatype to be fetched.
+   * @returns The minimum number accepted of the DataTypeQuantity.
+   */
   getMinOfRange(key: string): number {
     const datatype: DataTypeQuantity = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeQuantity;
     return datatype.magnitudeMin;
   }
 
+  /**
+   * Gets the maximum of a range of a DataTypeQuantity.
+   * @param key the key of the datatype to be fetched.
+   * @returns The maximum number accepted of the DataTypeQuantity.
+   */
   getMaxOfRange(key: string): number {
     const datatype: DataTypeQuantity = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeQuantity;
     return datatype.magnitudeMax;
   }
 
+  /**
+   * Creates a DataPoint and adds it to the DataList with all the components of this DialogComponent, if the values are not accepted as
+   * an input the value will not save and the dialog will not close.
+   */
   createDataPoint() {
     console.log(this.pointData);
     for (const [typeId, value] of this.pointData.entries()) {
@@ -128,6 +145,12 @@ export class AddDataPointComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  /**
+   * Sets the time of the DataType. This is the only exception to the DataType, as the key 'time' will be split into two, a 'date' and a
+   * 'time'. The 'date' will be saved separately and the 'time' will be added into the 'date'. When saved into the DataType, the Date object
+   * in 'date' will be saved in 'time'.
+   * @param time the time to set.
+   */
   setTime(time: string) {
     console.log(time);
     this.clockTime = time;
@@ -138,13 +161,20 @@ export class AddDataPointComponent implements OnInit {
     this.pointData.set('time', date);
   }
 
-  open() {
+  /**
+   * Open the time picker to choose a time.
+   */
+  openTimePicker() {
     const amazingTimePicker = this.atp.open();
     amazingTimePicker.afterClose().subscribe(time => {
       this.setTime(time);
     });
   }
 
+  /**
+   * Gets the label of the category.
+   * @returns A human readable string of the label of the category.
+   */
   getCategoryLabel() {
     return this.conveyor.getCategorySpec(this.selectedCategory).label;
   }
