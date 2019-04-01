@@ -247,7 +247,7 @@ export class DataPoint {
 
     // wrap Map methods because Map can't be extended
     public get(typeId: string): any { return this.point.get(typeId); }
-    public set(typeId: string, value: any) { this.point[typeId] = value; }
+    public set(typeId: string, value: any) { this.point.set(typeId, value); }
     public values() { return this.point.values(); }
     public keys() { return this.point.keys(); }
     public entries() { return this.point.entries(); }
@@ -292,6 +292,12 @@ export class DataList {
         this.mathFunction = MathFunctionEnum.ACTUAL;
     }
 
+    // make lambda?
+    private sortByEarliestComparator(p1: DataPoint, p2: DataPoint) {
+        return (p1.get('time').getTime() - p2.get('time').getTime());
+    }
+
+    // TODO move to DataPoint
     private equals(p1: DataPoint, p2: DataPoint): boolean {
         // getTime() converts a Date-object to a unix timestamp
         return (p1.get('time').getTime() === p2.get('time').getTime());
@@ -318,6 +324,7 @@ export class DataList {
         if (!this.containsPoint(point)) {
             this.points.push(point);
         }
+        this.points.sort(this.sortByEarliestComparator);
     }
 
     /**
