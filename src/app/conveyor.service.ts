@@ -46,6 +46,10 @@ export class Conveyor {
         return platform.getAvailable();
     }
 
+    public getCategoryIds(): string[] {
+      return Array.from(this.categories.keys());
+    }
+
     /*
     * Removes a selected category from the selected list
     * */

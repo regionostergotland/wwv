@@ -7,7 +7,7 @@ import {
   MatDatepickerModule,
   MatDialogModule,
   MatSelectModule,
-  MatFormFieldModule, 
+  MatFormFieldModule,
   MAT_DIALOG_DATA,
   MatDialogRef
   } from '@angular/material';
@@ -45,7 +45,7 @@ describe('AddDataPointComponent', () => {
         MatDialogModule,
         MatFormFieldModule,
         MatSelectModule,
-        
+
         GoogleApiModule.forRoot({
           provide: NG_GAPI_CONFIG,
           useValue: gapiClientConfig

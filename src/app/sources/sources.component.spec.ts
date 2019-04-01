@@ -29,7 +29,7 @@ describe('SourcesComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ SourcesComponent ],
       imports: [
-        RouterTestingModule, 
+        RouterTestingModule,
         MatCardModule,
 
         GoogleApiModule.forRoot({
