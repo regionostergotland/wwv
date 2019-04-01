@@ -19,12 +19,7 @@ export abstract class Platform {
 
     public abstract signOut(): void;
 
-    // can be overridden to check if available for logged in user
-    public abstract isAvailable(categoryId: string): Observable<boolean>;
-
-    public abstract getAvailable(): string[];
-
-    public abstract getCategories(): Observable<any>;
+    public abstract getAvailable(): Observable<string[]>;
 
     protected isImplemented(categoryId: string): boolean {
         return this.implemented.some(e => e.category === categoryId);

@@ -32,7 +32,6 @@ export class AppComponent {
     }
 
     showCategories(): void {
-        this.gfitService.isAvailable('blood-pressure');
     }
 
     getCategories(platform: string): void {

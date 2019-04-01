@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataPoint } from '../shared/spec';
 import { Conveyor } from '../conveyor.service';
+import { platform } from 'os';
 
 @Component({
   selector: 'app-inspection',
@@ -30,13 +31,13 @@ export class InspectionComponent implements OnInit {
   }
 
   constructor(private conveyor: Conveyor) {
-
     for (const platform of conveyor.getPlatforms()) {
-      for (const category of conveyor.getAvailableCats(platform)) {
-        this.categories.push(category);
-      }
+      conveyor.getAvailableCategories(platform).subscribe(res => {
+        for(const category of res) {
+          this.categories.push(category);
+        }
+      });
     }
-
   }
 
   ngOnInit() {

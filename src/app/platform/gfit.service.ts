@@ -6,8 +6,8 @@ import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { GoogleAuthService } from 'ng-gapi';
 import GoogleUser = gapi.auth2.GoogleUser;
-import { MessageService } from '../message.service';
 import { AutofillMonitor } from '@angular/cdk/text-field';
+import { cat } from 'shelljs';
 
 @Injectable({
     providedIn: 'root',
@@ -40,8 +40,7 @@ export class GfitService extends Platform {
 
     constructor(
         private googleAuth: GoogleAuthService,
-        private http: HttpClient,
-        private messageService: MessageService
+        private http: HttpClient
         ) {
         super();
         this.implemented.push(
@@ -60,8 +59,10 @@ export class GfitService extends Platform {
     }
 
     public async signIn() {
-        const res = await this.auth.signIn();
-        this.signInSuccessHandler(res);
+        if (!sessionStorage.getItem(GfitService.SESSION_STORAGE_KEY) || (this.user == null)) {
+            const res = await this.auth.signIn();
+            this.signInSuccessHandler(res);
+        }
     }
 
     /*public signIn(): void {
@@ -87,41 +88,11 @@ export class GfitService extends Platform {
     }
 
     /**
-     * This function checks if a given category is available to fetch data from
-     * The first time this function is called it will GET the metadata containing information about available activites
-     * @param categoryId category to check availability for
-     * @returns true if category is available, false if not
-     */
-    // @override
-    public isAvailable(categoryId: string): Observable<boolean> {
-        if (!this.dataIsFetched) {
-            this.dataIsFetched = true;
-            return this.getCategories().pipe(map(_ =>
-                 this.isImplemented(categoryId) && this.available.includes(categoryId)
-                ));
-        } else {
-            return of(this.isImplemented(categoryId) && this.available.includes(categoryId));
-        }
-    }
-
-    public getAvailable(): string[] {
-        const res: string[] = [];
-        for (const cat in this.available) {
-            if (this.isImplemented(cat)) {
-                res.push(cat);
-            }
-        }
-        return this.available;
-    }
-
-
-    /**
      * This function GETs the activity metadata for the user and parses this data to
-     * add categories that are available to the user. It then returns an empty observable
-     * so that isAvailable() is notified when this function has finished executing and
-     * the vector containing available categories has been updated.
+     * add categories that are available to the user. It then returns an observable containing
+     * an array with the available categories.
      */
-    public getCategories(): Observable<any> {
+    public getAvailable(): Observable<string[]> {
         if (!this.dataIsFetched) {
             this.dataIsFetched = true;
             return this.http.get(
@@ -129,15 +100,21 @@ export class GfitService extends Platform {
                     this.activities = res;
                     this.activities.dataSource.forEach(source => {
                         if (source.dataStreamId.split(':')[0] === 'raw') { // As of now, we only want raw data
-                            this.available.push(this.categoryDataTypeNames.get(source.dataType.name));
+                            const categoryId: string = this.categoryDataTypeNames.get(source.dataType.name);
+                            if (this.isImplemented(categoryId)) {
+                                this.available.push(categoryId);
+                            }
                         }
                     });
-                    return of(null);
+                    return this.available;
                 }));
         } else {
-            return of(null);
+            return of(this.available);
         }
     }
+
+
+
 
     /**
      * This function GETs the data for a specified category and time interval.
@@ -150,11 +127,9 @@ export class GfitService extends Platform {
      */
     public getData(categoryId: string,
                    start: Date, end: Date): Observable<DataPoint[]> {
-        const weekInMs = 7 * 24 * 3600 * 1000 * 14;
-        const startTime = String((Date.now() - weekInMs) * Math.pow(10, 6));
-        const endTime = String(Math.floor(Date.now() * Math.pow(10, 6)));
+        const startTime = String(start.getTime() * Math.pow(10, 6));
+        const endTime = String(end.getTime() * Math.pow(10, 6));
         const dataSetId = startTime + '-' + endTime;
-
         let url: string = this.baseUrl;
         const tail: string = '/datasets/' +
                             dataSetId +
@@ -180,7 +155,6 @@ export class GfitService extends Platform {
      * @returns an array containing the converted DataPoint(s)
      */
     public convertData(res: any, categoryId: string): DataPoint[] {
-        this.messageService.addMsg('Converting data...');
         const points: DataPoint[] = [];
         if (categoryId === 'blood-pressure') {
             res.point.forEach(src => {
