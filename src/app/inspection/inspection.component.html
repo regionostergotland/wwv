@@ -27,12 +27,12 @@
   <div style="margin-bottom: 10px">
     <label>Username: <input #username /> </label>
     <label>Password: <input type="password" #password /> </label>
-    <button (click)="authenticate(username.value, password.value);
-  sendData()">
-      Send data</button>
   </div>
 
-  <button mat-raised-button color='primary' (click)='sendData()'>Godkänn och skicka</button>
+  <button mat-raised-button color='primary'
+    (click)="authenticate(username.value, password.value); sendData()">
+      Godkänn och skicka
+  </button>
 
 </div>
 
