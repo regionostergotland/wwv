@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 
-import { CategorySpec, DataList, DataPoint } from './ehr/ehr-types';
+import { DataList } from './ehr/ehr-types';
 import { EhrService } from './ehr/ehr.service';
 import { Platform } from './platform/platform.service';
 import { GfitService } from './platform/gfit.service';
 import { DummyPlatformService } from './platform/dummy.service';
-import { of, Observable, EMPTY } from 'rxjs';
-import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
-import { PlayState } from '@angular/core/src/render3/interfaces/player';
+import { Observable, EMPTY } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 
 @Injectable({
@@ -52,6 +51,14 @@ export class Conveyor {
 
     public getCategoryIds(): string[] {
       return Array.from(this.categories.keys());
+    }
+
+    public hasCategoryId(categoryId: string): boolean {
+      return this.categories.has(categoryId);
+    }
+
+    public getAllCategories(): string[] {
+      return this.ehrService.getCategories();
     }
 
     /*

@@ -15,7 +15,7 @@ import { InfoComponent } from './info/info.component';
 import { HelpComponent } from './help/help.component';
 import { HealthListItemsComponent } from './health-list-items/health-list-items.component';
 import { InspectionComponent } from './inspection/inspection.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { BottomSheetOverviewExampleSheetComponent, SidebarComponent } from './sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 
@@ -58,11 +58,8 @@ import { MatAutocompleteModule,
 
 import {
   GoogleApiModule,
-  GoogleApiService,
-  GoogleAuthService,
   NgGapiClientConfig,
-  NG_GAPI_CONFIG,
-  GoogleApiConfig
+  NG_GAPI_CONFIG
 } from 'ng-gapi';
 import { AddDataPointComponent } from './add-data-point/add-data-point.component';
 
@@ -88,7 +85,8 @@ const gapiClientConfig: NgGapiClientConfig = {
     HealthListItemsComponent,
     InspectionComponent,
     SidebarComponent,
-    MessagesComponent, AddDataPointComponent
+    MessagesComponent, AddDataPointComponent,
+    BottomSheetOverviewExampleSheetComponent
   ],
   imports: [
     BrowserModule,
@@ -146,6 +144,6 @@ const gapiClientConfig: NgGapiClientConfig = {
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [AddDataPointComponent]
+  entryComponents: [AddDataPointComponent, BottomSheetOverviewExampleSheetComponent]
 })
 export class AppModule { }

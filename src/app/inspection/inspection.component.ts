@@ -63,6 +63,18 @@ export class InspectionComponent implements OnInit {
   }
 
   /**
+   * Checks if a category is empty.
+   * @param categoryId the category to check values from.
+   * @returns whether the category has no points in its list.
+   */
+  isCategoryEmpty(categoryId: string): boolean {
+    if (this.conveyor.getDataList(categoryId)) {
+      return this.conveyor.getDataList(categoryId).getPoints().length < 1;
+    }
+    return false;
+  }
+
+  /**
    * Returns the columns which should be displayed in the table depending on which
    * category it is.
    * @param category the category to get columns from

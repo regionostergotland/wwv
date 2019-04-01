@@ -1,7 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NgModule } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Conveyor } from '../conveyor.service';
 import { Router } from '@angular/router';
+import {MatBottomSheet, MatBottomSheetRef} from '@angular/material';
+import {DataList} from '../ehr/ehr-types';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,24 +14,58 @@ export class SidebarComponent implements OnInit {
   title = 'Kategorier';
   selectedCategory: string;
 
-  userCategories: string[];
-
-  constructor(private conveyor: Conveyor, private router: Router) {
+  constructor(private conveyor: Conveyor, private router: Router, private bottomSheet: MatBottomSheet) {
 
   }
 
   ngOnInit() {
-      this.userCategories = this.conveyor.getCategoryIds();
   }
 
   selectCategory(category: string): void {
       this.selectedCategory = category;
-      // this.router.navigateByUrl('sidebar/' + category); //TODO see if this will be needed
+  }
+
+  getUserCategories(): string[] {
+    return this.conveyor.getCategoryIds();
   }
 
   getCategoryLabel(categoryId: string): string {
       return this.conveyor.getCategorySpec(categoryId).label;
   }
 
+  openBottomSheet(): void {
+    this.bottomSheet.open(BottomSheetOverviewExampleSheetComponent);
+  }
+}
 
+@Component({
+  selector: 'app-bottom-sheet-overview-example-sheet',
+  templateUrl: 'bottom-sheet-overview-example-sheet.html',
+})
+export class BottomSheetOverviewExampleSheetComponent {
+  constructor(private bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheetComponent>, private conveyor: Conveyor) {}
+
+  getAllCategories(): string[] {
+    return this.conveyor.getAllCategories();
+  }
+
+  getCategoryDescription(categoryId: string): string {
+    if (this.conveyor.getCategorySpec(categoryId)) {
+      return this.conveyor.getCategorySpec(categoryId).description;
+    }
+  }
+
+  getCategoryLabel(categoryId: string): string {
+    if (this.conveyor.getCategorySpec(categoryId)) {
+      return this.conveyor.getCategorySpec(categoryId).label;
+    }
+  }
+
+  addCategory(event: MouseEvent, categoryId: string): void {
+    if (!this.conveyor.hasCategoryId(categoryId)) {
+      this.conveyor.setDataList(categoryId, new DataList(this.conveyor.getCategorySpec(categoryId)));
+    }
+    this.bottomSheetRef.dismiss();
+    event.preventDefault();
+  }
 }
