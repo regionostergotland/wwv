@@ -132,6 +132,10 @@ export class DataList {
         this.mathFunction = MathFunctionEnum.ACTUAL;
     }
 
+    private sortByEarliestComparator(p1: DataPoint, p2: DataPoint) {
+        return (p1.get('time').getTime() - p2.get('time').getTime());
+    }
+
     private equals(p1: DataPoint, p2: DataPoint): boolean {
         // getTime() converts a Date-object to a unix timestamp
         return (p1.get('time').getTime() === p2.get('time').getTime());
@@ -161,6 +165,7 @@ export class DataList {
         for (const point of points) {
             this.addPoint(point);
         }
+        this.points.sort(this.sortByEarliestComparator);
     }
 
     public getPoints(): DataPoint[] {

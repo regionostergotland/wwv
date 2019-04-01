@@ -34,8 +34,10 @@ export class CategoryPickerComponent implements OnInit {
 
     // finns det en platform
     if (this.platformId) {
-      this.conveyor.getCategories(this.platformId).subscribe(_ => {
-        this.categoryIds = this.conveyor.getAvailableCats(this.platformId);
+      // this.conveyor.getCategories(this.platformId).subscribe(_ => {
+      this.conveyor.getAvailableCategories(this.platformId).subscribe(res => {
+        this.categoryIds = res;
+        console.log(this.categoryIds);
         this.getCategories();
       });
     }

@@ -22,17 +22,8 @@ export class DummyPlatformService extends Platform {
     public signIn(): void { }
     public signOut(): void { }
 
-    // @override
-    public isAvailable(categoryId: string): Observable<boolean> {
-        return of(this.isImplemented(categoryId));
-    }
-
-    public getAvailable(): string[] {
-        return this.implemented.map(e => e.category);
-    }
-
-    public getCategories(): Observable<any> {
-        return of(this.getAvailable());
+    public getAvailable(): Observable<string[]> {
+        return of(this.implemented.map(e => e.category));
     }
 
     /**

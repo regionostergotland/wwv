@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { MessageService } from './message.service';
 import { CategorySpec, DataList, DataPoint } from './ehr/ehr-types';
 import { EhrService } from './ehr/ehr.service';
 import { Platform } from './platform/platform.service';
@@ -21,7 +20,6 @@ export class Conveyor {
     private selectedPlatform: string;
 
     constructor(
-        private messageService: MessageService,
         private ehrService: EhrService,
         private gfitService: GfitService,
         private dummyPlatformService: DummyPlatformService) {
@@ -47,18 +45,9 @@ export class Conveyor {
         return Array.from(this.platforms.keys());
     }
 
-    public getAvailableCats(platformId: string): string[] {
+    public getAvailableCategories(platformId: string): Observable<string[]> {
         const platform: Platform = this.platforms.get(platformId);
-        const available: string[] = platform.getAvailable();
-        const categoryIds: string[] = this.ehrService.getCategories();
-        console.log(available);
-        return categoryIds.filter(id => available.includes(id));
-    }
-
-    public getCategories(platformId: string): Observable<any> {
-        const platform: Platform = this.platforms.get(platformId);
-        const categoryIds: string[] = this.ehrService.getCategories();
-        return platform.getCategories().pipe(map(_ => EMPTY ));
+        return platform.getAvailable();
     }
 
     /*
@@ -99,7 +88,11 @@ export class Conveyor {
     }
 
     public getDataList(categoryId: string): DataList {
-        return this.categories.get(categoryId);
+        if (this.categories.has(categoryId)) {
+            return this.categories.get(categoryId);
+        } else {
+            throw TypeError("category "+categoryId+" not in map");
+        }
     }
 
     public setDataList(categoryId: string, list: DataList) {
