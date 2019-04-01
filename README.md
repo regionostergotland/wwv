@@ -56,7 +56,7 @@ mer info. Funktionskommentarer skrivs på engelska.
 ## Kodstruktur
 I src/app finns kodfilerna till projektet samlade. Conveyor är centralpunkten
 till projektets moduler då den sammakopplar de olika delarna och ligger därför
-direkt i src/app. I shared/spec.ts så beskrivs datatyperna som kommer användas
+direkt i src/app. I ehr/ehr-types.ts så beskrivs datatyperna som kommer användas
 genom projektet och är till stora delar direkta tillämpningar av openEHRs
 standarder för att underlätta vid inskickning och vid framtida underhåll av
 projektet. I platform/ samlas både den abstrakta föräldraklassen platform och

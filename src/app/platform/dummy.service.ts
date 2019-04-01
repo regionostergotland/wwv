@@ -27,6 +27,14 @@ export class DummyPlatformService extends Platform {
         return of(this.isImplemented(categoryId));
     }
 
+    public getAvailable(): string[] {
+        return this.implemented.map(e => e.category);
+    }
+
+    public getCategories(): Observable<any> {
+        return of()
+    }
+
     /**
      * This function GETs the data for a specified category and time interval.
      * The data is then converted to an internal format, and returned within an

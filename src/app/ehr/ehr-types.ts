@@ -251,6 +251,7 @@ export class DataPoint {
     public values() { return this.point.values(); }
     public keys() { return this.point.keys(); }
     public entries() { return this.point.entries(); }
+    public has(typeId: string) { return this.point.has(typeId); }
 }
 
 /**
@@ -291,6 +292,20 @@ export class DataList {
         this.mathFunction = MathFunctionEnum.ACTUAL;
     }
 
+    private equals(p1: DataPoint, p2: DataPoint): boolean {
+        // getTime() converts a Date-object to a unix timestamp
+        return (p1.get('time').getTime() === p2.get('time').getTime());
+    }
+
+    private containsPoint(newPoint: DataPoint): boolean {
+        for (const point of this.points) {
+            if (this.equals(point, newPoint)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * Add a point to the data list.
      */
@@ -300,7 +315,9 @@ export class DataList {
                 throw TypeError(value + ' invalid value for ' + typeId);
             }
         }
-        this.points.push(point);
+        if (!this.containsPoint(point)) {
+            this.points.push(point);
+        }
     }
 
     /**

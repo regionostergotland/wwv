@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>{{getCategoryLabel()}}</h2>
+
+<mat-dialog-content>
+  <div *ngFor="let key of getDisplayedColumns()">
+    <p>{{getLabel(key)}}:</p>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.TEXT">
+      <mat-form-field class="example-full-width">
+        <input (change)="pointData.set(key, $event.target.valueOf())" matInput placeholder={{getLabel(key)}}>
+      </mat-form-field>
+    </div>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.CODED_TEXT">
+      <mat-form-field>
+        <mat-select (selectionChange)="pointData.set(key, $event.value)" placeholder={{getLabel(key)}}>
+          <mat-option *ngFor="let option of getOptions(key)" [value]="option.code">
+            {{option.label}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.DATE_TIME && key === 'date'">
+      <mat-form-field>
+        <input (dateChange)="pointData.set('time', $event.value); setTime(clockTime)" matInput [matDatepicker]="start" placeholder={{getLabel(key)}}>
+        <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+        <mat-datepicker #start></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.DATE_TIME && key === 'time'">
+      <mat-form-field>
+        <input #time (click)="openTimePicker()" matInput  [(ngModel)]="clockTime"/>
+      </mat-form-field>
+    </div>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.DATE_TIME && key != 'time' && key != 'date'">
+      <mat-form-field>
+        <input (dateChange)="pointData.set(key, $event.value)" matInput [matDatepicker]="start" placeholder={{getLabel(key)}}>
+        <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+        <mat-datepicker #start></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.QUANTITY">
+      <mat-form-field>
+        <input #quantity (change)="pointData.set(key, +quantity.value)" matInput type="number" placeholder={{getLabel(key)}} min={{getMinOfRange(key)}} max={{getMaxOfRange(key)}}>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+<div mat-dialog-actions>
+  <button mat-flat-button color="primary" (click)="createDataPoint()">Lägg till datapunkt</button>
+</div>

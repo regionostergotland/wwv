@@ -7,6 +7,7 @@ import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { GoogleAuthService } from 'ng-gapi';
 import GoogleUser = gapi.auth2.GoogleUser;
 import { MessageService } from '../message.service';
+import { AutofillMonitor } from '@angular/cdk/text-field';
 
 @Injectable({
     providedIn: 'root',
@@ -15,9 +16,10 @@ export class GfitService extends Platform {
 
     public static SESSION_STORAGE_KEY = 'accessToken';
     private user: GoogleUser;
-    private dataIsFetched = false;
+    private dataIsFetched;
     private activities: any;
     private baseUrl = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/';
+    private auth: any;
 
     // Maps Google Fit's data type names to our internal category names
     private readonly categoryDataTypeNames: Map<string, string> = new Map(
@@ -45,6 +47,8 @@ export class GfitService extends Platform {
         this.implemented.push(
             { category: 'blood_pressure', dataTypes: ['time', 'systolic', 'diastolic'] }
         );
+        this.dataIsFetched = false;
+        this.googleAuth.getAuth().subscribe(auth => this.auth = auth);
     }
 
     public getToken(): string {
@@ -55,18 +59,24 @@ export class GfitService extends Platform {
         return sessionStorage.getItem(GfitService.SESSION_STORAGE_KEY);
     }
 
-    public signIn(): void {
+    public async signIn() {
+        const res = await this.auth.signIn();
+        this.signInSuccessHandler(res);
+    }
+
+    /*public signIn(): void {
         this.googleAuth.getAuth()
         .subscribe((auth) => {
             auth.signIn().then(res => this.signInSuccessHandler(res));
         });
-    }
+    }*/
 
     private signInSuccessHandler(res: GoogleUser) {
         this.user = res;
         sessionStorage.setItem(
             GfitService.SESSION_STORAGE_KEY, res.getAuthResponse().access_token
         );
+        console.log('access token updated');
     }
 
     public signOut(): void {
@@ -75,27 +85,6 @@ export class GfitService extends Platform {
           auth.disconnect();
         });
     }
-
-    /**
-     * This function GETs the activity metadata for the user and parses this data to
-     * add categories that are available to the user. It then returns an empty observable
-     * so that isAvailable() is notified when this function has finished executing and
-     * the vector containing available categories has been updated.
-     */
-    private getActivities(): Observable<any> {
-        return this.http.get(
-            this.baseUrl + '?access_token=' + this.getToken()).pipe(map(res => {
-                this.activities = res;
-                this.activities.dataSource.forEach(source => {
-                    if (source.dataStreamId.split(':')[0] === 'raw') { // As of now, we only want raw data
-                        this.available.push(this.categoryDataTypeNames.get(source.dataType.name));
-                        this.messageService.addMsg('Now available: ' + this.categoryDataTypeNames.get(source.dataType.name));
-                    }
-                });
-                return EMPTY;
-            }));
-      }
-
 
     /**
      * This function checks if a given category is available to fetch data from
@@ -107,11 +96,46 @@ export class GfitService extends Platform {
     public isAvailable(categoryId: string): Observable<boolean> {
         if (!this.dataIsFetched) {
             this.dataIsFetched = true;
-            return this.getActivities().pipe(map(_ =>
+            return this.getCategories().pipe(map(_ =>
                  this.isImplemented(categoryId) && this.available.includes(categoryId)
                 ));
         } else {
             return of(this.isImplemented(categoryId) && this.available.includes(categoryId));
+        }
+    }
+
+    public getAvailable(): string[] {
+        const res: string[] = [];
+        for (const cat in this.available) {
+            if (this.isImplemented(cat)) {
+                res.push(cat);
+            }
+        }
+        return this.available;
+    }
+
+
+    /**
+     * This function GETs the activity metadata for the user and parses this data to
+     * add categories that are available to the user. It then returns an empty observable
+     * so that isAvailable() is notified when this function has finished executing and
+     * the vector containing available categories has been updated.
+     */
+    public getCategories(): Observable<any> {
+        if (!this.dataIsFetched) {
+            this.dataIsFetched = true;
+            return this.http.get(
+                this.baseUrl + '?access_token=' + this.getToken()).pipe(map(res => {
+                    this.activities = res;
+                    this.activities.dataSource.forEach(source => {
+                        if (source.dataStreamId.split(':')[0] === 'raw') { // As of now, we only want raw data
+                            this.available.push(this.categoryDataTypeNames.get(source.dataType.name));
+                        }
+                    });
+                    return of(null);
+                }));
+        } else {
+            return of(null);
         }
     }
 
@@ -144,7 +168,6 @@ export class GfitService extends Platform {
             return this.http.get(url).pipe(map(res => this.convertData(res, categoryId)));
         } else if (categoryId === 'weight') {
             url += this.categoryUrl.get(categoryId) + tail;
-            this.messageService.addMsg('Fetching weight data...');
         } else {
             throw TypeError('unimplemented');
         }
