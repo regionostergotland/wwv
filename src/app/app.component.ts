@@ -32,7 +32,7 @@ export class AppComponent {
     }
 
     showCategories(): void {
-        this.gfitService.isAvailable('blood-pressure');
+        this.gfitService.isAvailable('blood_pressure');
     }
 
     getCategories(platform: string): void {
