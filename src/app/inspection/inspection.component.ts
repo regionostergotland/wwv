@@ -33,7 +33,7 @@ export class InspectionComponent implements OnInit {
   constructor(private conveyor: Conveyor) {
     for (const platform of conveyor.getPlatforms()) {
       conveyor.getAvailableCategories(platform).subscribe(res => {
-        for(const category of res) {
+        for (const category of res) {
           this.categories.push(category);
         }
       });
