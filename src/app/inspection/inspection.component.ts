@@ -128,4 +128,8 @@ export class InspectionComponent implements OnInit {
     this.conveyor.sendData();
   }
 
+  authenticate(user: string, pass: string): void {
+    this.conveyor.authenticateBasic(user, pass);
+  }
+
 }
