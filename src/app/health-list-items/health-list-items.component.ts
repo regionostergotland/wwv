@@ -192,4 +192,11 @@ export class HealthListItemsComponent implements OnInit {
     return point.get(key);
   }
 
+  getText(point: DataPoint, key: string): string {
+    if (!point.get(key)) {
+      return '';
+    }
+    return point.get(key);
+  }
+
 }

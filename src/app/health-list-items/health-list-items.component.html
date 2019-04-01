@@ -16,7 +16,14 @@
         </mat-form-field>
 
       </div>
-      <div *ngIf="getVisualType(key) != dataTypeEnum.CODED_TEXT">
+      <div *ngIf="getVisualType(key) === dataTypeEnum.TEXT">
+
+        <mat-form-field>
+          <input #textInput (change)="dataPoint.set(key, textInput.value)" [value]="getText(dataPoint, key)" matInput placeholder={{getLabel(key)}}>
+        </mat-form-field>
+
+      </div>
+      <div *ngIf="getVisualType(key) != dataTypeEnum.CODED_TEXT && getVisualType(key) != dataTypeEnum.TEXT">
 
         {{getPointData(dataPoint, key)}}
 
