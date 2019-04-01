@@ -3,7 +3,7 @@
 <p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
 
 
-<mat-expansion-panel *ngFor="let category of categories" class="panel">
+<mat-expansion-panel *ngFor="let category of getCategories()" class="panel">
   <mat-expansion-panel-header>
     <mat-panel-title>{{getLabel(category)}}</mat-panel-title>
     <mat-panel-description>Antal mätvärden: {{getNumberOfValues(category)}}</mat-panel-description>
