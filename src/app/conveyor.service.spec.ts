@@ -59,8 +59,8 @@ describe('Conveyor', () => {
 
   it('should return blood_pressure when calling getCategories', () => {
     const service: Conveyor = TestBed.get(Conveyor);
-    const cats = service.getCategories('dummy');
-    expect(cats).toContain('blood_pressure');
+    service.getAvailableCategories('dummy')
+      .subscribe(cats => expect(cats).toContain('blood_pressure'));
   });
 
   it('should return a list of datapoints when calling getDataList', () => {
