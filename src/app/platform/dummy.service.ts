@@ -32,7 +32,7 @@ export class DummyPlatformService extends Platform {
     }
 
     public getCategories(): Observable<any> {
-        return of()
+        return of(this.getAvailable());
     }
 
     /**
