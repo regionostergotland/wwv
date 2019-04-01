@@ -5,7 +5,7 @@
     <p>{{getLabel(key)}}:</p>
     <div *ngIf="getVisualType(key) === dataTypeEnum.TEXT">
       <mat-form-field class="example-full-width">
-        <input (change)="pointData.set(key, $event.target.valueOf())" matInput placeholder={{getLabel(key)}}>
+        <input #textInput (change)="pointData.set(key, textInput.value)" matInput placeholder={{getLabel(key)}}>
       </mat-form-field>
     </div>
     <div *ngIf="getVisualType(key) === dataTypeEnum.CODED_TEXT">
