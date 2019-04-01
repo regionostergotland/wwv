@@ -3,6 +3,8 @@ import { DataList, DataTypeText, DataPoint, CategorySpec, DataType,
   DataTypeDateTime, DataTypeQuantity, DataTypeCodedText } from './ehr-types';
 import { HttpClient, HttpHandler} from '@angular/common/http';
 
+
+
 describe('Ehr Types', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
@@ -11,6 +13,11 @@ describe('Ehr Types', () => {
     HttpHandler
   ]
   }));
+
+/**
+* Test case for ehr types, expecting all data points to return true for validity
+* check. Detect incorrect type, outside of bounds numbers
+*/
 
   it('should have true resluts to all valid data points', () => {
     const categories: CategorySpec[] = [
@@ -91,13 +98,6 @@ describe('Ehr Types', () => {
                     )
                 ],
                 [
-                    'comment',
-                    new DataTypeText(
-                        'Undertryck',
-                        'Diastoliskt undertryck av blod'
-                    )
-                ],
-                [
                     'state_of_dress',
                     new DataTypeCodedText(
                         'Klädsel',
@@ -130,7 +130,7 @@ describe('Ehr Types', () => {
         new DataPoint(
             [
                 [ 'time', new Date() ],
-                [ 'systolic', 10 ],
+                [ 'systolic', 100 ],
                 [ 'diastolic', 20 ],
             ]
         ),
@@ -141,6 +141,16 @@ describe('Ehr Types', () => {
                 [ 'diastolic', 22 ],
             ]
         )
+    ]);
+    const data_list2 = new DataList(categories[1]);
+    data_list2.addPoints([
+      new DataPoint(
+        [
+          ['time', new Date()],
+          ['weight', 90],
+          ['state_of_dress', 'at0011'],
+        ]
+      )
     ]);
 
     for (let point of data_list.getPoints()) {

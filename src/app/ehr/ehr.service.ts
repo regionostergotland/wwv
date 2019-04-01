@@ -89,13 +89,6 @@ export class EhrService {
                     )
                 ],
                 [
-                    'comment',
-                    new DataTypeText(
-                        'Undertryck',
-                        'Diastoliskt undertryck av blod'
-                    )
-                ],
-                [
                     'state_of_dress',
                     new DataTypeCodedText(
                         'Klädsel',
