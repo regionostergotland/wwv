@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Conveyor } from '../conveyor.service';
 import { Router } from '@angular/router';
-import {MatBottomSheet, MatBottomSheetRef} from '@angular/material';
-import {DataList} from '../ehr/ehr-types';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material';
+import { DataList } from '../ehr/ehr-types';
 
 @Component({
   selector: 'app-sidebar',
@@ -34,7 +34,7 @@ export class SidebarComponent implements OnInit {
   }
 
   openBottomSheet(): void {
-    this.bottomSheet.open(BottomSheetOverviewExampleSheetComponent);
+    this.bottomSheet.open(BottomSheetCategoriesComponent);
   }
 }
 
@@ -42,8 +42,8 @@ export class SidebarComponent implements OnInit {
   selector: 'app-bottom-sheet-overview-example-sheet',
   templateUrl: 'bottom-sheet-overview-example-sheet.html',
 })
-export class BottomSheetOverviewExampleSheetComponent {
-  constructor(private bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheetComponent>, private conveyor: Conveyor) {}
+export class BottomSheetCategoriesComponent {
+  constructor(private bottomSheetRef: MatBottomSheetRef<BottomSheetCategoriesComponent>, private conveyor: Conveyor) {}
 
   getAllCategories(): string[] {
     return this.conveyor.getAllCategories();
