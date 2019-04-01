@@ -58,7 +58,17 @@ export class HealthListItemsComponent implements OnInit {
    * @returns a list of all datapoints in the category
    */
   getData(): DataPoint[] {
-    return this.conveyor.getDataList(this.selectedCategory).getPoints();
+    if (this.conveyor.getDataList(this.selectedCategory)) {
+      return this.conveyor.getDataList(this.selectedCategory).getPoints();
+    }
+    return [];
+  }
+
+  getCategoryLabel(): string {
+    if (this.conveyor.getCategorySpec(this.selectedCategory)) {
+      return this.conveyor.getCategorySpec(this.selectedCategory).label;
+    }
+    return '';
   }
 
   /**
@@ -70,7 +80,10 @@ export class HealthListItemsComponent implements OnInit {
     if (labelId === 'date') {
       return 'Datum';
     }
-    return this.conveyor.getDataList(this.selectedCategory).getDataType(labelId).label;
+    if (this.conveyor.getDataList(this.selectedCategory)) {
+      return this.conveyor.getDataList(this.selectedCategory).getDataType(labelId).label;
+    }
+    return '';
   }
 
   /**
@@ -80,7 +93,7 @@ export class HealthListItemsComponent implements OnInit {
    */
   getDisplayedColumns(): string[] {
     const result: string[] = [];
-    if (this.getData()) {
+    if (this.conveyor.getDataList(this.selectedCategory)) {
       for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
         if (column === 'time') {
           result.push('date');
@@ -102,7 +115,9 @@ export class HealthListItemsComponent implements OnInit {
     if (key === 'date') {
       return DataTypeEnum.DATE_TIME;
     }
-    return this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.get(key).type;
+    if (this.conveyor.getDataList(this.selectedCategory)) {
+      return this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.get(key).type;
+    }
   }
 
   /**
@@ -111,8 +126,10 @@ export class HealthListItemsComponent implements OnInit {
    * @returns a list of options
    */
   getOptions(key: string): DataTypeCodedTextOpt[] {
-    const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
-    return datatypes.options;
+    if (this.conveyor.getDataList(this.selectedCategory)) {
+      const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
+      return datatypes.options;
+    }
   }
 
   /**
