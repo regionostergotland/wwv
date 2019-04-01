@@ -1,0 +1,38 @@
+<div class="center">
+
+<p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
+
+
+<mat-expansion-panel *ngFor="let category of getCategories()" class="panel">
+  <mat-expansion-panel-header>
+    <mat-panel-title>{{getLabel(category)}}</mat-panel-title>
+    <mat-panel-description>Antal mätvärden: {{getNumberOfValues(category)}}</mat-panel-description>
+  </mat-expansion-panel-header>
+
+  <table mat-table [dataSource]="getData(category)" style="text-align: left">
+
+    <ng-container *ngFor="let key of getDisplayedColumns(category)" matColumnDef={{key}}>
+      <th mat-header-cell *matHeaderCellDef> {{getColumnLabel(category, key)}} </th>
+      <td mat-cell *matCellDef="let dataPoint;">
+          {{getPointData(dataPoint, key)}}
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(category)"></tr>
+    <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(category);"></tr>
+  </table>
+
+</mat-expansion-panel>
+
+  <div style="margin-bottom: 10px">
+    <label>Username: <input #username /> </label>
+    <label>Password: <input type="password" #password /> </label>
+  </div>
+
+  <button mat-raised-button color='primary'
+    (click)="authenticate(username.value, password.value); sendData()">
+      Godkänn och skicka
+  </button>
+
+</div>
+

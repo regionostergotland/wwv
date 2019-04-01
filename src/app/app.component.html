@@ -1,4 +1,5 @@
-<!--The content below is only a placeholder and can be replaced.-->
+<app-toolbar></app-toolbar>
+<!--The content below is only a placeholder and can be replaced.
 <div style="text-align:center">
   <h1>
     Welcome to {{ title }}!
@@ -19,7 +20,7 @@
 <h2>Platforms</h2>
 <ul>
     <li *ngFor="let platform of platforms">
-        <button (click)="getCategories(platform)">Get categories</button>
+        <button (click)="getCategories(platform)">{{platform}}</button>
     </li>
 </ul>
 
@@ -44,7 +45,7 @@
             {{value}}
         </td>
     </tr>
-</table>
+</table>-->
 
 <app-messages></app-messages>
 

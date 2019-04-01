@@ -1,0 +1,50 @@
+  .example-card {
+  max-width: 200px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  text-align: center;
+  flex-direction: column;
+}
+
+.item-card-container {
+  margin:20px;
+}
+
+.card-height {
+  display: flex;
+}
+
+.centering {
+  display: flex;
+  justify-content: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.date-card {
+  height: 100%;
+}
+
+.example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
+.example-margin {
+  margin: 0 10px;
+}
+
+.next-button {
+  margin: 20px 20px;
+}

@@ -1,0 +1,30 @@
+.example-card {
+  max-width: 200px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.item-card-container {
+  margin:20px;
+}
+
+.mat-card-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-height {
+  display: flex;
+  align-items: stretch;
+}
+
+.centering {
+  display: flex;
+  justify-content: center;
+}

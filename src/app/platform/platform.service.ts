@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { DataPoint } from '../shared/spec';
+import { DataPoint } from '../ehr/ehr-types';
 
 interface Implementation {
     category: string;
@@ -15,13 +15,11 @@ export abstract class Platform {
     protected implemented: Implementation[] = [];
     protected available: string[] = [];
 
-    public abstract signIn(): void;
+    public abstract async signIn();
 
     public abstract signOut(): void;
 
-    // can be overridden to check if available for logged in user
-    public abstract isAvailable(categoryId: string): Observable<boolean>;
-
+    public abstract getAvailable(): Observable<string[]>;
 
     protected isImplemented(categoryId: string): boolean {
         return this.implemented.some(e => e.category === categoryId);
@@ -30,8 +28,5 @@ export abstract class Platform {
     public abstract getData(categoryId: string,
                             start: Date, end: Date): Observable<any>;
 
-
     public abstract convertData(res: any, categoryId: string): DataPoint[];
-
-
 }

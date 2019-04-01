@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { CategorySpec, DataList, DataPoint } from './shared/spec';
+import { CategorySpec, DataList, DataPoint } from './ehr/ehr-types';
 import { EhrService } from './ehr/ehr.service';
 import { Platform } from './platform/platform.service';
 import { GfitService } from './platform/gfit.service';
+import { DummyPlatformService } from './platform/dummy.service';
 import { of, Observable, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
+import { PlayState } from '@angular/core/src/render3/interfaces/player';
 
 
 @Injectable({
@@ -14,19 +16,24 @@ import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 export class Conveyor {
     private readonly platforms: Map<string, Platform>;
     private categories: Map<string, DataList>;
+    private selectedCategories: string[];
+    private selectedPlatform: string;
 
     constructor(
         private ehrService: EhrService,
-        private gfitService: GfitService) {
+        private gfitService: GfitService,
+        private dummyPlatformService: DummyPlatformService) {
         this.categories = new Map<string, DataList>();
+        this.selectedCategories = [];
         this.platforms = new Map<string, Platform>([
-            [ 'google-fit', this.gfitService ]
+            [ 'google-fit', this.gfitService ],
+            [ 'dummy', this.dummyPlatformService ]
         ]);
     }
 
-    public signIn(platformId: string): void {
+    public async signIn(platformId: string) {
         const platform: Platform = this.platforms.get(platformId);
-        platform.signIn();
+        await platform.signIn();
     }
 
     public signOut(platformId: string): void {
@@ -38,10 +45,35 @@ export class Conveyor {
         return Array.from(this.platforms.keys());
     }
 
-    public getCategories(platformId: string): string[] {
+    public getAvailableCategories(platformId: string): Observable<string[]> {
         const platform: Platform = this.platforms.get(platformId);
-        const categoryIds: string[] = this.ehrService.getCategories();
-        return categoryIds.filter(id => platform.isAvailable(id));
+        return platform.getAvailable();
+    }
+
+    public getCategoryIds(): string[] {
+      return Array.from(this.categories.keys());
+    }
+
+    /*
+    * Removes a selected category from the selected list
+    * */
+    public unselectCategory(categoryId: string) {
+        if (this.selectedCategories.includes(categoryId)) {
+            this.selectedCategories.splice(this.selectedCategories.indexOf(categoryId), 1);
+        }
+    }
+
+    /*
+    * Adds a new category to the selected list
+    * */
+    public selectCategory(categoryId: string) {
+        if (!this.selectedCategories.includes(categoryId)) {
+            this.selectedCategories.push(categoryId);
+        }
+    }
+
+    public getSelectedCategories(): string[] {
+        return this.selectedCategories;
     }
 
     public fetchData(platformId: string, categoryId: string, start: Date, end: Date): Observable<any> {
@@ -60,17 +92,45 @@ export class Conveyor {
     }
 
     public getDataList(categoryId: string): DataList {
-        return this.categories.get(categoryId);
+        if (this.categories.has(categoryId)) {
+            return this.categories.get(categoryId);
+        } else {
+            throw TypeError('category ' + categoryId + ' not in map');
+        }
     }
 
     public setDataList(categoryId: string, list: DataList) {
         this.categories.set(categoryId, list);
     }
 
-    public sendData() {
-        // TODO authenticate
+    public getCategorySpec(categoryId: string) {
+        return this.ehrService.getCategorySpec(categoryId);
+    }
+
+    public authenticateBasic(username: string, password: string) {
+        console.log('authing ' + username);
+        this.ehrService.authenticateBasic(username, password);
+    }
+
+    public sendData(): Observable<{}> {
         for (const category of this.categories.values()) {
-            this.ehrService.sendData(category);
+            return this.ehrService.sendData(category);
         }
+    }
+
+    /*
+    * Saves the platform to be fetched from.
+    * @param platformId The chosen platform
+    * */
+    public selectPlatform(platformId: string) {
+        this.selectedPlatform = platformId;
+    }
+
+    /*
+    * Gets the current selected platform.
+    * @returns the currently selected platform.
+    * */
+    public getSelectedPlatform(): string {
+        return this.selectedPlatform;
     }
 }

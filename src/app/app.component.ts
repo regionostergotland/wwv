@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { Conveyor } from './conveyor.service';
-import { DataList, DataPoint } from './shared/spec';
+import { DataList, DataPoint } from './ehr/ehr-types';
 import { GfitService } from './platform/gfit.service';
 
 @Component({
@@ -32,19 +32,16 @@ export class AppComponent {
     }
 
     showCategories(): void {
-        this.gfitService.isAvailable('blood-pressure');
     }
 
     getCategories(platform: string): void {
         this.platform = platform;
-        this.categories = this.conveyor.getCategories(this.platform);
+        // this.categories = this.conveyor.getCategories(this.platform);
     }
 
     getData(category: string) {
-
         this.conveyor.fetchData(this.platform, category,
                                 new Date(), new Date()).subscribe(_ => {
-
                                     const data = this.conveyor.getDataList(category);
                                     this.types = [];
                                     for (const t of data.spec.dataTypes.keys()) {
@@ -60,6 +57,13 @@ export class AppComponent {
                                     }
                                 }
                             );
+    }
 
+    authenticate(user: string, pass: string): void {
+        this.conveyor.authenticateBasic(user, pass);
+    }
+
+    sendData(): void {
+        this.conveyor.sendData().subscribe();
     }
 }

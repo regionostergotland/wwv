@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import { DataPoint, CategorySpec } from '../shared/spec';
+import { DataPoint, CategorySpec } from '../ehr/ehr-types';
 import { Platform } from './platform.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { GoogleAuthService } from 'ng-gapi';
 import GoogleUser = gapi.auth2.GoogleUser;
-import { MessageService } from '../message.service';
+import { AutofillMonitor } from '@angular/cdk/text-field';
+import { cat } from 'shelljs';
 
 @Injectable({
     providedIn: 'root',
@@ -15,36 +16,41 @@ export class GfitService extends Platform {
 
     public static SESSION_STORAGE_KEY = 'accessToken';
     private user: GoogleUser;
-    private dataIsFetched = false;
+    private dataIsFetched;
     private activities: any;
     private baseUrl = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/';
+    private auth: any;
 
     // Maps Google Fit's data type names to our internal category names
     private readonly categoryDataTypeNames: Map<string, string> = new Map(
         [
-            ['com.google.blood_pressure', 'blood-pressure'],
-            ['com.google.weight', 'weight']
+            ['com.google.blood_pressure', 'blood_pressure'],
+            ['com.google.weight', 'body_weight']
         ]
     );
 
     // Maps internal name for categories to the URL which is used to GET the data
     private readonly categoryUrl: Map<string, string> = new Map(
         [
-            ['blood-pressure', 'raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input'],
-            ['weight', 'raw:com.google.weight:com.google.android.apps.fitness:user_input']
+            ['blood_pressure', 'raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input'],
+            ['body_weight', 'raw:com.google.weight:com.google.android.apps.fitness:user_input']
         ]
 
     );
 
     constructor(
         private googleAuth: GoogleAuthService,
-        private http: HttpClient,
-        private messageService: MessageService
+        private http: HttpClient
         ) {
         super();
         this.implemented.push(
-            { category: 'blood-pressure', dataTypes: ['time', 'systolic', 'diastolic'] }
+            { category: 'blood_pressure',
+              dataTypes: ['time', 'systolic', 'diastolic'] },
+            { category: 'body_weight',
+              dataTypes: ['time', 'weight'] }
         );
+        this.dataIsFetched = false;
+        this.googleAuth.getAuth().subscribe(auth => this.auth = auth);
     }
 
     public getToken(): string {
@@ -55,18 +61,26 @@ export class GfitService extends Platform {
         return sessionStorage.getItem(GfitService.SESSION_STORAGE_KEY);
     }
 
-    public signIn(): void {
+    public async signIn() {
+        if (!sessionStorage.getItem(GfitService.SESSION_STORAGE_KEY) || (this.user == null)) {
+            const res = await this.auth.signIn();
+            this.signInSuccessHandler(res);
+        }
+    }
+
+    /*public signIn(): void {
         this.googleAuth.getAuth()
         .subscribe((auth) => {
             auth.signIn().then(res => this.signInSuccessHandler(res));
         });
-    }
+    }*/
 
     private signInSuccessHandler(res: GoogleUser) {
         this.user = res;
         sessionStorage.setItem(
             GfitService.SESSION_STORAGE_KEY, res.getAuthResponse().access_token
         );
+        console.log('access token updated');
     }
 
     public signOut(): void {
@@ -78,42 +92,32 @@ export class GfitService extends Platform {
 
     /**
      * This function GETs the activity metadata for the user and parses this data to
-     * add categories that are available to the user. It then returns an empty observable
-     * so that isAvailable() is notified when this function has finished executing and
-     * the vector containing available categories has been updated.
+     * add categories that are available to the user. It then returns an observable containing
+     * an array with the available categories.
      */
-    private getActivities(): Observable<any> {
-        return this.http.get(
-            this.baseUrl + '?access_token=' + this.getToken()).pipe(map(res => {
-                this.activities = res;
-                this.activities.dataSource.forEach(source => {
-                    if (source.dataStreamId.split(':')[0] === 'raw') { // As of now, we only want raw data
-                        this.available.push(this.categoryDataTypeNames.get(source.dataType.name));
-                        this.messageService.addMsg('Now available: ' + this.categoryDataTypeNames.get(source.dataType.name));
-                    }
-                });
-                return EMPTY;
-            }));
-      }
-
-
-    /**
-     * This function checks if a given category is available to fetch data from
-     * The first time this function is called it will GET the metadata containing information about available activites
-     * @param categoryId category to check availability for
-     * @returns true if category is available, false if not
-     */
-    // @override
-    public isAvailable(categoryId: string): Observable<boolean> {
+    public getAvailable(): Observable<string[]> {
         if (!this.dataIsFetched) {
             this.dataIsFetched = true;
-            return this.getActivities().pipe(map(_ =>
-                 this.isImplemented(categoryId) && this.available.includes(categoryId)
-                ));
+            return this.http.get(
+                this.baseUrl + '?access_token=' + this.getToken()).pipe(map(res => {
+                    this.activities = res;
+                    this.activities.dataSource.forEach(source => {
+                        if (source.dataStreamId.split(':')[0] === 'raw') { // As of now, we only want raw data
+                            const categoryId: string = this.categoryDataTypeNames.get(source.dataType.name);
+                            if (this.isImplemented(categoryId)) {
+                                this.available.push(categoryId);
+                            }
+                        }
+                    });
+                    return this.available;
+                }));
         } else {
-            return of(this.isImplemented(categoryId) && this.available.includes(categoryId));
+            return of(this.available);
         }
     }
+
+
+
 
     /**
      * This function GETs the data for a specified category and time interval.
@@ -126,25 +130,22 @@ export class GfitService extends Platform {
      */
     public getData(categoryId: string,
                    start: Date, end: Date): Observable<DataPoint[]> {
-        const weekInMs = 7 * 24 * 3600 * 1000 * 14;
-        const startTime = String((Date.now() - weekInMs) * Math.pow(10, 6));
-        const endTime = String(Math.floor(Date.now() * Math.pow(10, 6)));
+        const startTime = String(start.getTime() * Math.pow(10, 6));
+        const endTime = String(end.getTime() * Math.pow(10, 6));
         const dataSetId = startTime + '-' + endTime;
-
         let url: string = this.baseUrl;
         const tail: string = '/datasets/' +
                             dataSetId +
                             '?access_token=' +
                             this.getToken();
 
-        if (categoryId === 'blood-pressure') {
-            this.messageService.addMsg('Fetching blood pressure...');
+        if (categoryId === 'blood_pressure') {
             url += this.categoryUrl.get(categoryId) + tail;
             // Return an observable with the converted data
             return this.http.get(url).pipe(map(res => this.convertData(res, categoryId)));
-        } else if (categoryId === 'weight') {
+        } else if (categoryId === 'body_weight') {
             url += this.categoryUrl.get(categoryId) + tail;
-            this.messageService.addMsg('Fetching weight data...');
+            return this.http.get(url).pipe(map(res => this.convertData(res, categoryId)));
         } else {
             throw TypeError('unimplemented');
         }
@@ -158,9 +159,8 @@ export class GfitService extends Platform {
      * @returns an array containing the converted DataPoint(s)
      */
     public convertData(res: any, categoryId: string): DataPoint[] {
-        this.messageService.addMsg('Converting data...');
         const points: DataPoint[] = [];
-        if (categoryId === 'blood-pressure') {
+        if (categoryId === 'blood_pressure') {
             res.point.forEach(src => {
                 points.push(new DataPoint(
                     [

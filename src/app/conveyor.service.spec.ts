@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { Conveyor } from './conveyor.service';
-import { DataList } from './shared/spec';
+import { DataList } from './ehr/ehr-types';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import {
@@ -51,19 +51,18 @@ describe('Conveyor', () => {
     expect(platforms).toContain('google-fit');
   });
 
-  /*
-  it('should return blood-pressure when calling getCategories', () => {
+  it('should return dummy when calling getPlatforms', () => {
     const service: Conveyor = TestBed.get(Conveyor);
-    const cats = service.getCategories('google-fit');
-    expect(cats).toContain('blood-pressure');
+    const platforms = service.getPlatforms();
+    expect(platforms).toContain('dummy');
   });
 
   it('should return a list of datapoints when calling getDataList', () => {
     const service: Conveyor = TestBed.get(Conveyor);
-    service.fetchData('google-fit', 'blood-pressure', new Date(), new Date());
-    const catlist: DataList = service.getDataList('blood-pressure');
+    service.fetchData('dummy', 'blood_pressure', new Date(), new Date());
+    const catlist: DataList = service.getDataList('blood_pressure');
 
     expect(catlist).toBeDefined();
-  });*/
+  });
 
 });
