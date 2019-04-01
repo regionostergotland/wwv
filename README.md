@@ -54,16 +54,16 @@ mer info. Funktionskommentarer skrivs på engelska.
 * Följer commitregler
 
 ## Kodstruktur
-I src/app finns kodfilerna till projektet samlade. Conveyor är centralpunkten
-till projektets moduler då den sammakopplar de olika delarna och ligger därför
-direkt i src/app. I shared/spec.ts så beskrivs datatyperna som kommer användas
-genom projektet och är till stora delar direkta tillämpningar av openEHRs
-standarder för att underlätta vid inskickning och vid framtida underhåll av
-projektet. I platform/ samlas både den abstrakta föräldraklassen platform och
-dess barn som i nuläget är platform-google-fit. Det gör att framtida
-implementationer av andra plattformer lätt kan skapas som barn till platform och
-inte behöva ändringar i andra delar av koden. I ehr/ så samlas implementationen
-mot ***REMOVED*** system enligt openEHRs standard.
+I src/app är projektets utvecklingsfiler samlade.
+
+Mappen ehr är samling av filer angående integration till ***REMOVED*** och format ärvda
+från openEHRs standard.
+
+Mappen platform är samling av specifika implementationerna av externa
+hälsoplattformer och dess abstrakta förälderklass.
+
+Conveyor är den centrala punkten för att koppla samman projektets moduler för
+och är fasaden i fasadmönstret.
 
 ## Development server
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
