@@ -145,6 +145,7 @@ export class GfitService extends Platform {
             return this.http.get(url).pipe(map(res => this.convertData(res, categoryId)));
         } else if (categoryId === 'body_weight') {
             url += this.categoryUrl.get(categoryId) + tail;
+            return this.http.get(url).pipe(map(res => this.convertData(res, categoryId)));
         } else {
             throw TypeError('unimplemented');
         }
