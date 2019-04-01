@@ -20,7 +20,7 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.userCategories = this.conveyor.getSelectedCategories();
+      this.userCategories = this.conveyor.getCategoryIds();
   }
 
   selectCategory(category: string): void {
