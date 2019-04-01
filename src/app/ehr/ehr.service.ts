@@ -106,10 +106,17 @@ export class EhrService {
                             },
                             {
                                 code: 'at0010',
-                                label: 'Fullklädd',
+                                label: 'Fullt påklädd',
                                 description: 'Klädsel som bidrar med vikt.'
                             }
                         ]
+                    )
+                ],
+                [
+                    'comment',
+                    new DataTypeText(
+                        'Kommentar',
+                        'Kompletterande information med fritext'
                     )
                 ],
             ])
