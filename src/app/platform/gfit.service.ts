@@ -22,7 +22,7 @@ export class GfitService extends Platform {
     // Maps Google Fit's data type names to our internal category names
     private readonly categoryDataTypeNames: Map<string, string> = new Map(
         [
-            ['com.google.blood_pressure', 'blood-pressure'],
+            ['com.google.blood_pressure', 'blood_pressure'],
             ['com.google.weight', 'weight']
         ]
     );
@@ -30,7 +30,7 @@ export class GfitService extends Platform {
     // Maps internal name for categories to the URL which is used to GET the data
     private readonly categoryUrl: Map<string, string> = new Map(
         [
-            ['blood-pressure', 'raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input'],
+            ['blood_pressure', 'raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input'],
             ['weight', 'raw:com.google.weight:com.google.android.apps.fitness:user_input']
         ]
 
@@ -43,7 +43,7 @@ export class GfitService extends Platform {
         ) {
         super();
         this.implemented.push(
-            { category: 'blood-pressure', dataTypes: ['time', 'systolic', 'diastolic'] }
+            { category: 'blood_pressure', dataTypes: ['time', 'systolic', 'diastolic'] }
         );
     }
 
@@ -137,7 +137,7 @@ export class GfitService extends Platform {
                             '?access_token=' +
                             this.getToken();
 
-        if (categoryId === 'blood-pressure') {
+        if (categoryId === 'blood_pressure') {
             this.messageService.addMsg('Fetching blood pressure...');
             url += this.categoryUrl.get(categoryId) + tail;
             // Return an observable with the converted data
@@ -160,7 +160,7 @@ export class GfitService extends Platform {
     public convertData(res: any, categoryId: string): DataPoint[] {
         this.messageService.addMsg('Converting data...');
         const points: DataPoint[] = [];
-        if (categoryId === 'blood-pressure') {
+        if (categoryId === 'blood_pressure') {
             res.point.forEach(src => {
                 points.push(new DataPoint(
                     [
