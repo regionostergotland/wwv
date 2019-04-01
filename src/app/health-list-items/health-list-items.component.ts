@@ -65,6 +65,10 @@ export class HealthListItemsComponent implements OnInit {
     return [];
   }
 
+  /**
+   * Get the label for the category.
+   * @returns the label for the category.
+   */
   getCategoryLabel(): string {
     if (this.conveyor.getCategorySpec(this.selectedCategory)) {
       return this.conveyor.getCategorySpec(this.selectedCategory).label;
@@ -192,6 +196,12 @@ export class HealthListItemsComponent implements OnInit {
     return point.get(key);
   }
 
+  /**
+   * Get the text of the DataPoint from the given key.
+   * @param point the point to get text from.
+   * @param key The identifier to get the text from.
+   * @returns A string of the DataPoint and the key.
+   */
   getText(point: DataPoint, key: string): string {
     if (!point.get(key)) {
       return '';
