@@ -59,7 +59,7 @@ export class HealthListItemsComponent implements OnInit {
    * @returns a list of all datapoints in the category
    */
   getData(): DataPoint[] {
-    if (this.conveyor.getDataList(this.selectedCategory)) {
+    if (this.selectedCategory) {
       return this.conveyor.getDataList(this.selectedCategory).getPoints();
     }
     return [];
@@ -94,7 +94,7 @@ export class HealthListItemsComponent implements OnInit {
    */
   getDisplayedColumns(): string[] {
     const result: string[] = [];
-    if (this.conveyor.getDataList(this.selectedCategory)) {
+    if (this.selectedCategory) {
       for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
         if (column === 'time') {
           result.push('date');

@@ -44,7 +44,7 @@ export class AddDataPointComponent implements OnInit {
    * @returns a list of all datapoints in the category
    */
   getData(): DataPoint[] {
-    if (this.conveyor.getDataList(this.selectedCategory)) {
+    if (this.selectedCategory) {
       return this.conveyor.getDataList(this.selectedCategory).getPoints();
     }
   }
@@ -56,7 +56,7 @@ export class AddDataPointComponent implements OnInit {
    */
   getDisplayedColumns(): string[] {
     const result: string[] = [];
-    if (this.conveyor.getDataList(this.selectedCategory)) {
+    if (this.conveyor.getCategoryIds().includes(this.selectedCategory)) {
       for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
         if (column === 'time') {
           result.push('date');
@@ -190,9 +190,9 @@ export class AddDataPointComponent implements OnInit {
    * @returns A human readable string of the label of the category.
    */
   getCategoryLabel() {
-    if (this.conveyor.getCategorySpec(this.selectedCategory)) {
-    return this.conveyor.getCategorySpec(this.selectedCategory).label;
+    if (this.conveyor.getCategoryIds().includes(this.selectedCategory)) {
+      return this.conveyor.getCategorySpec(this.selectedCategory).label;
     }
-    return '';
+      return '';
   }
 }
