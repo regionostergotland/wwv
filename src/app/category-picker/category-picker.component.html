@@ -5,7 +5,7 @@
   <mat-card class="example-card">
     <mat-card-content *ngFor="let category of categories">
       <section class="example-section">
-        <mat-checkbox class="example-margin" id="check-box" (change)="updateChosenCategories(category[0], $event)">{{category[1]}}</mat-checkbox>
+        <mat-checkbox class="example-margin" (change)="updateChosenCategories(category[0], $event)">{{category[1]}}</mat-checkbox>
       </section>
     </mat-card-content>
   </mat-card>
