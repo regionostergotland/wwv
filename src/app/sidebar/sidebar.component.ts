@@ -25,7 +25,7 @@ export class SidebarComponent implements OnInit {
 
   selectCategory(category: string): void {
       this.selectedCategory = category;
-      //this.router.navigateByUrl('sidebar/' + category); //TODO see if this will be needed
+      // this.router.navigateByUrl('sidebar/' + category); //TODO see if this will be needed
   }
 
   getCategoryLabel(categoryId: string): string {

@@ -37,7 +37,7 @@ export class AppComponent {
 
     getCategories(platform: string): void {
         this.platform = platform;
-        //this.categories = this.conveyor.getCategories(this.platform);
+        // this.categories = this.conveyor.getCategories(this.platform);
     }
 
     getData(category: string) {

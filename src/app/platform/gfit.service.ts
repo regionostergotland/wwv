@@ -87,27 +87,6 @@ export class GfitService extends Platform {
     }
 
     /**
-     * This function GETs the activity metadata for the user and parses this data to
-     * add categories that are available to the user. It then returns an empty observable
-     * so that isAvailable() is notified when this function has finished executing and
-     * the vector containing available categories has been updated.
-     */
-    private getActivities(): Observable<any> {
-        return this.http.get(
-            this.baseUrl + '?access_token=' + this.getToken()).pipe(map(res => {
-                this.activities = res;
-                this.activities.dataSource.forEach(source => {
-                    if (source.dataStreamId.split(':')[0] === 'raw') { // As of now, we only want raw data
-                        this.available.push(this.categoryDataTypeNames.get(source.dataType.name));
-                        this.messageService.addMsg('Now available: ' + this.categoryDataTypeNames.get(source.dataType.name));
-                    }
-                });
-                return EMPTY;
-            }));
-      }
-
-
-    /**
      * This function checks if a given category is available to fetch data from
      * The first time this function is called it will GET the metadata containing information about available activites
      * @param categoryId category to check availability for
@@ -117,7 +96,7 @@ export class GfitService extends Platform {
     public isAvailable(categoryId: string): Observable<boolean> {
         if (!this.dataIsFetched) {
             this.dataIsFetched = true;
-            return this.getActivities().pipe(map(_ =>
+            return this.getCategories().pipe(map(_ =>
                  this.isImplemented(categoryId) && this.available.includes(categoryId)
                 ));
         } else {
@@ -126,11 +105,24 @@ export class GfitService extends Platform {
     }
 
     public getAvailable(): string[] {
+        const res: string[] = [];
+        for (const cat in this.available) {
+            if (this.isImplemented(cat)) {
+                res.push(cat);
+            }
+        }
         return this.available;
     }
 
+
+    /**
+     * This function GETs the activity metadata for the user and parses this data to
+     * add categories that are available to the user. It then returns an empty observable
+     * so that isAvailable() is notified when this function has finished executing and
+     * the vector containing available categories has been updated.
+     */
     public getCategories(): Observable<any> {
-        if (!this.dataIsFetched) { // (!this.dataIsFetched) {
+        if (!this.dataIsFetched) {
             this.dataIsFetched = true;
             return this.http.get(
                 this.baseUrl + '?access_token=' + this.getToken()).pipe(map(res => {
@@ -138,15 +130,14 @@ export class GfitService extends Platform {
                     this.activities.dataSource.forEach(source => {
                         if (source.dataStreamId.split(':')[0] === 'raw') { // As of now, we only want raw data
                             this.available.push(this.categoryDataTypeNames.get(source.dataType.name));
-                            this.messageService.addMsg('Now available: ' + this.categoryDataTypeNames.get(source.dataType.name));
                         }
                     });
                     return of(null);
-        }));
-    } else {
-        return of(null);
+                }));
+        } else {
+            return of(null);
+        }
     }
-}
 
     /**
      * This function GETs the data for a specified category and time interval.
@@ -171,13 +162,11 @@ export class GfitService extends Platform {
                             this.getToken();
 
         if (categoryId === 'blood-pressure') {
-            this.messageService.addMsg('Fetching blood pressure...');
             url += this.categoryUrl.get(categoryId) + tail;
             // Return an observable with the converted data
             return this.http.get(url).pipe(map(res => this.convertData(res, categoryId)));
         } else if (categoryId === 'weight') {
             url += this.categoryUrl.get(categoryId) + tail;
-            this.messageService.addMsg('Fetching weight data...');
         } else {
             throw TypeError('unimplemented');
         }

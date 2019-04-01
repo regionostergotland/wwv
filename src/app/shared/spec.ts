@@ -1,3 +1,5 @@
+import { containsElement } from '@angular/animations/browser/src/render/shared';
+
 export interface CategorySpec {
     id: string;
     label: string;
@@ -130,13 +132,29 @@ export class DataList {
         this.mathFunction = MathFunctionEnum.ACTUAL;
     }
 
+    private equals(p1: DataPoint, p2: DataPoint): boolean {
+        // getTime() converts a Date-object to a unix timestamp
+        return (p1.get('time').getTime() === p2.get('time').getTime());
+    }
+
+    private containsPoint(newPoint: DataPoint): boolean {
+        for (const point of this.points) {
+            if (this.equals(point, newPoint)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public addPoint(point: DataPoint) {
         for (const [typeId, value] of point.entries()) {
             if (!this.getDataType(typeId).isValid(value)) {
                 throw TypeError(value + ' invalid value for ' + typeId);
             }
         }
-        this.points.push(point);
+        if (!this.containsPoint(point)) {
+            this.points.push(point);
+        }
     }
 
     public addPoints(points: DataPoint[]) {

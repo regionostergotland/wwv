@@ -53,12 +53,7 @@ export class Conveyor {
     public getCategories(platformId: string): Observable<any> {
         const platform: Platform = this.platforms.get(platformId);
         const categoryIds: string[] = this.ehrService.getCategories();
-        console.log("Getting categories");
         return platform.getCategories().pipe(map(_ => EMPTY ));
-        /*return platform.getAvailable().pipe(map(res => {
-            available = res;
-        }));*/
-        // categoryIds.filter(id => platform.isAvailable(id));
     }
 
     /*
@@ -130,7 +125,6 @@ export class Conveyor {
     * @returns the currently selected platform.
     * */
     public getSelectedPlatform(): string {
-        console.log("Returning " + this.selectedPlatform);
         return this.selectedPlatform;
     }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DateAdapter} from '@angular/material/core';
 import { Conveyor } from '../conveyor.service';
 import { CategorySpec } from '../shared/spec';
-import { Router } from "@angular/router";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-category-picker',
@@ -27,7 +27,7 @@ export class CategoryPickerComponent implements OnInit {
     this.platformId = this.conveyor.getSelectedPlatform();
 
     this.startDate = new Date();
-    this.startDate.setMonth(this.startDate.getMonth()-1);
+    this.startDate.setMonth(this.startDate.getMonth() - 1);
     this.endDate = new Date();
 
     // finns det en platform
