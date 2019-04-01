@@ -158,6 +158,11 @@ describe('Ehr Types', () => {
         expect(data_list.getDataType(typeId).isValid(value)).toBeTruthy();
       }
     }
+    for (let point of data_list2.getPoints()) {
+      for (let [typeId, value] of point.entries()) {
+        expect(data_list2.getDataType(typeId).isValid(value)).toBeTruthy();
+      }
+    }
   });
 
 
