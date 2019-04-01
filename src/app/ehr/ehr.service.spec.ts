@@ -12,7 +12,7 @@ describe('EhrService', () => {
         ]
     }));
 
-  it('should be created', () => {
+    it('should be created', () => {
     const service: EhrService = TestBed.get(EhrService);
     expect(service).toBeTruthy();
   });

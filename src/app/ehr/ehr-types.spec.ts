@@ -12,7 +12,7 @@ describe('Ehr Types', () => {
   ]
   }));
 
-const categories: CategorySpec[] = [
+  const categories: CategorySpec[] = [
     {
         id : 'blood_pressure',
         templateId : 'sm_blood-pressure',
@@ -118,11 +118,11 @@ const categories: CategorySpec[] = [
 ];
 
   /**
-  * Test that correct blood-pressures pass validity check
-  */
+   * Test that correct blood-pressures pass validity check
+   */
   it('should have true validity check for correct blood_pressures', () => {
-    const correct_bps = new DataList(categories[0]);
-    correct_bps.addPoints([
+    const correctBps = new DataList(categories[0]);
+    correctBps.addPoints([
         new DataPoint(
             [
                 [ 'time', new Date() ],
@@ -139,20 +139,20 @@ const categories: CategorySpec[] = [
             ]
         )
     ]);
-    for (let point of correct_bps.getPoints()) {
-      for (let [typeId, value] of point.entries()) {
-        expect(correct_bps.getDataType(typeId).isValid(value)).toBeTruthy();
+    for (const point of correctBps.getPoints()) {
+      for (const [typeId, value] of point.entries()) {
+        expect(correctBps.getDataType(typeId).isValid(value)).toBeTruthy();
       }
     }
 
   });
 
   /**
-  * Test that correct body weights pass validity check
-  */
+   * Test that correct body weights pass validity check
+   */
   it('should have true validity check for correct body weights', () => {
-    const correct_bws = new DataList(categories[1]);
-    correct_bws.addPoints([
+    const correctBws = new DataList(categories[1]);
+    correctBws.addPoints([
       new DataPoint(
         [
           ['time', new Date()],
@@ -167,9 +167,9 @@ const categories: CategorySpec[] = [
         ]
       )
     ]);
-    for (let point of correct_bws.getPoints()) {
-      for (let [typeId, value] of point.entries()) {
-        expect(correct_bws.getDataType(typeId).isValid(value)).toBeTruthy();
+    for (const point of correctBws.getPoints()) {
+      for (const [typeId, value] of point.entries()) {
+        expect(correctBws.getDataType(typeId).isValid(value)).toBeTruthy();
       }
     }
   });

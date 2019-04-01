@@ -192,7 +192,8 @@ export class AddDataPointComponent implements OnInit {
   getCategoryLabel() {
     if (this.conveyor.getCategoryIds().includes(this.selectedCategory)) {
       return this.conveyor.getCategorySpec(this.selectedCategory).label;
-    }
+    } else {
       return '';
+    }
   }
 }
