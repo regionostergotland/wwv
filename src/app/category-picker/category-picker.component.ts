@@ -25,7 +25,6 @@ export class CategoryPickerComponent implements OnInit {
   private platformId = '';
 
   ngOnInit() {
-    console.log("ngON_INIT");
     this.platformId = this.conveyor.getSelectedPlatform();
     console.log(this.platformId);
 
@@ -35,11 +34,8 @@ export class CategoryPickerComponent implements OnInit {
 
     // finns det en platform
     if (this.platformId) {
-      console.log("SUBSCRIBE");
       this.conveyor.getCategories(this.platformId).subscribe(_ => {
-        console.log("SUBSCRIBER"+this.categoryIds);
         this.categoryIds = this.conveyor.getAvailableCats(this.platformId);
-        console.log("CATS: "+this.categoryIds);
         this.getCategories();
       });
     }
@@ -81,7 +77,7 @@ export class CategoryPickerComponent implements OnInit {
    * Gets data from conveyor.
    */
   getData() {
-    let fetches: Observable<any>[] = this.chosenCategories
+    const fetches: Observable<any>[] = this.chosenCategories
       .map(cat =>
         this.conveyor.fetchData(this.platformId, cat,
                                 this.startDate, this.endDate));

@@ -63,7 +63,6 @@ export class SourcesComponent implements OnInit {
   }
 
   async selectPlatform(platformId: string) {
-    console.log("SELECT");
     this.conveyor.selectPlatform(platformId);
     await this.conveyor.signIn(platformId);
     this.router.navigateByUrl('/catpicker');
