@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {DateAdapter} from '@angular/material/core';
+import { DateAdapter } from '@angular/material/core';
+import { Observable, forkJoin } from 'rxjs';
 import { Conveyor } from '../conveyor.service';
 import { CategorySpec } from '../ehr/ehr-types';
 import { Router } from '@angular/router';
@@ -60,11 +61,13 @@ export class CategoryPickerComponent implements OnInit {
    * @param category The category to update
    * @param event the checkbox event
    */
-  updateChosenCategories(category: string, event): void {
+  updateChosenCategories(category: string, event: any): void {
     const boxChecked: boolean = event.checked;
     if (boxChecked) {
+        this.chosenCategories.push(category);
         this.conveyor.selectCategory(category);
     } else {
+        this.chosenCategories.splice(this.chosenCategories.indexOf(category));
         this.conveyor.unselectCategory(category);
     }
     console.log(this.conveyor.getSelectedCategories());
@@ -78,11 +81,10 @@ export class CategoryPickerComponent implements OnInit {
    * Gets data from conveyor.
    */
   getData() {
-    // TODO change blood pressure to array of categories
-    this.conveyor.fetchData(this.platformId, 'blood-pressure', this.startDate, this.endDate).subscribe(_ =>
-      this.router.navigateByUrl('/sidebar')
-    );
+    let fetches: Observable<any>[] = this.chosenCategories
+      .map(cat =>
+        this.conveyor.fetchData(this.platformId, cat,
+                                this.startDate, this.endDate));
+    forkJoin(fetches).subscribe(_ => this.router.navigateByUrl('/sidebar'));
   }
-
-
 }
