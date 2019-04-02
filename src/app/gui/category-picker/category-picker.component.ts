@@ -54,6 +54,12 @@ export class CategoryPickerComponent implements OnInit {
     }
   }
 
+  getDescription(categoryId: string) {
+    if (this.conveyor.getCategorySpec(categoryId)) {
+      return this.conveyor.getCategorySpec(categoryId).description;
+    }
+  }
+
   /**
    * connected to the category checkboxes
    * @param category The category to update
