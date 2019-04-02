@@ -5,10 +5,9 @@ import { EhrService } from './ehr/ehr.service';
 import { Platform } from './platform/platform.service';
 import { GfitService } from './platform/gfit.service';
 import { DummyPlatformService } from './platform/dummy.service';
-import { of, Observable, EMPTY } from 'rxjs';
+import { of, Observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { PlayState } from '@angular/core/src/render3/interfaces/player';
-
 
 @Injectable({
     providedIn: 'root'
@@ -59,7 +58,10 @@ export class Conveyor {
     * */
     public unselectCategory(categoryId: string) {
         if (this.selectedCategories.includes(categoryId)) {
-            this.selectedCategories.splice(this.selectedCategories.indexOf(categoryId), 1);
+            this.selectedCategories.splice(
+                this.selectedCategories.indexOf(categoryId),
+                1
+            );
         }
     }
 
@@ -76,7 +78,8 @@ export class Conveyor {
         return this.selectedCategories;
     }
 
-    public fetchData(platformId: string, categoryId: string, start: Date, end: Date): Observable<any> {
+    public fetchData(platformId: string, categoryId: string,
+                     start: Date, end: Date): Observable<any> {
         if (!this.platforms.has(platformId)) {
             throw TypeError('platform ' + platformId + 'not available');
         }
@@ -87,8 +90,12 @@ export class Conveyor {
 
         const platform = this.platforms.get(platformId);
         const category: DataList = this.getDataList(categoryId);
-        // Add points to category and return an empty observable for the GUI to subscribe to
-        return platform.getData(categoryId, start, end).pipe(map( res => { category.addPoints(res); return EMPTY; }));
+        // Add points to category and return an empty observable for the GUI to
+        // subscribe to
+        return platform.getData(categoryId, start, end)
+            .pipe(map(res => {
+                category.addPoints(res); return EMPTY;
+            }));
     }
 
     public getDataList(categoryId: string): DataList {
@@ -108,14 +115,14 @@ export class Conveyor {
     }
 
     public authenticateBasic(username: string, password: string) {
-        console.log('authing ' + username);
         this.ehrService.authenticateBasic(username, password);
     }
 
     public sendData(): Observable<{}> {
-        for (const category of this.categories.values()) {
-            return this.ehrService.sendData(category);
-        }
+        // TODO handle if one of requests fail?
+        const requests = Array.from(this.categories.values())
+            .map(cat => this.ehrService.sendData(cat));
+        return forkJoin(requests);
     }
 
     /*
