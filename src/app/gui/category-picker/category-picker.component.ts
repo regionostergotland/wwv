@@ -63,16 +63,13 @@ export class CategoryPickerComponent implements OnInit {
     const boxChecked: boolean = event.checked;
     if (boxChecked) {
         this.chosenCategories.push(category);
-        this.conveyor.selectCategory(category);
     } else {
         this.chosenCategories.splice(this.chosenCategories.indexOf(category));
-        this.conveyor.unselectCategory(category);
     }
-    console.log(this.conveyor.getSelectedCategories());
+    console.log(this.chosenCategories);
   }
-
   validateSelections(): boolean {
-      return(this.startDate && this.endDate && this.conveyor.getSelectedCategories().length > 0);
+      return(this.startDate && this.endDate && this.chosenCategories.length > 0);
   }
 
   /**
@@ -83,6 +80,7 @@ export class CategoryPickerComponent implements OnInit {
       .map(cat =>
         this.conveyor.fetchData(this.platformId, cat,
                                 this.startDate, this.endDate));
+    this.chosenCategories = [];
     forkJoin(fetches).subscribe(_ => this.router.navigateByUrl('/sidebar'));
   }
 }
