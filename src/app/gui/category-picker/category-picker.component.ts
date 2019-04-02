@@ -54,6 +54,10 @@ export class CategoryPickerComponent implements OnInit {
     }
   }
 
+  /**
+   * Returns the description of a category
+   * @param categoryId the ID of the category
+   */
   getDescription(categoryId: string) {
     if (this.conveyor.getCategorySpec(categoryId)) {
       return this.conveyor.getCategorySpec(categoryId).description;
