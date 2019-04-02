@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { DataPoint } from '../../ehr/ehr-types';
-import { Conveyor } from '../../conveyor.service';
-import { platform } from 'os';
+import {Component, OnInit} from '@angular/core';
+import {DataPoint, DataTypeCodedText, DataTypeEnum, DataTypeQuantity} from '../../ehr/ehr-types';
+import {Conveyor} from '../../conveyor.service';
 
 @Component({
   selector: 'app-inspection',
@@ -63,6 +62,18 @@ export class InspectionComponent implements OnInit {
   }
 
   /**
+   * Checks if a category is empty.
+   * @param categoryId the category to check values from.
+   * @returns whether the category has no points in its list.
+   */
+  isCategoryEmpty(categoryId: string): boolean {
+    if (this.conveyor.getDataList(categoryId)) {
+      return this.conveyor.getDataList(categoryId).getPoints().length < 1;
+    }
+    return false;
+  }
+
+  /**
    * Returns the columns which should be displayed in the table depending on which
    * category it is.
    * @param category the category to get columns from
@@ -100,16 +111,40 @@ export class InspectionComponent implements OnInit {
    * Gets the data to be displayed from the point
    * @param point the datapoint to get the data from
    * @param key the data category to get
+   * @param categoryId the category to fetch from.
    * @returns a string of the value to show
    */
-  getPointData(point: DataPoint, key: string): string {
+  getPointData(point: DataPoint, key: string, categoryId: string): string {
     if (key === 'date') {
       return InspectionComponent.getDate(point.get('time'));
     }
     if (key === 'time') {
       return InspectionComponent.getTime(point.get('time'));
     }
+    if (this.getVisualType(key, categoryId) === DataTypeEnum.CODED_TEXT) {
+      const codedText: DataTypeCodedText = this.conveyor.getDataList(categoryId).getDataType(key) as DataTypeCodedText;
+      for (const code of codedText.options) {
+        if (code.code === point.get(key)) {
+          return code.label;
+        }
+      }
+    }
     return point.get(key);
+  }
+
+  /**
+   * Gets the type to display in the table.
+   * @param key the id to get the label from
+   * @param categoryId the category to fetch from.
+   * @returns the type to display in the table
+   */
+  getVisualType(key: string, categoryId: string): DataTypeEnum {
+    if (key === 'date') {
+      return DataTypeEnum.DATE_TIME;
+    }
+    if (this.conveyor.getDataList(categoryId)) {
+      return this.conveyor.getDataList(categoryId).spec.dataTypes.get(key).type;
+    }
   }
 
   /**

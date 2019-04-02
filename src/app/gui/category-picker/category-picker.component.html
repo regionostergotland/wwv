@@ -2,7 +2,7 @@
   <p>Välj vilken typ av data du vill importera och mellan vilka datum</p>
 <div class="centering">
 <div layout="row" layout-align="center center" class="card-height">
-  <mat-card class="example-card">
+  <mat-card class="home-card">
     <mat-card-content *ngFor="let category of categories">
       <section class="example-section">
         <mat-checkbox class="example-margin" (change)="updateChosenCategories(category[0], $event)">{{category[1]}}</mat-checkbox>
@@ -10,7 +10,7 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card class="example-card">
+  <mat-card class="home-card">
     <mat-card-content class="date-card">
       <section class="example-section">
         <mat-form-field>
