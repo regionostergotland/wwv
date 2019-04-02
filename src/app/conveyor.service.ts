@@ -15,7 +15,6 @@ import { map } from 'rxjs/operators';
 export class Conveyor {
     private readonly platforms: Map<string, Platform>;
     private categories: Map<string, DataList>;
-    private selectedCategories: string[];
     private selectedPlatform: string;
 
     constructor(
@@ -23,7 +22,6 @@ export class Conveyor {
         private gfitService: GfitService,
         private dummyPlatformService: DummyPlatformService) {
         this.categories = new Map<string, DataList>();
-        this.selectedCategories = [];
         this.platforms = new Map<string, Platform>([
             [ 'google-fit', this.gfitService ],
             [ 'dummy', this.dummyPlatformService ]
@@ -59,28 +57,6 @@ export class Conveyor {
 
     public getAllCategories(): string[] {
       return this.ehrService.getCategories();
-    }
-
-    /*
-    * Removes a selected category from the selected list
-    * */
-    public unselectCategory(categoryId: string) {
-        if (this.selectedCategories.includes(categoryId)) {
-            this.selectedCategories.splice(this.selectedCategories.indexOf(categoryId), 1);
-        }
-    }
-
-    /*
-    * Adds a new category to the selected list
-    * */
-    public selectCategory(categoryId: string) {
-        if (!this.selectedCategories.includes(categoryId)) {
-            this.selectedCategories.push(categoryId);
-        }
-    }
-
-    public getSelectedCategories(): string[] {
-        return this.selectedCategories;
     }
 
     public fetchData(platformId: string, categoryId: string, start: Date, end: Date): Observable<any> {
