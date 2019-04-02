@@ -232,6 +232,10 @@ export class DataTypeQuantity extends DataType {
  */
 export class DataPoint {
     /**
+     * Point is marked as chosen
+     */
+    public chosen: boolean;
+    /**
      * Point is marked for removal.
      */
     public removed: boolean;
@@ -241,6 +245,7 @@ export class DataPoint {
     private point: Map<string, any>;
 
     constructor(values= []) {
+        this.chosen = true;
         this.removed = false;
         this.point = new Map<string, any>(values);
     }
@@ -264,6 +269,7 @@ export enum MathFunctionEnum {
     TOTAL,
 }
 
+
 /**
  * List of [[DataPoint]]s with certain [[DataType]]s specified by a
  * [[CategorySpec]].
@@ -279,6 +285,11 @@ export class DataList {
      */
     private points: DataPoint[];
 
+    /**
+     * All data points that are marked as chosen in the list.
+     */
+     private chosen_points: DataPoint[];
+
     // TODO use these for processing
     private width: number;
     private mathFunction: MathFunctionEnum;
@@ -287,9 +298,36 @@ export class DataList {
         this.spec = spec;
 
         this.points = [];
+        this.chosen_points = [];
 
         this.width = 0;
         this.mathFunction = MathFunctionEnum.ACTUAL;
+    }
+
+    // utgår från att width är antal dagars upplösning
+    public width_divider() {
+      this.chosen_points = this.points.filter(p => p.chosen);
+      if (this.width === 0) {}
+      else {
+        let datapoint_list = [];
+        let interval_list = [];
+        const ms_in_day: number = 1000*60*60*24;
+        const origin_date = new Date().setDate(1) - 1000; // TODO tidigaste punktens datum
+        const latest_date = new Date().getTime(); // TODO senaste punktens datum
+        let n = 1;
+        let prev_cutoff: number = 0;
+        while (n < Math.ceil((latest_date - origin_date)/this.width)) {
+          datapoint_list = this.chosen_points.filter(p =>
+            (p.get('time').getTime() < origin_date + n*this.width*ms_in_day));
+          datapoint_list = datapoint_list.filter(p =>
+            (p.get('time').getTime() >= prev_cutoff));
+          prev_cutoff = origin_date + n*this.width*ms_in_day;
+          n += 1;
+          interval_list.push(datapoint_list);
+        }
+         // kräver mer stöd för att hantera men vill inte clutter cat spec
+        this.chosen_points = interval_list;
+      }
     }
 
     // make lambda?
@@ -376,5 +414,9 @@ export class DataList {
      */
     public setMathFunction(mathFunction: MathFunctionEnum): void {
         this.mathFunction = mathFunction;
+    }
+
+    public getChosenPoints(): DataPoint[] {
+      return this.chosen_points;
     }
 }

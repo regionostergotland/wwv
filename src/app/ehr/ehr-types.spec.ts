@@ -174,4 +174,75 @@ describe('Ehr Types', () => {
     }
   });
 
+  /* Problem med test */
+  /*it('should split datapoints into one day intervals', () => {
+    const test = new DataList(categories[0]);
+    const date: Date = new Date();
+    let date1: Date = new Date();
+    let date2: Date = new Date();
+    let date3: Date = new Date();
+    let date4: Date = new Date();
+    let date5: Date = new Date();
+    date1.setDate(1);
+    date2.setDate(1);
+    date3.setDate(1);
+    date2.setHours(12);
+    date3.setHours(16);
+    date4.setHours(12);
+    date5.setHours(16);
+    test.addPoints([
+        new DataPoint(
+            [
+                [ 'time', date1 ],
+                [ 'systolic', 101 ],
+                [ 'diastolic', 20 ],
+            ]
+        ),
+        new DataPoint(
+            [
+                [ 'time', date1 ],
+                [ 'systolic', 10 ],
+                [ 'diastolic', 22 ],
+                [ 'position', 'at1003'],
+            ]
+        ),
+        new DataPoint(
+            [
+                [ 'time', date1],
+                [ 'systolic', 100 ],
+                [ 'diastolic', 20 ],
+            ]
+        ),
+        new DataPoint(
+            [
+                [ 'time', date ],
+                [ 'systolic', 110 ],
+                [ 'diastolic', 220 ],
+                [ 'position', 'at1001'],
+            ]
+        ),
+        new DataPoint(
+            [
+                [ 'time', date ],
+                [ 'systolic', 10 ],
+                [ 'diastolic', 2 ],
+            ]
+        ),
+        new DataPoint(
+            [
+                [ 'time', date ],
+                [ 'systolic', 118 ],
+                [ 'diastolic', 232 ],
+                [ 'position', 'at1003'],
+            ]
+        )
+    ]);
+    // set all points to chosen_points
+    test.setWidth(1);
+    test.width_divider();
+    console.log('chosen points ' + test.getChosenPoints());
+    console.log('nr of chosen points ' + test.getChosenPoints().length);
+    expect(1).toBeTruthy();
+
+  });*/
 });
