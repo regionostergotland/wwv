@@ -63,6 +63,8 @@ export abstract class DataType {
      */
     readonly description: string;
 
+    // TODO add required flag
+
     constructor(type: DataTypeEnum, label: string, description: string) {
         this.type = type;
         this.label = label;
@@ -83,6 +85,10 @@ export abstract class DataType {
      * @return Stringified JSON object represantation of value.
      */
     public abstract toRest(value: any): any;
+
+    public equal(v1: any, v2: any): boolean {
+        return v1 === v2;
+    }
 }
 
 /**
@@ -104,6 +110,11 @@ export class DataTypeDateTime extends DataType {
 
     public toRest(value: any): any {
         return [value.toISOString()];
+    }
+
+    //@override
+    public equal(v1: any, v2: any): boolean {
+        return v1.valueOf() === v2.valueOf();
     }
 }
 
@@ -248,10 +259,26 @@ export class DataPoint {
     // wrap Map methods because Map can't be extended
     public get(typeId: string): any { return this.point.get(typeId); }
     public set(typeId: string, value: any) { this.point.set(typeId, value); }
+    public size(): number { return this.point.size; }
     public values() { return this.point.values(); }
     public keys() { return this.point.keys(); }
     public entries() { return this.point.entries(); }
     public has(typeId: string) { return this.point.has(typeId); }
+
+    public equals(p: DataPoint, dataTypes: Map<string,DataType>): boolean {
+        if (p.size() != this.size()) {
+            return false
+        }
+
+        for (let [key, value] of this.entries()) {
+            // only check required fields?
+            if (!p.has(key) || !dataTypes.get(key).equal(p.get(key), value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
 
 /**
@@ -297,15 +324,9 @@ export class DataList {
         return (p1.get('time').getTime() - p2.get('time').getTime());
     }
 
-    // TODO move to DataPoint
-    private equals(p1: DataPoint, p2: DataPoint): boolean {
-        // getTime() converts a Date-object to a unix timestamp
-        return (p1.get('time').getTime() === p2.get('time').getTime());
-    }
-
     private containsPoint(newPoint: DataPoint): boolean {
         for (const point of this.points) {
-            if (this.equals(point, newPoint)) {
+            if (newPoint.equals(point, this.spec.dataTypes)) {
                 return true;
             }
         }

@@ -65,6 +65,12 @@ export class DummyPlatformService extends Platform {
                 ),
                 new DataPoint(
                     [
+                        [ 'time', new Date(2017,1) ],
+                        [ 'weight', 100 ],
+                    ]
+                ),
+                new DataPoint(
+                    [
                         [ 'time', end ],
                         [ 'weight', 35 ],
                     ]
