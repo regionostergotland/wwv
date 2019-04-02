@@ -334,6 +334,7 @@ export class DataList {
         for (const point of points) {
             this.addPoint(point);
         }
+        this.points.sort(this.sortByEarliestComparator);
     }
 
     /**

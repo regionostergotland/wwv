@@ -11,19 +11,23 @@ import { MessageService } from '../message.service';
 export class DummyPlatformService extends Platform {
     constructor() {
         super();
-        this.implemented.push(
+        /*this.implemented.push(
             { category: 'blood_pressure',
               dataTypes: ['time', 'systolic', 'diastolic'] },
             { category: 'body_weight',
               dataTypes: ['time', 'weight'] }
-        );
+        );*/
     }
 
     public signIn(): void { }
     public signOut(): void { }
 
     public getAvailable(): Observable<string[]> {
-        return of(this.implemented.map(e => e.category));
+        return of(['blood-pressure', 'body_weight']);//this.implemented.map(e => e.category));
+    }
+
+    protected initCategoryProperties(): void {
+
     }
 
     /**
