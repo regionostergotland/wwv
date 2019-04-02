@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {Conveyor} from '../conveyor.service';
+import {Conveyor} from '../../conveyor.service';
 import {DataPoint, DataTypeCodedText,
         DataTypeCodedTextOpt, DataTypeEnum,
-        DataTypeQuantity} from '../ehr/ehr-types';
+        DataTypeQuantity} from '../../ehr/ehr-types';
 import { AmazingTimePickerService } from 'amazing-time-picker';
 
 

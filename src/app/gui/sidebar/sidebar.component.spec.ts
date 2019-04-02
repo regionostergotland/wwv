@@ -1,7 +1,17 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MatSelectModule, MatFormFieldModule, MatCardModule, MatSidenavModule, MatListModule, MatTableModule} from '@angular/material';
-import { SidebarComponent } from './sidebar.component';
+import {
+  MatSelectModule,
+  MatFormFieldModule,
+  MatCardModule,
+  MatSidenavModule,
+  MatListModule,
+  MatTableModule,
+  MatBottomSheetModule,
+  MatBottomSheetRef,
+  MAT_BOTTOM_SHEET_DATA
+} from '@angular/material';
+import {BottomSheetCategoriesComponent, SidebarComponent} from './sidebar.component';
 import { HealthListItemsComponent } from '../health-list-items/health-list-items.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -30,7 +40,7 @@ describe('SidebarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SidebarComponent, HealthListItemsComponent ],
+      declarations: [ SidebarComponent, HealthListItemsComponent, BottomSheetCategoriesComponent ],
       imports: [
         BrowserAnimationsModule,
         MatSelectModule,
@@ -40,6 +50,7 @@ describe('SidebarComponent', () => {
         MatCardModule,
         MatSidenavModule,
         MatListModule,
+        MatBottomSheetModule,
 
         GoogleApiModule.forRoot({
           provide: NG_GAPI_CONFIG,
@@ -51,7 +62,9 @@ describe('SidebarComponent', () => {
       GoogleAuthService,
       GoogleApiService,
       HttpClient,
-      HttpHandler
+      HttpHandler,
+       {provide: MatBottomSheetRef, useValue: {}},
+       {provide: MAT_BOTTOM_SHEET_DATA, useValue: {}},
     ]
     })
     .compileComponents();
