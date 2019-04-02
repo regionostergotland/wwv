@@ -23,7 +23,7 @@ export class DummyPlatformService extends Platform {
     public signOut(): void { }
 
     public getAvailable(): Observable<string[]> {
-        return of(['blood-pressure', 'body_weight']);//this.implemented.map(e => e.category));
+        return of(['blood-pressure', 'body_weight']); // this.implemented.map(e => e.category));
     }
 
     protected initCategoryProperties(): void {

@@ -34,6 +34,7 @@ export class SidebarComponent implements OnInit {
   }
 
   openBottomSheet(): void {
+// tslint:disable-next-line: no-use-before-declare
     this.bottomSheet.open(BottomSheetCategoriesComponent);
   }
 }
