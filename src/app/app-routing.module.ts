@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { SourcesComponent } from './sources/sources.component';
-import { CategoryPickerComponent } from './category-picker/category-picker.component';
-import { InfoComponent } from './info/info.component';
-import { HelpComponent} from './help/help.component';
-import { InspectionComponent} from './inspection/inspection.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import {HealthListItemsComponent} from './health-list-items/health-list-items.component';
+import { HomeComponent } from './gui/home/home.component';
+import { SourcesComponent } from './gui/sources/sources.component';
+import { CategoryPickerComponent } from './gui/category-picker/category-picker.component';
+import { InfoComponent } from './gui/info/info.component';
+import { HelpComponent} from './gui/help/help.component';
+import { InspectionComponent} from './gui/inspection/inspection.component';
+import { SidebarComponent } from './gui/sidebar/sidebar.component';
+import {HealthListItemsComponent} from './gui/health-list-items/health-list-items.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },

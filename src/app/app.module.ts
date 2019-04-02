@@ -6,16 +6,16 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { MessagesComponent } from './messages/messages.component';
 
-import { ToolbarComponent } from './toolbar/toolbar.component';
-import { SourcesComponent } from './sources/sources.component';
-import { HomeComponent } from './home/home.component';
+import { ToolbarComponent } from './gui/toolbar/toolbar.component';
+import { SourcesComponent } from './gui/sources/sources.component';
+import { HomeComponent } from './gui/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
-import { CategoryPickerComponent } from './category-picker/category-picker.component';
-import { InfoComponent } from './info/info.component';
-import { HelpComponent } from './help/help.component';
-import { HealthListItemsComponent } from './health-list-items/health-list-items.component';
-import { InspectionComponent } from './inspection/inspection.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { CategoryPickerComponent } from './gui/category-picker/category-picker.component';
+import { InfoComponent } from './gui/info/info.component';
+import { HelpComponent } from './gui/help/help.component';
+import { HealthListItemsComponent } from './gui/health-list-items/health-list-items.component';
+import { InspectionComponent } from './gui/inspection/inspection.component';
+import { SidebarComponent } from './gui/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 
@@ -64,7 +64,7 @@ import {
   NG_GAPI_CONFIG,
   GoogleApiConfig
 } from 'ng-gapi';
-import { AddDataPointComponent } from './add-data-point/add-data-point.component';
+import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
 
 const gapiClientConfig: NgGapiClientConfig = {
   client_id: '***REMOVED***.apps.googleusercontent.com',

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgModule } from '@angular/core';
-import { Conveyor } from '../conveyor.service';
+import { Conveyor } from '../../conveyor.service';
 import { Router } from '@angular/router';
 
 @Component({

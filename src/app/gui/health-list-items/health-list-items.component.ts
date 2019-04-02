@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {DataPoint, DataTypeCodedText,
-        DataTypeCodedTextOpt, DataTypeEnum} from '../ehr/ehr-types';
-import {Conveyor} from '../conveyor.service';
+        DataTypeCodedTextOpt, DataTypeEnum} from '../../ehr/ehr-types';
+import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
 import {MatDialog} from '@angular/material';
 

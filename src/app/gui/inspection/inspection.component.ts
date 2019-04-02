@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { DataPoint } from '../ehr/ehr-types';
-import { Conveyor } from '../conveyor.service';
+import { DataPoint } from '../../ehr/ehr-types';
+import { Conveyor } from '../../conveyor.service';
 import { platform } from 'os';
 
 @Component({
