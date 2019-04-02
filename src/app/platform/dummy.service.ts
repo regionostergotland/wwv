@@ -56,26 +56,34 @@ export class DummyPlatformService extends Platform {
                 )
             ]);
         } else if (categoryId === 'body_weight') {
-            return of([
-                new DataPoint(
+            let points: DataPoint[] = [];
+            for (let i = 0; i < 100; i++) {
+                points.push(new DataPoint(
                     [
-                        [ 'time', start ],
-                        [ 'weight', 20 ]
+                        [ 'time', new Date() ],
+                        [ 'weight', Math.random()*(500)+10 ]
                     ]
-                ),
-                new DataPoint(
-                    [
-                        [ 'time', new Date(2017,1) ],
-                        [ 'weight', 100 ],
-                    ]
-                ),
-                new DataPoint(
-                    [
-                        [ 'time', end ],
-                        [ 'weight', 35 ],
-                    ]
-                )
-            ]);
+                ));
+            }
+            points.push(new DataPoint(
+                [
+                    [ 'time', start ],
+                    [ 'weight', 20 ]
+                ]
+            ));
+            points.push(new DataPoint(
+                [
+                    [ 'time', new Date(2017, 1) ],
+                    [ 'weight', 100 ],
+                ]
+            ));
+            points.push(new DataPoint(
+                [
+                    [ 'time', end ],
+                    [ 'weight', 35 ],
+                ]
+            ));
+            return of(points);
         } else {
             throw TypeError('unimplemented');
         }

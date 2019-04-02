@@ -116,7 +116,7 @@ export class DataTypeDateTime extends DataType {
         return [value.toISOString()];
     }
 
-    //@override
+    // @override
     public equal(v1: any, v2: any): boolean {
         return v1.valueOf() === v2.valueOf();
     }
@@ -269,12 +269,12 @@ export class DataPoint {
     public entries() { return this.point.entries(); }
     public has(typeId: string) { return this.point.has(typeId); }
 
-    public equals(p: DataPoint, dataTypes: Map<string,DataType>): boolean {
-        if (p.size() != this.size()) {
-            return false
+    public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
+        if (p.size() !== this.size()) {
+            return false;
         }
 
-        for (let [key, value] of this.entries()) {
+        for (const [key, value] of this.entries()) {
             // only check required fields?
             if (!p.has(key) || !dataTypes.get(key).equal(p.get(key), value)) {
                 return false;
@@ -357,8 +357,16 @@ export class DataList {
      */
     public addPoints(points: DataPoint[]) {
         for (const point of points) {
-            this.addPoint(point);
+            for (const [typeId, value] of point.entries()) {
+                if (!this.getDataType(typeId).isValid(value)) {
+                    throw TypeError(value + ' invalid value for ' + typeId);
+                }
+            }
+            if (!this.containsPoint(point)) {
+                this.points.push(point);
+            }
         }
+        this.points.sort(this.sortByEarliestComparator);
     }
 
     /**
