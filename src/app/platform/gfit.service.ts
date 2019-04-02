@@ -171,6 +171,15 @@ export class GfitService extends Platform {
 
                 ));
             });
+        } else if (categoryId === 'body_weight') {
+            res.point.forEach(src => {
+                points.push(new DataPoint(
+                    [
+                        [ 'time', new Date(src.startTimeNanos * Math.pow(10, -6)) ], // Converts ns to ms
+                        [ 'weight', src.value[0].fpVal ]
+                    ]
+                ));
+            });
         }
         return points;
     }
