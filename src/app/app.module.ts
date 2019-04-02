@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,6 +16,7 @@ import { HelpComponent } from './gui/help/help.component';
 import { HealthListItemsComponent } from './gui/health-list-items/health-list-items.component';
 import { InspectionComponent } from './gui/inspection/inspection.component';
 import { BottomSheetCategoriesComponent, SidebarComponent } from './gui/sidebar/sidebar.component';
+import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 
@@ -55,7 +56,9 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
-  MatFormFieldModule, MatBottomSheet
+  MatFormFieldModule,
+  MAT_DATE_LOCALE,
+  ErrorStateMatcher
 } from '@angular/material';
 
 import {
@@ -63,7 +66,6 @@ import {
   NgGapiClientConfig,
   NG_GAPI_CONFIG
 } from 'ng-gapi';
-import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
 
 const gapiClientConfig: NgGapiClientConfig = {
   client_id: '***REMOVED***.apps.googleusercontent.com',
@@ -96,6 +98,7 @@ const gapiClientConfig: NgGapiClientConfig = {
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
 
     MatAutocompleteModule,
     MatBadgeModule,
@@ -134,7 +137,7 @@ const gapiClientConfig: NgGapiClientConfig = {
     MatTreeModule,
     MatFormFieldModule,
     MatTableModule,
-
+    ErrorStateMatcher,
 
     AmazingTimePickerModule,
     BrowserModule,
@@ -145,7 +148,7 @@ const gapiClientConfig: NgGapiClientConfig = {
       useValue: gapiClientConfig
     })
   ],
-  providers: [],
+  providers: [{provide: MAT_DATE_LOCALE, useValue: 'sv-SE'}],
   bootstrap: [AppComponent],
   entryComponents: [AddDataPointComponent, BottomSheetCategoriesComponent]
 })

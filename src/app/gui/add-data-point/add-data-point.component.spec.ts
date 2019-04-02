@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddDataPointComponent } from './add-data-point.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
   MatDatepickerModule,
@@ -9,8 +9,9 @@ import {
   MatSelectModule,
   MatFormFieldModule,
   MAT_DIALOG_DATA,
-  MatDialogRef
-  } from '@angular/material';
+  MatDialogRef,
+  MatInputModule
+} from '@angular/material';
 
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import {
@@ -40,6 +41,8 @@ describe('AddDataPointComponent', () => {
       declarations: [ AddDataPointComponent ],
       imports: [
         FormsModule,
+        ReactiveFormsModule,
+        MatInputModule,
 
         MatDatepickerModule,
         MatDialogModule,
