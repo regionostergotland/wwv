@@ -62,13 +62,17 @@ export abstract class DataType {
      * Human readable description of data type.
      */
     readonly description: string;
+    /**
+     * Specify if data field is required in composition.
+     */
+    readonly required: boolean;
 
-    // TODO add required flag
-
-    constructor(type: DataTypeEnum, label: string, description: string) {
+    constructor(type: DataTypeEnum, label: string,
+                description: string, required: boolean) {
         this.type = type;
         this.label = label;
         this.description = description;
+        this.required = required;
     }
 
     /**
@@ -95,8 +99,8 @@ export abstract class DataType {
  * Corresponding data type for DV_DATE_TIME in openEHR.
  */
 export class DataTypeDateTime extends DataType {
-    constructor(label: string, description: string) {
-        super(DataTypeEnum.DATE_TIME, label, description);
+    constructor(label: string, description: string, required: boolean) {
+        super(DataTypeEnum.DATE_TIME, label, description, required);
     }
 
     /**
@@ -122,8 +126,8 @@ export class DataTypeDateTime extends DataType {
  * Corresponding data type for DV_TEXT in openEHR.
  */
 export class DataTypeText extends DataType {
-    constructor(label: string, description: string) {
-        super(DataTypeEnum.TEXT, label, description);
+    constructor(label: string, description: string, required: boolean) {
+        super(DataTypeEnum.TEXT, label, description, required);
     }
 
     /**
@@ -167,9 +171,9 @@ export class DataTypeCodedText extends DataType {
      */
     public readonly options: DataTypeCodedTextOpt[];
 
-    constructor(label: string, description: string,
+    constructor(label: string, description: string, required: boolean,
                 options: DataTypeCodedTextOpt[]) {
-        super(DataTypeEnum.CODED_TEXT, label, description);
+        super(DataTypeEnum.CODED_TEXT, label, description, required);
         this.options = options;
     }
 
@@ -206,9 +210,9 @@ export class DataTypeQuantity extends DataType {
      */
     public readonly magnitudeMax: number;
 
-    constructor(label: string, description: string,
+    constructor(label: string, description: string, required: boolean,
                 unit: string, magnitudeMin: number, magnitudeMax: number) {
-        super(DataTypeEnum.QUANTITY, label, description);
+        super(DataTypeEnum.QUANTITY, label, description, required);
         this.unit = unit;
         this.magnitudeMin = magnitudeMin;
         this.magnitudeMax = magnitudeMax;

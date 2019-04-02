@@ -23,6 +23,7 @@ export class EhrService {
                     new DataTypeDateTime(
                         'Tid',
                         'Tidpunkt vid mätning',
+                        true,
                     )
                 ],
                 [
@@ -30,6 +31,7 @@ export class EhrService {
                     new DataTypeQuantity(
                         'Övertryck',
                         'Systoliskt övertryck av blod',
+                        true,
                         'mm[Hg]', 0, 1000
                     )
                 ],
@@ -38,6 +40,7 @@ export class EhrService {
                     new DataTypeQuantity(
                         'Undertryck',
                         'Diastoliskt undertryck av blod',
+                        true,
                         'mm[Hg]', 0, 1000
                     )
                 ],
@@ -46,6 +49,7 @@ export class EhrService {
                     new DataTypeCodedText(
                         'Position',
                         'Position vid mätning.',
+                        false,
                         [
                             {
                                 code: 'at1000',
@@ -78,6 +82,7 @@ export class EhrService {
                     new DataTypeDateTime(
                         'Tid',
                         'Tidpunkt vid mätning',
+                        true,
                     )
                 ],
                 [
@@ -85,6 +90,7 @@ export class EhrService {
                     new DataTypeQuantity(
                         'Vikt',
                         'Kroppsvikt',
+                        true,
                         'kg', 0, 1000
                     )
                 ],
@@ -93,6 +99,7 @@ export class EhrService {
                     new DataTypeCodedText(
                         'Klädsel',
                         'Klädsel vid mätning.',
+                        false,
                         [
                             {
                                 code: 'at0011',
@@ -116,7 +123,8 @@ export class EhrService {
                     'comment',
                     new DataTypeText(
                         'Kommentar',
-                        'Kompletterande information med fritext'
+                        'Kompletterande information med fritext',
+                        false,
                     )
                 ],
             ])
