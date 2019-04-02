@@ -64,7 +64,7 @@ export class CategoryPickerComponent implements OnInit {
     if (boxChecked) {
         this.chosenCategories.push(category);
     } else {
-        this.chosenCategories.splice(this.chosenCategories.indexOf(category));
+        this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
     }
     console.log(this.chosenCategories);
   }
