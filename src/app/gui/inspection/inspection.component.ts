@@ -162,8 +162,8 @@ export class InspectionComponent implements OnInit {
   sendData() {
     this.conveyor.sendData().
       subscribe(
-        _ => console.log("success"),
-        e =>console.log(e)
+        _ => console.log('success'),
+        e => console.log(e)
     );
   }
 
