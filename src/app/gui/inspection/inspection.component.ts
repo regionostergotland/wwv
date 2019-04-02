@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DataPoint, DataTypeCodedText, DataTypeEnum, DataTypeQuantity} from '../../ehr/ehr-types';
+import {DataPoint, DataTypeCodedText, DataTypeEnum } from '../../ehr/ehr-types';
 import {Conveyor} from '../../conveyor.service';
 
 @Component({
@@ -162,8 +162,8 @@ export class InspectionComponent implements OnInit {
   sendData() {
     this.conveyor.sendData().
       subscribe(
-        _ => console.log("success"),
-        e =>console.log(e)
+        _ => console.log('success'),
+        e => console.log(e)
     );
   }
 
