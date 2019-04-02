@@ -57,8 +57,7 @@ import {
   MatTooltipModule,
   MatTreeModule,
   MatFormFieldModule,
-  MAT_DATE_LOCALE,
-  ErrorStateMatcher
+  MAT_DATE_LOCALE
 } from '@angular/material';
 
 import {
@@ -137,7 +136,6 @@ const gapiClientConfig: NgGapiClientConfig = {
     MatTreeModule,
     MatFormFieldModule,
     MatTableModule,
-    ErrorStateMatcher,
 
     AmazingTimePickerModule,
     BrowserModule,
