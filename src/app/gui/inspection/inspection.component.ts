@@ -14,7 +14,7 @@ export class InspectionComponent implements OnInit {
   categoryDataPoints: Map<string, DataPoint[]>;
   options: Map<string, Map<string, DataTypeCodedTextOpt[]>>;
   data: Map<string, Map<DataPoint, Map<string, string>>>;
-  displayedColumns: Map<string, string[]>
+  displayedColumns: Map<string, string[]>;
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
