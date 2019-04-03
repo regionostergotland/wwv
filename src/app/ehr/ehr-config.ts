@@ -1,4 +1,4 @@
-import { InjectionToken } from "@angular/core";
+import { InjectionToken } from '@angular/core';
 
 import { CategorySpec, DataList, DataPoint, DataType,
          DataTypeDateTime, DataTypeQuantity, DataTypeText,
@@ -131,7 +131,7 @@ export const ehrConfig: EhrConfig = {
       ])
     }
   ]
-}
+};
 
 export let EHR_CONFIG = new InjectionToken<EhrConfig>('ehrconfig', {
   providedIn: 'root',
