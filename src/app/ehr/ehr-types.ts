@@ -413,8 +413,42 @@ export class DataList {
     public setMathFunction(mathFunction: MathFunctionEnum): void {
         this.mathFunction = mathFunction;
     }
-
+    /**
+     * Get the list of intervals of points.
+     * @returns a two deep list of datapoints
+     */
     public getPointsInterval(): DataPoint[][] {
       return this.pointsInterval;
+    }
+
+    /**
+     * The manipulation of intervals of datapoint to make one datapoint for each
+     * to represent respective interval.
+     * @returns A list of datapoints that each represent it's original interval.
+     */
+    public intervalManipulation(): DataPoint[] {
+      const dataPoints: DataPoint[] = [];
+      let n = 0;
+      for (const interval of this.pointsInterval) {
+        const dataPointElements: any[] = [];
+        if (this.pointsInterval[n] !== undefined && interval[0] !== undefined) {
+          for (const [key, value] of interval[0].entries()) {
+            if (key === 'time') {
+              const startDate: Date = this.pointsInterval[n][0].get(key);
+              startDate.setHours(0, 0, 0);
+              dataPointElements.push([key, startDate]);
+            }
+            let sum = 0;
+            if (typeof value === 'number') {
+              for (const point of interval) { sum += point.get(key); }
+              dataPointElements.push([key, sum]);
+            }
+          }
+        }
+        const dataPoint: DataPoint = new DataPoint(dataPointElements);
+        dataPoints.push(dataPoint);
+        n += 1;
+      }
+      return dataPoints;
     }
 }
