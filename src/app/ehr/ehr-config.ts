@@ -4,14 +4,12 @@ import { CategorySpec, DataList, DataPoint, DataType,
          DataTypeDateTime, DataTypeQuantity, DataTypeText,
          DataTypeCodedText } from './ehr-types';
 
-export let TEMPLATES = new InjectionToken("templates");
-
 export interface EhrConfig {
   baseUrl: string;
   categories: CategorySpec[];
 }
 
-export const templates: EhrConfig = {
+export const ehrConfig: EhrConfig = {
   baseUrl: 'https://rest.ehrscape.com/rest/v1/composition',
 // TODO generate these specifications automatically from templates in ehr
   categories: [
@@ -135,3 +133,7 @@ export const templates: EhrConfig = {
   ]
 }
 
+export let EHR_CONFIG = new InjectionToken<EhrConfig>('ehrconfig', {
+  providedIn: 'root',
+  factory: () => ehrConfig
+});

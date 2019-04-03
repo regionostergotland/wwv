@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { EhrConfig } from './ehr-config';
+import { EHR_CONFIG, EhrConfig } from './ehr-config';
 
 import { CategorySpec, DataList } from './ehr-types';
 
@@ -12,7 +12,7 @@ export class EhrService {
   private basicCredentials: string;
 
   constructor(
-    private config: EhrConfig,
+    @Inject(EHR_CONFIG) private config: EhrConfig,
     private http: HttpClient
   ) {}
 
