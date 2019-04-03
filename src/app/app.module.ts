@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MessagesComponent } from './messages/messages.component';
 
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 import { SourcesComponent } from './gui/sources/sources.component';
@@ -19,6 +18,8 @@ import { BottomSheetCategoriesComponent, SidebarComponent } from './gui/sidebar/
 import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
+import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
+
 
 import {
   MatAutocompleteModule,
@@ -60,10 +61,14 @@ import {
   MAT_DATE_LOCALE
 } from '@angular/material';
 
+
 import {
   GoogleApiModule,
+  GoogleApiService,
+  GoogleAuthService,
   NgGapiClientConfig,
-  NG_GAPI_CONFIG
+  NG_GAPI_CONFIG,
+  GoogleApiConfig
 } from 'ng-gapi';
 
 const gapiClientConfig: NgGapiClientConfig = {
@@ -88,8 +93,7 @@ const gapiClientConfig: NgGapiClientConfig = {
     HealthListItemsComponent,
     InspectionComponent,
     SidebarComponent,
-    MessagesComponent, AddDataPointComponent,
-    BottomSheetCategoriesComponent
+    AddDataPointComponent
   ],
   imports: [
     BrowserModule,
@@ -148,6 +152,6 @@ const gapiClientConfig: NgGapiClientConfig = {
   ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'sv-SE'}],
   bootstrap: [AppComponent],
-  entryComponents: [AddDataPointComponent, BottomSheetCategoriesComponent]
+  entryComponents: [AddDataPointComponent]
 })
 export class AppModule { }

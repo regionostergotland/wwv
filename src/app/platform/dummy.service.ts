@@ -5,77 +5,86 @@ import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { MessageService } from '../message.service';
 
+import { CategoryEnum,
+         BloodPressureEnum,
+         BodyWeightEnum,
+         HeightEnum } from '../ehr/ehr-config';
+
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class DummyPlatformService extends Platform {
+
     constructor() {
-        super();
-        this.implemented.push(
-            { category: 'blood_pressure',
-              dataTypes: ['time', 'systolic', 'diastolic'] },
-            { category: 'body_weight',
-              dataTypes: ['time', 'weight'] }
-        );
+      super(
+        new Map([
+          [ CategoryEnum.BLOOD_PRESSURE,
+            {
+              url: '',
+              dataTypes: new Map([
+                [BloodPressureEnum.TIME, null],
+                [BloodPressureEnum.SYSTOLIC, null],
+                [BloodPressureEnum.DIASTOLIC, null]
+              ]),
+            }
+          ],
+          [ CategoryEnum.BODY_WEIGHT,
+            {
+              url: '',
+              dataTypes: new Map([
+                [BodyWeightEnum.TIME, null],
+                [BodyWeightEnum.WEIGHT, null],
+              ]),
+            }
+          ],
+          [ CategoryEnum.HEIGHT,
+            {
+              url: '',
+              dataTypes: new Map([
+                [HeightEnum.TIME, null],
+                [HeightEnum.HEIGHT, null],
+              ]),
+            }
+          ],
+        ])
+      );
     }
 
-    public signIn(): void { }
-    public signOut(): void { }
+  public async signIn() {}
+  public signOut(): void {}
 
-    public getAvailable(): Observable<string[]> {
-        return of(this.implemented.map(e => e.category));
-    }
+  public getAvailable(): Observable<string[]> {
+    return of(Array.from(this.implementedCategories.keys()));
+  }
 
-    /**
-     * This function GETs the data for a specified category and time interval.
-     * The data is then converted to an internal format, and returned within an
-     * observable.
-     * @param categoryId category for which data is to be fetched
-     * @param start start of time interval for which data is to be fetched
-     * @param end end of time interval for which data is to fetched
-     * @returns an observable containing data that has been converted to
-     * our internal format
-     */
-    public getData(categoryId: string,
-                   start: Date, end: Date): Observable<DataPoint[]> {
-        if (categoryId === 'blood_pressure') {
-            return of([
-                new DataPoint(
-                    [
-                        [ 'time', start ],
-                        [ 'systolic', 10 ],
-                        [ 'diastolic', 20 ],
-                    ]
-                ),
-                new DataPoint(
-                    [
-                        [ 'time', end ],
-                        [ 'systolic', 11 ],
-                        [ 'diastolic', 22 ],
-                    ]
-                )
-            ]);
-        } else if (categoryId === 'body_weight') {
-            return of([
-                new DataPoint(
-                    [
-                        [ 'time', start ],
-                        [ 'weight', 20 ]
-                    ]
-                ),
-                new DataPoint(
-                    [
-                        [ 'time', end ],
-                        [ 'weight', 35 ],
-                    ]
-                )
-            ]);
-        } else {
-            throw TypeError('unimplemented');
-        }
-    }
+  /**
+   * Generate a data point for each day within the interval for given category.
+   * @param categoryId category for which data is to be fetched
+   * @param start start of time interval for which data is to be fetched
+   * @param end end of time interval for which data is to fetched
+   * @returns an observable containing data that has been converted to
+   * our internal format
+   */
+  public getData(categoryId: string,
+                 start: Date, end: Date): Observable<DataPoint[]> {
+    const lengthOfDay = 1000 * 3600 * 24;
+    let current: Date = new
+                   Date(start.getTime() - start.getTime() % lengthOfDay);
+    const points: DataPoint[] = [];
+    while (current.getTime() < end.getTime()) {
+      const fields = [];
+      const fieldnames = this.implementedCategories
+        .get(categoryId).dataTypes.keys();
+      for (const fieldname of fieldnames) {
+        const value = fieldname === 'time' ? current : current.getDate();
+        fields.push([fieldname, value]);
+      }
 
-    public convertData(res: any, categoryId: string): DataPoint[] {
-        return [];
+      points.push(new DataPoint(fields));
+
+      const nextDay: Date = new Date(current.getTime() + lengthOfDay);
+      current = nextDay;
     }
+    return of(points);
+  }
 }
