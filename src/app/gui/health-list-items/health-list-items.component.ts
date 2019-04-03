@@ -72,7 +72,6 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   trackItem(index, item) {
-    console.log(item);
     return item ? index : undefined;
   }
 
