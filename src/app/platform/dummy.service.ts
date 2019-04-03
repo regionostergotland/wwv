@@ -13,25 +13,29 @@ import { CategoryEnum, BloodPressureEnum,
 })
 export class DummyPlatformService extends Platform {
     constructor() {
-        super();
-
+      super();
+      this.implementedCategories = new Map([
+        [ CategoryEnum.BLOOD_PRESSURE,
+          {
+            url: '',
+            dataTypes: [BloodPressureEnum.TIME,
+                        BloodPressureEnum.SYSTOLIC,
+                        BloodPressureEnum.DIASTOLIC],
+            dataTypeConversions: null,
+          }
+        ],
+      ]);
     }
 
-  public signIn(): void { }
-  public signOut(): void { }
+  public signIn(): void {}
+  public signOut(): void {}
 
-    public getAvailable(): Observable<string[]> {
-        return of([CategoryEnum.BLOOD_PRESSURE, CategoryEnum.BODY_WEIGHT]); // this.implemented.map(e => e.category));
-    }
-
-    protected setImplemented(): void {
-
-    }
+  public getAvailable(): Observable<string[]> {
+    return of(Array.from(this.implementedCategories.keys()));
+  }
 
   /**
-   * This function GETs the data for a specified category and time interval.
-   * The data is then converted to an internal format, and returned within an
-   * observable.
+   * Generate a data point for each day within the interval for given category.
    * @param categoryId category for which data is to be fetched
    * @param start start of time interval for which data is to be fetched
    * @param end end of time interval for which data is to fetched
@@ -40,56 +44,23 @@ export class DummyPlatformService extends Platform {
    */
   public getData(categoryId: string,
                  start: Date, end: Date): Observable<DataPoint[]> {
-      if (categoryId === 'blood_pressure') {
-        return of([
-          new DataPoint(
-            [
-              [ 'time', start ],
-              [ 'systolic', 10 ],
-              [ 'diastolic', 20 ],
-            ]
-          ),
-          new DataPoint(
-            [
-              [ 'time', end ],
-              [ 'systolic', 11 ],
-              [ 'diastolic', 22 ],
-            ]
-          )
-        ]);
-      } else if (categoryId === 'body_weight') {
-        const points: DataPoint[] = [];
-        for (let i = 0; i < 100; i++) {
-          points.push(new DataPoint(
-            [
-              [ 'time', new Date() ],
-              [ 'weight', Math.random() * (500) + 10 ]
-            ]
-          ));
-        }
-        points.push(new DataPoint(
-          [
-            [ 'time', start ],
-            [ 'weight', 20 ]
-          ]
-        ));
-        points.push(new DataPoint(
-          [
-            [ 'time', new Date(2017, 1) ],
-            [ 'weight', 100 ],
-          ]
-        ));
-        points.push(new DataPoint(
-          [
-            [ 'time', end ],
-            [ 'weight', 35 ],
-          ]
-        ));
-        return of(points);
-      } else {
-        throw TypeError('unimplemented');
+    let current: Date = start;
+    let points: DataPoint[] = [];
+    while (current.getTime() < end.getTime()) {
+      let fields = [];
+      const fieldnames = this.implementedCategories.get(categoryId).dataTypes;
+      for (const fieldname of fieldnames) {
+        const value = fieldname == 'time' ? current : Math.random()*1000;
+        fields.push([fieldname, value]);
       }
+
+      points.push(new DataPoint(fields));
+
+      const nextDay: Date = new Date(current.getTime()+1000*3600*24);
+      current = nextDay;
     }
+    return of(points);
+  }
 
   public convertData(res: any, categoryId: string): DataPoint[] {
     return [];

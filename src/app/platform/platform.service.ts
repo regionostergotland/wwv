@@ -22,7 +22,6 @@ export interface CategoryProperties {
   providedIn: 'root',
 })
 export abstract class Platform {
-
   // Implemented categories for each specific health platform
   protected implementedCategories: Map<string, CategoryProperties>;
   protected available: string[] = [];
@@ -31,12 +30,9 @@ export abstract class Platform {
   }
 
   public abstract async signIn();
-
   public abstract signOut(): void;
 
   public abstract getAvailable(): Observable<string[]>;
-
-  protected abstract setImplemented(): void;
 
   protected isImplemented(categoryId: string): boolean {
     const keys: Iterable<string> = this.implementedCategories.keys();
@@ -50,7 +46,6 @@ export abstract class Platform {
 
   public abstract getData(categoryId: string,
                           start: Date, end: Date): Observable<any>;
-
 
   protected abstract convertData(res: any, categoryId: string): DataPoint[];
 }
