@@ -20,9 +20,9 @@
       </div>
       <div *ngIf="key !== 'date' && categorySpec.dataTypes.get(key).type === dataTypeEnum.TEXT">
 
-        <form>
-          <input #textInput (change)="dataPoint.set(key, textInput.value)" [value]="dataPoint.get(key) ? dataPoint.get(key) : ''" placeholder={{categorySpec.dataTypes.get(key).label}}>
-        </form>
+        <mat-form-field>
+          <input #textInput matInput (change)="dataPoint.set(key, textInput.value)" [value]="dataPoint.get(key) ? dataPoint.get(key) : ''" placeholder={{categorySpec.dataTypes.get(key).label}}>
+        </mat-form-field>
 
       </div>
       <div *ngIf="key === 'date' || (categorySpec.dataTypes.get(key).type != dataTypeEnum.CODED_TEXT && categorySpec.dataTypes.get(key).type != dataTypeEnum.TEXT)">
