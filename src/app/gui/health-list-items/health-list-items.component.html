@@ -1,39 +1,40 @@
-<h1 style="text-align: center">{{getCategoryLabel()}}</h1>
+<h1 style="text-align: center">{{categorySpec ? categorySpec.label : ''}}</h1>
 
-<table mat-table [dataSource]="getData()" class="mat-elevation-z8">
+<table mat-table [dataSource]="pointDataList" [trackBy]="trackItem" class="mat-elevation-z8">
 
-  <ng-container *ngFor="let key of getDisplayedColumns()" matColumnDef={{key}}>
+  <ng-container *ngFor="let key of displayedColumns" matColumnDef={{key}}>
     <th mat-header-cell *matHeaderCellDef> {{getLabel(key)}} </th>
     <td mat-cell *matCellDef="let dataPoint;">
-      <div *ngIf="getVisualType(key) === dataTypeEnum.CODED_TEXT">
+      <div *ngIf="key !== 'date' && categorySpec.dataTypes.get(key).type === dataTypeEnum.CODED_TEXT">
 
         <mat-form-field>
-          <mat-select [value]="getOption(dataPoint, key)" (selectionChange)="setOption(key, dataPoint, $event.value)" placeholder={{getLabel(key)}}>
-            <mat-option *ngFor="let option of getOptions(key)" [value]="option.code">
+          <mat-select [value]="data.get(dataPoint).get(key)" (selectionChange)="dataPoint.set(key, $event.value)">
+            <mat-option>-</mat-option>
+            <mat-option *ngFor="let option of options.get(key)" [value]="option.code">
               {{option.label}}
             </mat-option>
           </mat-select>
         </mat-form-field>
 
       </div>
-      <div *ngIf="getVisualType(key) === dataTypeEnum.TEXT">
+      <div *ngIf="key !== 'date' && categorySpec.dataTypes.get(key).type === dataTypeEnum.TEXT">
 
-        <mat-form-field>
-          <input #textInput (change)="dataPoint.set(key, textInput.value)" [value]="getText(dataPoint, key)" matInput placeholder={{getLabel(key)}}>
-        </mat-form-field>
+        <form>
+          <input #textInput (change)="dataPoint.set(key, textInput.value)" [value]="dataPoint.get(key) ? dataPoint.get(key) : ''" placeholder={{categorySpec.dataTypes.get(key).label}}>
+        </form>
 
       </div>
-      <div *ngIf="getVisualType(key) != dataTypeEnum.CODED_TEXT && getVisualType(key) != dataTypeEnum.TEXT">
+      <div *ngIf="key === 'date' || (categorySpec.dataTypes.get(key).type != dataTypeEnum.CODED_TEXT && categorySpec.dataTypes.get(key).type != dataTypeEnum.TEXT)">
 
-        {{getPointData(dataPoint, key)}}
+        {{data.get(dataPoint).get(key)}}
 
       </div>
 
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 
 <button mat-stroked-button color="accent" style="text-align: center; width: 100%" (click)="openDialog()">Lägg till datavärde</button>

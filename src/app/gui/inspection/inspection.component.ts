@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {DataPoint, DataTypeCodedText, DataTypeEnum } from '../../ehr/ehr-types';
+import {CategorySpec, DataPoint, DataTypeCodedText, DataTypeEnum} from '../../ehr/ehr-types';
 import {Conveyor} from '../../conveyor.service';
 
 @Component({
@@ -10,6 +10,8 @@ import {Conveyor} from '../../conveyor.service';
 export class InspectionComponent implements OnInit {
 
   categories: string[] = [];
+  categorySpecs: Map<string, CategorySpec>;
+  categoryDataPoints: Map<string, DataPoint[]>;
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -33,6 +35,13 @@ export class InspectionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.categories = this.conveyor.getCategoryIds();
+    this.categorySpecs = new Map<string, CategorySpec>();
+    this.categoryDataPoints = new Map<string, DataPoint[]>();
+    for (const category of this.categories) {
+      this.categorySpecs.set(category, this.conveyor.getCategorySpec(category));
+      this.categoryDataPoints.set(category, this.conveyor.getDataList(category).getPoints());
+    }
   }
 
   /**
@@ -41,7 +50,7 @@ export class InspectionComponent implements OnInit {
    * @returns a human readable string of the category
    */
   getLabel(category: string): string {
-    return this.conveyor.getCategorySpec(category).label;
+    return this.categorySpecs.get(category).label;
   }
 
   /**
@@ -50,7 +59,7 @@ export class InspectionComponent implements OnInit {
    * @returns a list of all points in the chosen categories
    */
   getData(category: string): DataPoint[] {
-    return this.conveyor.getDataList(category).getPoints();
+    return this.categoryDataPoints.get(category);
   }
 
   /**
@@ -58,7 +67,7 @@ export class InspectionComponent implements OnInit {
    * @returns a list of categories containing data from conveyor
    */
   getCategories(): string[] {
-    return this.conveyor.getCategoryIds();
+    return this.categories;
   }
 
   /**

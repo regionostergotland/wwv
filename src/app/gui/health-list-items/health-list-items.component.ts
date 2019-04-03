@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DataPoint, DataTypeCodedText,
-        DataTypeCodedTextOpt, DataTypeEnum} from '../../ehr/ehr-types';
+import {CategorySpec, DataPoint, DataTypeCodedText, DataTypeCodedTextOpt, DataTypeEnum} from '../../ehr/ehr-types';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
 import {MatDialog} from '@angular/material';
@@ -13,9 +12,19 @@ import {MatDialog} from '@angular/material';
 })
 export class HealthListItemsComponent implements OnInit {
 
-  @Input() selectedCategory: string;
+  selectedCategory: string;
+
+  @Input() set selectCategory(value: string) {
+    this.selectedCategory = value;
+    this.ngOnInit();
+  }
 
   dataTypeEnum = DataTypeEnum;
+  categorySpec: CategorySpec;
+  pointDataList: DataPoint[];
+  displayedColumns: string[];
+  options: Map<string, DataTypeCodedTextOpt[]>;
+  data: Map<DataPoint, Map<string, string>>;
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -39,6 +48,32 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.selectedCategory) {
+      this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
+      this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
+      this.displayedColumns = this.getDisplayedColumns();
+      this.options = new Map<string, DataTypeCodedTextOpt[]>();
+      this.data = new Map<DataPoint, Map<string, string>>();
+      for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
+        if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
+          const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
+          this.options.set(key, datatypes.options);
+        }
+        for (const dataPoint of this.pointDataList) {
+          const point = new Map<string, string>();
+          for (const column of this.displayedColumns) {
+            point.set(column, this.getPointData(dataPoint, column));
+          }
+          this.data.set(dataPoint, point);
+        }
+      }
+    }
+    console.log(this.options);
+  }
+
+  trackItem(index, item) {
+    console.log(item);
+    return item ? index : undefined;
   }
 
   /**
@@ -51,6 +86,8 @@ export class HealthListItemsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      this.ngOnInit();
+      console.log(this.pointDataList);
     });
   }
 
@@ -60,7 +97,7 @@ export class HealthListItemsComponent implements OnInit {
    */
   getData(): DataPoint[] {
     if (this.selectedCategory) {
-      return this.conveyor.getDataList(this.selectedCategory).getPoints();
+      return this.pointDataList;
     }
     return [];
   }
@@ -70,23 +107,8 @@ export class HealthListItemsComponent implements OnInit {
    * @returns the label for the category.
    */
   getCategoryLabel(): string {
-    if (this.conveyor.getCategorySpec(this.selectedCategory)) {
-      return this.conveyor.getCategorySpec(this.selectedCategory).label;
-    }
-    return '';
-  }
-
-  /**
-   * Gets the label of the id specified.
-   * @param labelId the id to fetch the label to
-   * @returns a label for the specified id
-   */
-  getLabel(labelId: string): string {
-    if (labelId === 'date') {
-      return 'Datum';
-    }
-    if (this.conveyor.getDataList(this.selectedCategory)) {
-      return this.conveyor.getDataList(this.selectedCategory).getDataType(labelId).label;
+    if (this.categorySpec) {
+      return this.categorySpec.label;
     }
     return '';
   }
@@ -120,8 +142,8 @@ export class HealthListItemsComponent implements OnInit {
     if (key === 'date') {
       return DataTypeEnum.DATE_TIME;
     }
-    if (this.conveyor.getDataList(this.selectedCategory)) {
-      return this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.get(key).type;
+    if (this.categorySpec) {
+      return this.categorySpec.dataTypes.get(key).type;
     }
   }
 
