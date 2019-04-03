@@ -1,19 +1,18 @@
-import { TestBed } from '@angular/core/testing';
-import { DataList, DataTypeText, DataPoint, CategorySpec, DataType,
-         DataTypeDateTime, DataTypeQuantity,
+import { InjectionToken } from '@angular/core';
+
+import { CategorySpec, DataList, DataPoint, DataType,
+         DataTypeDateTime, DataTypeQuantity, DataTypeText,
          DataTypeCodedText } from './ehr-types';
-import { HttpClient, HttpHandler} from '@angular/common/http';
 
-describe('Ehr Types', () => {
-  beforeEach(() => TestBed.configureTestingModule({
-    imports: [],
-    providers: [
-      HttpClient,
-      HttpHandler
-    ]
-  }));
+export interface EhrConfig {
+  baseUrl: string;
+  categories: CategorySpec[];
+}
 
-  const categories: CategorySpec[] = [
+export const ehrConfig: EhrConfig = {
+  baseUrl: 'https://rest.ehrscape.com/rest/v1/composition',
+// TODO generate these specifications automatically from templates in ehr
+  categories: [
     {
       id : 'blood_pressure',
       templateId : 'sm_blood-pressure',
@@ -34,7 +33,7 @@ describe('Ehr Types', () => {
             'Övertryck',
             'Systoliskt övertryck av blod',
             true,
-            'mm[Hg]', 0, 1000,
+            'mm[Hg]', 0, 1000
           )
         ],
         [
@@ -115,71 +114,26 @@ describe('Ehr Types', () => {
               },
               {
                 code: 'at0010',
-                label: 'Fullklädd',
+                label: 'Fullt påklädd',
                 description: 'Klädsel som bidrar med vikt.'
               }
             ]
           )
         ],
+        [
+          'comment',
+          new DataTypeText(
+            'Kommentar',
+            'Kompletterande information med fritext',
+            false,
+          )
+        ],
       ])
     }
-  ];
+  ]
+};
 
-  /**
-   * Test that correct blood-pressures pass validity check
-   */
-  it('should have true validity check for correct blood_pressures', () => {
-    const correctBps = new DataList(categories[0]);
-    correctBps.addPoints([
-      new DataPoint(
-        [
-          [ 'time', new Date() ],
-          [ 'systolic', 100 ],
-          [ 'diastolic', 20 ],
-        ]
-      ),
-      new DataPoint(
-        [
-          [ 'time', new Date() ],
-          [ 'systolic', 11 ],
-          [ 'diastolic', 22 ],
-          [ 'position', 'at1003'],
-        ]
-      )
-    ]);
-    for (const point of correctBps.getPoints()) {
-      for (const [typeId, value] of point.entries()) {
-        expect(correctBps.getDataType(typeId).isValid(value)).toBeTruthy();
-      }
-    }
-
-  });
-
-  /**
-   * Test that correct body weights pass validity check
-   */
-  it('should have true validity check for correct body weights', () => {
-    const correctBws = new DataList(categories[1]);
-    correctBws.addPoints([
-      new DataPoint(
-        [
-          ['time', new Date()],
-          ['weight', 90],
-          ['state_of_dress', 'at0011'],
-        ]
-      ),
-      new DataPoint(
-        [
-          ['time', new Date()],
-          ['weight', 70],
-        ]
-      )
-    ]);
-    for (const point of correctBws.getPoints()) {
-      for (const [typeId, value] of point.entries()) {
-        expect(correctBws.getDataType(typeId).isValid(value)).toBeTruthy();
-      }
-    }
-  });
-
+export let EHR_CONFIG = new InjectionToken<EhrConfig>('ehrconfig', {
+  providedIn: 'root',
+  factory: () => ehrConfig
 });

@@ -79,7 +79,7 @@ export class CategoryPickerComponent implements OnInit {
     console.log(this.chosenCategories);
   }
   validateSelections(): boolean {
-      return(this.startDate && this.endDate && this.chosenCategories.length > 0);
+    return(this.startDate && this.endDate && this.chosenCategories.length > 0);
   }
 
   /**
