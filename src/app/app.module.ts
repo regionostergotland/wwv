@@ -18,7 +18,6 @@ import { BottomSheetCategoriesComponent, SidebarComponent } from './gui/sidebar/
 import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
-import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
 
 
 import {
