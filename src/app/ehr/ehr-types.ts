@@ -270,7 +270,6 @@ export enum MathFunctionEnum {
     TOTAL,
 }
 
-
 /**
  * List of [[DataPoint]]s with certain [[DataType]]s specified by a
  * [[CategorySpec]].
@@ -428,26 +427,24 @@ export class DataList {
      */
     public intervalManipulation(): DataPoint[] {
       const dataPoints: DataPoint[] = [];
-      let n = 0;
       for (const interval of this.pointsInterval) {
         const dataPointElements: any[] = [];
-        if (this.pointsInterval[n] !== undefined && interval[0] !== undefined) {
-          for (const [key, value] of interval[0].entries()) {
-            if (key === 'time') {
-              const startDate: Date = this.pointsInterval[n][0].get(key);
-              startDate.setHours(0, 0, 0);
-              dataPointElements.push([key, startDate]);
+        for (const [key, value] of interval[0].entries()) {
+          if (key === 'time') {
+            const startDate: Date = interval[0].get(key);
+            startDate.setHours(0, 0, 0);
+            dataPointElements.push([key, startDate]);
+          }
+          let sum = 0;
+          if (typeof value === 'number') {
+            for (const point of interval) {
+              sum += point.get(key);
             }
-            let sum = 0;
-            if (typeof value === 'number') {
-              for (const point of interval) { sum += point.get(key); }
-              dataPointElements.push([key, sum]);
-            }
+            dataPointElements.push([key, sum]);
           }
         }
         const dataPoint: DataPoint = new DataPoint(dataPointElements);
         dataPoints.push(dataPoint);
-        n += 1;
       }
       return dataPoints;
     }
