@@ -54,7 +54,7 @@ export class InspectionComponent implements OnInit {
       this.displayedColumns.set(category, this.getDisplayedColumns(category));
       this.visibleStrings.set(category, new Map<DataPoint, Map<string, string>>());
 
-      // Fill all options for drop-downs and the data list with the dataPoints as the keys.
+      // Fill all options for drop-downs and the visibleStrings map with the dataPoints as the keys.
       for (const key of Array.from(this.categorySpecs.get(category).dataTypes.keys())) {
         this.options.set(category, new Map<string, DataTypeCodedTextOpt[]>());
 

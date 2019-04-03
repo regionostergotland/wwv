@@ -75,16 +75,23 @@ export class HealthListItemsComponent implements OnInit {
 
   ngOnInit() {
     if (this.selectedCategory) {
+      // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
       this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.visibleStrings = new Map<DataPoint, Map<string, string>>();
+
+      // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
+
+        // Fill options
         if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
           const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
           this.options.set(key, datatypes.options);
         }
+
+        // Fill visibleStrings
         for (const dataPoint of this.pointDataList) {
           const point = new Map<string, string>();
           for (const column of this.displayedColumns) {
@@ -94,7 +101,6 @@ export class HealthListItemsComponent implements OnInit {
         }
       }
     }
-    console.log(this.options);
   }
 
   trackItem(index, item) {
