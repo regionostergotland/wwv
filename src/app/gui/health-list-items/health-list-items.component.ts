@@ -24,7 +24,7 @@ export class HealthListItemsComponent implements OnInit {
   pointDataList: DataPoint[];
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
-  data: Map<DataPoint, Map<string, string>>;
+  visibleStrings: Map<DataPoint, Map<string, string>>;
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -79,7 +79,7 @@ export class HealthListItemsComponent implements OnInit {
       this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
-      this.data = new Map<DataPoint, Map<string, string>>();
+      this.visibleStrings = new Map<DataPoint, Map<string, string>>();
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
         if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
           const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
@@ -90,7 +90,7 @@ export class HealthListItemsComponent implements OnInit {
           for (const column of this.displayedColumns) {
             point.set(column, HealthListItemsComponent.getPointData(dataPoint, column));
           }
-          this.data.set(dataPoint, point);
+          this.visibleStrings.set(dataPoint, point);
         }
       }
     }

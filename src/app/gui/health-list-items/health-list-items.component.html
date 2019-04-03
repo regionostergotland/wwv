@@ -8,7 +8,7 @@
       <div *ngIf="key !== 'date' && categorySpec.dataTypes.get(key).type === dataTypeEnum.CODED_TEXT">
 
         <mat-form-field>
-          <mat-select [value]="data.get(dataPoint).get(key)" (selectionChange)="dataPoint.set(key, $event.value)">
+          <mat-select [value]="visibleStrings.get(dataPoint).get(key)" (selectionChange)="dataPoint.set(key, $event.value)">
             <mat-option>-</mat-option>
             <mat-option *ngFor="let option of options.get(key)" [value]="option.code">
               {{option.label}}
@@ -26,7 +26,7 @@
       </div>
       <div *ngIf="key === 'date' || (categorySpec.dataTypes.get(key).type != dataTypeEnum.CODED_TEXT && categorySpec.dataTypes.get(key).type != dataTypeEnum.TEXT)">
 
-        {{data.get(dataPoint).get(key)}}
+        {{visibleStrings.get(dataPoint).get(key)}}
 
       </div>
 
