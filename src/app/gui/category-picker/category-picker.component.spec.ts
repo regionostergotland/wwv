@@ -15,7 +15,8 @@ import {
   MatListModule,
   MatTableModule,
   MatButtonModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatTooltipModule
 } from '@angular/material';
 
 import { CategoryPickerComponent } from './category-picker.component';
@@ -63,6 +64,7 @@ describe('CategoryPickerComponent', () => {
         MatButtonModule,
         MatButtonToggleModule,
         MatNativeDateModule,
+        MatTooltipModule,
 
         GoogleApiModule.forRoot({
           provide: NG_GAPI_CONFIG,

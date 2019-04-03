@@ -55,6 +55,16 @@ export class CategoryPickerComponent implements OnInit {
   }
 
   /**
+   * Returns the description of a category
+   * @param categoryId the ID of the category
+   */
+  getDescription(categoryId: string) {
+    if (this.conveyor.getCategorySpec(categoryId)) {
+      return this.conveyor.getCategorySpec(categoryId).description;
+    }
+  }
+
+  /**
    * connected to the category checkboxes
    * @param category The category to update
    * @param event the checkbox event
@@ -62,17 +72,14 @@ export class CategoryPickerComponent implements OnInit {
   updateChosenCategories(category: string, event: any): void {
     const boxChecked: boolean = event.checked;
     if (boxChecked) {
-      this.chosenCategories.push(category);
-      this.conveyor.selectCategory(category);
+        this.chosenCategories.push(category);
     } else {
-      this.chosenCategories.splice(this.chosenCategories.indexOf(category));
-      this.conveyor.unselectCategory(category);
+        this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
     }
-    console.log(this.conveyor.getSelectedCategories());
+    console.log(this.chosenCategories);
   }
-
   validateSelections(): boolean {
-    return(this.startDate && this.endDate && this.conveyor.getSelectedCategories().length > 0);
+    return(this.startDate && this.endDate && this.chosenCategories.length > 0);
   }
 
   /**
@@ -82,7 +89,8 @@ export class CategoryPickerComponent implements OnInit {
     const fetches: Observable<any>[] = this.chosenCategories
       .map(cat =>
         this.conveyor.fetchData(this.platformId, cat,
-          this.startDate, this.endDate));
+                                this.startDate, this.endDate));
+    this.chosenCategories = [];
     forkJoin(fetches).subscribe(_ => this.router.navigateByUrl('/sidebar'));
   }
 }
