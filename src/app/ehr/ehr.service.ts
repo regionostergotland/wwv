@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { EhrConfig } from './templates';
+import { EhrConfig } from './ehr-config';
 
 import { CategorySpec, DataList } from './ehr-types';
 
