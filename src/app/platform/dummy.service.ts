@@ -67,20 +67,22 @@ export class DummyPlatformService extends Platform {
    */
   public getData(categoryId: string,
                  start: Date, end: Date): Observable<DataPoint[]> {
-    let current: Date = start;
+    const lengthOfDay = 1000*3600*24;
+    let current: Date = new
+                   Date(start.getTime()-start.getTime()%lengthOfDay);
     let points: DataPoint[] = [];
     while (current.getTime() < end.getTime()) {
       let fields = [];
       const fieldnames = this.implementedCategories
         .get(categoryId).dataTypes.keys();
       for (const fieldname of fieldnames) {
-        const value = fieldname == 'time' ? current : Math.random()*1000;
+        const value = fieldname == 'time' ? current : current.getDate();
         fields.push([fieldname, value]);
       }
 
       points.push(new DataPoint(fields));
 
-      const nextDay: Date = new Date(current.getTime()+1000*3600*24);
+      const nextDay: Date = new Date(current.getTime()+lengthOfDay);
       current = nextDay;
     }
     return of(points);
