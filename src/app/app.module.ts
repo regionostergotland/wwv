@@ -92,7 +92,8 @@ const gapiClientConfig: NgGapiClientConfig = {
     HealthListItemsComponent,
     InspectionComponent,
     SidebarComponent,
-    AddDataPointComponent
+    AddDataPointComponent,
+    BottomSheetCategoriesComponent
   ],
   imports: [
     BrowserModule,
@@ -151,6 +152,6 @@ const gapiClientConfig: NgGapiClientConfig = {
   ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'sv-SE'}],
   bootstrap: [AppComponent],
-  entryComponents: [AddDataPointComponent]
+  entryComponents: [AddDataPointComponent, BottomSheetCategoriesComponent]
 })
 export class AppModule { }
