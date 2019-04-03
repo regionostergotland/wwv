@@ -25,6 +25,7 @@ describe('Ehr Types', () => {
           new DataTypeDateTime(
             'Tid',
             'Tidpunkt vid mätning',
+            true,
           )
         ],
         [
@@ -32,7 +33,8 @@ describe('Ehr Types', () => {
           new DataTypeQuantity(
             'Övertryck',
             'Systoliskt övertryck av blod',
-            'mm[Hg]', 0, 1000
+            true,
+            'mm[Hg]', 0, 1000,
           )
         ],
         [
@@ -40,6 +42,7 @@ describe('Ehr Types', () => {
           new DataTypeQuantity(
             'Undertryck',
             'Diastoliskt undertryck av blod',
+            true,
             'mm[Hg]', 0, 1000
           )
         ],
@@ -48,6 +51,7 @@ describe('Ehr Types', () => {
           new DataTypeCodedText(
             'Position',
             'Position vid mätning.',
+            false,
             [
               {
                 code: 'at1000',
@@ -80,6 +84,7 @@ describe('Ehr Types', () => {
           new DataTypeDateTime(
             'Tid',
             'Tidpunkt vid mätning',
+            true,
           )
         ],
         [
@@ -87,6 +92,7 @@ describe('Ehr Types', () => {
           new DataTypeQuantity(
             'Vikt',
             'Kroppsvikt',
+            true,
             'kg', 0, 1000
           )
         ],
@@ -95,6 +101,7 @@ describe('Ehr Types', () => {
           new DataTypeCodedText(
             'Klädsel',
             'Klädsel vid mätning.',
+            false,
             [
               {
                 code: 'at0011',
