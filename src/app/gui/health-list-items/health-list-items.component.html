@@ -3,7 +3,7 @@
 <table mat-table [dataSource]="pointDataList" [trackBy]="trackItem" class="mat-elevation-z8">
 
   <ng-container *ngFor="let key of displayedColumns" matColumnDef={{key}}>
-    <th mat-header-cell *matHeaderCellDef> {{getLabel(key)}} </th>
+    <th mat-header-cell *matHeaderCellDef> {{key === 'date' ? 'Datum' : categorySpec.dataTypes.get(key).label}} </th>
     <td mat-cell *matCellDef="let dataPoint;">
       <div *ngIf="key !== 'date' && categorySpec.dataTypes.get(key).type === dataTypeEnum.CODED_TEXT">
 
