@@ -5,29 +5,52 @@ import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { MessageService } from '../message.service';
 
-import { CategoryEnum, BloodPressureEnum,
-         BodyWeightEnum } from '../ehr/ehr-config';
+import { CategoryEnum,
+         BloodPressureEnum,
+         BodyWeightEnum,
+         HeightEnum } from '../ehr/ehr-config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DummyPlatformService extends Platform {
+
     constructor() {
-      super();
-      this.implementedCategories = new Map([
-        [ CategoryEnum.BLOOD_PRESSURE,
-          {
-            url: '',
-            dataTypes: [BloodPressureEnum.TIME,
-                        BloodPressureEnum.SYSTOLIC,
-                        BloodPressureEnum.DIASTOLIC],
-            dataTypeConversions: null,
-          }
-        ],
-      ]);
+      super(
+        new Map([
+          [ CategoryEnum.BLOOD_PRESSURE,
+            {
+              url: '',
+              dataTypes: new Map([
+                [BloodPressureEnum.TIME, null],
+                [BloodPressureEnum.SYSTOLIC, null],
+                [BloodPressureEnum.DIASTOLIC, null]
+              ]),
+            }
+          ],
+          [ CategoryEnum.BODY_WEIGHT,
+            {
+              url: '',
+              dataTypes: new Map([
+                [BodyWeightEnum.TIME, null],
+                [BodyWeightEnum.WEIGHT, null],
+              ]),
+            }
+          ],
+          [ CategoryEnum.HEIGHT,
+            {
+              url: '',
+              dataTypes: new Map([
+                [HeightEnum.TIME, null],
+                [HeightEnum.HEIGHT, null],
+              ]),
+            }
+          ],
+        ])
+      );
     }
 
-  public signIn(): void {}
+  public async signIn() {}
   public signOut(): void {}
 
   public getAvailable(): Observable<string[]> {
@@ -48,7 +71,8 @@ export class DummyPlatformService extends Platform {
     let points: DataPoint[] = [];
     while (current.getTime() < end.getTime()) {
       let fields = [];
-      const fieldnames = this.implementedCategories.get(categoryId).dataTypes;
+      const fieldnames = this.implementedCategories
+        .get(categoryId).dataTypes.keys();
       for (const fieldname of fieldnames) {
         const value = fieldname == 'time' ? current : Math.random()*1000;
         fields.push([fieldname, value]);
@@ -60,9 +84,5 @@ export class DummyPlatformService extends Platform {
       current = nextDay;
     }
     return of(points);
-  }
-
-  public convertData(res: any, categoryId: string): DataPoint[] {
-    return [];
   }
 }

@@ -12,10 +12,9 @@ import { CategoryEnum } from '../ehr/ehr-config';
  */
 export interface CategoryProperties {
   url: string;
-  dataTypes: string[];
   /* This maps available data types for the category to a function
    that's used to convert the data type to the internal data format */
-  dataTypeConversions: Map<string, (src: any) => any>;
+  dataTypes: Map<string, (src: any) => any>;
 }
 
 @Injectable({
@@ -23,10 +22,10 @@ export interface CategoryProperties {
 })
 export abstract class Platform {
   // Implemented categories for each specific health platform
-  protected implementedCategories: Map<string, CategoryProperties>;
-  protected available: string[] = [];
+  protected readonly implementedCategories: Map<string, CategoryProperties>;
 
-  constructor() {
+  constructor(implementedCategories: Map<string, CategoryProperties>) {
+    this.implementedCategories = implementedCategories;
   }
 
   public abstract async signIn();
@@ -46,6 +45,4 @@ export abstract class Platform {
 
   public abstract getData(categoryId: string,
                           start: Date, end: Date): Observable<any>;
-
-  protected abstract convertData(res: any, categoryId: string): DataPoint[];
 }

@@ -26,7 +26,6 @@ export class CategoryPickerComponent implements OnInit {
 
   ngOnInit() {
     this.platformId = this.conveyor.getSelectedPlatform();
-    console.log(this.platformId);
 
     this.startDate = new Date();
     this.startDate.setMonth(this.startDate.getMonth() - 1);
@@ -37,7 +36,6 @@ export class CategoryPickerComponent implements OnInit {
       // this.conveyor.getCategories(this.platformId).subscribe(_ => {
       this.conveyor.getAvailableCategories(this.platformId).subscribe(res => {
         this.categoryIds = res;
-        console.log(this.categoryIds);
         this.getCategories();
       });
     }
@@ -76,7 +74,6 @@ export class CategoryPickerComponent implements OnInit {
     } else {
         this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
     }
-    console.log(this.chosenCategories);
   }
   validateSelections(): boolean {
     return(this.startDate && this.endDate && this.chosenCategories.length > 0);

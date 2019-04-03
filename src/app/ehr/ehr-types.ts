@@ -271,16 +271,6 @@ export class DataPoint {
 
   public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
     if (p.size() !== this.size()) {
-      const pArray = Array.from(p.keys());
-      console.log('p.keys: ');
-      for(const key of pArray) {
-        console.log(key);
-      }
-      const thisArray = Array.from(this.keys());
-      console.log('this.keys: ');
-      for(const key of thisArray) {
-        console.log(key);
-      }
       return false;
     }
 
