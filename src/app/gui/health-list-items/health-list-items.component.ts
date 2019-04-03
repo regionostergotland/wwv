@@ -24,7 +24,7 @@ export class HealthListItemsComponent implements OnInit {
   pointDataList: DataPoint[];
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
-  data: Map<DataPoint, Map<string, string>>;
+  visibleStrings: Map<DataPoint, Map<string, string>>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataList: MatTableDataSource<DataPoint>;
@@ -47,27 +47,60 @@ export class HealthListItemsComponent implements OnInit {
     return date.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
   }
 
+  /**
+   * Sets the data category in the dataPoint to the set option
+   * @param key the data category to set
+   * @param point the point to set data in
+   * @param option the option to set
+   */
+  static setOption(key: string, point: DataPoint, option: string) {
+    point.set(key, option);
+  }
+
+  /**
+   * Gets the data to be displayed from the point
+   * @param point the datapoint to get the data from
+   * @param key the data category to get
+   * @returns a string of the value to show
+   */
+  static getPointData(point: DataPoint, key: string): string {
+    if (key === 'date') {
+      return HealthListItemsComponent.getDate(point.get('time'));
+    }
+    if (key === 'time') {
+      return HealthListItemsComponent.getTime(point.get('time'));
+    }
+    return point.get(key);
+  }
+
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
 
   ngOnInit() {
     if (this.selectedCategory) {
+      // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
       this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
-      this.data = new Map<DataPoint, Map<string, string>>();
+      this.visibleStrings = new Map<DataPoint, Map<string, string>>();
+
+      // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
+
+        // Fill options
         if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
           const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
           this.options.set(key, datatypes.options);
         }
+
+        // Fill visibleStrings
         for (const dataPoint of this.pointDataList) {
           const point = new Map<string, string>();
           for (const column of this.displayedColumns) {
-            point.set(column, this.getPointData(dataPoint, column));
+            point.set(column, HealthListItemsComponent.getPointData(dataPoint, column));
           }
-          this.data.set(dataPoint, point);
+          this.visibleStrings.set(dataPoint, point);
         }
       }
     }
@@ -138,58 +171,6 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   /**
-   * Gets the type to display in the table.
-   * @param key the id to get the label from
-   * @returns the type to display in the table
-   */
-  getVisualType(key: string): DataTypeEnum {
-    if (key === 'date') {
-      return DataTypeEnum.DATE_TIME;
-    }
-    if (this.categorySpec) {
-      return this.categorySpec.dataTypes.get(key).type;
-    }
-  }
-
-  /**
-   * Gets the options to choose from according to a DataType.
-   * @param key the id to to fetch the options from
-   * @returns a list of options
-   */
-  getOptions(key: string): DataTypeCodedTextOpt[] {
-    if (this.conveyor.getDataList(this.selectedCategory)) {
-      const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
-      return datatypes.options;
-    }
-  }
-
-  /**
-   * Gets the data to be displayed from the point
-   * @param point the datapoint to get the data from
-   * @param key the data category to get
-   * @returns a string of the value to show
-   */
-  getPointData(point: DataPoint, key: string): string {
-    if (key === 'date') {
-      return HealthListItemsComponent.getDate(point.get('time'));
-    }
-    if (key === 'time') {
-      return HealthListItemsComponent.getTime(point.get('time'));
-    }
-    return point.get(key);
-  }
-
-  /**
-   * Sets the data category in the dataPoint to the set option
-   * @param key the data category to set
-   * @param point the point to set data in
-   * @param option the option to set
-   */
-  setOption(key: string, point: DataPoint, option: string) {
-    point.set(key, option);
-  }
-
-  /**
    * Set all unset data types in a category
    * @param key the data category to be set
    * @param option the option to set
@@ -198,41 +179,15 @@ export class HealthListItemsComponent implements OnInit {
     let allData = true;
     for (const point of this.getData()) {
       if (!point.has(key)) {
-        this.setOption(key, point, option);
+        HealthListItemsComponent.setOption(key, point, option);
         allData = false;
       }
     }
     if (allData) {
       for (const point of this.getData()) {
-        this.setOption(key, point, option);
+        HealthListItemsComponent.setOption(key, point, option);
       }
     }
-  }
-
-  /**
-   * Gets the option of the chosen DataPoint with the given key.
-   * @param point the DataPoint to get the option from.
-   * @param key the key in the DataPoint to get the option from.
-   * @returns A string representation of the option.
-   */
-  getOption(point: DataPoint, key: string): string {
-    if (!point.get(key)) {
-      point.set(key, '');
-    }
-    return point.get(key);
-  }
-
-  /**
-   * Get the text of the DataPoint from the given key.
-   * @param point the point to get text from.
-   * @param key The identifier to get the text from.
-   * @returns A string of the DataPoint and the key.
-   */
-  getText(point: DataPoint, key: string): string {
-    if (!point.get(key)) {
-      return '';
-    }
-    return point.get(key);
   }
 
 }

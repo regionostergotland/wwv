@@ -13,7 +13,7 @@ export class InspectionComponent implements OnInit {
   categorySpecs: Map<string, CategorySpec>;
   categoryDataPoints: Map<string, DataPoint[]>;
   options: Map<string, Map<string, DataTypeCodedTextOpt[]>>;
-  data: Map<string, Map<DataPoint, Map<string, string>>>;
+  visibleStrings: Map<string, Map<DataPoint, Map<string, string>>>;
   displayedColumns: Map<string, string[]>;
 
   /**
@@ -38,46 +38,42 @@ export class InspectionComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Reset all the internal lists.
     this.categories = this.conveyor.getCategoryIds();
     this.categorySpecs = new Map<string, CategorySpec>();
     this.categoryDataPoints = new Map<string, DataPoint[]>();
     this.options = new Map<string, Map<string, DataTypeCodedTextOpt[]>>();
-    this.data = new Map<string, Map<DataPoint, Map<string, string>>>();
+    this.visibleStrings = new Map<string, Map<DataPoint, Map<string, string>>>();
     this.displayedColumns = new Map<string, string[]>();
 
+    // Fill lists with correct values.
     for (const category of this.categories) {
+      // Set all Maps with the category as the key so that it exists.
       this.categorySpecs.set(category, this.conveyor.getCategorySpec(category));
       this.categoryDataPoints.set(category, this.conveyor.getDataList(category).getPoints());
       this.displayedColumns.set(category, this.getDisplayedColumns(category));
-      this.data.set(category, new Map<DataPoint, Map<string, string>>());
+      this.visibleStrings.set(category, new Map<DataPoint, Map<string, string>>());
 
+      // Fill all options for drop-downs and the visibleStrings map with the dataPoints as the keys.
       for (const key of Array.from(this.categorySpecs.get(category).dataTypes.keys())) {
         this.options.set(category, new Map<string, DataTypeCodedTextOpt[]>());
 
+        // Fill all options for the drop-downs of the category
         if (this.categorySpecs.get(category).dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
           const datatypes: DataTypeCodedText = this.conveyor.getDataList(category).getDataType(key) as DataTypeCodedText;
           this.options.get(category).set(key, datatypes.options);
         }
 
+        // Fill the data container with strings using the getPointData method.
         for (const dataPoint of this.categoryDataPoints.get(category)) {
           const point = new Map<string, string>();
           for (const column of this.displayedColumns.get(category)) {
             point.set(column, this.getPointData(dataPoint, column, category));
           }
-          this.data.get(category).set(dataPoint, point);
+          this.visibleStrings.get(category).set(dataPoint, point);
         }
       }
     }
-    console.log(this.categories);
-  }
-
-  /**
-   * Get the human readable label of the chosen category.
-   * @param category the category to get the label to
-   * @returns a human readable string of the category
-   */
-  getLabel(category: string): string {
-    return this.categorySpecs.get(category).label;
   }
 
   /**
