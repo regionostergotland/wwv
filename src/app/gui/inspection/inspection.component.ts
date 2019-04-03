@@ -72,15 +72,6 @@ export class InspectionComponent implements OnInit {
   }
 
   /**
-   * Get the human readable label of the chosen category.
-   * @param category the category to get the label to
-   * @returns a human readable string of the category
-   */
-  getLabel(category: string): string {
-    return this.categorySpecs.get(category).label;
-  }
-
-  /**
    * Get a list of all the DataPoints of a chosen category.
    * @param category the category to get points from
    * @returns a list of all points in the chosen categories
