@@ -4,6 +4,26 @@ import { CategorySpec, DataList, DataPoint, DataType,
          DataTypeDateTime, DataTypeQuantity, DataTypeText,
          DataTypeCodedText } from './ehr-types';
 
+export enum CategoryEnum {
+  BLOOD_PRESSURE = 'blood_pressure',
+  BODY_WEIGHT = 'body_weight',
+}
+
+export enum BloodPressureEnum {
+  TIME = 'time',
+  SYSTOLIC = 'systolic',
+  DIASTOLIC = 'diastolic',
+  POSITION = 'position',
+  COMMENT = 'comment',
+}
+
+export enum BodyWeightEnum {
+  TIME = 'time',
+  WEIGHT = 'weight',
+  DRESS = 'state_of_dress',
+  COMMENT = 'comment',
+}
+
 export interface EhrConfig {
   baseUrl: string;
   categories: CategorySpec[];
@@ -14,7 +34,7 @@ export const ehrConfig: EhrConfig = {
 // TODO generate these specifications automatically from templates in ehr
   categories: [
     {
-      id : 'blood_pressure',
+      id : CategoryEnum.BLOOD_PRESSURE,
       templateId : 'sm_blood-pressure',
       label : 'Blodtryck',
       description : 'Mätning av arteriellt blodtryck.',
@@ -28,7 +48,7 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          'systolic',
+          BloodPressureEnum.SYSTOLIC,
           new DataTypeQuantity(
             'Övertryck',
             'Systoliskt övertryck av blod',
@@ -37,7 +57,7 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          'diastolic',
+          BloodPressureEnum.DIASTOLIC,
           new DataTypeQuantity(
             'Undertryck',
             'Diastoliskt undertryck av blod',
@@ -46,7 +66,7 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          'position',
+          BloodPressureEnum.POSITION,
           new DataTypeCodedText(
             'Position',
             'Position vid mätning.',
@@ -70,16 +90,24 @@ export const ehrConfig: EhrConfig = {
             ]
           )
         ],
+        [
+          BloodPressureEnum.COMMENT,
+          new DataTypeText(
+            'Kommentar',
+            'Kompletterande information med fritext',
+            false,
+          )
+        ],
       ])
     },
     {
-      id : 'body_weight',
+      id : CategoryEnum.BODY_WEIGHT,
       templateId : 'sm_weight',
       label : 'Kroppsvikt',
       description : 'Mätning av faktisk kroppsvikt.',
       dataTypes : new Map<string, DataType>([
         [
-          'time',
+          BodyWeightEnum.TIME,
           new DataTypeDateTime(
             'Tid',
             'Tidpunkt vid mätning',
@@ -87,7 +115,7 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          'weight',
+          BodyWeightEnum.WEIGHT,
           new DataTypeQuantity(
             'Vikt',
             'Kroppsvikt',
@@ -96,7 +124,7 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          'state_of_dress',
+          BodyWeightEnum.DRESS,
           new DataTypeCodedText(
             'Klädsel',
             'Klädsel vid mätning.',
@@ -121,7 +149,7 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          'comment',
+          BodyWeightEnum.COMMENT,
           new DataTypeText(
             'Kommentar',
             'Kompletterande information med fritext',

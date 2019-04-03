@@ -5,6 +5,9 @@ import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { MessageService } from '../message.service';
 
+import { CategoryEnum, BloodPressureEnum,
+         BodyWeightEnum } from '../ehr/ehr-config.ts'
+
 @Injectable({
   providedIn: 'root',
 })
@@ -12,10 +15,13 @@ export class DummyPlatformService extends Platform {
   constructor() {
     super();
     this.implemented.push(
-      { category: 'blood_pressure',
-        dataTypes: ['time', 'systolic', 'diastolic'] },
-      { category: 'body_weight',
-        dataTypes: ['time', 'weight'] }
+      { category: CategoryEnum.BLOOD_PRESSURE,
+        dataTypes: [BloodPressureEnum.TIME,
+                    BloodPressureEnum.SYSTOLIC,
+                    BloodPressureEnum.DIASTOLIC] },
+      { category: CategoryEnum.BODY_WEIGHT,
+        dataTypes: [BodyWeightEnum.TIME,
+                    BodyWeightEnum.WEIGHT] }
     );
   }
 
