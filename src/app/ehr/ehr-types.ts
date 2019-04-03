@@ -270,14 +270,11 @@ export class DataPoint {
   public has(typeId: string) { return this.point.has(typeId); }
 
   public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
-    if (p.size() !== this.size()) {
-      return false;
-    }
-
-    for (const [key, value] of this.entries()) {
-      // only check required fields?
-      if (!p.has(key) || !dataTypes.get(key).equal(p.get(key), value)) {
-        return false;
+    for (const [typeId, dataType] of dataTypes.entries()) {
+      if (dataType.required) {
+        if (!dataType.equal(p.get(typeId), this.get(typeId))) {
+          return false;
+        }
       }
     }
 
