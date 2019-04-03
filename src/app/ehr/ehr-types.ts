@@ -245,7 +245,7 @@ export class DataPoint {
     private point: Map<string, any>;
 
     constructor(values= []) {
-        this.chosen = true;
+        this.chosen = false;
         this.removed = false;
         this.point = new Map<string, any>(values);
     }
@@ -257,6 +257,7 @@ export class DataPoint {
     public keys() { return this.point.keys(); }
     public entries() { return this.point.entries(); }
     public has(typeId: string) { return this.point.has(typeId); }
+    public setChosen(value: boolean) {  this.chosen = value; }
 }
 
 /**
@@ -286,9 +287,9 @@ export class DataList {
     private points: DataPoint[];
 
     /**
-     * All data points that are marked as chosen in the list.
+     * List of lists of datapoints divided into interval based on width
      */
-     private chosen_points: DataPoint[];
+     private pointsInterval: DataPoint[][];
 
     // TODO use these for processing
     private width: number;
@@ -298,35 +299,32 @@ export class DataList {
         this.spec = spec;
 
         this.points = [];
-        this.chosen_points = [];
+        this.pointsInterval = [];
 
         this.width = 0;
         this.mathFunction = MathFunctionEnum.ACTUAL;
     }
 
-    // utgår från att width är antal dagars upplösning
-    public width_divider() {
-      this.chosen_points = this.points.filter(p => p.chosen);
-      if (this.width === 0) {}
-      else {
-        let datapoint_list = [];
-        let interval_list = [];
-        const ms_in_day: number = 1000*60*60*24;
-        const origin_date = new Date().setDate(1) - 1000; // TODO tidigaste punktens datum
-        const latest_date = new Date().getTime(); // TODO senaste punktens datum
-        let n = 1;
-        let prev_cutoff: number = 0;
-        while (n < Math.ceil((latest_date - origin_date)/this.width)) {
-          datapoint_list = this.chosen_points.filter(p =>
-            (p.get('time').getTime() < origin_date + n*this.width*ms_in_day));
-          datapoint_list = datapoint_list.filter(p =>
-            (p.get('time').getTime() >= prev_cutoff));
-          prev_cutoff = origin_date + n*this.width*ms_in_day;
-          n += 1;
-          interval_list.push(datapoint_list);
+    /**
+     * Divides datapoints marked as chosen into lists of time intervals based on width.
+     * The lists are pushed to this.points_interval for mathematical use.
+     */
+    public width_divider(): void {
+      let chosenPoints = this.points.filter(p => p.chosen);
+      chosenPoints.sort(this.sortByEarliestComparator);
+      if (this.width === 0) {
+        this.pointsInterval = [chosenPoints];
+      } else {
+        let datapointList: DataPoint[] = [];
+        const msInDay: number = 1000 * 60 * 60 * 24;
+        while (chosenPoints[0] !== undefined) {
+          const oldestDate: number = chosenPoints[0].get('time').setHours(0, 0, 0);
+          datapointList = chosenPoints.filter(p =>
+            (p.get('time').getTime() < oldestDate + this.width * msInDay));
+          chosenPoints = chosenPoints.filter(p =>
+            (p.get('time').getTime() > oldestDate + this.width * msInDay));
+          this.pointsInterval.push(datapointList);
         }
-         // kräver mer stöd för att hantera men vill inte clutter cat spec
-        this.chosen_points = interval_list;
       }
     }
 
@@ -416,7 +414,7 @@ export class DataList {
         this.mathFunction = mathFunction;
     }
 
-    public getChosenPoints(): DataPoint[] {
-      return this.chosen_points;
+    public getPointsInterval(): DataPoint[][] {
+      return this.pointsInterval;
     }
 }

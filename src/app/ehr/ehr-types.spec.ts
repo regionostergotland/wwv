@@ -174,26 +174,30 @@ describe('Ehr Types', () => {
     }
   });
 
-  /* Problem med test */
-  /*it('should split datapoints into one day intervals', () => {
+  /* Test that splits datapoints into width interval, passes if date in first
+  lists are from same day */
+  it('should split datapoints into one day intervals', () => {
     const test = new DataList(categories[0]);
     const date: Date = new Date();
-    let date1: Date = new Date();
-    let date2: Date = new Date();
-    let date3: Date = new Date();
-    let date4: Date = new Date();
-    let date5: Date = new Date();
+    const date1: Date = new Date();
+    const date2: Date = new Date();
+    const date3: Date = new Date();
+    const date4: Date = new Date();
+    const date5: Date = new Date();
+    date.setDate(1);
     date1.setDate(1);
-    date2.setDate(1);
-    date3.setDate(1);
+    date2.setDate(2);
+    date3.setDate(2);
+    date.setHours(10);
+    date1.setHours(11);
     date2.setHours(12);
-    date3.setHours(16);
-    date4.setHours(12);
-    date5.setHours(16);
+    date3.setHours(13);
+    date4.setHours(6);
+    date5.setHours(7);
     test.addPoints([
         new DataPoint(
             [
-                [ 'time', date1 ],
+                [ 'time', date ],
                 [ 'systolic', 101 ],
                 [ 'diastolic', 20 ],
             ]
@@ -208,14 +212,14 @@ describe('Ehr Types', () => {
         ),
         new DataPoint(
             [
-                [ 'time', date1],
+                [ 'time', date2 ],
                 [ 'systolic', 100 ],
                 [ 'diastolic', 20 ],
             ]
         ),
         new DataPoint(
             [
-                [ 'time', date ],
+                [ 'time', date3 ],
                 [ 'systolic', 110 ],
                 [ 'diastolic', 220 ],
                 [ 'position', 'at1001'],
@@ -223,26 +227,27 @@ describe('Ehr Types', () => {
         ),
         new DataPoint(
             [
-                [ 'time', date ],
+                [ 'time', date4 ],
                 [ 'systolic', 10 ],
                 [ 'diastolic', 2 ],
             ]
         ),
         new DataPoint(
             [
-                [ 'time', date ],
+                [ 'time', date5 ],
                 [ 'systolic', 118 ],
                 [ 'diastolic', 232 ],
                 [ 'position', 'at1003'],
             ]
         )
     ]);
-    // set all points to chosen_points
+    for (const p of test.getPoints()) {
+      p.setChosen(true);
+    }
     test.setWidth(1);
     test.width_divider();
-    console.log('chosen points ' + test.getChosenPoints());
-    console.log('nr of chosen points ' + test.getChosenPoints().length);
-    expect(1).toBeTruthy();
+    expect(test.getPointsInterval()[0][0].get('time').getDate()).
+    toEqual(test.getPointsInterval()[0][1].get('time').getDate());
 
-  });*/
+  });
 });
