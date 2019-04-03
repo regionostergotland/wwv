@@ -39,6 +39,7 @@ export class AddDataPointComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: string,
     private conveyor: Conveyor,
     private atp: AmazingTimePickerService) {
+
     this.selectedCategory = data;
     this.pointData = new Map<string, any>();
     this.pointFormControl = new Map<string, FormControl>();
@@ -47,13 +48,17 @@ export class AddDataPointComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
-    this.requiredFields = [];
+    if (this.selectedCategory) {
+      this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
+      if (this.categorySpec) {
+        this.requiredFields = [];
 
-    // Add all required fields from the categorySpec.
-    for (const dataType of Array.from(this.categorySpec.dataTypes.keys())) {
-      if (this.categorySpec.dataTypes.get(dataType).required) {
-        this.requiredFields.push(dataType);
+        // Add all required fields from the categorySpec.
+        for (const dataType of Array.from(this.categorySpec.dataTypes.keys())) {
+          if (this.categorySpec.dataTypes.get(dataType).required) {
+            this.requiredFields.push(dataType);
+          }
+        }
       }
     }
   }
