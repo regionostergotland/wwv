@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CategorySpec, DataPoint, DataTypeCodedText, DataTypeEnum} from '../../ehr/ehr-types';
+import {CategorySpec, DataPoint, DataTypeCodedText, DataTypeCodedTextOpt, DataTypeEnum} from '../../ehr/ehr-types';
 import {Conveyor} from '../../conveyor.service';
 
 @Component({
@@ -12,6 +12,9 @@ export class InspectionComponent implements OnInit {
   categories: string[] = [];
   categorySpecs: Map<string, CategorySpec>;
   categoryDataPoints: Map<string, DataPoint[]>;
+  options: Map<string, Map<string, DataTypeCodedTextOpt[]>>;
+  data: Map<string, Map<DataPoint, Map<string, string>>>;
+  displayedColumns: Map<string, string[]>
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -38,10 +41,34 @@ export class InspectionComponent implements OnInit {
     this.categories = this.conveyor.getCategoryIds();
     this.categorySpecs = new Map<string, CategorySpec>();
     this.categoryDataPoints = new Map<string, DataPoint[]>();
+    this.options = new Map<string, Map<string, DataTypeCodedTextOpt[]>>();
+    this.data = new Map<string, Map<DataPoint, Map<string, string>>>();
+    this.displayedColumns = new Map<string, string[]>();
+
     for (const category of this.categories) {
       this.categorySpecs.set(category, this.conveyor.getCategorySpec(category));
       this.categoryDataPoints.set(category, this.conveyor.getDataList(category).getPoints());
+      this.displayedColumns.set(category, this.getDisplayedColumns(category));
+      this.data.set(category, new Map<DataPoint, Map<string, string>>());
+
+      for (const key of Array.from(this.categorySpecs.get(category).dataTypes.keys())) {
+        this.options.set(category, new Map<string, DataTypeCodedTextOpt[]>());
+
+        if (this.categorySpecs.get(category).dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
+          const datatypes: DataTypeCodedText = this.conveyor.getDataList(category).getDataType(key) as DataTypeCodedText;
+          this.options.get(category).set(key, datatypes.options);
+        }
+
+        for (const dataPoint of this.categoryDataPoints.get(category)) {
+          const point = new Map<string, string>();
+          for (const column of this.displayedColumns.get(category)) {
+            point.set(column, this.getPointData(dataPoint, column, category));
+          }
+          this.data.get(category).set(dataPoint, point);
+        }
+      }
     }
+    console.log(this.categories);
   }
 
   /**

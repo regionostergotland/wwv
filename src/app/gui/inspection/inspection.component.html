@@ -6,21 +6,21 @@
 <mat-expansion-panel *ngFor="let category of categories" class="panel">
 
   <mat-expansion-panel-header *ngIf="!isCategoryEmpty(category)">
-    <mat-panel-title>{{getLabel(category)}}</mat-panel-title>
+    <mat-panel-title>{{categorySpecs.get(category).label}}</mat-panel-title>
     <mat-panel-description>Antal mätvärden: {{getNumberOfValues(category)}}</mat-panel-description>
   </mat-expansion-panel-header>
 
-  <table mat-table [dataSource]="getData(category)" style="text-align: left">
+  <table mat-table [dataSource]="categoryDataPoints.get(category)" style="text-align: left">
 
-    <ng-container *ngFor="let key of getDisplayedColumns(category)" matColumnDef={{key}}>
-      <th mat-header-cell *matHeaderCellDef> {{getColumnLabel(category, key)}} </th>
+    <ng-container *ngFor="let key of displayedColumns.get(category)" matColumnDef={{key}}>
+      <th mat-header-cell *matHeaderCellDef> {{key === 'date' ? 'Datum' : categorySpecs.get(category).dataTypes.get(key).label}} </th>
       <td mat-cell *matCellDef="let dataPoint;">
-          {{getPointData(dataPoint, key, category)}}
+          {{data.get(category).get(dataPoint).get(key)}}
       </td>
     </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(category)"></tr>
-    <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(category);"></tr>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns.get(category)"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns.get(category);"></tr>
   </table>
 </mat-expansion-panel>
 
