@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatExpansionModule, MatMenuModule, MatTableModule, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatExpansionModule, MatMenuModule, MatTableModule, MatPaginatorModule } from '@angular/material';
 import { InspectionComponent } from './inspection.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -31,9 +31,9 @@ describe('InspectionComponent', () => {
       imports: [ MatExpansionModule,
         MatMenuModule,
         MatTableModule,
-        MatPaginator,
-        MatTableDataSource,
+        MatPaginatorModule,
         BrowserAnimationsModule,
+        MatTableModule,
 
         GoogleApiModule.forRoot({
           provide: NG_GAPI_CONFIG,
