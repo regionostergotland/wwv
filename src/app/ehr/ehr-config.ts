@@ -235,7 +235,7 @@ export const ehrConfig: EhrConfig = {
             'Frekvens',
             'Frekvensen mätt i slag per minut.',
             true,
-            'cm', 0, 1000
+            '/min', 0, -1
           )
         ],
         [
