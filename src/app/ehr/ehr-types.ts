@@ -228,7 +228,13 @@ export class DataTypeQuantity extends DataType {
     if (typeof value !== 'number') {
       return false;
     }
-    return this.magnitudeMin <= value && value <= this.magnitudeMax;
+    if (value < this.magnitudeMin) {
+      return false;
+    }
+    if (this.magnitudeMax >= 0 && this.magnitudeMax < value) {
+      return false;
+    }
+    return true;
   }
 
   public toRest(value: any): any {
