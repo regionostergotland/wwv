@@ -9,7 +9,8 @@ import {
   MatTableModule,
   MatBottomSheetModule,
   MatBottomSheetRef,
-  MAT_BOTTOM_SHEET_DATA
+  MAT_BOTTOM_SHEET_DATA,
+  MatTooltipModule
 } from '@angular/material';
 import {BottomSheetCategoriesComponent, SidebarComponent} from './sidebar.component';
 import { HealthListItemsComponent } from '../health-list-items/health-list-items.component';
@@ -51,6 +52,7 @@ describe('SidebarComponent', () => {
         MatSidenavModule,
         MatListModule,
         MatBottomSheetModule,
+        MatTooltipModule,
 
         GoogleApiModule.forRoot({
           provide: NG_GAPI_CONFIG,
