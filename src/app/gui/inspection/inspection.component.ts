@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, AfterViewInit, ViewChild, ViewChildren, QueryList} from '@angular/core';
 import {CategorySpec, DataPoint, DataTypeCodedText, DataTypeCodedTextOpt, DataTypeEnum} from '../../ehr/ehr-types';
 import {Conveyor} from '../../conveyor.service';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
+import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-inspection',
@@ -15,6 +17,9 @@ export class InspectionComponent implements OnInit {
   options: Map<string, Map<string, DataTypeCodedTextOpt[]>>;
   visibleStrings: Map<string, Map<DataPoint, Map<string, string>>>;
   displayedColumns: Map<string, string[]>;
+
+  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
+  categoryDataList: Map<string, MatTableDataSource<DataPoint>>;
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -46,6 +51,7 @@ export class InspectionComponent implements OnInit {
     this.visibleStrings = new Map<string, Map<DataPoint, Map<string, string>>>();
     this.displayedColumns = new Map<string, string[]>();
 
+    this.categoryDataList = new Map<string, MatTableDataSource<DataPoint>>();
     // Fill lists with correct values.
     for (const category of this.categories) {
       // Set all Maps with the category as the key so that it exists.
@@ -65,14 +71,27 @@ export class InspectionComponent implements OnInit {
         }
 
         // Fill the data container with strings using the getPointData method.
-        for (const dataPoint of this.categoryDataPoints.get(category)) {
-          const point = new Map<string, string>();
-          for (const column of this.displayedColumns.get(category)) {
-            point.set(column, this.getPointData(dataPoint, column, category));
-          }
-          this.visibleStrings.get(category).set(dataPoint, point);
-        }
+        // for (const dataPoint of this.categoryDataPoints.get(category)) {
+        //   const point = new Map<string, string>();
+        //   for (const column of this.displayedColumns.get(category)) {
+        //     point.set(column, this.getPointData(dataPoint, column, category));
+        //   }
+        //   this.visibleStrings.get(category).set(dataPoint, point);
+        // }
       }
+      //console.log(this.paginator.toArray()[paginatorIndex]);
+      //console.log(this.categoryDataList.get(category));
+      this.categoryDataList.set(category, new MatTableDataSource<DataPoint>(this.categoryDataPoints.get(category)));
+    }
+  }
+
+  ngAfterViewInit() {
+    let paginatorIndex = 0;
+    for (const category of this.categories) {
+      console.log(this.paginator.toArray()[paginatorIndex]);
+      this.categoryDataList.get(category).paginator = this.paginator.toArray()[paginatorIndex];
+      console.log(this.categoryDataList.get(category));
+      paginatorIndex++;
     }
   }
 

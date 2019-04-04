@@ -18,8 +18,7 @@ export class HealthListItemsComponent implements OnInit {
     if (this.selectedCategory) {
       this.selectedCategory = value;
       this.ngOnInit();
-    }
-    else {
+    } else {
       this.selectedCategory = value;
     }
   }
@@ -107,7 +106,7 @@ export class HealthListItemsComponent implements OnInit {
         //   }
         //   this.visibleStrings.set(dataPoint, point);
         // }
-        console.log("loading");
+        //console.log(this.paginator);
       }
     }
     console.log(this.options);
