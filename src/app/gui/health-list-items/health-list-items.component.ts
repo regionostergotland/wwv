@@ -32,7 +32,7 @@ export class HealthListItemsComponent implements OnInit {
    * @returns a formatted string representing a date
    */
   static getDate(date: Date): string {
-    return date.toLocaleDateString('sv-SE');
+    return date.toISOString().slice(0, 10);
   }
 
   /**
@@ -41,7 +41,8 @@ export class HealthListItemsComponent implements OnInit {
    * @returns a formatted string representing a time
    */
   static getTime(date: Date): string {
-    return date.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+    // return date.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+    return date.toTimeString().slice(0, 5);
   }
 
   /**
@@ -91,6 +92,7 @@ export class HealthListItemsComponent implements OnInit {
           this.options.set(key, datatypes.options);
         }
 
+        /*
         // Fill visibleStrings
         for (const dataPoint of this.pointDataList) {
           const point = new Map<string, string>();
@@ -99,6 +101,7 @@ export class HealthListItemsComponent implements OnInit {
           }
           this.visibleStrings.set(dataPoint, point);
         }
+        */
       }
     }
   }
@@ -118,7 +121,6 @@ export class HealthListItemsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.ngOnInit();
-      console.log(this.pointDataList);
     });
   }
 
