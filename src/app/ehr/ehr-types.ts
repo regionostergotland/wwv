@@ -68,7 +68,7 @@ export abstract class DataType {
   readonly required: boolean;
 
   constructor(type: DataTypeEnum, label: string,
-              description: string, required: boolean) {
+    description: string, required: boolean) {
     this.type = type;
     this.label = label;
     this.description = description;
@@ -140,7 +140,7 @@ export class DataTypeText extends DataType {
   }
 
   public toRest(value: any): any {
-    return [ value ];
+    return [value];
   }
 }
 
@@ -172,7 +172,7 @@ export class DataTypeCodedText extends DataType {
   public readonly options: DataTypeCodedTextOpt[];
 
   constructor(label: string, description: string, required: boolean,
-              options: DataTypeCodedTextOpt[]) {
+    options: DataTypeCodedTextOpt[]) {
     super(DataTypeEnum.CODED_TEXT, label, description, required);
     this.options = options;
   }
@@ -187,9 +187,9 @@ export class DataTypeCodedText extends DataType {
   }
 
   public toRest(value: any): any {
-    return [ {
+    return [{
       '|code': value,
-    } ];
+    }];
   }
 }
 
@@ -211,7 +211,7 @@ export class DataTypeQuantity extends DataType {
   public readonly magnitudeMax: number;
 
   constructor(label: string, description: string, required: boolean,
-              unit: string, magnitudeMin: number, magnitudeMax: number) {
+    unit: string, magnitudeMin: number, magnitudeMax: number) {
     super(DataTypeEnum.QUANTITY, label, description, required);
     this.unit = unit;
     this.magnitudeMin = magnitudeMin;
@@ -232,7 +232,7 @@ export class DataTypeQuantity extends DataType {
   }
 
   public toRest(value: any): any {
-    return [ {
+    return [{
       '|magnitude': value,
       '|unit': this.unit
     }];
@@ -255,7 +255,7 @@ export class DataPoint {
    */
   private point: Map<string, any>;
 
-  constructor(values= []) {
+  constructor(values = []) {
     this.removed = false;
     this.point = new Map<string, any>(values);
   }
@@ -287,9 +287,9 @@ export class DataPoint {
  */
 export enum MathFunctionEnum {
   ACTUAL,
-    MEDIAN,
-    MEAN,
-    TOTAL,
+  MEDIAN,
+  MEAN,
+  TOTAL,
 }
 
 /**
@@ -325,19 +325,24 @@ export class DataList {
     return (p1.get('time').getTime() - p2.get('time').getTime());
   }
 
+  /**
+   * Performs a binary search on the list of current points to check if
+   * a given point is a duplicate
+   * @param newPoint DataPoint to be added
+   */
   private containsPoint(newPoint: DataPoint): boolean {
     let start = 0;
-    let end = this.points.length;
-    let current = Math.floor(end / 2);
-    while (start <= current && current < end) {
+    let end = this.points.length - 1;
+    while (start <= end) {
+      const current = Math.floor((start + end) / 2);
       const point = this.points[current];
       const comp = this.sortByEarliestComparator(newPoint, point);
-      if (comp == 0) {
-        return newPoint.equals(point, this.spec.dataTypes);
-      } else if (comp < 0) {
-        end = current;
+      if (comp < 0) {
+        end = current - 1;
+      } else if (comp > 0) {
+        start = current + 1;
       } else {
-        start = current+1;
+        return newPoint.equals(point, this.spec.dataTypes);
       }
     }
     return false;
