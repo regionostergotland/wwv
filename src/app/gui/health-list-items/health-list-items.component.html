@@ -1,6 +1,6 @@
 <h1 style="text-align: center">{{categorySpec ? categorySpec.label : ''}}</h1>
 
-<table mat-table [dataSource]="pointDataList" [trackBy]="trackItem" class="mat-elevation-z8">
+<table mat-table [dataSource]="dataList" [trackBy]="trackItem" class="mat-elevation-z8">
 
   <ng-container *ngFor="let key of displayedColumns" matColumnDef={{key}}>
     <th mat-header-cell *matHeaderCellDef [matTooltip]="key === 'date' ? 'Datum för mätning'  : categorySpec.dataTypes.get(key).description">
@@ -57,5 +57,7 @@
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 15, 30, 50]" showFirstLastButtons></mat-paginator>
 
 <button mat-stroked-button color="accent" style="text-align: center; width: 100%" (click)="openDialog()">Lägg till datavärde</button>

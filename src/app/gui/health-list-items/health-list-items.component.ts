@@ -1,8 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CategorySpec, DataPoint, DataTypeCodedText, DataTypeCodedTextOpt, DataTypeEnum} from '../../ehr/ehr-types';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
 
 
 @Component({
@@ -15,8 +15,12 @@ export class HealthListItemsComponent implements OnInit {
   selectedCategory: string;
 
   @Input() set selectCategory(value: string) {
-    this.selectedCategory = value;
-    this.ngOnInit();
+    if (this.selectedCategory) {
+      this.selectedCategory = value;
+      this.ngOnInit();
+    } else {
+      this.selectedCategory = value;
+    }
   }
 
   dataTypeEnum = DataTypeEnum;
@@ -24,6 +28,9 @@ export class HealthListItemsComponent implements OnInit {
   pointDataList: DataPoint[];
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  dataList: MatTableDataSource<DataPoint>;
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -59,7 +66,7 @@ export class HealthListItemsComponent implements OnInit {
    * @param key the data category to get
    * @returns a string of the value to show
    */
-  static getPointData(point: DataPoint, key: string): string {
+  getPointData(point: DataPoint, key: string): string {
     if (key === 'date') {
       return HealthListItemsComponent.getDate(point.get('time'));
     }
@@ -90,6 +97,9 @@ export class HealthListItemsComponent implements OnInit {
         }
       }
     }
+    console.log(this.options);
+    this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
+    this.dataList.paginator = this.paginator;
   }
 
   trackItem(index, item) {

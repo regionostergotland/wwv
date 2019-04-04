@@ -10,18 +10,21 @@
     <mat-panel-description>Antal mätvärden: {{getNumberOfValues(category)}}</mat-panel-description>
   </mat-expansion-panel-header>
 
-  <table mat-table [dataSource]="categoryDataPoints.get(category)" style="text-align: left">
+  <table mat-table [dataSource]="categoryDataList.get(category)" style="text-align: left">
 
     <ng-container *ngFor="let key of displayedColumns.get(category)" matColumnDef={{key}}>
       <th mat-header-cell *matHeaderCellDef> {{key === 'date' ? 'Datum' : categorySpecs.get(category).dataTypes.get(key).label}} </th>
       <td mat-cell *matCellDef="let dataPoint;">
-          {{visibleStrings.get(category).get(dataPoint).get(key)}}
+          <!-- {{visibleStrings.get(category).get(dataPoint).get(key)}} -->
+          {{getPointData(dataPoint, key, category)}}
       </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns.get(category)"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns.get(category);"></tr>
   </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
 </mat-expansion-panel>
 
   <div style="margin-bottom: 10px">
