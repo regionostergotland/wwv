@@ -326,9 +326,18 @@ export class DataList {
   }
 
   private containsPoint(newPoint: DataPoint): boolean {
-    for (const point of this.points) {
-      if (newPoint.equals(point, this.spec.dataTypes)) {
-        return true;
+    let start = 0;
+    let end = this.points.length;
+    let current = Math.floor(end / 2);
+    while (start <= current && current < end) {
+      const point = this.points[current];
+      const comp = this.sortByEarliestComparator(newPoint, point);
+      if (comp == 0) {
+        return newPoint.equals(point, this.spec.dataTypes);
+      } else if (comp < 0) {
+        end = current;
+      } else {
+        start = current+1;
       }
     }
     return false;
