@@ -8,6 +8,7 @@ export enum CategoryEnum {
   BLOOD_PRESSURE = 'blood_pressure',
   BODY_WEIGHT = 'body_weight',
   HEIGHT = 'height_length',
+  HEART_RATE = 'pulse_heart_beat'
 }
 
 export enum BloodPressureEnum {
@@ -28,6 +29,13 @@ export enum BodyWeightEnum {
 export enum HeightEnum {
   TIME = 'time',
   HEIGHT = 'height_length',
+  COMMENT = 'comment',
+}
+
+export enum HeartRateEnum {
+  TIME = 'time',
+  RATE = 'heart_rate',
+  POSITION = 'position',
   COMMENT = 'comment',
 }
 
@@ -197,6 +205,67 @@ export const ehrConfig: EhrConfig = {
         ],
         [
           HeightEnum.COMMENT,
+          new DataTypeText(
+            'Kommentar',
+            `Kommentarer avseende mätningen av kroppslängden som inte beskrivs
+            i övriga fält.`,
+            false,
+          )
+        ],
+      ])
+    },
+    {
+      id : CategoryEnum.HEART_RATE,
+      templateId : 'sm_heart-rate',
+      label : 'Puls/Hjärtfrekvens',
+      description : `Mätning av puls eller hjärtfrekvens samt beskrivning av
+      relaterade egenskaper.`,
+      dataTypes : new Map<string, DataType>([
+        [
+          HeartRateEnum.TIME,
+          new DataTypeDateTime(
+            'Tid',
+            'Tidpunkt vid mätning',
+            true,
+          )
+        ],
+        [
+          HeartRateEnum.RATE,
+          new DataTypeQuantity(
+            'Frekvens',
+            'Frekvensen mätt i slag per minut.',
+            true,
+            'cm', 0, 1000
+          )
+        ],
+        [
+          HeartRateEnum.POSITION,
+          new DataTypeCodedText(
+            'Ställning',
+            'Individens kroppställning under mätningen.',
+            false,
+            [
+              {
+                code: 'at1000',
+                label: 'Stående',
+                description: 'Stående ställning under blodtrycksmätningen.',
+              },
+              {
+                code: 'at1001',
+                label: 'Sittande',
+                description: `Sittande ställning under blodtrycksmätningen,
+                exempelvis på en säng eller stol.`,
+              },
+              {
+                code: 'at1003',
+                label: 'Liggande',
+                description: 'Liggande ställning under blodtrycksmätningen.',
+              }
+            ]
+          )
+        ],
+        [
+          HeartRateEnum.COMMENT,
           new DataTypeText(
             'Kommentar',
             `Kommentarer avseende mätningen av kroppslängden som inte beskrivs
