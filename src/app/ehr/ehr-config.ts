@@ -241,25 +241,25 @@ export const ehrConfig: EhrConfig = {
         [
           HeartRateEnum.POSITION,
           new DataTypeCodedText(
-            'Ställning',
-            'Individens kroppställning under mätningen.',
+            'Kroppsställning',
+            'Patientens kroppsställning under observationen.',
             false,
             [
               {
                 code: 'at1000',
-                label: 'Stående',
-                description: 'Stående ställning under blodtrycksmätningen.',
+                label: 'Stående eller upprätt',
+                description: 'Patienten stod, gick eller sprang.',
               },
               {
                 code: 'at1001',
                 label: 'Sittande',
-                description: `Sittande ställning under blodtrycksmätningen,
-                exempelvis på en säng eller stol.`,
+                description: `Patienten satt, exempelvis på en säng eller en
+                stol.`,
               },
               {
                 code: 'at1003',
                 label: 'Liggande',
-                description: 'Liggande ställning under blodtrycksmätningen.',
+                description: 'Patienten låg plant.',
               }
             ]
           )
