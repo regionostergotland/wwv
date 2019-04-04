@@ -185,8 +185,7 @@ export class GfitService extends Platform {
     }
   }
 
-  /**    console.log(convertedData);
-
+  /**
    * This function converts data from the default JSON-format which is returned
    * by Google, to our internal representation (which varies depending on
    * category)
