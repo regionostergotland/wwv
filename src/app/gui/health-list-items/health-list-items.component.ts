@@ -15,8 +15,13 @@ export class HealthListItemsComponent implements OnInit {
   selectedCategory: string;
 
   @Input() set selectCategory(value: string) {
-    this.selectedCategory = value;
-    this.ngOnInit();
+    if (this.selectedCategory) {
+      this.selectedCategory = value;
+      this.ngOnInit();
+    }
+    else {
+      this.selectedCategory = value;
+    }
   }
 
   dataTypeEnum = DataTypeEnum;
@@ -63,7 +68,7 @@ export class HealthListItemsComponent implements OnInit {
    * @param key the data category to get
    * @returns a string of the value to show
    */
-  static getPointData(point: DataPoint, key: string): string {
+  getPointData(point: DataPoint, key: string): string {
     if (key === 'date') {
       return HealthListItemsComponent.getDate(point.get('time'));
     }
@@ -95,13 +100,14 @@ export class HealthListItemsComponent implements OnInit {
         }
 
         // Fill visibleStrings
-        for (const dataPoint of this.pointDataList) {
-          const point = new Map<string, string>();
-          for (const column of this.displayedColumns) {
-            point.set(column, HealthListItemsComponent.getPointData(dataPoint, column));
-          }
-          this.visibleStrings.set(dataPoint, point);
-        }
+        // for (const dataPoint of this.pointDataList) {
+        //   const point = new Map<string, string>();
+        //   for (const column of this.displayedColumns) {
+        //     point.set(column, HealthListItemsComponent.getPointData(dataPoint, column));
+        //   }
+        //   this.visibleStrings.set(dataPoint, point);
+        // }
+        console.log("loading");
       }
     }
     console.log(this.options);
@@ -124,7 +130,7 @@ export class HealthListItemsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.ngOnInit();
-      console.log(this.pointDataList);
+     // console.log(this.pointDataList);
     });
   }
 
