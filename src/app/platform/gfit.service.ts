@@ -9,7 +9,7 @@ import GoogleUser = gapi.auth2.GoogleUser;
 import { AutofillMonitor } from '@angular/cdk/text-field';
 import { cat } from 'shelljs';
 import { stringify } from '@angular/compiler/src/util';
-import { CategoryEnum, BloodPressureEnum, BodyWeightEnum } from '../ehr/ehr-config';
+import { CategoryEnum, BloodPressureEnum, BodyWeightEnum, HeightEnum, HeartRateEnum } from '../ehr/ehr-config';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +25,10 @@ export class GfitService extends Platform {
   // Maps Google Fit's data type names to internal category names
   private readonly categoryDataTypeNames: Map<string, string> = new Map(
     [
-      ['com.google.blood_pressure', 'blood_pressure'],
-      ['com.google.weight', 'body_weight']
+      ['com.google.blood_pressure', CategoryEnum.BLOOD_PRESSURE],
+      ['com.google.weight', CategoryEnum.BODY_WEIGHT],
+      ['com.google.heart_rate.bpm', CategoryEnum.HEART_RATE],
+      ['com.google.height', CategoryEnum.HEIGHT]
     ]
   );
 
@@ -60,6 +62,31 @@ export class GfitService extends Platform {
           ),
         },
       ],
+
+      [ CategoryEnum.HEART_RATE,
+        {
+          url: 'raw:com.google.heart_rate.bpm:com.google.android.apps.fitness:user_input',
+          dataTypes: new Map(
+            [
+             [HeartRateEnum.TIME,
+              src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+            ]
+          )
+        },
+      ],
+
+      [ CategoryEnum.HEIGHT,
+        {
+          url: 'raw:com.google.height:com.google.android.apps.fitness:user_input',
+          dataTypes: new Map(
+            [
+              [HeightEnum.TIME,
+                src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+              [HeightEnum.HEIGHT, src => src.value[0].fpVal]
+            ]
+          ),
+        },
+      ]
     ]));
 
     this.dataIsFetched = false;
@@ -137,9 +164,11 @@ export class GfitService extends Platform {
    */
   public getData(categoryId: string,
                  start: Date, end: Date): Observable<DataPoint[]> {
+
     const startTime = String(start.getTime() * Math.pow(10, 6));
     const endTime = String(end.getTime() * Math.pow(10, 6));
     const dataSetId = startTime + '-' + endTime;
+    console.log(dataSetId);
     let url: string = this.baseUrl;
     const tail: string = '/datasets/' +
                           dataSetId +
@@ -156,18 +185,20 @@ export class GfitService extends Platform {
     }
   }
 
-  /**
+  /**    console.log(convertedData);
+
    * This function converts data from the default JSON-format which is returned
    * by Google, to our internal representation (which varies depending on
    * category)
    * @param res result from http.get-request (json file)
    * @param categoryId specifies which category the data belongs to
-   * @returns an array containing the converted DataPoint(s)
+   *  @returns an array containing the converted DataPoint(s)
    */
   protected convertData(res: any, categoryId: string): DataPoint[] {
     const points: DataPoint[] = [];
     const dataTypeConversions: Map<string, (src: any) => any> =
       this.implementedCategories.get(categoryId).dataTypes;
+
 
     res.point.forEach(src => {
       const convertedData: DataPoint = new DataPoint();

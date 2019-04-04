@@ -8,6 +8,7 @@ export enum CategoryEnum {
   BLOOD_PRESSURE = 'blood_pressure',
   BODY_WEIGHT = 'body_weight',
   HEIGHT = 'height_length',
+  HEART_RATE = 'pulse_heart_rate'
 }
 
 export enum BloodPressureEnum {
@@ -29,6 +30,13 @@ export enum HeightEnum {
   TIME = 'time',
   HEIGHT = 'height_length',
   COMMENT = 'comment',
+}
+
+export enum HeartRateEnum {
+  TIME = 'time',
+  RATE = 'heart_rate',
+  POSITION = 'position',
+  COMMENT = 'comment'
 }
 
 export interface EhrConfig {
