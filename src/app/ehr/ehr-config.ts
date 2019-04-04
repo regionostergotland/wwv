@@ -246,7 +246,7 @@ export const ehrConfig: EhrConfig = {
             false,
             [
               {
-                code: 'at1000',
+                code: 'at1003',
                 label: 'Stående eller upprätt',
                 description: 'Patienten stod, gick eller sprang.',
               },
@@ -257,7 +257,7 @@ export const ehrConfig: EhrConfig = {
                 stol.`,
               },
               {
-                code: 'at1003',
+                code: 'at1000',
                 label: 'Liggande',
                 description: 'Patienten låg plant.',
               }
