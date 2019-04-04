@@ -68,7 +68,7 @@ export abstract class DataType {
   readonly required: boolean;
 
   constructor(type: DataTypeEnum, label: string,
-    description: string, required: boolean) {
+              description: string, required: boolean) {
     this.type = type;
     this.label = label;
     this.description = description;
@@ -172,7 +172,7 @@ export class DataTypeCodedText extends DataType {
   public readonly options: DataTypeCodedTextOpt[];
 
   constructor(label: string, description: string, required: boolean,
-    options: DataTypeCodedTextOpt[]) {
+              options: DataTypeCodedTextOpt[]) {
     super(DataTypeEnum.CODED_TEXT, label, description, required);
     this.options = options;
   }
@@ -211,7 +211,7 @@ export class DataTypeQuantity extends DataType {
   public readonly magnitudeMax: number;
 
   constructor(label: string, description: string, required: boolean,
-    unit: string, magnitudeMin: number, magnitudeMax: number) {
+              unit: string, magnitudeMin: number, magnitudeMax: number) {
     super(DataTypeEnum.QUANTITY, label, description, required);
     this.unit = unit;
     this.magnitudeMin = magnitudeMin;
