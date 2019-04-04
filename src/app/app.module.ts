@@ -14,7 +14,7 @@ import { InfoComponent } from './gui/info/info.component';
 import { HelpComponent } from './gui/help/help.component';
 import { HealthListItemsComponent } from './gui/health-list-items/health-list-items.component';
 import { InspectionComponent } from './gui/inspection/inspection.component';
-import { SidebarComponent } from './gui/sidebar/sidebar.component';
+import {BottomSheetCategoriesComponent, SidebarComponent} from './gui/sidebar/sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
@@ -87,7 +87,8 @@ const gapiClientConfig: NgGapiClientConfig = {
     HealthListItemsComponent,
     InspectionComponent,
     SidebarComponent,
-    AddDataPointComponent
+    AddDataPointComponent,
+    BottomSheetCategoriesComponent
   ],
   imports: [
     BrowserModule,
@@ -145,6 +146,6 @@ const gapiClientConfig: NgGapiClientConfig = {
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [AddDataPointComponent]
+  entryComponents: [AddDataPointComponent, BottomSheetCategoriesComponent]
 })
 export class AppModule { }
