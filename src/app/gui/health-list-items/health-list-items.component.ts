@@ -24,7 +24,6 @@ export class HealthListItemsComponent implements OnInit {
   pointDataList: DataPoint[];
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
-  visibleStrings: Map<DataPoint, Map<string, string>>;
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -41,7 +40,6 @@ export class HealthListItemsComponent implements OnInit {
    * @returns a formatted string representing a time
    */
   static getTime(date: Date): string {
-    // return date.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
     return date.toTimeString().slice(0, 5);
   }
 
@@ -81,7 +79,6 @@ export class HealthListItemsComponent implements OnInit {
       this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
-      this.visibleStrings = new Map<DataPoint, Map<string, string>>();
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
@@ -91,17 +88,6 @@ export class HealthListItemsComponent implements OnInit {
           const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
           this.options.set(key, datatypes.options);
         }
-
-        /*
-        // Fill visibleStrings
-        for (const dataPoint of this.pointDataList) {
-          const point = new Map<string, string>();
-          for (const column of this.displayedColumns) {
-            point.set(column, HealthListItemsComponent.getPointData(dataPoint, column));
-          }
-          this.visibleStrings.set(dataPoint, point);
-        }
-        */
       }
     }
   }
