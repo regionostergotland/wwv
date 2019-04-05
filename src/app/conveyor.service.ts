@@ -100,10 +100,7 @@ export class Conveyor {
   }
 
   public sendData(): Observable<{}> {
-    // TODO handle if one of requests fail?
-    const requests = Array.from(this.categories.values())
-    .map(cat => this.ehrService.sendData(cat));
-    return forkJoin(requests);
+    return this.ehrService.sendData(Array.from(this.categories.values()));
   }
 
   /*
