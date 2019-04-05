@@ -9,7 +9,7 @@ import { stringify } from 'querystring';
   templateUrl: './inspection.component.html',
   styleUrls: ['./inspection.component.scss']
 })
-export class InspectionComponent implements OnInit {
+export class InspectionComponent implements OnInit, AfterViewInit {
 
   categories: string[] = [];
   categorySpecs: Map<string, CategorySpec>;
