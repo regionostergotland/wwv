@@ -51,7 +51,9 @@ export class EhrService {
         const element: any = {};
 
         for (const [id, value] of point.entries()) {
-          element[id] = spec.dataTypes.get(id).toRest(value);
+          if (value !== "") {
+            element[id] = spec.dataTypes.get(id).toRest(value);
+          }
         }
 
         event.push(element);
