@@ -13,7 +13,7 @@ import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
 export class HealthListItemsComponent implements OnInit {
 
   selectedCategory: string;
-  isEditable: boolean = false;
+  isEditable = false;
 
   @Input() set selectCategory(value: string) {
     if (this.selectedCategory) {
