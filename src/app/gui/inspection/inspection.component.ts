@@ -18,6 +18,7 @@ export class InspectionComponent implements OnInit, AfterViewInit {
   displayedColumns: Map<string, string[]>;
   dataTypeEnum = DataTypeEnum;
 
+  // For adding pagination to the tables
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   categoryDataList: Map<string, MatTableDataSource<DataPoint>>;
 
@@ -68,12 +69,15 @@ export class InspectionComponent implements OnInit, AfterViewInit {
           this.options.get(category).set(key, datatypes.options);
         }
       }
-      // console.log(this.paginator.toArray()[paginatorIndex]);
-      // console.log(this.categoryDataList.get(category));
       this.categoryDataList.set(category, new MatTableDataSource<DataPoint>(this.categoryDataPoints.get(category)));
     }
   }
 
+  /**
+   * This is used for adding pagination to all of the tables in inspection.
+   * Must be done in ngAfterViewInit in order to know how many tables there are
+   * to add pagination to all of them
+   */
   ngAfterViewInit() {
     let paginatorIndex = 0;
     for (const category of this.categories) {
