@@ -10,44 +10,7 @@
     <mat-panel-description>Antal mätvärden: {{getNumberOfValues(category)}}</mat-panel-description>
   </mat-expansion-panel-header>
 
-  <table mat-table [dataSource]="categoryDataList.get(category)" style="text-align: left">
-
-    <ng-container *ngFor="let key of displayedColumns.get(category)" matColumnDef={{key}}>
-      <th mat-header-cell *matHeaderCellDef> {{key === 'date' ? 'Datum' : categorySpecs.get(category).dataTypes.get(key).label}} </th>
-      <td mat-cell *matCellDef="let dataPoint;">
-
-        <div *ngIf="key !== 'date' && key !== 'time'">
-          <div *ngIf="categorySpecs.get(category).dataTypes.get(key).type === dataTypeEnum.CODED_TEXT">
-            <div *ngFor="let option of options.get(category).get(key)">
-
-              {{option.code === dataPoint.get(key) ? dataPoint.get(key) : ''}}
-
-            </div>
-          </div>
-          <div *ngIf="categorySpecs.get(category).dataTypes.get(key).type !== dataTypeEnum.CODED_TEXT">
-
-            {{dataPoint.get(key)}}
-
-          </div>
-        </div>
-        <div *ngIf="key === 'date'">
-
-          {{dataPoint.get('time').toISOString().slice(0,10)}}
-
-        </div>
-        <div *ngIf="key === 'time'">
-
-          {{dataPoint.get('time').toTimeString().slice(0,5)}}
-
-        </div>
-      </td>
-    </ng-container>
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumns.get(category)"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns.get(category);"></tr>
-  </table>
-
-  <mat-paginator [pageSizeOptions]="[5, 10, 15]" showFirstLastButtons></mat-paginator>
+  <app-health-list-items [selectCategory]="category" [editable]="false" ></app-health-list-items>
 </mat-expansion-panel>
 
   <div style="margin-bottom: 10px">

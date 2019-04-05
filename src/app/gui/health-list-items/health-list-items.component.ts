@@ -13,6 +13,7 @@ import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
 export class HealthListItemsComponent implements OnInit {
 
   selectedCategory: string;
+  isEditable: boolean = false;
 
   @Input() set selectCategory(value: string) {
     if (this.selectedCategory) {
@@ -21,6 +22,10 @@ export class HealthListItemsComponent implements OnInit {
     } else {
       this.selectedCategory = value;
     }
+  }
+
+  @Input() set editable(value: boolean) {
+    this.isEditable = value;
   }
 
   dataTypeEnum = DataTypeEnum;
