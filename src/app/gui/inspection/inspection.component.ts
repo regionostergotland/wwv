@@ -15,8 +15,8 @@ export class InspectionComponent implements OnInit {
   categorySpecs: Map<string, CategorySpec>;
   categoryDataPoints: Map<string, DataPoint[]>;
   options: Map<string, Map<string, DataTypeCodedTextOpt[]>>;
-  visibleStrings: Map<string, Map<DataPoint, Map<string, string>>>;
   displayedColumns: Map<string, string[]>;
+  dataTypeEnum = DataTypeEnum;
 
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   categoryDataList: Map<string, MatTableDataSource<DataPoint>>;
@@ -48,7 +48,6 @@ export class InspectionComponent implements OnInit {
     this.categorySpecs = new Map<string, CategorySpec>();
     this.categoryDataPoints = new Map<string, DataPoint[]>();
     this.options = new Map<string, Map<string, DataTypeCodedTextOpt[]>>();
-    this.visibleStrings = new Map<string, Map<DataPoint, Map<string, string>>>();
     this.displayedColumns = new Map<string, string[]>();
 
     this.categoryDataList = new Map<string, MatTableDataSource<DataPoint>>();
@@ -58,7 +57,6 @@ export class InspectionComponent implements OnInit {
       this.categorySpecs.set(category, this.conveyor.getCategorySpec(category));
       this.categoryDataPoints.set(category, this.conveyor.getDataList(category).getPoints());
       this.displayedColumns.set(category, this.getDisplayedColumns(category));
-      this.visibleStrings.set(category, new Map<DataPoint, Map<string, string>>());
 
       // Fill all options for drop-downs and the visibleStrings map with the dataPoints as the keys.
       for (const key of Array.from(this.categorySpecs.get(category).dataTypes.keys())) {
@@ -69,18 +67,9 @@ export class InspectionComponent implements OnInit {
           const datatypes: DataTypeCodedText = this.conveyor.getDataList(category).getDataType(key) as DataTypeCodedText;
           this.options.get(category).set(key, datatypes.options);
         }
-
-        // Fill the data container with strings using the getPointData method.
-        // for (const dataPoint of this.categoryDataPoints.get(category)) {
-        //   const point = new Map<string, string>();
-        //   for (const column of this.displayedColumns.get(category)) {
-        //     point.set(column, this.getPointData(dataPoint, column, category));
-        //   }
-        //   this.visibleStrings.get(category).set(dataPoint, point);
-        // }
       }
-      //console.log(this.paginator.toArray()[paginatorIndex]);
-      //console.log(this.categoryDataList.get(category));
+      // console.log(this.paginator.toArray()[paginatorIndex]);
+      // console.log(this.categoryDataList.get(category));
       this.categoryDataList.set(category, new MatTableDataSource<DataPoint>(this.categoryDataPoints.get(category)));
     }
   }
@@ -143,59 +132,6 @@ export class InspectionComponent implements OnInit {
       }
     }
     return result;
-  }
-
-  /**
-   * Gets the label of the id specified.
-   * @param category category to fetch label from
-   * @param labelId the id to fetch the label to
-   * @returns a label for the specified id
-   */
-  getColumnLabel(category: string, labelId: string): string {
-    if (labelId === 'date') {
-      return 'Datum';
-    }
-    return this.conveyor.getDataList(category).getDataType(labelId).label;
-  }
-
-  /**
-   * Gets the data to be displayed from the point
-   * @param point the datapoint to get the data from
-   * @param key the data category to get
-   * @param categoryId the category to fetch from.
-   * @returns a string of the value to show
-   */
-  getPointData(point: DataPoint, key: string, categoryId: string): string {
-    if (key === 'date') {
-      return InspectionComponent.getDate(point.get('time'));
-    }
-    if (key === 'time') {
-      return InspectionComponent.getTime(point.get('time'));
-    }
-    if (this.getVisualType(key, categoryId) === DataTypeEnum.CODED_TEXT) {
-      const codedText: DataTypeCodedText = this.conveyor.getDataList(categoryId).getDataType(key) as DataTypeCodedText;
-      for (const code of codedText.options) {
-        if (code.code === point.get(key)) {
-          return code.label;
-        }
-      }
-    }
-    return point.get(key);
-  }
-
-  /**
-   * Gets the type to display in the table.
-   * @param key the id to get the label from
-   * @param categoryId the category to fetch from.
-   * @returns the type to display in the table
-   */
-  getVisualType(key: string, categoryId: string): DataTypeEnum {
-    if (key === 'date') {
-      return DataTypeEnum.DATE_TIME;
-    }
-    if (this.conveyor.getDataList(categoryId)) {
-      return this.conveyor.getDataList(categoryId).spec.dataTypes.get(key).type;
-    }
   }
 
   /**
