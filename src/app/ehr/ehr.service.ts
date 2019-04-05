@@ -30,7 +30,7 @@ export class EhrService {
     return cats;
   }
 
-  private createComposition(list: DataList): string {
+  private createComposition(lists: DataList[]): string {
     const composition: any = {
       ctx: {
         language: 'en',
@@ -39,21 +39,23 @@ export class EhrService {
       self_monitoring: {}
     };
 
-    const spec = list.spec;
-    composition.self_monitoring[spec.id] = [ {
-      any_event: []
-    } ];
+    for (const list of lists) {
+      const spec = list.spec;
+      composition.self_monitoring[spec.id] = [ {
+        any_event: []
+      } ];
 
-    const event = composition.self_monitoring[spec.id][0].any_event;
+      const event = composition.self_monitoring[spec.id][0].any_event;
 
-    for (const point of list.getPoints()) {
-      const element: any = {};
+      for (const point of list.getPoints()) {
+        const element: any = {};
 
-      for (const [id, value] of point.entries()) {
-        element[id] = spec.dataTypes.get(id).toRest(value);
+        for (const [id, value] of point.entries()) {
+          element[id] = spec.dataTypes.get(id).toRest(value);
+        }
+
+        event.push(element);
       }
-
-      event.push(element);
     }
 
     const postData = JSON.stringify(composition, null, 2);
@@ -61,11 +63,11 @@ export class EhrService {
     return JSON.stringify(composition);
   }
 
-  public sendData(list: DataList): Observable<{}> {
+  public sendData(lists: DataList[]): Observable<{}> {
     // TODO get ehrId from pnr
     const params = [
       ['ehrId', 'c0cf738e-67b5-4c8c-8410-f83df4082ac0'],
-      ['templateId', list.spec.templateId],
+      ['templateId', this.config.templateId],
       ['format', 'STRUCTURED'],
     ];
     let url = this.config.baseUrl + '?';
@@ -73,7 +75,7 @@ export class EhrService {
       url += key + '=' + value + '&';
     }
 
-    const composition = this.createComposition(list);
+    const composition = this.createComposition(lists);
 
     const options = {
       headers: new HttpHeaders({
