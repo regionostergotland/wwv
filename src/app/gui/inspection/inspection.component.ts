@@ -24,7 +24,6 @@ export class InspectionComponent implements OnInit {
       this.categorySpecs.set(category, this.conveyor.getCategorySpec(category));
     }
   }
-
   /**
    * Checks if a category is empty.
    * @param categoryId the category to check values from.
