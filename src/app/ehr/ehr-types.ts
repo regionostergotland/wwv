@@ -327,11 +327,8 @@ export class DataList {  /**
 
   constructor(spec: CategorySpec) {
     this.spec = spec;
-
     this.points = [];
-
     this.pointsInterval = [];
-
     this.width = 0;
     this.mathFunction = MathFunctionEnum.ACTUAL;
   }
@@ -436,66 +433,71 @@ export class DataList {  /**
     return this.pointsInterval;
   }
 
-    /**
-     * The manipulation of intervals of datapoint to make one datapoint for each
-     * to represent respective interval.
-     * @returns A list of datapoints that each represent it's original interval.
-     */
-    public intervalManipulation(): DataPoint[] {
-      const dataPoints: DataPoint[] = [];
-      for (const interval of this.pointsInterval) {
-        const dataPointElements: any[] = [];
-        for (const [key, value] of interval[0].entries()) {
-          if (key === 'time') {
-            const startDate: Date = interval[0].get(key);
-            startDate.setHours(0, 0, 0);
-            dataPointElements.push([key, startDate]);
-          }
-          let sum = 0;
-          if (typeof value === 'number') {
-            for (const point of interval) {
-              sum += point.get(key);
-            }
-            dataPointElements.push([key, sum]);
-          }
+  /**
+   * The manipulation of intervals of datapoint to make one datapoint for each
+   * to represent respective interval.
+   * @returns A list of datapoints that each represent it's original interval.
+   */
+  public intervalManipulation(): DataPoint[] {
+    const dataPoints: DataPoint[] = [];
+    for (const interval of this.pointsInterval) {
+      const dataPointElements: any[] = [];
+      const requiredIds: string[] = Array.from(this.spec.dataTypes.keys()).
+      filter(f => this.spec.dataTypes.get(f).required);
+      for (let id of requiredIds) {
+        if (id === 'time') {
+          const startDate: Date = interval[0].get('time');
+          startDate.setHours(0,0,0);
+          dataPointElements.push(['time', startDate]);
         }
-        const dataPoint: DataPoint = new DataPoint(dataPointElements);
-        dataPoints.push(dataPoint);
+        else if (typeof interval[0].get(id) === 'number') {
+          let value = 0;
+          for (const point of interval) {
+            value += point.get(id); // TODO add math function
+          }
+          dataPointElements.push([id, value]);
+        }
+        else {
+          dataPointElements.push([id, interval[0].get(id)]);
+        }
       }
-      return dataPoints;
+      const dataPoint: DataPoint = new DataPoint(dataPointElements);
+      dataPoints.push(dataPoint);
     }
+    return dataPoints;
+  }
 
-    /**
-     * Replace all points with new list of points.
-     */
-    public setPoints(points: DataPoint[]) {
-      this.points = [];
-      this.addPoints(points);
-    }
+  /**
+   * Replace all points with new list of points.
+   */
+  public setPoints(points: DataPoint[]) {
+    this.points = [];
+    this.addPoints(points);
+  }
 
-    /**
-     * Set the width of intervals that data points shall represent.
-     */
-    public setWidth(width: number): void {
-      this.width = width;
-    }
+  /**
+   * Set the width of intervals that data points shall represent.
+   */
+  public setWidth(width: number): void {
+    this.width = width;
+  }
 
-    /**
-     * Set math function that will determing value for point of an interval.
-     */
-    public setMathFunction(mathFunction: MathFunctionEnum): void {
-      this.mathFunction = mathFunction;
-    }
+  /**
+   * Set math function that will determing value for point of an interval.
+   */
+  public setMathFunction(mathFunction: MathFunctionEnum): void {
+    this.mathFunction = mathFunction;
+  }
 
-    /**
-     * Get DataType object for certain data type.
-     */
-    public getDataType(typeId: string): DataType {
-      if (this.spec.dataTypes.has(typeId)) {
-        return this.spec.dataTypes.get(typeId);
-      } else {
-        throw TypeError('invalid type id -- ' + typeId);
-      }
+  /**
+   * Get DataType object for certain data type.
+   */
+  public getDataType(typeId: string): DataType {
+    if (this.spec.dataTypes.has(typeId)) {
+      return this.spec.dataTypes.get(typeId);
+    } else {
+      throw TypeError('invalid type id -- ' + typeId);
     }
+  }
 
 }
