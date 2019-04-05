@@ -135,7 +135,7 @@ export class DataTypeText extends DataType {
   }
 
   public toRest(value: any): any {
-    return [ value ];
+    return [value];
   }
 }
 
@@ -182,9 +182,9 @@ export class DataTypeCodedText extends DataType {
   }
 
   public toRest(value: any): any {
-    return [ {
+    return [{
       '|code': value,
-    } ];
+    }];
   }
 }
 
@@ -233,7 +233,7 @@ export class DataTypeQuantity extends DataType {
   }
 
   public toRest(value: any): any {
-    return [ {
+    return [{
       '|magnitude': value,
       '|unit': this.unit
     }];
@@ -256,7 +256,7 @@ export class DataPoint {
    */
   private point: Map<string, any>;
 
-  constructor(values= []) {
+  constructor(values = []) {
     this.removed = false;
     this.point = new Map<string, any>(values);
   }
@@ -288,9 +288,9 @@ export class DataPoint {
  */
 export enum MathFunctionEnum {
   ACTUAL,
-    MEDIAN,
-    MEAN,
-    TOTAL,
+  MEDIAN,
+  MEAN,
+  TOTAL,
 }
 
 /**
@@ -326,10 +326,24 @@ export class DataList {
     return (p1.get('time').getTime() - p2.get('time').getTime());
   }
 
+  /**
+   * Performs a binary search on the list of current points to check if
+   * a given point is a duplicate
+   * @param newPoint DataPoint to be added
+   */
   private containsPoint(newPoint: DataPoint): boolean {
-    for (const point of this.points) {
-      if (newPoint.equals(point, this.spec.dataTypes)) {
-        return true;
+    let start = 0;
+    let end = this.points.length - 1;
+    while (start <= end) {
+      const current = Math.floor((start + end) / 2);
+      const point = this.points[current];
+      const comp = this.sortByEarliestComparator(newPoint, point);
+      if (comp < 0) {
+        end = current - 1;
+      } else if (comp > 0) {
+        start = current + 1;
+      } else {
+        return newPoint.equals(point, this.spec.dataTypes);
       }
     }
     return false;
