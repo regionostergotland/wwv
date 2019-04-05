@@ -48,7 +48,7 @@ export interface EhrConfig {
   /**
    * ID for template containing archetypes for all categories of data.
    */
-  templateId : string;
+  templateId: string;
 
   /**
    * Specifications for all available categories.
