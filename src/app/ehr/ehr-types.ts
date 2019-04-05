@@ -10,11 +10,6 @@ export interface CategorySpec {
   id: string;
 
   /**
-   * Template identifier for corresponding template in EHR.
-   */
-  templateId: string;
-
-  /**
    * Human readable name for category.
    */
   label: string;

@@ -40,17 +40,29 @@ export enum HeartRateEnum {
 }
 
 export interface EhrConfig {
+  /**
+   * Identifier used to specify category.
+   */
   baseUrl: string;
+
+  /**
+   * ID for template containing archetypes for all categories of data.
+   */
+  templateId: string;
+
+  /**
+   * Specifications for all available categories.
+   */
   categories: CategorySpec[];
 }
 
 export const ehrConfig: EhrConfig = {
   baseUrl: 'https://rest.ehrscape.com/rest/v1/composition',
+  templateId : 'self-reporting',
 // TODO generate these specifications automatically from templates in ehr
   categories: [
     {
       id : CategoryEnum.BLOOD_PRESSURE,
-      templateId : 'sm_blood-pressure',
       label : 'Blodtryck',
       description : `Den lokala mätningen av artärblodtrycket som är ett
       surrogat för artärtryck i systemcirkulationen.`,
@@ -122,7 +134,6 @@ export const ehrConfig: EhrConfig = {
     },
     {
       id : CategoryEnum.BODY_WEIGHT,
-      templateId : 'sm_weight',
       label : 'Kroppsvikt',
       description : 'Mätning av en individs kroppsvikt.',
       dataTypes : new Map<string, DataType>([
@@ -182,7 +193,6 @@ export const ehrConfig: EhrConfig = {
     },
     {
       id : CategoryEnum.HEIGHT,
-      templateId : 'sm_height',
       label : 'Kroppslängd',
       description : 'Kroppslängd mäts från hjässa till fotsula.',
       dataTypes : new Map<string, DataType>([
@@ -216,7 +226,6 @@ export const ehrConfig: EhrConfig = {
     },
     {
       id : CategoryEnum.HEART_RATE,
-      templateId : 'sm_heart-rate',
       label : 'Puls/Hjärtfrekvens',
       description : `Mätning av puls eller hjärtfrekvens samt beskrivning av
       relaterade egenskaper.`,
