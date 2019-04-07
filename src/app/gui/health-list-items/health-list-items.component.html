@@ -92,4 +92,7 @@
 
 <mat-paginator [pageSizeOptions]="[5, 10, 15, 30, 50]" showFirstLastButtons></mat-paginator>
 
-<button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%" (click)="openDialog()">Lägg till datavärde</button>
+<button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%"
+(click)="openDialog()">Lägg till datavärde</button>
+<button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%" 
+(click)="removeSelected()">Ta bort datavärden, {{selection.selected.length}} valda</button>

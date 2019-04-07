@@ -37,29 +37,48 @@ export class HealthListItemsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataList: MatTableDataSource<DataPoint>;
 
+  // The selected datapoints
   selection = new SelectionModel<DataPoint>(true, []);
 
-  /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
+  /** 
+   * Checks whether the number of selected elements matches the total number of rows.
+   * @returns a boolean, true of selected elements matches total number of rows 
+   * */
+  isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataList.data.length;
     return numSelected === numRows;
   }
 
-  /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
+  /**
+   * Selects all rows if they are not all selected; otherwise clear selection. 
+   */
+  masterToggle() {  
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataList.data.forEach(row => this.selection.select(row));
   }
 
-  // /** The label for the checkbox on the passed row */
-  // checkboxLabel(row?: DataPoint): string {
-  //   if (!row) {
-  //     return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-  //   }
-  //   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
-  // }
+  /**
+   * Removes all of the selected datapoints and updates the list
+   */
+  removeSelected() {
+    for (let point of this.selection.selected) {
+      point.removed = true;
+    }
+    this.selection.clear();
+
+    let newList: DataPoint[] = [];
+    for (let point of this.conveyor.getDataList(this.selectedCategory).getPoints()) {
+      if (!point.removed) {
+        newList.push(point);
+      }
+    }
+    console.log(this.conveyor.getDataList(this.selectedCategory).getPoints());
+    console.log(newList);
+    this.conveyor.getDataList(this.selectedCategory).setPoints(newList);
+    this.ngOnInit();
+  }
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -115,6 +134,7 @@ export class HealthListItemsComponent implements OnInit {
       this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
+      this.selection.clear();
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
