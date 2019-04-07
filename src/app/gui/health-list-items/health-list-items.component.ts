@@ -3,7 +3,7 @@ import {CategorySpec, DataPoint, DataTypeCodedText, DataTypeCodedTextOpt, DataTy
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
 import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
-
+import {SelectionModel} from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-health-list-items',
@@ -36,6 +36,30 @@ export class HealthListItemsComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataList: MatTableDataSource<DataPoint>;
+
+  selection = new SelectionModel<DataPoint>(true, []);
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataList.data.length;
+    return numSelected === numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataList.data.forEach(row => this.selection.select(row));
+  }
+
+  // /** The label for the checkbox on the passed row */
+  // checkboxLabel(row?: DataPoint): string {
+  //   if (!row) {
+  //     return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+  //   }
+  //   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  // }
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -154,6 +178,7 @@ export class HealthListItemsComponent implements OnInit {
    */
   getDisplayedColumns(): string[] {
     const result: string[] = [];
+    result.push("select");
     if (this.selectedCategory) {
       for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
         if (column === 'time') {
