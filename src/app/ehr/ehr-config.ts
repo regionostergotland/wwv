@@ -4,39 +4,47 @@ import { CategorySpec, DataList, DataPoint, DataType,
          DataTypeDateTime, DataTypeQuantity, DataTypeText,
          DataTypeCodedText } from './ehr-types';
 
-export enum CategoryEnum {
+export enum Categories {
   BLOOD_PRESSURE = 'blood_pressure',
   BODY_WEIGHT = 'body_weight',
   HEIGHT = 'height_length',
-  HEART_RATE = 'pulse_heart_beat'
+  HEART_RATE = 'pulse_heart_beat',
 }
 
-export enum BloodPressureEnum {
+export enum SubTrees {
+  EVENT = 'any_event',
+  MEDICAL_DEVICE = 'medical_device',
+}
+
+export enum CommonFields {
   TIME = 'time',
+  COMMENT = 'comment',
+}
+
+export enum MedicalDeviceEnum {
+  NAME = 'device-name',
+  TYPE = 'type',
+  MANUFACTURER = 'manufacturer',
+}
+
+export enum BloodPressure {
   SYSTOLIC = 'systolic',
   DIASTOLIC = 'diastolic',
   POSITION = 'position',
-  COMMENT = 'comment',
 }
 
-export enum BodyWeightEnum {
-  TIME = 'time',
+export enum BodyWeight {
   WEIGHT = 'weight',
   DRESS = 'state_of_dress',
-  COMMENT = 'comment',
 }
 
-export enum HeightEnum {
-  TIME = 'time',
+export enum Height {
   HEIGHT = 'height_length',
-  COMMENT = 'comment',
 }
 
-export enum HeartRateEnum {
-  TIME = 'time',
+export enum HeartRate {
   RATE = 'heart_rate',
   POSITION = 'position',
-  COMMENT = 'comment',
 }
 
 export interface EhrConfig {
@@ -62,7 +70,7 @@ export const ehrConfig: EhrConfig = {
 // TODO generate these specifications automatically from templates in ehr
   categories: [
     {
-      id : CategoryEnum.BLOOD_PRESSURE,
+      id : Categories.BLOOD_PRESSURE,
       label : 'Blodtryck',
       description : `Den lokala mätningen av artärblodtrycket som är ett
       surrogat för artärtryck i systemcirkulationen.`,
@@ -70,14 +78,16 @@ export const ehrConfig: EhrConfig = {
         [
           'time',
           new DataTypeDateTime(
+            [SubTrees.EVENT],
             'Tid',
             'Tidpunkt vid mätning',
             true,
           )
         ],
         [
-          BloodPressureEnum.SYSTOLIC,
+          BloodPressure.SYSTOLIC,
           new DataTypeQuantity(
+            [SubTrees.EVENT],
             'Systoliskt',
             `Det högsta systemiskt arteriella blodtrycket uppmätt systoliskt
             eller under sammandragningsfasen av hjärtcykeln.`,
@@ -86,8 +96,9 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          BloodPressureEnum.DIASTOLIC,
+          BloodPressure.DIASTOLIC,
           new DataTypeQuantity(
+            [SubTrees.EVENT],
             'Diastoliskt',
             `Det minsta systemiskt arteriella blodtrycket uppmätt diastoliskt
             eller i hjärtcykelns avslappningsfas.`,
@@ -96,8 +107,9 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          BloodPressureEnum.POSITION,
+          BloodPressure.POSITION,
           new DataTypeCodedText(
+            [SubTrees.EVENT],
             'Ställning',
             'Individens kroppställning under mätningen.',
             false,
@@ -122,8 +134,9 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          BloodPressureEnum.COMMENT,
+          CommonFields.COMMENT,
           new DataTypeText(
+            [SubTrees.EVENT],
             'Kommentar',
             `Ytterligare beskrivning av mätningen som inte beskrivits i andra
             fält.`,
@@ -133,21 +146,23 @@ export const ehrConfig: EhrConfig = {
       ])
     },
     {
-      id : CategoryEnum.BODY_WEIGHT,
+      id : Categories.BODY_WEIGHT,
       label : 'Kroppsvikt',
       description : 'Mätning av en individs kroppsvikt.',
       dataTypes : new Map<string, DataType>([
         [
-          BodyWeightEnum.TIME,
+          CommonFields.TIME,
           new DataTypeDateTime(
+            [SubTrees.EVENT],
             'Tid',
             'Tidpunkt vid mätning',
             true,
           )
         ],
         [
-          BodyWeightEnum.WEIGHT,
+          BodyWeight.WEIGHT,
           new DataTypeQuantity(
+            [SubTrees.EVENT],
             'Vikt',
             'Individens vikt.',
             true,
@@ -155,8 +170,9 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          BodyWeightEnum.DRESS,
+          BodyWeight.DRESS,
           new DataTypeCodedText(
+            [SubTrees.EVENT],
             'Klädsel',
             'Beskrivning av individens klädsel vid tidpunkten för vägning.',
             false,
@@ -181,8 +197,9 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          BodyWeightEnum.COMMENT,
+          CommonFields.COMMENT,
           new DataTypeText(
+            [SubTrees.EVENT],
             'Kommentar',
             `Ytterligare beskrivning av mätningen som inte beskrivits i andra
             fält.`,
@@ -192,21 +209,23 @@ export const ehrConfig: EhrConfig = {
       ])
     },
     {
-      id : CategoryEnum.HEIGHT,
+      id : Categories.HEIGHT,
       label : 'Kroppslängd',
       description : 'Kroppslängd mäts från hjässa till fotsula.',
       dataTypes : new Map<string, DataType>([
         [
-          BodyWeightEnum.TIME,
+          CommonFields.TIME,
           new DataTypeDateTime(
+            [SubTrees.EVENT],
             'Tid',
             'Tidpunkt vid mätning',
             true,
           )
         ],
         [
-          HeightEnum.HEIGHT,
+          Height.HEIGHT,
           new DataTypeQuantity(
+            [SubTrees.EVENT],
             'Kroppslängd',
             'Kroppslängd från hjässa till fotsula.',
             true,
@@ -214,8 +233,9 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          HeightEnum.COMMENT,
+          CommonFields.COMMENT,
           new DataTypeText(
+            [SubTrees.EVENT],
             'Kommentar',
             `Kommentarer avseende mätningen av kroppslängden som inte beskrivs
             i övriga fält.`,
@@ -225,22 +245,24 @@ export const ehrConfig: EhrConfig = {
       ])
     },
     {
-      id : CategoryEnum.HEART_RATE,
+      id : Categories.HEART_RATE,
       label : 'Puls/Hjärtfrekvens',
       description : `Mätning av puls eller hjärtfrekvens samt beskrivning av
       relaterade egenskaper.`,
       dataTypes : new Map<string, DataType>([
         [
-          HeartRateEnum.TIME,
+          CommonFields.TIME,
           new DataTypeDateTime(
+            [SubTrees.EVENT],
             'Tid',
             'Tidpunkt vid mätning',
             true,
           )
         ],
         [
-          HeartRateEnum.RATE,
+          HeartRate.RATE,
           new DataTypeQuantity(
+            [SubTrees.EVENT],
             'Frekvens',
             'Frekvensen mätt i slag per minut.',
             true,
@@ -248,8 +270,9 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          HeartRateEnum.POSITION,
+          HeartRate.POSITION,
           new DataTypeCodedText(
+            [SubTrees.EVENT],
             'Kroppsställning',
             'Patientens kroppsställning under observationen.',
             false,
@@ -274,8 +297,9 @@ export const ehrConfig: EhrConfig = {
           )
         ],
         [
-          HeartRateEnum.COMMENT,
+          CommonFields.COMMENT,
           new DataTypeText(
+            [SubTrees.EVENT],
             'Kommentar',
             `Kommentarer avseende mätningen av kroppslängden som inte beskrivs
             i övriga fält.`,

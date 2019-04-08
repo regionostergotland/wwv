@@ -5,7 +5,6 @@ import { DataPoint } from '../ehr/ehr-types';
 import { setInjectImplementation } from '@angular/core/src/di/injector_compatibility';
 import { strictEqual } from 'assert';
 import { stringify } from '@angular/core/src/util';
-import { CategoryEnum } from '../ehr/ehr-config';
 
 /**
  * Contains necessary properties for all categories.

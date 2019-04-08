@@ -5,11 +5,12 @@ import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { MessageService } from '../message.service';
 
-import { CategoryEnum,
-         BloodPressureEnum,
-         BodyWeightEnum,
-         HeightEnum,
-         HeartRateEnum } from '../ehr/ehr-config';
+import { Categories,
+         CommonFields,
+         BloodPressure,
+         BodyWeight,
+         Height,
+         HeartRate} from '../ehr/ehr-config';
 
 @Injectable({
   providedIn: 'root',
@@ -19,40 +20,40 @@ export class DummyPlatformService extends Platform {
     constructor() {
       super(
         new Map([
-          [ CategoryEnum.BLOOD_PRESSURE,
+          [ Categories.BLOOD_PRESSURE,
             {
               url: '',
-              dataTypes: new Map([
-                [BloodPressureEnum.TIME, null],
-                [BloodPressureEnum.SYSTOLIC, null],
-                [BloodPressureEnum.DIASTOLIC, null]
+              dataTypes: new Map<string, any>([
+                [CommonFields.TIME, null],
+                [BloodPressure.SYSTOLIC, null],
+                [BloodPressure.DIASTOLIC, null]
               ]),
             }
           ],
-          [ CategoryEnum.BODY_WEIGHT,
+          [ Categories.BODY_WEIGHT,
             {
               url: '',
-              dataTypes: new Map([
-                [BodyWeightEnum.TIME, null],
-                [BodyWeightEnum.WEIGHT, null],
+              dataTypes: new Map<string, any>([
+                [CommonFields.TIME, null],
+                [BodyWeight.WEIGHT, null],
               ]),
             }
           ],
-          [ CategoryEnum.HEIGHT,
+          [ Categories.HEIGHT,
             {
               url: '',
-              dataTypes: new Map([
-                [HeightEnum.TIME, null],
-                [HeightEnum.HEIGHT, null],
+              dataTypes: new Map<string, any>([
+                [CommonFields.TIME, null],
+                [Height.HEIGHT, null],
               ]),
             }
           ],
-          [ CategoryEnum.HEART_RATE,
+          [ Categories.HEART_RATE,
             {
               url: '',
-              dataTypes: new Map([
-                [HeartRateEnum.TIME, null],
-                [HeartRateEnum.RATE, null],
+              dataTypes: new Map<string, any>([
+                [CommonFields.TIME, null],
+                [HeartRate.RATE, null],
               ]),
             }
           ],
