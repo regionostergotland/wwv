@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DataPoint, CategorySpec } from '../ehr/ehr-types';
+import { DataPoint, CategorySpec, DataTypeEnum } from '../ehr/ehr-types';
+import { EhrService } from '../ehr/ehr.service'
 import { Platform } from './platform.service';
 import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
@@ -7,6 +8,7 @@ import { MessageService } from '../message.service';
 
 import { Categories,
          CommonFields,
+         MedicalDevice,
          BloodPressure,
          BodyWeight,
          Height,
@@ -16,50 +18,52 @@ import { Categories,
   providedIn: 'root',
 })
 export class DummyPlatformService extends Platform {
-
-    constructor() {
-      super(
-        new Map([
-          [ Categories.BLOOD_PRESSURE,
-            {
-              url: '',
-              dataTypes: new Map<string, any>([
-                [CommonFields.TIME, null],
-                [BloodPressure.SYSTOLIC, null],
-                [BloodPressure.DIASTOLIC, null]
-              ]),
-            }
-          ],
-          [ Categories.BODY_WEIGHT,
-            {
-              url: '',
-              dataTypes: new Map<string, any>([
-                [CommonFields.TIME, null],
-                [BodyWeight.WEIGHT, null],
-              ]),
-            }
-          ],
-          [ Categories.HEIGHT,
-            {
-              url: '',
-              dataTypes: new Map<string, any>([
-                [CommonFields.TIME, null],
-                [Height.HEIGHT, null],
-              ]),
-            }
-          ],
-          [ Categories.HEART_RATE,
-            {
-              url: '',
-              dataTypes: new Map<string, any>([
-                [CommonFields.TIME, null],
-                [HeartRate.RATE, null],
-              ]),
-            }
-          ],
-        ])
-      );
-    }
+  constructor(
+    private ehr: EhrService
+  ) {
+    super(
+      new Map([
+        [ Categories.BLOOD_PRESSURE,
+          {
+            url: '',
+            dataTypes: new Map<string, any>([
+              [CommonFields.TIME, null],
+              [MedicalDevice.NAME, null],
+              [BloodPressure.SYSTOLIC, null],
+              [BloodPressure.DIASTOLIC, null]
+            ]),
+          }
+        ],
+        [ Categories.BODY_WEIGHT,
+          {
+            url: '',
+            dataTypes: new Map<string, any>([
+              [CommonFields.TIME, null],
+              [BodyWeight.WEIGHT, null],
+            ]),
+          }
+        ],
+        [ Categories.HEIGHT,
+          {
+            url: '',
+            dataTypes: new Map<string, any>([
+              [CommonFields.TIME, null],
+              [Height.HEIGHT, null],
+            ]),
+          }
+        ],
+        [ Categories.HEART_RATE,
+          {
+            url: '',
+            dataTypes: new Map<string, any>([
+              [CommonFields.TIME, null],
+              [HeartRate.RATE, null],
+            ]),
+          }
+        ],
+      ])
+    );
+  }
 
   public async signIn() {}
   public signOut(): void {}
@@ -78,6 +82,11 @@ export class DummyPlatformService extends Platform {
    */
   public getData(categoryId: string,
                  start: Date, end: Date): Observable<DataPoint[]> {
+    const generators: Map<DataTypeEnum, (date: Date) => any> = new Map([
+      [ DataTypeEnum.QUANTITY, date => date.getDate() ],
+      [ DataTypeEnum.DATE_TIME, date => date ],
+      [ DataTypeEnum.TEXT, date => date.toString() ],
+    ]);
     const lengthOfDay = 1000 * 3600 * 24;
     let current: Date = new
                    Date(start.getTime() - start.getTime() % lengthOfDay);
@@ -87,7 +96,9 @@ export class DummyPlatformService extends Platform {
       const fieldnames = this.implementedCategories
         .get(categoryId).dataTypes.keys();
       for (const fieldname of fieldnames) {
-        const value = fieldname === 'time' ? current : current.getDate();
+        const generator = generators.get(
+          this.ehr.getCategorySpec(categoryId).dataTypes.get(fieldname).type);
+        const value = generator(current);
         fields.push([fieldname, value]);
       }
 
