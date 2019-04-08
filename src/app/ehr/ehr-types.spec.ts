@@ -180,4 +180,38 @@ describe('Ehr Types', () => {
     }
   });
 
+
+  /**
+   * Test that list contains added points.
+   */
+  it('should contain all added points, not contain unadded points', () => {
+    const spec: CategorySpec= {
+      id : 'id', label : '', description : '',
+      dataTypes : new Map<string, DataType>([
+        [ 'time', new DataTypeDateTime('', '', true) ],
+      ])
+    };
+    const list = new DataList(spec);
+    const addedPoints = [
+      new DataPoint([['time', new Date(2017, 1)]]),
+      new DataPoint([['time', new Date(2017, 4)]]),
+      new DataPoint([['time', new Date(2017, 3)]]),
+      new DataPoint([['time', new Date(2017, 2)]]),
+      new DataPoint([['time', new Date(2017, 5)]]),
+    ];
+    const notAddedPoints = [
+      new DataPoint([['time', new Date(2016, 1)]]),
+      new DataPoint([['time', new Date(2016, 4)]]),
+      new DataPoint([['time', new Date(2016, 3)]]),
+      new DataPoint([['time', new Date(2016, 2)]]),
+      new DataPoint([['time', new Date(2016, 5)]]),
+    ];
+    list.addPoints(addedPoints);
+    for (let p of addedPoints) {
+      expect(list.containsPoint(p)).toEqual(true);
+    }
+    for (let p of notAddedPoints) {
+      expect(list.containsPoint(p)).toEqual(false);
+    }
+  });
 });
