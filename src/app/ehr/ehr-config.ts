@@ -21,7 +21,7 @@ export enum CommonFields {
   COMMENT = 'comment',
 }
 
-export enum MedicalDeviceEnum {
+export enum MedicalDevice {
   NAME = 'device-name',
   TYPE = 'type',
   MANUFACTURER = 'manufacturer',
@@ -46,6 +46,35 @@ export enum HeartRate {
   RATE = 'heart_rate',
   POSITION = 'position',
 }
+
+const TimeField: [string, DataType] = [
+  CommonFields.TIME,
+  new DataTypeDateTime(
+    [SubTrees.EVENT],
+    'Tid',
+    'Tidpunkt vid mätning',
+    true,
+  )
+];
+const CommentField: [string, DataType] = [
+  CommonFields.COMMENT,
+  new DataTypeText(
+    [SubTrees.EVENT],
+    'Kommentar',
+    `Ytterligare beskrivning av mätningen som inte beskrivits i andra
+    fält.`,
+    false,
+  )
+];
+const DeviceNameField: [string, DataType] = [
+  MedicalDevice.NAME,
+  new DataTypeText(
+    [SubTrees.MEDICAL_DEVICE],
+    'Enhetsnamn',
+    `Namn på enhet som använts för mätning.`,
+    false,
+  )
+];
 
 export interface EhrConfig {
   /**
@@ -75,15 +104,9 @@ export const ehrConfig: EhrConfig = {
       description : `Den lokala mätningen av artärblodtrycket som är ett
       surrogat för artärtryck i systemcirkulationen.`,
       dataTypes : new Map<string, DataType>([
-        [
-          'time',
-          new DataTypeDateTime(
-            [SubTrees.EVENT],
-            'Tid',
-            'Tidpunkt vid mätning',
-            true,
-          )
-        ],
+        TimeField,
+        CommentField,
+        DeviceNameField,
         [
           BloodPressure.SYSTOLIC,
           new DataTypeQuantity(
@@ -133,16 +156,6 @@ export const ehrConfig: EhrConfig = {
             ]
           )
         ],
-        [
-          CommonFields.COMMENT,
-          new DataTypeText(
-            [SubTrees.EVENT],
-            'Kommentar',
-            `Ytterligare beskrivning av mätningen som inte beskrivits i andra
-            fält.`,
-            false,
-          )
-        ],
       ])
     },
     {
@@ -150,15 +163,8 @@ export const ehrConfig: EhrConfig = {
       label : 'Kroppsvikt',
       description : 'Mätning av en individs kroppsvikt.',
       dataTypes : new Map<string, DataType>([
-        [
-          CommonFields.TIME,
-          new DataTypeDateTime(
-            [SubTrees.EVENT],
-            'Tid',
-            'Tidpunkt vid mätning',
-            true,
-          )
-        ],
+        TimeField,
+        CommentField,
         [
           BodyWeight.WEIGHT,
           new DataTypeQuantity(
@@ -196,16 +202,6 @@ export const ehrConfig: EhrConfig = {
             ]
           )
         ],
-        [
-          CommonFields.COMMENT,
-          new DataTypeText(
-            [SubTrees.EVENT],
-            'Kommentar',
-            `Ytterligare beskrivning av mätningen som inte beskrivits i andra
-            fält.`,
-            false,
-          )
-        ],
       ])
     },
     {
@@ -213,15 +209,8 @@ export const ehrConfig: EhrConfig = {
       label : 'Kroppslängd',
       description : 'Kroppslängd mäts från hjässa till fotsula.',
       dataTypes : new Map<string, DataType>([
-        [
-          CommonFields.TIME,
-          new DataTypeDateTime(
-            [SubTrees.EVENT],
-            'Tid',
-            'Tidpunkt vid mätning',
-            true,
-          )
-        ],
+        TimeField,
+        CommentField,
         [
           Height.HEIGHT,
           new DataTypeQuantity(
@@ -232,16 +221,6 @@ export const ehrConfig: EhrConfig = {
             'cm', 0, 1000
           )
         ],
-        [
-          CommonFields.COMMENT,
-          new DataTypeText(
-            [SubTrees.EVENT],
-            'Kommentar',
-            `Kommentarer avseende mätningen av kroppslängden som inte beskrivs
-            i övriga fält.`,
-            false,
-          )
-        ],
       ])
     },
     {
@@ -250,15 +229,8 @@ export const ehrConfig: EhrConfig = {
       description : `Mätning av puls eller hjärtfrekvens samt beskrivning av
       relaterade egenskaper.`,
       dataTypes : new Map<string, DataType>([
-        [
-          CommonFields.TIME,
-          new DataTypeDateTime(
-            [SubTrees.EVENT],
-            'Tid',
-            'Tidpunkt vid mätning',
-            true,
-          )
-        ],
+        TimeField,
+        CommentField,
         [
           HeartRate.RATE,
           new DataTypeQuantity(
@@ -294,16 +266,6 @@ export const ehrConfig: EhrConfig = {
                 description: 'Patienten låg plant.',
               }
             ]
-          )
-        ],
-        [
-          CommonFields.COMMENT,
-          new DataTypeText(
-            [SubTrees.EVENT],
-            'Kommentar',
-            `Kommentarer avseende mätningen av kroppslängden som inte beskrivs
-            i övriga fält.`,
-            false,
           )
         ],
       ])
