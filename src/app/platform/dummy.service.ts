@@ -22,6 +22,7 @@ export class DummyPlatformService extends Platform {
           [ CategoryEnum.BLOOD_PRESSURE,
             {
               url: '',
+              dataStreams: [],
               dataTypes: new Map([
                 [BloodPressureEnum.TIME, null],
                 [BloodPressureEnum.SYSTOLIC, null],
@@ -32,6 +33,7 @@ export class DummyPlatformService extends Platform {
           [ CategoryEnum.BODY_WEIGHT,
             {
               url: '',
+              dataStreams: [],
               dataTypes: new Map([
                 [BodyWeightEnum.TIME, null],
                 [BodyWeightEnum.WEIGHT, null],
@@ -41,6 +43,7 @@ export class DummyPlatformService extends Platform {
           [ CategoryEnum.HEIGHT,
             {
               url: '',
+              dataStreams: [],
               dataTypes: new Map([
                 [HeightEnum.TIME, null],
                 [HeightEnum.HEIGHT, null],
@@ -50,6 +53,7 @@ export class DummyPlatformService extends Platform {
           [ CategoryEnum.HEART_RATE,
             {
               url: '',
+              dataStreams: [],
               dataTypes: new Map([
                 [HeartRateEnum.TIME, null],
                 [HeartRateEnum.RATE, null],

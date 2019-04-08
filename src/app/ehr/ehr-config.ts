@@ -8,7 +8,13 @@ export enum CategoryEnum {
   BLOOD_PRESSURE = 'blood_pressure',
   BODY_WEIGHT = 'body_weight',
   HEIGHT = 'height_length',
-  HEART_RATE = 'pulse_heart_beat'
+  HEART_RATE = 'pulse_heart_beat',
+  STEPS = 'steps'
+}
+
+export enum StepEnum {
+  TIME = 'time',
+  STEPS = 'steps'
 }
 
 export enum BloodPressureEnum {
@@ -224,6 +230,27 @@ export const ehrConfig: EhrConfig = {
         ],
       ])
     },
+
+    {
+      id: CategoryEnum.STEPS,
+      label: 'Steg',
+      description: 'Antal uppmätta steg vid gång',
+      dataTypes: new Map<string, DataType>(
+        [
+          [StepEnum.TIME, new DataTypeDateTime(
+            'Tid', 'Tidpunkt vid mätning', true
+          )], 
+          [StepEnum.TIME, new DataTypeQuantity(
+            'Antal steg',
+            'Antal uppnätta steg under givet tidsintervall',
+            true,
+            'Steg', 0, -1
+            )]
+        ]
+      )
+    },
+
+
     {
       id : CategoryEnum.HEART_RATE,
       label : 'Puls/Hjärtfrekvens',

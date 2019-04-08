@@ -12,6 +12,7 @@ import { CategoryEnum } from '../ehr/ehr-config';
  */
 export interface CategoryProperties {
   url: string;
+  dataStreams: string[];
   /* This maps available data types for the category to a function
    that's used to convert the data type to the internal data format */
   dataTypes: Map<string, (src: any) => any>;

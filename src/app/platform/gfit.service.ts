@@ -9,7 +9,7 @@ import GoogleUser = gapi.auth2.GoogleUser;
 import { AutofillMonitor } from '@angular/cdk/text-field';
 import { cat } from 'shelljs';
 import { stringify } from '@angular/compiler/src/util';
-import { CategoryEnum, BloodPressureEnum, BodyWeightEnum, HeightEnum, HeartRateEnum } from '../ehr/ehr-config';
+import { CategoryEnum, BloodPressureEnum, BodyWeightEnum, HeightEnum, HeartRateEnum, StepEnum } from '../ehr/ehr-config';
 
 @Injectable({
   providedIn: 'root',
@@ -22,13 +22,16 @@ export class GfitService extends Platform {
   private baseUrl = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/';
   private auth: any;
 
+  // Step url: derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas
+
   // Maps Google Fit's data type names to internal category names
   private readonly categoryDataTypeNames: Map<string, string> = new Map(
     [
       ['com.google.blood_pressure', CategoryEnum.BLOOD_PRESSURE],
       ['com.google.weight', CategoryEnum.BODY_WEIGHT],
       ['com.google.heart_rate.bpm', CategoryEnum.HEART_RATE],
-      ['com.google.height', CategoryEnum.HEIGHT]
+      ['com.google.height', CategoryEnum.HEIGHT],
+      ['com.google.step_count.cumulative', CategoryEnum.STEPS]
     ]
   );
 
@@ -37,55 +40,73 @@ export class GfitService extends Platform {
     private http: HttpClient
   ) {
     super(new Map([
-      [ CategoryEnum.BLOOD_PRESSURE,
-        {
-          url: 'raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
-            [
-              [BloodPressureEnum.TIME,
-               src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [BloodPressureEnum.SYSTOLIC, src => src.value[0].fpVal],
-              [BloodPressureEnum.DIASTOLIC, src => src.value[1].fpVal],
-            ]
-          ),
-        },
+      [CategoryEnum.BLOOD_PRESSURE,
+      {
+        url: 'raw:com.google.blood_pressure:',
+        dataStreams: [],
+        dataTypes: new Map(
+          [
+            [BloodPressureEnum.TIME,
+            src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+            [BloodPressureEnum.SYSTOLIC, src => src.value[0].fpVal],
+            [BloodPressureEnum.DIASTOLIC, src => src.value[1].fpVal],
+          ]
+        ),
+      },
       ],
-      [ CategoryEnum.BODY_WEIGHT,
-        {
-          url: 'raw:com.google.weight:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
-            [
-              [BodyWeightEnum.TIME,
-               src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [BodyWeightEnum.WEIGHT, src => src.value[0].fpVal]
-            ]
-          ),
-        },
+      [CategoryEnum.BODY_WEIGHT,
+      {
+        url: 'raw:com.google.weight:',
+        dataStreams: [],
+        dataTypes: new Map(
+          [
+            [BodyWeightEnum.TIME,
+            src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+            [BodyWeightEnum.WEIGHT, src => src.value[0].fpVal]
+          ]
+        ),
+      },
       ],
 
-      [ CategoryEnum.HEART_RATE,
+      [CategoryEnum.HEART_RATE,
+      {
+        url: 'raw:com.google.heart_rate.bpm:',
+        dataStreams: [],
+        dataTypes: new Map(
+          [
+            [HeartRateEnum.TIME,
+            src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+          ]
+        )
+      },
+      ],
+
+      [CategoryEnum.HEIGHT,
+      {
+        url: 'raw:com.google.height:',
+        dataStreams: [],
+        dataTypes: new Map(
+          [
+            [HeightEnum.TIME,
+            src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+            [HeightEnum.HEIGHT, src => src.value[0].fpVal]
+          ]
+        ),
+      },
+      ],
+
+      [CategoryEnum.STEPS,
         {
-          url: 'raw:com.google.heart_rate.bpm:com.google.android.apps.fitness:user_input',
+          url: 'raw:com.google.step_count.cumulative:',
+          dataStreams: [],
           dataTypes: new Map(
             [
-             [HeartRateEnum.TIME,
-              src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+              [StepEnum.TIME,
+                src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+              [StepEnum.STEPS, src => src.value[0].fpVal]
             ]
           )
-        },
-      ],
-
-      [ CategoryEnum.HEIGHT,
-        {
-          url: 'raw:com.google.height:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
-            [
-              [HeightEnum.TIME,
-                src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [HeightEnum.HEIGHT, src => src.value[0].fpVal]
-            ]
-          ),
-        },
+        }
       ]
     ]));
 
@@ -131,6 +152,8 @@ export class GfitService extends Platform {
    * @returns an observable containing an array with the available categories.
    */
   public getAvailable(): Observable<string[]> {
+    const dataStreamIndex = 2;
+    const devices: string[] = [];
     if (!this.dataIsFetched) {
       this.dataIsFetched = true;
       return this.http.get(
@@ -138,13 +161,21 @@ export class GfitService extends Platform {
           const activities: any = res;
           activities.dataSource.forEach(source => {
             if (source.dataStreamId.split(':')[0] === 'raw') {
+              if (source.device) {
+                devices.push(source.device);
+              }
               const categoryId: string = this.categoryDataTypeNames
                 .get(source.dataType.name);
               if (this.isImplemented(categoryId)) {
+                // Extracts the datastream of the activity
+                this.implementedCategories.get(categoryId).dataStreams
+                  .push(source.dataStreamId.split(':').slice(dataStreamIndex).join(':'));
+                console.log('new source: ' + source.dataStreamId);
                 this.available.push(categoryId);
               }
             }
           });
+          console.log(this.available);
           return this.available;
         }));
     } else {
@@ -169,7 +200,6 @@ export class GfitService extends Platform {
     const endTime = String(end.getTime() * Math.pow(10, 6));
     const dataSetId = startTime + '-' + endTime;
     console.log(dataSetId);
-    let url: string = this.baseUrl;
     const tail: string = '/datasets/' +
                           dataSetId +
                           '?access_token=' +
@@ -178,9 +208,16 @@ export class GfitService extends Platform {
     if (!this.isImplemented(categoryId)) {
       throw TypeError(categoryId + ' is unimplemented');
     } else {
-      const categoryUrl: string = this.implementedCategories.get(categoryId).url;
-      url += categoryUrl + tail;
-      return this.http.get(url).pipe(map(
+      const results: Observable<any>[] = [];
+      const url: string = this.baseUrl + this.implementedCategories.get(categoryId).url;
+      // GETs the data from each datastream
+      this.implementedCategories.get(categoryId).dataStreams.forEach(dataStreamUrl => {
+
+        results.push(this.http.get(url + dataStreamUrl + tail)
+        );
+      });
+
+      return forkJoin(results).pipe(map(
         res => this.convertData(res, categoryId)));
     }
   }
@@ -193,19 +230,20 @@ export class GfitService extends Platform {
    * @param categoryId specifies which category the data belongs to
    *  @returns an array containing the converted DataPoint(s)
    */
-  protected convertData(res: any, categoryId: string): DataPoint[] {
+  protected convertData(res: any[], categoryId: string): DataPoint[] {
     const points: DataPoint[] = [];
     const dataTypeConversions: Map<string, (src: any) => any> =
       this.implementedCategories.get(categoryId).dataTypes;
 
-
-    res.point.forEach(src => {
-      const convertedData: DataPoint = new DataPoint();
-      for (const [type, conversionFunc] of dataTypeConversions) {
-        convertedData.set(type, conversionFunc(src));
-      }
-      points.push(convertedData);
-    });
+    for(const response of res) {
+      response.point.forEach(src => {
+        const convertedData: DataPoint = new DataPoint();
+        for (const [type, conversionFunc] of dataTypeConversions) {
+          convertedData.set(type, conversionFunc(src));
+        }
+        points.push(convertedData);
+      });
+    }
     return points;
   }
 }

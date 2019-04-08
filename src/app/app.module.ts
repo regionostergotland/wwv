@@ -75,7 +75,8 @@ const gapiClientConfig: NgGapiClientConfig = {
   discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],
   scope: [
     'https://www.googleapis.com/auth/fitness.blood_pressure.read',
-    'https://www.googleapis.com/auth/fitness.body.read'
+    'https://www.googleapis.com/auth/fitness.body.read',
+    'https://www.googleapis.com/auth/fitness.activity.read'
   ].join(' '),
 };
 

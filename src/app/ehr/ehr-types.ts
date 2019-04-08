@@ -335,9 +335,9 @@ export class DataList {
     let start = 0;
     let end = this.points.length - 1;
     while (start <= end) {
-      const current = Math.floor((start + end) / 2);
+      const current: number = Math.floor((start + end) / 2);
       const point = this.points[current];
-      const comp = this.sortByEarliestComparator(newPoint, point);
+      const comp: number = this.sortByEarliestComparator(newPoint, point);
       if (comp < 0) {
         end = current - 1;
       } else if (comp > 0) {
