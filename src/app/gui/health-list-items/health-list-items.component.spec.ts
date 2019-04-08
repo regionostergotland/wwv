@@ -10,6 +10,8 @@ import {
   MatListModule,
   MatTableModule,
   MatDialogModule,
+  MatDialogRef,
+  MatCheckboxModule,
   MatTooltipModule,
   MatPaginatorModule } from '@angular/material';
 
@@ -48,6 +50,7 @@ describe('HealthListItemsComponent', () => {
         MatFormFieldModule,
         RouterTestingModule,
         MatCardModule,
+        MatCheckboxModule,
         MatSidenavModule,
         MatListModule,
         MatDialogModule,
@@ -64,7 +67,8 @@ describe('HealthListItemsComponent', () => {
       GoogleAuthService,
       GoogleApiService,
       HttpClient,
-      HttpHandler
+      HttpHandler,
+      {provide: MatDialogRef, useValue: {}}
     ]
     })
     .compileComponents();

@@ -2,8 +2,25 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {CategorySpec, DataPoint, DataTypeCodedText, DataTypeCodedTextOpt, DataTypeEnum} from '../../ehr/ehr-types';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
+
+@Component({
+  selector: 'app-removal-dialog',
+  templateUrl: 'removal-dialog.html',
+})
+export class RemovalDialogComponent {
+
+  remove = true;
+
+  constructor(private conveyor: Conveyor, public dialogRef: MatDialogRef<RemovalDialogComponent>) {
+    }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+
+}
 
 @Component({
   selector: 'app-health-list-items',
@@ -11,9 +28,6 @@ import {SelectionModel} from '@angular/cdk/collections';
   styleUrls: ['./health-list-items.component.scss']
 })
 export class HealthListItemsComponent implements OnInit {
-
-  selectedCategory: string;
-  isEditable = false;
 
   @Input() set selectCategory(value: string) {
     if (this.selectedCategory) {
@@ -28,6 +42,12 @@ export class HealthListItemsComponent implements OnInit {
     this.isEditable = value;
   }
 
+  constructor(private conveyor: Conveyor, public dialog: MatDialog) {
+  }
+
+  selectedCategory: string;
+  isEditable = false;
+
   dataTypeEnum = DataTypeEnum;
   categorySpec: CategorySpec;
   pointDataList: DataPoint[];
@@ -40,45 +60,7 @@ export class HealthListItemsComponent implements OnInit {
   // The selected datapoints
   selection = new SelectionModel<DataPoint>(true, []);
 
-  /** 
-   * Checks whether the number of selected elements matches the total number of rows.
-   * @returns a boolean, true of selected elements matches total number of rows 
-   * */
-  isAllSelected(): boolean {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataList.data.length;
-    return numSelected === numRows;
-  }
-
-  /**
-   * Selects all rows if they are not all selected; otherwise clear selection. 
-   */
-  masterToggle() {  
-    this.isAllSelected() ?
-        this.selection.clear() :
-        this.dataList.data.forEach(row => this.selection.select(row));
-  }
-
-  /**
-   * Removes all of the selected datapoints and updates the list
-   */
-  removeSelected() {
-    for (let point of this.selection.selected) {
-      point.removed = true;
-    }
-    this.selection.clear();
-
-    let newList: DataPoint[] = [];
-    for (let point of this.conveyor.getDataList(this.selectedCategory).getPoints()) {
-      if (!point.removed) {
-        newList.push(point);
-      }
-    }
-    console.log(this.conveyor.getDataList(this.selectedCategory).getPoints());
-    console.log(newList);
-    this.conveyor.getDataList(this.selectedCategory).setPoints(newList);
-    this.ngOnInit();
-  }
+  remove = false;
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -109,6 +91,57 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   /**
+   * Checks whether the number of selected elements matches the total number of rows.
+   * @returns a boolean, true of selected elements matches total number of rows
+   */
+  isAllSelected(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataList.data.length;
+    return numSelected === numRows;
+  }
+
+  /**
+   * Selects all rows if they are not all selected; otherwise clear selection.
+   */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataList.data.forEach(row => this.selection.select(row));
+  }
+
+  openRemovalDialog() {
+    const dialogRef = this.dialog.open(RemovalDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      // If result is true, that means the user pressed the button for removing selected values
+      if (result) {
+        this.removeSelected();
+      }
+    });
+  }
+
+  /**
+   * Removes all of the selected datapoints and updates the list
+   */
+  removeSelected() {
+    for (const point of this.selection.selected) {
+      point.removed = true;
+    }
+    this.selection.clear();
+
+    const newList: DataPoint[] = [];
+    for (const point of this.conveyor.getDataList(this.selectedCategory).getPoints()) {
+      if (!point.removed) {
+        newList.push(point);
+      }
+    }
+    // console.log(this.conveyor.getDataList(this.selectedCategory).getPoints());
+    // console.log(newList);
+    this.conveyor.getDataList(this.selectedCategory).setPoints(newList);
+    this.ngOnInit();
+  }
+
+  /**
    * Gets the data to be displayed from the point
    * @param point the datapoint to get the data from
    * @param key the data category to get
@@ -122,9 +155,6 @@ export class HealthListItemsComponent implements OnInit {
       return HealthListItemsComponent.getTime(point.get('time'));
     }
     return point.get(key);
-  }
-
-  constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -198,7 +228,9 @@ export class HealthListItemsComponent implements OnInit {
    */
   getDisplayedColumns(): string[] {
     const result: string[] = [];
-    result.push("select");
+    if (this.isEditable) {
+      result.push('select');
+    }
     if (this.selectedCategory) {
       for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
         if (column === 'time') {

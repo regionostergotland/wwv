@@ -1,5 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import {MatExpansionModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatTooltipModule, MatSelectModule} from '@angular/material';
+import {
+  MatExpansionModule,
+  MatMenuModule,
+  MatTableModule,
+  MatCheckboxModule,
+  MatPaginatorModule,
+  MatTooltipModule,
+  MatSelectModule} from '@angular/material';
 import { InspectionComponent } from './inspection.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -35,6 +42,7 @@ describe('InspectionComponent', () => {
         MatPaginatorModule,
         BrowserAnimationsModule,
         MatTableModule,
+        MatCheckboxModule,
         MatTooltipModule,
         MatSelectModule,
 

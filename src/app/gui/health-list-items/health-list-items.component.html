@@ -1,6 +1,6 @@
 <h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
 
-<table mat-table [dataSource]="dataList" [trackBy]="trackItem">
+<table style="text-align: left" mat-table [dataSource]="dataList" [trackBy]="trackItem">
 
   <ng-container *ngFor="let key of displayedColumns" matColumnDef={{key}}>
     <div *ngIf="key==='select'">
@@ -16,6 +16,7 @@
         </mat-checkbox>
       </td>
     </div>
+
     <th mat-header-cell *matHeaderCellDef [matTooltip]="key === 'date' ? 'Datum för mätning'  : categorySpec.dataTypes.get(key).description">
       {{key === 'date' ? 'Datum' : categorySpec.dataTypes.get(key).label}}
     </th>
@@ -95,4 +96,4 @@
 <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%"
 (click)="openDialog()">Lägg till datavärde</button>
 <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%" 
-(click)="removeSelected()">Ta bort datavärden, {{selection.selected.length}} valda</button>
+(click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button>
