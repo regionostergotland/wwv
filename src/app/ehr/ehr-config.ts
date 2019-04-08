@@ -105,8 +105,6 @@ export const ehrConfig: EhrConfig = {
       surrogat för artärtryck i systemcirkulationen.`,
       dataTypes : new Map<string, DataType>([
         TimeField,
-        CommentField,
-        DeviceNameField,
         [
           BloodPressure.SYSTOLIC,
           new DataTypeQuantity(
@@ -156,6 +154,8 @@ export const ehrConfig: EhrConfig = {
             ]
           )
         ],
+        CommentField,
+        DeviceNameField,
       ])
     },
     {
