@@ -460,26 +460,25 @@ export class DataList {
               for (const point of interval) {
                 value += point.get(id);
               }
-            break;
+              break;
             case MathFunctionEnum.ACTUAL :
 
             break;
             case MathFunctionEnum.MEDIAN :
               interval.sort(this.sortByValue);
-              if (interval.length/2 === Math.ceil(interval.length/2)) {
-                value = interval[interval.length/2].get(id);
+              if (interval.length / 2 === Math.ceil(interval.length / 2)) {
+                value = interval[interval.length / 2].get(id);
+              } else {
+                value = (interval[Math.ceil(interval.length / 2)].get(id) -
+                interval[Math.floor(interval.length) / 2].get(id)) / 2;
               }
-              else {
-                value = (interval[Math.ceil(interval.length/2)].get(id) -
-                interval[Math.floor(interval.length)/2].get(id))/2;
-              }
-            break;
+              break;
             case MathFunctionEnum.MEAN :
               for (const point of interval) {
                 value += point.get(id);
               }
-            value = value/interval.length;
-            break;
+              value = value / interval.length;
+              break;
           }
           dataPointElements.push([id, value]);
         } else {

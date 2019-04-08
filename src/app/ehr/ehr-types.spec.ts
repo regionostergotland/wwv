@@ -5,7 +5,7 @@ import { DataList, DataTypeText, DataPoint, CategorySpec, DataType,
          MathFunctionEnum} from './ehr-types';
 import { HttpClient, HttpHandler} from '@angular/common/http';
 
-fdescribe('Ehr Types', () => {
+describe('Ehr Types', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
     providers: [
@@ -258,7 +258,7 @@ fdescribe('Ehr Types', () => {
 
   });
 
-  fit('should create new datapoints with mean of the interval points numerized fields', () => {
+  it('should create new datapoints with mean of the interval points numerized fields', () => {
     const test = new DataList(categories[1]);
     const date: Date = new Date();
     const date1: Date = new Date();
@@ -325,6 +325,6 @@ fdescribe('Ehr Types', () => {
     const res: DataPoint[] = test.intervalManipulation();
 
     expect(res[0].get('weight')).
-    toEqual((test.getPoints()[0].get('weight') + test.getPoints()[1].get('weight'))/2);
+    toEqual((test.getPoints()[0].get('weight') + test.getPoints()[1].get('weight')) / 2);
   });
 });
