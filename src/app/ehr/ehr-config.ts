@@ -8,7 +8,7 @@ export enum CategoryEnum {
   BLOOD_PRESSURE = 'blood_pressure',
   BODY_WEIGHT = 'body_weight',
   HEIGHT = 'height_length',
-  HEART_RATE = 'pulse_heart_rate'
+  HEART_RATE = 'pulse_heart_beat'
 }
 
 export enum BloodPressureEnum {
@@ -36,21 +36,33 @@ export enum HeartRateEnum {
   TIME = 'time',
   RATE = 'heart_rate',
   POSITION = 'position',
-  COMMENT = 'comment'
+  COMMENT = 'comment',
 }
 
 export interface EhrConfig {
+  /**
+   * Identifier used to specify category.
+   */
   baseUrl: string;
+
+  /**
+   * ID for template containing archetypes for all categories of data.
+   */
+  templateId: string;
+
+  /**
+   * Specifications for all available categories.
+   */
   categories: CategorySpec[];
 }
 
 export const ehrConfig: EhrConfig = {
   baseUrl: 'https://rest.ehrscape.com/rest/v1/composition',
+  templateId : 'self-reporting',
 // TODO generate these specifications automatically from templates in ehr
   categories: [
     {
       id : CategoryEnum.BLOOD_PRESSURE,
-      templateId : 'sm_blood-pressure',
       label : 'Blodtryck',
       description : `Den lokala mätningen av artärblodtrycket som är ett
       surrogat för artärtryck i systemcirkulationen.`,
@@ -122,7 +134,6 @@ export const ehrConfig: EhrConfig = {
     },
     {
       id : CategoryEnum.BODY_WEIGHT,
-      templateId : 'sm_weight',
       label : 'Kroppsvikt',
       description : 'Mätning av en individs kroppsvikt.',
       dataTypes : new Map<string, DataType>([
@@ -182,7 +193,6 @@ export const ehrConfig: EhrConfig = {
     },
     {
       id : CategoryEnum.HEIGHT,
-      templateId : 'sm_height',
       label : 'Kroppslängd',
       description : 'Kroppslängd mäts från hjässa till fotsula.',
       dataTypes : new Map<string, DataType>([
@@ -205,6 +215,66 @@ export const ehrConfig: EhrConfig = {
         ],
         [
           HeightEnum.COMMENT,
+          new DataTypeText(
+            'Kommentar',
+            `Kommentarer avseende mätningen av kroppslängden som inte beskrivs
+            i övriga fält.`,
+            false,
+          )
+        ],
+      ])
+    },
+    {
+      id : CategoryEnum.HEART_RATE,
+      label : 'Puls/Hjärtfrekvens',
+      description : `Mätning av puls eller hjärtfrekvens samt beskrivning av
+      relaterade egenskaper.`,
+      dataTypes : new Map<string, DataType>([
+        [
+          HeartRateEnum.TIME,
+          new DataTypeDateTime(
+            'Tid',
+            'Tidpunkt vid mätning',
+            true,
+          )
+        ],
+        [
+          HeartRateEnum.RATE,
+          new DataTypeQuantity(
+            'Frekvens',
+            'Frekvensen mätt i slag per minut.',
+            true,
+            '/min', 0, -1
+          )
+        ],
+        [
+          HeartRateEnum.POSITION,
+          new DataTypeCodedText(
+            'Kroppsställning',
+            'Patientens kroppsställning under observationen.',
+            false,
+            [
+              {
+                code: 'at1003',
+                label: 'Stående eller upprätt',
+                description: 'Patienten stod, gick eller sprang.',
+              },
+              {
+                code: 'at1001',
+                label: 'Sittande',
+                description: `Patienten satt, exempelvis på en säng eller en
+                stol.`,
+              },
+              {
+                code: 'at1000',
+                label: 'Liggande',
+                description: 'Patienten låg plant.',
+              }
+            ]
+          )
+        ],
+        [
+          HeartRateEnum.COMMENT,
           new DataTypeText(
             'Kommentar',
             `Kommentarer avseende mätningen av kroppslängden som inte beskrivs

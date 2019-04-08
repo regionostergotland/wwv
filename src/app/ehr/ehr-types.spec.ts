@@ -16,7 +16,6 @@ describe('Ehr Types', () => {
   const categories: CategorySpec[] = [
     {
       id : 'blood_pressure',
-      templateId : 'sm_blood-pressure',
       label : 'Blodtryck',
       description : 'Mätning av arteriellt blodtryck.',
       dataTypes : new Map<string, DataType>([
@@ -75,7 +74,6 @@ describe('Ehr Types', () => {
     },
     {
       id : 'body_weight',
-      templateId : 'sm_weight',
       label : 'Kroppsvikt',
       description : 'Mätning av faktisk kroppsvikt.',
       dataTypes : new Map<string, DataType>([

@@ -8,7 +8,8 @@ import { MessageService } from '../message.service';
 import { CategoryEnum,
          BloodPressureEnum,
          BodyWeightEnum,
-         HeightEnum } from '../ehr/ehr-config';
+         HeightEnum,
+         HeartRateEnum } from '../ehr/ehr-config';
 
 @Injectable({
   providedIn: 'root',
@@ -43,6 +44,15 @@ export class DummyPlatformService extends Platform {
               dataTypes: new Map([
                 [HeightEnum.TIME, null],
                 [HeightEnum.HEIGHT, null],
+              ]),
+            }
+          ],
+          [ CategoryEnum.HEART_RATE,
+            {
+              url: '',
+              dataTypes: new Map([
+                [HeartRateEnum.TIME, null],
+                [HeartRateEnum.RATE, null],
               ]),
             }
           ],

@@ -9,7 +9,9 @@ import {
   MatSidenavModule,
   MatListModule,
   MatTableModule,
-  MatDialogModule } from '@angular/material';
+  MatDialogModule,
+  MatTooltipModule,
+  MatPaginatorModule } from '@angular/material';
 
 import { HealthListItemsComponent } from './health-list-items.component';
 
@@ -49,6 +51,8 @@ describe('HealthListItemsComponent', () => {
         MatSidenavModule,
         MatListModule,
         MatDialogModule,
+        MatTooltipModule,
+        MatPaginatorModule,
 
         GoogleApiModule.forRoot({
           provide: NG_GAPI_CONFIG,
