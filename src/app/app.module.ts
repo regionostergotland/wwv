@@ -16,6 +16,8 @@ import { HealthListItemsComponent } from './gui/health-list-items/health-list-it
 import { InspectionComponent } from './gui/inspection/inspection.component';
 import { BottomSheetCategoriesComponent, SidebarComponent } from './gui/sidebar/sidebar.component';
 import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
+import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';
+import { ConfirmationComponent } from './gui/confirmation/confirmation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 
@@ -93,7 +95,9 @@ const gapiClientConfig: NgGapiClientConfig = {
     InspectionComponent,
     SidebarComponent,
     AddDataPointComponent,
-    BottomSheetCategoriesComponent
+    BottomSheetCategoriesComponent,
+    ProgressBarComponent,
+    ConfirmationComponent
   ],
   imports: [
     BrowserModule,

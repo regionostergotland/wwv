@@ -3,7 +3,8 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { MessagesComponent } from './messages/messages.component';
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
-import { MatToolbarModule } from '@angular/material';
+import { ProgressBarComponent} from './gui/progress-bar/progress-bar.component';
+import { MatToolbarModule, MatGridListModule } from '@angular/material';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import {
@@ -32,6 +33,7 @@ describe('AppComponent', () => {
       imports: [ // add all modules used in this component
         RouterTestingModule,
         MatToolbarModule,
+        MatGridListModule,
         RouterTestingModule,
         GoogleApiModule.forRoot({
           provide: NG_GAPI_CONFIG,
@@ -42,7 +44,8 @@ describe('AppComponent', () => {
         AppComponent,
         ToolbarComponent,
         AppComponent,
-        MessagesComponent
+        MessagesComponent,
+        ProgressBarComponent
       ],
       providers: [
         GoogleAuthService,

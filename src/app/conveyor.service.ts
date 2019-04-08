@@ -16,11 +16,21 @@ export class Conveyor {
   private readonly platforms: Map<string, Platform>;
   private categories: Map<string, DataList>;
   private selectedPlatform: string;
+  progressBar: boolean;
+
+  showProgressBar(): void {
+    this.progressBar = true;
+  }
+
+  hideProgressBar(): void {
+    this.progressBar = false;
+  }
 
   constructor(
     private ehrService: EhrService,
     private gfitService: GfitService,
     private dummyPlatformService: DummyPlatformService) {
+    this.progressBar = false;
     this.categories = new Map<string, DataList>();
     this.platforms = new Map<string, Platform>([
       [ 'google-fit', this.gfitService ],

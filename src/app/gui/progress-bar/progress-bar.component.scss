@@ -1,0 +1,38 @@
+mat-grid-list.progressBar {
+  height: 7%;
+  width: 100%;
+  text-align: center;
+}
+
+mat-grid-tile {
+  height: 100%;
+}
+
+button {
+ display: inline-block;
+ //vertical-align: top;
+ text-align:center;
+ margin-left: calc(100% / 10);
+ margin-right: calc(100% / 10);
+ margin-bottom: 0;
+ margin-top: 0;
+ box-shadow: none !important;
+ background-color: green !important;
+}
+
+.done {
+  background-color: #fed765 !important;
+}
+
+.hidden {
+  display: none;
+}
+
+div.hr-line {
+    position: relative;
+    display: inline-block;
+    margin-left: 5px;
+    margin-right: 5px;
+    width: 100%;
+    border-bottom: 1px solid #7A7A7A;
+}
