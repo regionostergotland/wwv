@@ -306,7 +306,9 @@ export enum MathFunctionEnum {
  * List of [[DataPoint]]s with certain [[DataType]]s specified by a
  * [[CategorySpec]].
  */
-export class DataList {  /**
+export class DataList {
+
+  /**
    * Specification for category of data list.
    */
   public readonly spec: CategorySpec;
@@ -324,6 +326,7 @@ export class DataList {  /**
   // TODO use these for processing
   private width: number;
   private mathFunction: MathFunctionEnum;
+  private id: string;
 
   constructor(spec: CategorySpec) {
     this.spec = spec;
@@ -444,20 +447,42 @@ export class DataList {  /**
       const dataPointElements: any[] = [];
       const requiredIds: string[] = Array.from(this.spec.dataTypes.keys()).
       filter(f => this.spec.dataTypes.get(f).required);
-      for (let id of requiredIds) {
+      for (const id of requiredIds) {
         if (id === 'time') {
           const startDate: Date = interval[0].get('time');
-          startDate.setHours(0,0,0);
+          startDate.setHours(0, 0, 0);
           dataPointElements.push(['time', startDate]);
-        }
-        else if (typeof interval[0].get(id) === 'number') {
+        } else if (typeof interval[0].get(id) === 'number') {
           let value = 0;
-          for (const point of interval) {
-            value += point.get(id); // TODO add math function
+          this.id = id;
+          switch (this.mathFunction) {
+            case MathFunctionEnum.TOTAL :
+              for (const point of interval) {
+                value += point.get(id);
+              }
+            break;
+            case MathFunctionEnum.ACTUAL :
+
+            break;
+            case MathFunctionEnum.MEDIAN :
+              interval.sort(this.sortByValue);
+              if (interval.length/2 === Math.ceil(interval.length/2)) {
+                value = interval[interval.length/2].get(id);
+              }
+              else {
+                value = (interval[Math.ceil(interval.length/2)].get(id) -
+                interval[Math.floor(interval.length)/2].get(id))/2;
+              }
+            break;
+            case MathFunctionEnum.MEAN :
+              for (const point of interval) {
+                value += point.get(id);
+              }
+            value = value/interval.length;
+            break;
           }
           dataPointElements.push([id, value]);
-        }
-        else {
+        } else {
           dataPointElements.push([id, interval[0].get(id)]);
         }
       }
@@ -465,6 +490,13 @@ export class DataList {  /**
       dataPoints.push(dataPoint);
     }
     return dataPoints;
+  }
+
+  /**
+   * Sort point by current ids value.
+   */
+  public sortByValue(p1: DataPoint, p2: DataPoint): number {
+      return (p1.get(this.id) - p2.get(this.id));
   }
 
   /**
