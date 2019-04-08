@@ -57,13 +57,20 @@ export class EhrService {
               }
               container = container[0][key]
             }
-            if (!container[p]) {
-              container[p] = {}
+            let element: any;
+            if (dataType.single) { // use/overwrite first and only element
+              if (!container[0]) {
+                container[0] = {}
+              }
+              element = container[0];
+            } else {
+              if (!container[p]) {
+                container[p] = {}
+              }
+              element = container[p];
             }
-            const element = container[p];
 
             element[id] = dataType.toRest(value);
-            console.log(JSON.stringify(composition));
           }
         }
       }

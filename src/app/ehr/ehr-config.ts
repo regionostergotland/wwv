@@ -22,7 +22,7 @@ export enum CommonFields {
 }
 
 export enum MedicalDevice {
-  NAME = 'device-name',
+  NAME = 'device_name',
   TYPE = 'type',
   MANUFACTURER = 'manufacturer',
 }
@@ -53,7 +53,7 @@ const TimeField: [string, DataType] = [
     [SubTrees.EVENT],
     'Tid',
     'Tidpunkt vid mätning',
-    true,
+    true, false,
   )
 ];
 const CommentField: [string, DataType] = [
@@ -63,7 +63,7 @@ const CommentField: [string, DataType] = [
     'Kommentar',
     `Ytterligare beskrivning av mätningen som inte beskrivits i andra
     fält.`,
-    false,
+    false, false,
   )
 ];
 const DeviceNameField: [string, DataType] = [
@@ -72,7 +72,7 @@ const DeviceNameField: [string, DataType] = [
     [SubTrees.MEDICAL_DEVICE],
     'Enhetsnamn',
     `Namn på enhet som använts för mätning.`,
-    false,
+    false, true,
   )
 ];
 
@@ -114,7 +114,7 @@ export const ehrConfig: EhrConfig = {
             'Systoliskt',
             `Det högsta systemiskt arteriella blodtrycket uppmätt systoliskt
             eller under sammandragningsfasen av hjärtcykeln.`,
-            true,
+            true, false,
             'mm[Hg]', 0, 1000
           )
         ],
@@ -125,7 +125,7 @@ export const ehrConfig: EhrConfig = {
             'Diastoliskt',
             `Det minsta systemiskt arteriella blodtrycket uppmätt diastoliskt
             eller i hjärtcykelns avslappningsfas.`,
-            true,
+            true, false,
             'mm[Hg]', 0, 1000
           )
         ],
@@ -135,7 +135,7 @@ export const ehrConfig: EhrConfig = {
             [SubTrees.EVENT],
             'Ställning',
             'Individens kroppställning under mätningen.',
-            false,
+            false, false,
             [
               {
                 code: 'at1000',
@@ -171,7 +171,7 @@ export const ehrConfig: EhrConfig = {
             [SubTrees.EVENT],
             'Vikt',
             'Individens vikt.',
-            true,
+            true, false,
             'kg', 0, 1000
           )
         ],
@@ -181,7 +181,7 @@ export const ehrConfig: EhrConfig = {
             [SubTrees.EVENT],
             'Klädsel',
             'Beskrivning av individens klädsel vid tidpunkten för vägning.',
-            false,
+            false, false,
             [
               {
                 code: 'at0011',
@@ -217,7 +217,7 @@ export const ehrConfig: EhrConfig = {
             [SubTrees.EVENT],
             'Kroppslängd',
             'Kroppslängd från hjässa till fotsula.',
-            true,
+            true, false,
             'cm', 0, 1000
           )
         ],
@@ -237,7 +237,7 @@ export const ehrConfig: EhrConfig = {
             [SubTrees.EVENT],
             'Frekvens',
             'Frekvensen mätt i slag per minut.',
-            true,
+            true, false,
             '/min', 0, -1
           )
         ],
@@ -247,7 +247,7 @@ export const ehrConfig: EhrConfig = {
             [SubTrees.EVENT],
             'Kroppsställning',
             'Patientens kroppsställning under observationen.',
-            false,
+            false, false,
             [
               {
                 code: 'at1003',
