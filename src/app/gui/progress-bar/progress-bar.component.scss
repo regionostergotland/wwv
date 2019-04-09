@@ -1,6 +1,6 @@
 mat-grid-list.progressBar {
   height: 7%;
-  width: 100%;
+  width: 90%;
   text-align: center;
 }
 
@@ -8,12 +8,16 @@ mat-grid-tile {
   height: 100%;
 }
 
+p {
+  size: 10px;
+}
+
 button {
  display: inline-block;
  //vertical-align: top;
  text-align:center;
- margin-left: calc(100% / 10);
- margin-right: calc(100% / 10);
+ margin-left: calc(90% / 8);
+ margin-right: calc(90% / 16);
  margin-bottom: 0;
  margin-top: 0;
  box-shadow: none !important;
