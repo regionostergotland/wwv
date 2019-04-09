@@ -1,6 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MessagesComponent } from './messages/messages.component';
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 import { ProgressBarComponent} from './gui/progress-bar/progress-bar.component';
@@ -44,7 +43,6 @@ describe('AppComponent', () => {
         AppComponent,
         ToolbarComponent,
         AppComponent,
-        MessagesComponent,
         ProgressBarComponent
       ],
       providers: [

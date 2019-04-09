@@ -3,7 +3,6 @@ import { DataPoint, CategorySpec } from '../ehr/ehr-types';
 import { Platform } from './platform.service';
 import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
-import { MessageService } from '../message.service';
 
 import { CategoryEnum,
          BloodPressureEnum,

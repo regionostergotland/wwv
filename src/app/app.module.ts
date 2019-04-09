@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 import { SourcesComponent } from './gui/sources/sources.component';
 import { HomeComponent } from './gui/home/home.component';
@@ -97,7 +96,7 @@ const gapiClientConfig: NgGapiClientConfig = {
     AddDataPointComponent,
     BottomSheetCategoriesComponent,
     ProgressBarComponent,
-    ConfirmationComponent
+    ConfirmationComponent,
   ],
   imports: [
     BrowserModule,
