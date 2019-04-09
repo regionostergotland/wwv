@@ -5,7 +5,7 @@ import { DataList, DataTypeText, DataPoint, CategorySpec, DataType,
          MathFunctionEnum} from './ehr-types';
 import { HttpClient, HttpHandler} from '@angular/common/http';
 
-describe('Ehr Types', () => {
+fdescribe('Ehr Types', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
     providers: [
@@ -258,7 +258,7 @@ describe('Ehr Types', () => {
 
   });
 
-  it('should create new datapoints with mean of the interval points numerized fields', () => {
+  fit('should create new datapoints with mean of the interval points numerized fields', () => {
     const test = new DataList(categories[1]);
     const date: Date = new Date();
     const date1: Date = new Date();
@@ -268,12 +268,12 @@ describe('Ehr Types', () => {
     const date5: Date = new Date();
     date.setDate(1);
     date1.setDate(1);
-    date2.setDate(2);
+    date2.setDate(1);
     date3.setDate(2);
-    date.setHours(10);
-    date1.setHours(11);
-    date2.setHours(12);
-    date3.setHours(13);
+    date.setHours(2);
+    date1.setHours(3);
+    date2.setHours(4);
+    date3.setHours(5);
     date4.setHours(6);
     date5.setHours(7);
     test.addPoints([
@@ -293,7 +293,7 @@ describe('Ehr Types', () => {
       new DataPoint(
           [
             ['time', date2],
-            ['weight', 50],
+            ['weight', 80],
           ]
       ),
       new DataPoint(
@@ -319,12 +319,10 @@ describe('Ehr Types', () => {
       p.setChosen(true);
     }
 
-    test.setMathFunction(MathFunctionEnum.MEAN);
+    test.setMathFunction(MathFunctionEnum.MEDIAN);
     test.setWidth(1);
     test.width_divider();
     const res: DataPoint[] = test.intervalManipulation();
-
-    expect(res[0].get('weight')).
-    toEqual((test.getPoints()[0].get('weight') + test.getPoints()[1].get('weight')) / 2);
+    expect(res[0].get('weight')).toEqual(80);
   });
 });
