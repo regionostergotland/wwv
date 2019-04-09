@@ -235,7 +235,6 @@ export class HealthListItemsComponent implements OnInit {
     }
     if (this.selectedCategory) {
       for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
-        //console.log(column);
         if (column === 'device_name' || column === 'type' || column === 'manufacturer') {
           continue;
         } else if (column === 'time') {
