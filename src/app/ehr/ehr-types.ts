@@ -131,11 +131,7 @@ export class DataTypeDateTime extends DataType {
 
   // @override
   public equal(v1: any, v2: any): boolean {
-    return v1.valueOf() === v2.valueOf();
-  }
-
-  public compare(v1: any, v2: any): number {
-    return v1.valueOf() - v2.valueOf();
+    return v1.getTime() === v2.getTime();
   }
 }
 
@@ -402,9 +398,8 @@ export class DataList {
       }
     }
     Array.prototype.push.apply(this.points, add);
-    let compare = (p1, p2) => {p1.compareTo(p2, this.spec.dataTypes)};
+    let compare = (p1, p2) => p1.compareTo(p2, this.spec.dataTypes);
     this.points.sort(compare.bind(this));
-    console.log(this.points);
   }
 
   /**
