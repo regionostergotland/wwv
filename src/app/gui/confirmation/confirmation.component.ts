@@ -7,9 +7,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConfirmationComponent implements OnInit {
 
-  constructor() { }
+  load: boolean;
+
+  constructor() {
+    this.load = true;
+  }
 
   ngOnInit() {
+    this.load = true;
+    this.wait();
+    this.load = false;
+  }
+
+  async wait(): Promise<void> {
+    await this.delay(2000);
+  }
+
+  async delay(milliseconds: number) {
+    return new Promise<void>(resolve => {
+      setTimeout(resolve, milliseconds);
+    });
   }
 
 }

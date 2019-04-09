@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { MatProgressSpinnerModule, MatProgressBarModule } from '@angular/material';
 import { ConfirmationComponent } from './confirmation.component';
 
 describe('ConfirmationComponent', () => {
@@ -8,7 +8,8 @@ describe('ConfirmationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ConfirmationComponent ]
+      declarations: [ ConfirmationComponent ],
+      imports: [ MatProgressBarModule, MatProgressSpinnerModule ]
     })
     .compileComponents();
   }));
