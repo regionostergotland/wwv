@@ -25,7 +25,7 @@ describe('Ehr Types', () => {
             ['any_event'],
             'Tid',
             'Tidpunkt vid mätning',
-            true,
+            true, false,
           )
         ],
         [
@@ -34,7 +34,7 @@ describe('Ehr Types', () => {
             ['any_event'],
             'Övertryck',
             'Systoliskt övertryck av blod',
-            true,
+            true, false,
             'mm[Hg]', 0, 1000,
           )
         ],
@@ -44,7 +44,7 @@ describe('Ehr Types', () => {
             ['any_event'],
             'Undertryck',
             'Diastoliskt undertryck av blod',
-            true,
+            true, false,  
             'mm[Hg]', 0, 1000
           )
         ],
@@ -54,7 +54,7 @@ describe('Ehr Types', () => {
             ['any_event'],
             'Position',
             'Position vid mätning.',
-            false,
+            false, false,
             [
               {
                 code: 'at1000',
@@ -87,7 +87,7 @@ describe('Ehr Types', () => {
             ['any_event'],
             'Tid',
             'Tidpunkt vid mätning',
-            true,
+            true, false,
           )
         ],
         [
@@ -96,7 +96,7 @@ describe('Ehr Types', () => {
             ['any_event'],
             'Vikt',
             'Kroppsvikt',
-            true,
+            true, false,
             'kg', 0, 1000
           )
         ],
@@ -106,7 +106,7 @@ describe('Ehr Types', () => {
             ['any_event'],
             'Klädsel',
             'Klädsel vid mätning.',
-            false,
+            false, false,
             [
               {
                 code: 'at0011',
@@ -195,7 +195,7 @@ describe('Ehr Types', () => {
     const spec: CategorySpec= {
       id : 'id', label : '', description : '',
       dataTypes : new Map<string, DataType>([
-        [ 'time', new DataTypeDateTime(['any_event'], '', '', true) ],
+        [ 'time', new DataTypeDateTime(['any_event'], '', '', true, false) ],
       ])
     };
     const list = new DataList(spec);
