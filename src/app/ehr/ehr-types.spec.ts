@@ -22,35 +22,39 @@ describe('Ehr Types', () => {
         [
           'time',
           new DataTypeDateTime(
+            ['any_event'],
             'Tid',
             'Tidpunkt vid mätning',
-            true,
+            true, false,
           )
         ],
         [
           'systolic',
           new DataTypeQuantity(
+            ['any_event'],
             'Övertryck',
             'Systoliskt övertryck av blod',
-            true,
+            true, false,
             'mm[Hg]', 0, 1000,
           )
         ],
         [
           'diastolic',
           new DataTypeQuantity(
+            ['any_event'],
             'Undertryck',
             'Diastoliskt undertryck av blod',
-            true,
+            true, false,
             'mm[Hg]', 0, 1000
           )
         ],
         [
           'position',
           new DataTypeCodedText(
+            ['any_event'],
             'Position',
             'Position vid mätning.',
-            false,
+            false, false,
             [
               {
                 code: 'at1000',
@@ -80,26 +84,29 @@ describe('Ehr Types', () => {
         [
           'time',
           new DataTypeDateTime(
+            ['any_event'],
             'Tid',
             'Tidpunkt vid mätning',
-            true,
+            true, false,
           )
         ],
         [
           'weight',
           new DataTypeQuantity(
+            ['any_event'],
             'Vikt',
             'Kroppsvikt',
-            true,
+            true, false,
             'kg', 0, 1000
           )
         ],
         [
           'state_of_dress',
           new DataTypeCodedText(
+            ['any_event'],
             'Klädsel',
             'Klädsel vid mätning.',
-            false,
+            false, false,
             [
               {
                 code: 'at0011',
@@ -185,10 +192,10 @@ describe('Ehr Types', () => {
    * Test that list contains added points.
    */
   it('should contain all added points, not contain unadded points', () => {
-    const spec: CategorySpec= {
+    const spec: CategorySpec = {
       id : 'id', label : '', description : '',
       dataTypes : new Map<string, DataType>([
-        [ 'time', new DataTypeDateTime('', '', true) ],
+        [ 'time', new DataTypeDateTime(['any_event'], '', '', true, false) ],
       ])
     };
     const list = new DataList(spec);
@@ -207,10 +214,10 @@ describe('Ehr Types', () => {
       new DataPoint([['time', new Date(2016, 5)]]),
     ];
     list.addPoints(addedPoints);
-    for (let p of addedPoints) {
+    for (const p of addedPoints) {
       expect(list.containsPoint(p)).toEqual(true);
     }
-    for (let p of notAddedPoints) {
+    for (const p of notAddedPoints) {
       expect(list.containsPoint(p)).toEqual(false);
     }
   });
