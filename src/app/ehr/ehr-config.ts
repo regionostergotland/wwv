@@ -75,6 +75,24 @@ const DeviceNameField: [string, DataType] = [
     false, true,
   )
 ];
+const DeviceTypeField: [string, DataType] = [
+  MedicalDevice.TYPE,
+  new DataTypeText(
+    [SubTrees.MEDICAL_DEVICE],
+    'Enhetstyp',
+    `Typ av enhet som använts för mätning.`,
+    false, true,
+  )
+];
+const DeviceManufacturerField: [string, DataType] = [
+  MedicalDevice.MANUFACTURER,
+  new DataTypeText(
+    [SubTrees.MEDICAL_DEVICE],
+    'Enhetstillverkare',
+    `Tillverkare av enhet som använts för mätning.`,
+    false, true,
+  )
+];
 
 export interface EhrConfig {
   /**
@@ -156,6 +174,8 @@ export const ehrConfig: EhrConfig = {
         ],
         CommentField,
         DeviceNameField,
+        DeviceTypeField,
+        DeviceManufacturerField,
       ])
     },
     {
@@ -164,7 +184,6 @@ export const ehrConfig: EhrConfig = {
       description : 'Mätning av en individs kroppsvikt.',
       dataTypes : new Map<string, DataType>([
         TimeField,
-        CommentField,
         [
           BodyWeight.WEIGHT,
           new DataTypeQuantity(
@@ -202,6 +221,10 @@ export const ehrConfig: EhrConfig = {
             ]
           )
         ],
+        CommentField,
+        DeviceNameField,
+        DeviceTypeField,
+        DeviceManufacturerField,
       ])
     },
     {
@@ -210,7 +233,6 @@ export const ehrConfig: EhrConfig = {
       description : 'Kroppslängd mäts från hjässa till fotsula.',
       dataTypes : new Map<string, DataType>([
         TimeField,
-        CommentField,
         [
           Height.HEIGHT,
           new DataTypeQuantity(
@@ -221,6 +243,10 @@ export const ehrConfig: EhrConfig = {
             'cm', 0, 1000
           )
         ],
+        CommentField,
+        DeviceNameField,
+        DeviceTypeField,
+        DeviceManufacturerField,
       ])
     },
     {
@@ -230,7 +256,6 @@ export const ehrConfig: EhrConfig = {
       relaterade egenskaper.`,
       dataTypes : new Map<string, DataType>([
         TimeField,
-        CommentField,
         [
           HeartRate.RATE,
           new DataTypeQuantity(
@@ -268,6 +293,10 @@ export const ehrConfig: EhrConfig = {
             ]
           )
         ],
+        CommentField,
+        DeviceNameField,
+        DeviceTypeField,
+        DeviceManufacturerField,
       ])
     }
   ]
