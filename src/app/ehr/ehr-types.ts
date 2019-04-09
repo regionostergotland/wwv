@@ -463,15 +463,15 @@ export class DataList {
               }
               break;
             case MathFunctionEnum.ACTUAL :
-              
+
               break;
             case MathFunctionEnum.MEDIAN :
               interval.sort(this.sortByValue.bind(this));
-              if ((interval.length-1) / 2 === Math.ceil((interval.length-1) / 2)) {
-                value = interval[(interval.length-1) / 2].get(id);
+              if ((interval.length - 1) / 2 === Math.ceil((interval.length - 1) / 2)) {
+                value = interval[(interval.length - 1) / 2].get(id);
               } else {
-                value = (interval[Math.ceil((interval.length-1) / 2)].get(id) +
-                interval[Math.floor((interval.length-1) / 2)].get(id)) / 2;
+                value = (interval[Math.ceil((interval.length - 1) / 2)].get(id) +
+                interval[Math.floor((interval.length - 1) / 2)].get(id)) / 2;
               }
               break;
             case MathFunctionEnum.MEAN :
