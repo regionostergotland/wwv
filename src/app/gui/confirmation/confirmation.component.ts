@@ -14,13 +14,13 @@ export class ConfirmationComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.load = true;
     this.wait();
-    this.load = false;
   }
 
   async wait(): Promise<void> {
+    this.load = true;
     await this.delay(2000);
+    this.load = false;
   }
 
   async delay(milliseconds: number) {
