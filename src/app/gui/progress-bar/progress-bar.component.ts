@@ -21,16 +21,16 @@ export class ProgressBarComponent implements OnInit {
         return 1;
       }
       case '/catpicker': {
-        return 2;
+        return 1;
       }
       case '/sidebar': {
-        return 3;
+        return 2;
       }
       case '/inspection': {
-        return 4;
+        return 3;
       }
       case '/confirmation': {
-        return 5;
+        return 4;
       }
       default: {
         return 0;

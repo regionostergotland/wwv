@@ -1,34 +1,28 @@
-<mat-grid-list cols="5" class="progressBar" rowHeight="5:1" [ngClass]="{'hidden': getCurrentStep() === 0 }">
+<mat-grid-list cols="4" class="progressBar" rowHeight="5:1" [ngClass]="{'hidden': getCurrentStep() === 0 }">
 
   <mat-grid-tile>
     <button mat-mini-fab *ngIf="getCurrentStep() < 1">1</button>
     <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 1" routerLink="/sources">1</button>
-    <p>Källa</p>
+    <p>Hämtning</p>
   </mat-grid-tile>
 
   <mat-grid-tile>
     <button mat-mini-fab *ngIf="getCurrentStep() < 2">2</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 2" routerLink="/catpicker">2</button>
-    <p>Tid & Kategori</p>
-  </mat-grid-tile>
-
-  <mat-grid-tile>
-    <button mat-mini-fab *ngIf="getCurrentStep() < 3">3</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 3" routerLink="/sidebar">3</button>
+    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 2" routerLink="/sidebar">2</button>
     <p>Redigering</p>
 
   </mat-grid-tile>
 
   <mat-grid-tile>
-    <button mat-mini-fab *ngIf="getCurrentStep() < 4">4</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 4" routerLink="/inspection">4</button>
+    <button mat-mini-fab *ngIf="getCurrentStep() < 3">3</button>
+    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 3" routerLink="/inspection">3</button>
     <p>Inspektering</p>
 
   </mat-grid-tile>
 
   <mat-grid-tile>
-    <button mat-mini-fab *ngIf="getCurrentStep() < 5">5</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 5">5</button>
+    <button mat-mini-fab *ngIf="getCurrentStep() < 4">4</button>
+    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 4">4</button>
     <p>Skickat</p>
   </mat-grid-tile>
 
