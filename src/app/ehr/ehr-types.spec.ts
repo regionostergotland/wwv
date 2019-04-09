@@ -191,7 +191,7 @@ describe('Ehr Types', () => {
    * Test that datatypes compares values correctly.
    */
   it('should compare datatype time values correctly', () => {
-    let dataType = new DataTypeDateTime(['any_event'], '', '', true, false);
+    const dataType = new DataTypeDateTime(['any_event'], '', '', true, false);
     expect(dataType.compare(new Date(2016, 1), new Date(2017, 1)))
       .toBeLessThan(0);
     expect(dataType.compare(new Date(2000, 1), new Date(2000, 2)))
@@ -202,7 +202,7 @@ describe('Ehr Types', () => {
       .toBe(0);
   });
   it('should compare quantity datatype values correctly', () => {
-    let dataType = new DataTypeQuantity(['any_event'], '', '', true, false,
+    const dataType = new DataTypeQuantity(['any_event'], '', '', true, false,
                                         'unit', 0, -1);
     expect(dataType.compare(5, 100)).toBeLessThan(0);
     expect(dataType.compare(0, 0.1)).toBeLessThan(0);
@@ -210,13 +210,13 @@ describe('Ehr Types', () => {
     expect(dataType.compare(0.324, 0.324)).toBe(0);
   });
   it('should compare text datatype values correctly', () => {
-    let dataType = new DataTypeText(['any_event'], '', '', true, false);
-    expect(dataType.compare("hej", "zzz")).toBeLessThan(0);
-    expect(dataType.compare("zzzz", "zzz")).toBeGreaterThan(0);
-    expect(dataType.compare("eee", "eee")).toBe(0);
+    const dataType = new DataTypeText(['any_event'], '', '', true, false);
+    expect(dataType.compare('hej', 'zzz')).toBeLessThan(0);
+    expect(dataType.compare('zzzz', 'zzz')).toBeGreaterThan(0);
+    expect(dataType.compare('eee', 'eee')).toBe(0);
   });
   it('should compare codedtext datatype values correctly', () => {
-    let dataType = new DataTypeCodedText(['any_event'], '', '', true, false, [
+    const dataType = new DataTypeCodedText(['any_event'], '', '', true, false, [
       { code: 'at1001', label: '', description: ''},
       { code: 'at1003', label: '', description: ''},
       { code: 'at1002', label: '', description: ''},
@@ -232,7 +232,7 @@ describe('Ehr Types', () => {
    * Test that points compare.
    */
   it('should compare points correctly', () => {
-    let dataTypes = new Map<string, DataType>([
+    const dataTypes = new Map<string, DataType>([
       [ 'time', new DataTypeDateTime(['any_event'], '', '', true, false) ],
       [ 'value', new DataTypeQuantity(['any_event'], '', '', true, false,
         'unit', 0, -1) ],
