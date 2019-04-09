@@ -41,22 +41,38 @@ export class EhrService {
 
     for (const list of lists) {
       const spec = list.spec;
-      composition.self_monitoring[spec.id] = [ {
-        any_event: []
-      } ];
 
-      const event = composition.self_monitoring[spec.id][0].any_event;
+      composition.self_monitoring[spec.id] = [ {} ];
+      const root = composition.self_monitoring[spec.id];
 
-      for (const point of list.getPoints()) {
-        const element: any = {};
-
+      for (let p = 0; p < list.getPoints().length; p++) {
+        const point = list.getPoints()[p];
         for (const [id, value] of point.entries()) {
+          const dataType = spec.dataTypes.get(id);
           if (value !== '') {
-            element[id] = spec.dataTypes.get(id).toRest(value);
+            let container: any = root;
+            for (const key of dataType.path) {
+              if (!(key in container[0])) {
+                container[0][key] = [ {} ];
+              }
+              container = container[0][key];
+            }
+            let element: any;
+            if (dataType.single) { // use/overwrite first and only element
+              if (!container[0]) {
+                container[0] = {};
+              }
+              element = container[0];
+            } else {
+              if (!container[p]) {
+                container[p] = {};
+              }
+              element = container[p];
+            }
+
+            element[id] = dataType.toRest(value);
           }
         }
-
-        event.push(element);
       }
     }
 

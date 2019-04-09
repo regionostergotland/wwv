@@ -50,6 +50,10 @@ export abstract class DataType {
    */
   readonly type: DataTypeEnum;
   /**
+   * Location of field in composition.
+   */
+  readonly path: string[];
+  /**
    * Human readable name for data type.
    */
   readonly label: string;
@@ -61,13 +65,20 @@ export abstract class DataType {
    * Specify if data field is required in composition.
    */
   readonly required: boolean;
+  /**
+   * Data type corresponds to a set of data instead of just a single point.
+   */
+  readonly single: boolean;
 
-  constructor(type: DataTypeEnum, label: string,
-              description: string, required: boolean) {
+  constructor(type: DataTypeEnum, path: string[],
+              label: string, description: string,
+              required: boolean, single: boolean) {
     this.type = type;
+    this.path = path;
     this.label = label;
     this.description = description;
     this.required = required;
+    this.single = single;
   }
 
   /**
@@ -88,14 +99,21 @@ export abstract class DataType {
   public equal(v1: any, v2: any): boolean {
     return v1 === v2;
   }
+
+  public compare(v1: any, v2: any): number {
+    if (v1 < v2) return -1;
+    else if (v2 < v1) return 1;
+    else return 0;
+  }
 }
 
 /**
  * Corresponding data type for DV_DATE_TIME in openEHR.
  */
 export class DataTypeDateTime extends DataType {
-  constructor(label: string, description: string, required: boolean) {
-    super(DataTypeEnum.DATE_TIME, label, description, required);
+  constructor(path: string[], label: string, description: string,
+              required: boolean, single: boolean) {
+    super(DataTypeEnum.DATE_TIME, path, label, description, required, single);
   }
 
   /**
@@ -115,14 +133,19 @@ export class DataTypeDateTime extends DataType {
   public equal(v1: any, v2: any): boolean {
     return v1.valueOf() === v2.valueOf();
   }
+
+  public compare(v1: any, v2: any): number {
+    return v1.valueOf() - v2.valueOf();
+  }
 }
 
 /**
  * Corresponding data type for DV_TEXT in openEHR.
  */
 export class DataTypeText extends DataType {
-  constructor(label: string, description: string, required: boolean) {
-    super(DataTypeEnum.TEXT, label, description, required);
+  constructor(path: string[], label: string, description: string,
+              required: boolean, single: boolean) {
+    super(DataTypeEnum.TEXT, path, label, description, required, single);
   }
 
   /**
@@ -166,9 +189,10 @@ export class DataTypeCodedText extends DataType {
    */
   public readonly options: DataTypeCodedTextOpt[];
 
-  constructor(label: string, description: string, required: boolean,
+  constructor(path: string[], label: string, description: string,
+              required: boolean, single: boolean,
               options: DataTypeCodedTextOpt[]) {
-    super(DataTypeEnum.CODED_TEXT, label, description, required);
+    super(DataTypeEnum.CODED_TEXT, path, label, description, required, single);
     this.options = options;
   }
 
@@ -205,9 +229,10 @@ export class DataTypeQuantity extends DataType {
    */
   public readonly magnitudeMax: number;
 
-  constructor(label: string, description: string, required: boolean,
+  constructor(path: string[], label: string, description: string,
+              required: boolean, single: boolean,
               unit: string, magnitudeMin: number, magnitudeMax: number) {
-    super(DataTypeEnum.QUANTITY, label, description, required);
+    super(DataTypeEnum.QUANTITY, path, label, description, required, single);
     this.unit = unit;
     this.magnitudeMin = magnitudeMin;
     this.magnitudeMax = magnitudeMax;
@@ -273,13 +298,22 @@ export class DataPoint {
   public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
     for (const [typeId, dataType] of dataTypes.entries()) {
       if (dataType.required) {
-        if (!dataType.equal(p.get(typeId), this.get(typeId))) {
+        if (!dataType.equal(this.get(typeId), p.get(typeId))) {
           return false;
         }
       }
     }
-
     return true;
+  }
+
+  public compareTo(p: DataPoint, dataTypes: Map<string, DataType>): number {
+    for (let [typeId, dataType] of dataTypes.entries()) {
+      if (dataType.required) {
+        const comp = dataType.compare(this.get(typeId), p.get(typeId));
+        if (comp != 0) return comp;
+      }
+    }
+    return 0;
   }
 }
 
@@ -321,29 +355,24 @@ export class DataList {
     this.mathFunction = MathFunctionEnum.ACTUAL;
   }
 
-  // make lambda?
-  private sortByEarliestComparator(p1: DataPoint, p2: DataPoint) {
-    return (p1.get('time').getTime() - p2.get('time').getTime());
-  }
-
   /**
    * Performs a binary search on the list of current points to check if
    * a given point is a duplicate
    * @param newPoint DataPoint to be added
    */
-  private containsPoint(newPoint: DataPoint): boolean {
+  public containsPoint(testPoint: DataPoint): boolean {
     let start = 0;
     let end = this.points.length - 1;
     while (start <= end) {
       const current = Math.floor((start + end) / 2);
       const point = this.points[current];
-      const comp = this.sortByEarliestComparator(newPoint, point);
+      const comp = testPoint.compareTo(point, this.spec.dataTypes);
       if (comp < 0) {
         end = current - 1;
       } else if (comp > 0) {
         start = current + 1;
       } else {
-        return newPoint.equals(point, this.spec.dataTypes);
+        return true;
       }
     }
     return false;
@@ -353,21 +382,15 @@ export class DataList {
    * Add a point to the data list.
    */
   public addPoint(point: DataPoint) {
-    for (const [typeId, value] of point.entries()) {
-      if (!this.getDataType(typeId).isValid(value)) {
-        throw TypeError(value + ' invalid value for ' + typeId);
-      }
-    }
-    if (!this.containsPoint(point)) {
-      this.points.push(point);
-    }
-    this.points.sort(this.sortByEarliestComparator);
+    this.addPoints([point]);
   }
 
   /**
    * Add multiple points to the data list.
    */
   public addPoints(points: DataPoint[]) {
+    // Assumption: none of the new points are duplicates of each other.
+    let add: DataPoint[] = [];
     for (const point of points) {
       for (const [typeId, value] of point.entries()) {
         if (!this.getDataType(typeId).isValid(value)) {
@@ -375,10 +398,13 @@ export class DataList {
         }
       }
       if (!this.containsPoint(point)) {
-        this.points.push(point);
+        add.push(point);
       }
     }
-    this.points.sort(this.sortByEarliestComparator);
+    Array.prototype.push.apply(this.points, add);
+    let compare = (p1, p2) => {p1.compareTo(p2, this.spec.dataTypes)};
+    this.points.sort(compare.bind(this));
+    console.log(this.points);
   }
 
   /**
