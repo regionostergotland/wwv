@@ -5,17 +5,16 @@ import { DataPoint } from '../ehr/ehr-types';
 import { setInjectImplementation } from '@angular/core/src/di/injector_compatibility';
 import { strictEqual } from 'assert';
 import { stringify } from '@angular/core/src/util';
-import { CategoryEnum } from '../ehr/ehr-config';
 
 /**
  * Contains necessary properties for all categories.
  */
 export interface CategoryProperties {
   url: string;
-  dataStreams: string[];
   /* This maps available data types for the category to a function
    that's used to convert the data type to the internal data format */
   dataTypes: Map<string, (src: any) => any>;
+  dataPoints?: DataPoint[];
 }
 
 @Injectable({

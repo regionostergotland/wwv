@@ -50,6 +50,10 @@ export abstract class DataType {
    */
   readonly type: DataTypeEnum;
   /**
+   * Location of field in composition.
+   */
+  readonly path: string[];
+  /**
    * Human readable name for data type.
    */
   readonly label: string;
@@ -61,13 +65,20 @@ export abstract class DataType {
    * Specify if data field is required in composition.
    */
   readonly required: boolean;
+  /**
+   * Data type corresponds to a set of data instead of just a single point.
+   */
+  readonly single: boolean;
 
-  constructor(type: DataTypeEnum, label: string,
-              description: string, required: boolean) {
+  constructor(type: DataTypeEnum, path: string[],
+              label: string, description: string,
+              required: boolean, single: boolean) {
     this.type = type;
+    this.path = path;
     this.label = label;
     this.description = description;
     this.required = required;
+    this.single = single;
   }
 
   /**
@@ -94,8 +105,9 @@ export abstract class DataType {
  * Corresponding data type for DV_DATE_TIME in openEHR.
  */
 export class DataTypeDateTime extends DataType {
-  constructor(label: string, description: string, required: boolean) {
-    super(DataTypeEnum.DATE_TIME, label, description, required);
+  constructor(path: string[], label: string, description: string,
+              required: boolean, single: boolean) {
+    super(DataTypeEnum.DATE_TIME, path, label, description, required, single);
   }
 
   /**
@@ -121,8 +133,9 @@ export class DataTypeDateTime extends DataType {
  * Corresponding data type for DV_TEXT in openEHR.
  */
 export class DataTypeText extends DataType {
-  constructor(label: string, description: string, required: boolean) {
-    super(DataTypeEnum.TEXT, label, description, required);
+  constructor(path: string[], label: string, description: string,
+              required: boolean, single: boolean) {
+    super(DataTypeEnum.TEXT, path, label, description, required, single);
   }
 
   /**
@@ -166,9 +179,10 @@ export class DataTypeCodedText extends DataType {
    */
   public readonly options: DataTypeCodedTextOpt[];
 
-  constructor(label: string, description: string, required: boolean,
+  constructor(path: string[], label: string, description: string,
+              required: boolean, single: boolean,
               options: DataTypeCodedTextOpt[]) {
-    super(DataTypeEnum.CODED_TEXT, label, description, required);
+    super(DataTypeEnum.CODED_TEXT, path, label, description, required, single);
     this.options = options;
   }
 
@@ -205,9 +219,10 @@ export class DataTypeQuantity extends DataType {
    */
   public readonly magnitudeMax: number;
 
-  constructor(label: string, description: string, required: boolean,
+  constructor(path: string[], label: string, description: string,
+              required: boolean, single: boolean,
               unit: string, magnitudeMin: number, magnitudeMax: number) {
-    super(DataTypeEnum.QUANTITY, label, description, required);
+    super(DataTypeEnum.QUANTITY, path, label, description, required, single);
     this.unit = unit;
     this.magnitudeMin = magnitudeMin;
     this.magnitudeMax = magnitudeMax;
@@ -331,19 +346,19 @@ export class DataList {
    * a given point is a duplicate
    * @param newPoint DataPoint to be added
    */
-  private containsPoint(newPoint: DataPoint): boolean {
+  public containsPoint(testPoint: DataPoint): boolean {
     let start = 0;
     let end = this.points.length - 1;
     while (start <= end) {
       const current: number = Math.floor((start + end) / 2);
       const point = this.points[current];
-      const comp: number = this.sortByEarliestComparator(newPoint, point);
+      const comp = this.sortByEarliestComparator(testPoint, point);
       if (comp < 0) {
         end = current - 1;
       } else if (comp > 0) {
         start = current + 1;
       } else {
-        return newPoint.equals(point, this.spec.dataTypes);
+        return testPoint.equals(point, this.spec.dataTypes);
       }
     }
     return false;
@@ -417,7 +432,7 @@ export class DataList {
   }
 
   /**
-   * Set math function that will determing value for point of an interval.
+   * Set math function that will determine value for point of an interval.
    */
   public setMathFunction(mathFunction: MathFunctionEnum): void {
     this.mathFunction = mathFunction;
