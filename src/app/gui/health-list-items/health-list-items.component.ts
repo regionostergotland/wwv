@@ -110,14 +110,16 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   openRemovalDialog() {
-    const dialogRef = this.dialog.open(RemovalDialogComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      // If result is true, that means the user pressed the button for removing selected values
-      if (result) {
-        this.removeSelected();
-      }
-    });
+    if (this.selection.selected.length > 0) {
+      const dialogRef = this.dialog.open(RemovalDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        // If result is true, that means the user pressed the button for removing selected values
+        if (result) {
+          this.removeSelected();
+        }
+      });
+    }
   }
 
   /**
@@ -233,7 +235,10 @@ export class HealthListItemsComponent implements OnInit {
     }
     if (this.selectedCategory) {
       for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
-        if (column === 'time') {
+        //console.log(column);
+        if (column === 'device_name' || column === 'type' || column === 'manufacturer') {
+          continue;
+        } else if (column === 'time') {
           result.push('date');
           result.push('time');
         } else {
