@@ -15,7 +15,7 @@ import { Categories,
          BodyWeight,
          Height,
          HeartRate,
-         Steps, 
+         Steps,
          MedicalDevice} from '../ehr/ehr-config';
 
 @Injectable({
@@ -117,7 +117,7 @@ export class GfitService extends Platform {
                 this.getDeviceName(src.originDataSourceId.split(':')[4])],
               [MedicalDevice.TYPE, src =>
                 this.getDeviceType(src.originDataSourceId.split(':')[4])],
-              [MedicalDevice.MANUFACTURER, src => 
+              [MedicalDevice.MANUFACTURER, src =>
                 this.getDeviceManufacturer(src.originDataSourceId.split(':')[4])],
               [Steps.STEPS, src => src.value[0].intVal],
             ]
