@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs';
-
 import { DataPoint } from '../ehr/ehr-types';
 import { setInjectImplementation } from '@angular/core/src/di/injector_compatibility';
 import { strictEqual } from 'assert';
