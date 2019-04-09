@@ -9,7 +9,12 @@ import GoogleUser = gapi.auth2.GoogleUser;
 import { AutofillMonitor } from '@angular/cdk/text-field';
 import { cat } from 'shelljs';
 import { stringify } from '@angular/compiler/src/util';
-import { CategoryEnum, BloodPressureEnum, BodyWeightEnum, HeightEnum, HeartRateEnum } from '../ehr/ehr-config';
+import { Categories,
+         CommonFields,
+         BloodPressure,
+         BodyWeight,
+         Height,
+         HeartRate } from '../ehr/ehr-config';
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +30,10 @@ export class GfitService extends Platform {
   // Maps Google Fit's data type names to internal category names
   private readonly categoryDataTypeNames: Map<string, string> = new Map(
     [
-      ['com.google.blood_pressure', CategoryEnum.BLOOD_PRESSURE],
-      ['com.google.weight', CategoryEnum.BODY_WEIGHT],
-      ['com.google.heart_rate.bpm', CategoryEnum.HEART_RATE],
-      ['com.google.height', CategoryEnum.HEIGHT]
+      ['com.google.blood_pressure', Categories.BLOOD_PRESSURE],
+      ['com.google.weight', Categories.BODY_WEIGHT],
+      ['com.google.heart_rate.bpm', Categories.HEART_RATE],
+      ['com.google.height', Categories.HEIGHT]
     ]
   );
 
@@ -37,52 +42,52 @@ export class GfitService extends Platform {
     private http: HttpClient
   ) {
     super(new Map([
-      [ CategoryEnum.BLOOD_PRESSURE,
+      [ Categories.BLOOD_PRESSURE,
         {
           url: 'raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
+          dataTypes: new Map<string, any>(
             [
-              [BloodPressureEnum.TIME,
+              [CommonFields.TIME,
                src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [BloodPressureEnum.SYSTOLIC, src => src.value[0].fpVal],
-              [BloodPressureEnum.DIASTOLIC, src => src.value[1].fpVal],
+              [BloodPressure.SYSTOLIC, src => src.value[0].fpVal],
+              [BloodPressure.DIASTOLIC, src => src.value[1].fpVal],
             ]
           ),
         },
       ],
-      [ CategoryEnum.BODY_WEIGHT,
+      [ Categories.BODY_WEIGHT,
         {
           url: 'raw:com.google.weight:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
+          dataTypes: new Map<string, any>(
             [
-              [BodyWeightEnum.TIME,
+              [CommonFields.TIME,
                src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [BodyWeightEnum.WEIGHT, src => src.value[0].fpVal]
+              [BodyWeight.WEIGHT, src => src.value[0].fpVal]
             ]
           ),
         },
       ],
 
-      [ CategoryEnum.HEART_RATE,
+      [ Categories.HEART_RATE,
         {
           url: 'raw:com.google.heart_rate.bpm:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
+          dataTypes: new Map<string, any>(
             [
-             [HeartRateEnum.TIME,
+             [CommonFields.TIME,
               src => new Date(src.startTimeNanos * Math.pow(10, -6))],
             ]
           )
         },
       ],
 
-      [ CategoryEnum.HEIGHT,
+      [ Categories.HEIGHT,
         {
           url: 'raw:com.google.height:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
+          dataTypes: new Map<string, any>(
             [
-              [HeightEnum.TIME,
+              [CommonFields.TIME,
                 src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [HeightEnum.HEIGHT, src => src.value[0].fpVal]
+              [Height.HEIGHT, src => src.value[0].fpVal]
             ]
           ),
         },
