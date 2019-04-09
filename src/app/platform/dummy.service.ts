@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DataPoint, CategorySpec, DataTypeEnum } from '../ehr/ehr-types';
-import { EhrService } from '../ehr/ehr.service'
+import { EhrService } from '../ehr/ehr.service';
 import { Platform } from './platform.service';
 import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
