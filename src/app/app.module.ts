@@ -62,24 +62,8 @@ import {
 } from '@angular/material';
 
 
-import {
-  GoogleApiModule,
-  GoogleApiService,
-  GoogleAuthService,
-  NgGapiClientConfig,
-  NG_GAPI_CONFIG,
-  GoogleApiConfig
-} from 'ng-gapi';
+import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
 
-const gapiClientConfig: NgGapiClientConfig = {
-  client_id: '***REMOVED***.apps.googleusercontent.com',
-  discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],
-  scope: [
-    'https://www.googleapis.com/auth/fitness.blood_pressure.read',
-    'https://www.googleapis.com/auth/fitness.body.read',
-    'https://www.googleapis.com/auth/fitness.activity.read'
-  ].join(' '),
-};
 
 
 @NgModule({
@@ -149,10 +133,7 @@ const gapiClientConfig: NgGapiClientConfig = {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    GoogleApiModule.forRoot({
-      provide: NG_GAPI_CONFIG,
-      useValue: gapiClientConfig
-    })
+    CustomGoogleApiModule
   ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'sv-SE'}],
   bootstrap: [AppComponent],
