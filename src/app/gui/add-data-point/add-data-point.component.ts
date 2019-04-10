@@ -1,11 +1,12 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {ErrorStateMatcher, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {Conveyor} from '../../conveyor.service';
-import {
-  CategorySpec, DataPoint, DataTypeCodedText,
-  DataTypeCodedTextOpt, DataTypeEnum,
-  DataTypeQuantity
-} from '../../ehr/ehr-types';
+import { CategorySpec,
+         DataTypeCodedText,
+         DataTypeCodedTextOpt,
+         DataTypeEnum,
+         DataTypeQuantity} from '../../ehr/datatype';
+import { DataPoint } from '../../ehr/datalist';
 import { AmazingTimePickerService } from 'amazing-time-picker';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 

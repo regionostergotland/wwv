@@ -1,5 +1,9 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {CategorySpec, DataPoint, DataTypeCodedText, DataTypeCodedTextOpt, DataTypeEnum} from '../../ehr/ehr-types';
+import { CategorySpec,
+         DataTypeCodedText,
+         DataTypeCodedTextOpt,
+         DataTypeEnum} from '../../ehr/datatype';
+import { DataPoint } from '../../ehr/datalist';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
 import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource} from '@angular/material';

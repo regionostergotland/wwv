@@ -36,6 +36,18 @@ export enum DataTypeEnum {
 }
 
 /**
+ * All possible math functions to be used on a list values inside an interval.
+ */
+export enum MathFunctionEnum {
+  ACTUAL,
+  MEDIAN,
+  MEAN,
+  TOTAL,
+  MIN,
+  MAX,
+}
+
+/**
  * Superclass for classes that represent openEHR data types.
  * Instances of DataType correspond to a certain class of values (e.g. weight)
  * of a specific data type (e.g. Quantity).
@@ -98,6 +110,49 @@ export abstract class DataType {
 
   public equal(v1: any, v2: any): boolean {
     return v1 === v2;
+  }
+
+  public truncate(values: any[], fn: MathFunctionEnum): any[] {
+    const functions = new Map<MathFunctionEnum, (v: any[]) => any[]>([
+      [MathFunctionEnum.ACTUAL, this.only.bind(this)],
+      [MathFunctionEnum.MEDIAN, this.median.bind(this)],
+      [MathFunctionEnum.MEAN, this.mean.bind(this)],
+      [MathFunctionEnum.TOTAL, this.total.bind(this)],
+      [MathFunctionEnum.MIN, this.min.bind(this)],
+      [MathFunctionEnum.MAX, this.max.bind(this)],
+    ]);
+    return functions.get(fn)(values);
+  }
+
+  protected median(values: any[]): any {
+    return this.only(values);
+  }
+
+  protected mean(values: any[]): any {
+    return this.only(values);
+  }
+
+  protected total(values: any[]): any {
+    return this.only(values);
+  }
+
+  protected min(values: any[]): any {
+    return this.only(values);
+  }
+
+  protected max(values: any[]): any {
+    return this.only(values);
+  }
+
+  private only(values: any[]): any {
+    let equal = true;
+    for (const value of values) {
+      if (value !== values[0]) {
+        equal = false;
+        break;
+      }
+    }
+    return equal ? values[0] : undefined;
   }
 
   public compare(v1: any, v2: any): number {
@@ -263,188 +318,31 @@ export class DataTypeQuantity extends DataType {
       '|unit': this.unit
     }];
   }
-}
 
-/**
- * Map of values to be put in a DataList.
- * Can be thought of as an n-dimensional point or a row in a data table.
- * Can be marked as removed by modifying the public removed instance variable.
- * Otherwise, works similar to a Map.
- */
-export class DataPoint {
-  /**
-   * Point is marked for removal.
-   */
-  public removed: boolean;
-  /**
-   * Values for data point.
-   */
-  private point: Map<string, any>;
-
-  constructor(values = []) {
-    this.removed = false;
-    this.point = new Map<string, any>(values);
-  }
-
-  // wrap Map methods because Map can't be extended
-  public get(typeId: string): any { return this.point.get(typeId); }
-  public set(typeId: string, value: any) { this.point.set(typeId, value); }
-  public size(): number { return this.point.size; }
-  public values() { return this.point.values(); }
-  public keys() { return this.point.keys(); }
-  public entries() { return this.point.entries(); }
-  public has(typeId: string) { return this.point.has(typeId); }
-
-  public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
-    for (const [typeId, dataType] of dataTypes.entries()) {
-      if (dataType.required) {
-        if (!dataType.equal(this.get(typeId), p.get(typeId))) {
-          return false;
-        }
-      }
-    }
-    return true;
-  }
-
-  public compareTo(p: DataPoint, dataTypes: Map<string, DataType>): number {
-    for (const [typeId, dataType] of dataTypes.entries()) {
-      if (dataType.required) {
-        const comp = dataType.compare(this.get(typeId), p.get(typeId));
-        if (comp !== 0) { return comp; }
-      }
-    }
-    return 0;
-  }
-}
-
-/**
- * All possible math functions to be used on a list values inside an interval.
- */
-export enum MathFunctionEnum {
-  ACTUAL,
-  MEDIAN,
-  MEAN,
-  TOTAL,
-}
-
-/**
- * List of [[DataPoint]]s with certain [[DataType]]s specified by a
- * [[CategorySpec]].
- */
-export class DataList {
-  /**
-   * Specification for category of data list.
-   */
-  public readonly spec: CategorySpec;
-
-  /**
-   * All data points stored in the list.
-   */
-  private points: DataPoint[];
-
-  // TODO use these for processing
-  private width: number;
-  private mathFunction: MathFunctionEnum;
-
-  constructor(spec: CategorySpec) {
-    this.spec = spec;
-
-    this.points = [];
-
-    this.width = 0;
-    this.mathFunction = MathFunctionEnum.ACTUAL;
-  }
-
-  /**
-   * Performs a binary search on the list of current points to check if
-   * a given point is a duplicate
-   * @param newPoint DataPoint to be added
-   */
-  public containsPoint(testPoint: DataPoint): boolean {
-    let start = 0;
-    let end = this.points.length - 1;
-    while (start <= end) {
-      const current = Math.floor((start + end) / 2);
-      const point = this.points[current];
-      const comp = testPoint.compareTo(point, this.spec.dataTypes);
-      if (comp < 0) {
-        end = current - 1;
-      } else if (comp > 0) {
-        start = current + 1;
-      } else {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /**
-   * Add a point to the data list.
-   */
-  public addPoint(point: DataPoint) {
-    this.addPoints([point]);
-  }
-
-  /**
-   * Add multiple points to the data list.
-   */
-  public addPoints(points: DataPoint[]) {
-    // Assumption: none of the new points are duplicates of each other.
-    const add: DataPoint[] = [];
-    for (const point of points) {
-      for (const [typeId, value] of point.entries()) {
-        if (!this.getDataType(typeId).isValid(value)) {
-          throw TypeError(value + ' invalid value for ' + typeId);
-        }
-      }
-      if (!this.containsPoint(point)) {
-        add.push(point);
-      }
-    }
-    Array.prototype.push.apply(this.points, add);
-    const compare = (p1, p2) => p1.compareTo(p2, this.spec.dataTypes);
-    this.points.sort(compare.bind(this));
-  }
-
-  /**
-   * Get all data points from list, processed according to options.
-   */
-  public getPoints(): DataPoint[] {
-    const points = this.points.slice();
-    // TODO process
-    return points;
-  }
-
-  /**
-   * Get DataType object for certain data type.
-   */
-  public getDataType(typeId: string): DataType {
-    if (this.spec.dataTypes.has(typeId)) {
-      return this.spec.dataTypes.get(typeId);
+  protected median(values: any[]): any {
+    values.sort(); // can we assume they are sorted already?
+    const n = values.length;
+    if (n / 2 === Math.ceil(n / 2)) {
+      return values[n / 2];
     } else {
-      throw TypeError('invalid type id -- ' + typeId);
+      return (values[Math.ceil(n / 2)] + values[Math.floor(n / 2)]) / 2;
     }
   }
 
-  /**
-   * Replace all points with new list of points.
-   */
-  public setPoints(points: DataPoint[]) {
-    this.points = [];
-    this.addPoints(points);
+  protected mean(values: any[]): any {
+    return this.total(values) / values.length;
   }
 
-  /**
-   * Set the width of intervals that data points shall represent.
-   */
-  public setWidth(width: number): void {
-    this.width = width;
+  protected total(values: any[]): any {
+    return values.reduce((acc, v) => acc + v);
   }
 
-  /**
-   * Set math function that will determing value for point of an interval.
-   */
-  public setMathFunction(mathFunction: MathFunctionEnum): void {
-    this.mathFunction = mathFunction;
+  protected min(values: any[]): any {
+    return Math.min(...values);
   }
+
+  protected max(values: any[]): any {
+    return Math.max(...values);
+  }
+
 }

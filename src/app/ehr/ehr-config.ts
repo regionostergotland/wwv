@@ -1,8 +1,11 @@
 import { InjectionToken } from '@angular/core';
 
-import { CategorySpec, DataList, DataPoint, DataType,
-         DataTypeDateTime, DataTypeQuantity, DataTypeText,
-         DataTypeCodedText } from './ehr-types';
+import { CategorySpec, DataType,
+         DataTypeDateTime,
+         DataTypeQuantity,
+         DataTypeText,
+         DataTypeCodedText } from './datatype';
+import { DataList, DataPoint } from './datalist';
 
 export enum Categories {
   BLOOD_PRESSURE = 'blood_pressure',
