@@ -6,9 +6,6 @@ import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { GoogleAuthService } from 'ng-gapi';
 import GoogleUser = gapi.auth2.GoogleUser;
-import { AutofillMonitor } from '@angular/cdk/text-field';
-import { cat } from 'shelljs';
-import { stringify } from '@angular/compiler/src/util';
 import { Categories,
          CommonFields,
          BloodPressure,
@@ -23,14 +20,27 @@ import { Categories,
 })
 export class GfitService extends Platform {
   public static SESSION_STORAGE_KEY = 'accessToken';
-  private available: string[] = [];
+  private available: string[];
   private user: GoogleUser;
   private dataIsFetched: boolean;
   private baseUrl = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/';
   private auth: any;
-  private devices: any[] = [];
+  private devices: Set<any>;
 
-  // Step url: derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas
+  private readonly commonDataTypes = new Map<string, (src: any) => any>(
+    [
+      [CommonFields.TIME,
+      src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+      // split(':')[4] will yield the device uid from google's data
+      // [0] is device name, [1] is device type, [2] is device manufacturer
+      [MedicalDevice.NAME, src =>
+        this.getDeviceInfo(src.originDataSourceId.split(':')[4])[0]],
+      [MedicalDevice.TYPE, src =>
+        this.getDeviceInfo(src.originDataSourceId.split(':')[4])[1]],
+      [MedicalDevice.MANUFACTURER, src =>
+        this.getDeviceInfo(src.originDataSourceId.split(':')[4])[2]]
+    ]
+  );
 
   // Maps Google Fit's data type names to internal category names
   private readonly categoryDataTypeNames: Map<string, string> = new Map(
@@ -47,88 +57,45 @@ export class GfitService extends Platform {
     private googleAuth: GoogleAuthService,
     private http: HttpClient
     ) {
-    super(new Map([
-      [ Categories.BLOOD_PRESSURE,
-      {
+    super();
+    this.implementedCategories = new Map([
+      [Categories.BLOOD_PRESSURE, {
         url: 'derived:com.google.blood_pressure:com.google.android.gms:merged',
         dataTypes: new Map<string, any>(
-          [
-            [CommonFields.TIME,
-            src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-            [MedicalDevice.NAME, src => this.getDeviceName(src.originDataSourceId.split(':')[4])],
-            [BloodPressure.SYSTOLIC, src => src.value[0].fpVal],
-            [BloodPressure.DIASTOLIC, src => src.value[1].fpVal],
-          ]
-        ),
-        dataPoints: []
-      },
-      ],
-      [Categories.BODY_WEIGHT,
-      {
+          Array.from(this.commonDataTypes.entries()))
+          .set(BloodPressure.SYSTOLIC, src => src.value[0].fpVal)
+          .set(BloodPressure.DIASTOLIC, src => src.value[1].fpVal)
+      }],
+      [Categories.BODY_WEIGHT, {
         url: 'derived:com.google.weight:com.google.android.gms:merge_weight',
         dataTypes: new Map<string, any>(
-          [
-            [CommonFields.TIME,
-            src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-            [BodyWeight.WEIGHT, src => src.value[0].fpVal]
-          ]
-        ),
-        dataPoints: []
-      },
-      ],
-
-      [Categories.HEART_RATE,
-      {
+          Array.from(this.commonDataTypes.entries()))
+          .set(BodyWeight.WEIGHT, src => src.value[0].fpVal)
+      }],
+      [Categories.HEART_RATE, {
         url: 'derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm',
         dataTypes: new Map<string, any>(
-          [
-            [CommonFields.TIME,
-            src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-            [HeartRate.RATE, src => src.value[0].fpVal]
-          ]
-        ),
-        dataPoints: []
-      },
-      ],
-
-      [Categories.HEIGHT,
-      {
+          Array.from(this.commonDataTypes.entries()))
+          .set(HeartRate.RATE, src => src.value[0].fpVal)
+      }],
+      [Categories.HEIGHT, {
         url: 'derived:com.google.height:com.google.android.gms:merge_height',
         dataTypes: new Map<string, any>(
-          [
-            [CommonFields.TIME,
-            src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-            [Height.HEIGHT, src => src.value[0].fpVal]
-          ]
-        ),
-        dataPoints: []
-      },
-      ],
-
-      [ Categories.STEPS,
-        {
-          url: 'derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas',
-          dataTypes: new Map<string, any>(
-            [
-              [CommonFields.TIME,
-                src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              // src.originDataSourceId.split(':')[4] filters out the uid for the device
-              [MedicalDevice.NAME, src =>
-                this.getDeviceName(src.originDataSourceId.split(':')[4])],
-              [MedicalDevice.TYPE, src =>
-                this.getDeviceType(src.originDataSourceId.split(':')[4])],
-              [MedicalDevice.MANUFACTURER, src =>
-                this.getDeviceManufacturer(src.originDataSourceId.split(':')[4])],
-              [Steps.STEPS, src => src.value[0].intVal],
-            ]
-          ),
-          dataPoints: []
-        }
-      ]
-    ]));
+          Array.from(this.commonDataTypes.entries()))
+          .set(Height.HEIGHT, src => src.value[0].fpVal)
+      }],
+      [Categories.STEPS, {
+        url: 'derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas',
+        dataTypes: new Map<string, any>(
+          Array.from(this.commonDataTypes.entries()))
+          .set(Steps.STEPS, src => src.value[0].intVal)
+      }]
+    ]);
 
     this.dataIsFetched = false;
     this.googleAuth.getAuth().subscribe(auth => this.auth = auth);
+    this.available = [];
+    this.devices = new Set<any>();
   }
 
   public getToken(): string {
@@ -163,22 +130,22 @@ export class GfitService extends Platform {
       });
   }
 
-  private getDeviceName(deviceUid: string): string {
-    const result: any = this.devices.find(dev => dev.uid === deviceUid);
-    // If the result is undefined, return an empty string
-    return result ? result.model : '';
-  }
-
-  private getDeviceType(deviceUid: string): string {
-    const result: any = this.devices.find(dev => dev.uid === deviceUid);
-    // If the result is undefined, return an empty string
-    return result ? result.type : '';
-  }
-
-  private getDeviceManufacturer(deviceUid: string): string {
-    const result: any = this.devices.find(dev => dev.uid === deviceUid);
-    // If the result is undefined, return an empty string
-    return result ? result.manufacturer : '';
+  /**
+   * Checks if a given device is available, and returns information
+   * about the device if it is. If the device is not found, this returns
+   * an array of empty strings.
+   * @param deviceUid unique identifier for requested device
+   * @returns an array containing information about the device
+   */
+  private getDeviceInfo(deviceUid: string): string[] {
+    const entries =  this.devices.entries();
+    let res: any;
+    for (const e of entries) {
+      if (e[0].uid === deviceUid) {
+        res = e[0];
+      }
+    }
+    return res ? [res.model, res.type, res.manufacturer] : ['', '', ''];
   }
 
   /**
@@ -197,17 +164,14 @@ export class GfitService extends Platform {
             if (source.dataStreamId.split(':')[0] === 'derived') {
               const categoryId: string = this.categoryDataTypeNames
                 .get(source.dataType.name);
-              if (source.device && !this.devices.some(dev => dev.uid === source.device.uid)) {
-                this.devices.push(source.device);
+              if (source.device) {
+                this.devices.add(source.device);
               }
               if (this.isImplemented(categoryId) && !this.available.includes(categoryId)) {
-                // Extracts the datastream of the activity
                 this.available.push(categoryId);
               }
             }
           });
-          // console.log(this.available);
-          console.log(this.devices);
           return this.available;
         }));
     } else {
@@ -231,7 +195,7 @@ export class GfitService extends Platform {
     const startTime = String(start.getTime() * Math.pow(10, 6));
     const endTime = String(end.getTime() * Math.pow(10, 6));
     const dataSetId = startTime + '-' + endTime;
-    console.log(dataSetId);
+    // console.log(dataSetId);
     const tail: string = '/datasets/' +
                           dataSetId +
                           '?access_token=' +
@@ -255,18 +219,17 @@ export class GfitService extends Platform {
    *  @returns an array containing the converted DataPoint(s)
    */
   protected convertData(res: any, categoryId: string): DataPoint[] {
-    // const points: DataPoint[] = [];
+    const points: DataPoint[] = [];
     const dataTypeConversions: Map<string, (src: any) => any> =
       this.implementedCategories.get(categoryId).dataTypes;
-
     res.point.forEach(src => {
       const convertedData: DataPoint = new DataPoint();
       for (const [type, conversionFunc] of dataTypeConversions) {
         convertedData.set(type, conversionFunc(src));
       }
-      this.implementedCategories.get(categoryId).dataPoints.push(convertedData);
+      points.push(convertedData);
     });
-    return this.implementedCategories.get(categoryId).dataPoints;
+    return points;
   }
 
 }
