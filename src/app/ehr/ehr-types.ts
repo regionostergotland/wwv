@@ -364,7 +364,7 @@ export class DataList {
     let start = 0;
     let end = this.points.length - 1;
     while (start <= end) {
-      const current = Math.floor((start + end) / 2);
+      const current: number = Math.floor((start + end) / 2);
       const point = this.points[current];
       const comp = testPoint.compareTo(point, this.spec.dataTypes);
       if (comp < 0) {
@@ -442,7 +442,7 @@ export class DataList {
   }
 
   /**
-   * Set math function that will determing value for point of an interval.
+   * Set math function that will determine value for point of an interval.
    */
   public setMathFunction(mathFunction: MathFunctionEnum): void {
     this.mathFunction = mathFunction;

@@ -1,8 +1,4 @@
 import { Observable } from 'rxjs';
-import { DataPoint } from '../ehr/ehr-types';
-import { setInjectImplementation } from '@angular/core/src/di/injector_compatibility';
-import { strictEqual } from 'assert';
-import { stringify } from '@angular/core/src/util';
 
 /**
  * Contains necessary properties for all categories.
@@ -16,15 +12,13 @@ export interface CategoryProperties {
 
 export abstract class Platform {
   // Implemented categories for each specific health platform
-  protected readonly implementedCategories: Map<string, CategoryProperties>;
+  protected implementedCategories: Map<string, CategoryProperties>;
 
-  constructor(implementedCategories: Map<string, CategoryProperties>) {
-    this.implementedCategories = implementedCategories;
+  constructor() {
   }
 
   public abstract async signIn();
   public abstract signOut(): void;
-
   public abstract getAvailable(): Observable<string[]>;
 
   protected isImplemented(categoryId: string): boolean {
