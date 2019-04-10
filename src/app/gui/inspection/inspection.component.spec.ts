@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatExpansionModule, MatMenuModule, MatTableModule } from '@angular/material';
+import {MatExpansionModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatTooltipModule, MatSelectModule} from '@angular/material';
 import { InspectionComponent } from './inspection.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -11,6 +11,7 @@ import {
   NgGapiClientConfig,
   NG_GAPI_CONFIG
 } from 'ng-gapi';
+import {HealthListItemsComponent} from '../health-list-items/health-list-items.component';
 
 const gapiClientConfig: NgGapiClientConfig = {
   client_id: '***REMOVED***.apps.googleusercontent.com',
@@ -27,11 +28,15 @@ describe('InspectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ InspectionComponent ],
+      declarations: [ InspectionComponent, HealthListItemsComponent ],
       imports: [ MatExpansionModule,
         MatMenuModule,
         MatTableModule,
+        MatPaginatorModule,
         BrowserAnimationsModule,
+        MatTableModule,
+        MatTooltipModule,
+        MatSelectModule,
 
         GoogleApiModule.forRoot({
           provide: NG_GAPI_CONFIG,

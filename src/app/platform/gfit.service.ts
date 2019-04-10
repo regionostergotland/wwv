@@ -9,7 +9,12 @@ import GoogleUser = gapi.auth2.GoogleUser;
 import { AutofillMonitor } from '@angular/cdk/text-field';
 import { cat } from 'shelljs';
 import { stringify } from '@angular/compiler/src/util';
-import { CategoryEnum, BloodPressureEnum, BodyWeightEnum } from '../ehr/ehr-config';
+import { Categories,
+         CommonFields,
+         BloodPressure,
+         BodyWeight,
+         Height,
+         HeartRate } from '../ehr/ehr-config';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +30,10 @@ export class GfitService extends Platform {
   // Maps Google Fit's data type names to internal category names
   private readonly categoryDataTypeNames: Map<string, string> = new Map(
     [
-      ['com.google.blood_pressure', 'blood_pressure'],
-      ['com.google.weight', 'body_weight']
+      ['com.google.blood_pressure', Categories.BLOOD_PRESSURE],
+      ['com.google.weight', Categories.BODY_WEIGHT],
+      ['com.google.heart_rate.bpm', Categories.HEART_RATE],
+      ['com.google.height', Categories.HEIGHT]
     ]
   );
 
@@ -35,31 +42,56 @@ export class GfitService extends Platform {
     private http: HttpClient
   ) {
     super(new Map([
-      [ CategoryEnum.BLOOD_PRESSURE,
+      [ Categories.BLOOD_PRESSURE,
         {
           url: 'raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
+          dataTypes: new Map<string, any>(
             [
-              [BloodPressureEnum.TIME,
+              [CommonFields.TIME,
                src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [BloodPressureEnum.SYSTOLIC, src => src.value[0].fpVal],
-              [BloodPressureEnum.DIASTOLIC, src => src.value[1].fpVal],
+              [BloodPressure.SYSTOLIC, src => src.value[0].fpVal],
+              [BloodPressure.DIASTOLIC, src => src.value[1].fpVal],
             ]
           ),
         },
       ],
-      [ CategoryEnum.BODY_WEIGHT,
+      [ Categories.BODY_WEIGHT,
         {
           url: 'raw:com.google.weight:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
+          dataTypes: new Map<string, any>(
             [
-              [BodyWeightEnum.TIME,
+              [CommonFields.TIME,
                src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [BodyWeightEnum.WEIGHT, src => src.value[0].fpVal]
+              [BodyWeight.WEIGHT, src => src.value[0].fpVal]
             ]
           ),
         },
       ],
+
+      [ Categories.HEART_RATE,
+        {
+          url: 'raw:com.google.heart_rate.bpm:com.google.android.apps.fitness:user_input',
+          dataTypes: new Map<string, any>(
+            [
+             [CommonFields.TIME,
+              src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+            ]
+          )
+        },
+      ],
+
+      [ Categories.HEIGHT,
+        {
+          url: 'raw:com.google.height:com.google.android.apps.fitness:user_input',
+          dataTypes: new Map<string, any>(
+            [
+              [CommonFields.TIME,
+                src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+              [Height.HEIGHT, src => src.value[0].fpVal]
+            ]
+          ),
+        },
+      ]
     ]));
 
     this.dataIsFetched = false;
@@ -137,9 +169,11 @@ export class GfitService extends Platform {
    */
   public getData(categoryId: string,
                  start: Date, end: Date): Observable<DataPoint[]> {
+
     const startTime = String(start.getTime() * Math.pow(10, 6));
     const endTime = String(end.getTime() * Math.pow(10, 6));
     const dataSetId = startTime + '-' + endTime;
+    console.log(dataSetId);
     let url: string = this.baseUrl;
     const tail: string = '/datasets/' +
                           dataSetId +
@@ -162,12 +196,13 @@ export class GfitService extends Platform {
    * category)
    * @param res result from http.get-request (json file)
    * @param categoryId specifies which category the data belongs to
-   * @returns an array containing the converted DataPoint(s)
+   *  @returns an array containing the converted DataPoint(s)
    */
   protected convertData(res: any, categoryId: string): DataPoint[] {
     const points: DataPoint[] = [];
     const dataTypeConversions: Map<string, (src: any) => any> =
       this.implementedCategories.get(categoryId).dataTypes;
+
 
     res.point.forEach(src => {
       const convertedData: DataPoint = new DataPoint();
