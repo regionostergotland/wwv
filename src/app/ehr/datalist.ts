@@ -72,7 +72,7 @@ export class DataList {
    */
   private processedPoints: DataPoint[];
   /**
-   * Width of processed points. TODO unit??
+   * Width of processed points in milliseconds.
    */
   private width: number;
   /**
@@ -85,7 +85,7 @@ export class DataList {
     this.points = [];
     this.processedPoints = [];
     this.width = 0;
-    this.mathFunction = MathFunctionEnum.ACTUAL;
+    this.mathFunction = MathFunctionEnum.MEAN;
   }
 
   /**
@@ -98,18 +98,18 @@ export class DataList {
       return points.slice();
     } else {
       const newPoints: DataPoint[] = [];
-      const msInDay: number = 1000 * 60 * 60 * 24; // use shorter min interval?
-      while (points[0] !== undefined) {
-        const oldestDate: number = points[0].get('time').setHours(0, 0, 0);
+      while (points.length > 0) {
+        const oldestTime = points[0].get('time');
+        const startTime = oldestTime - (oldestTime % width);
         const interval: DataPoint[] = points.filter(p =>
-          (p.get('time').getTime() <= oldestDate + width * msInDay));
+          (p.get('time').getTime() <= startTime + width));
         points = points.filter(p =>
-          (p.get('time').getTime() > oldestDate + width * msInDay));
+          (p.get('time').getTime() > startTime + width));
         // time complexity of filter? linear possible?
         const newValues: any[] = [];
         for (const [id, dataType] of this.spec.dataTypes.entries()) {
           if (id === 'time') {
-            newValues.push(['time', new Date(oldestDate)]);
+            newValues.push(['time', new Date(startTime)]);
           } else {
             const prevValues = interval.map((p) => p.get(id));
             const newValue = dataType.truncate(prevValues, fn);

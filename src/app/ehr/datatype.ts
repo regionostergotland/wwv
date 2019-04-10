@@ -320,7 +320,7 @@ export class DataTypeQuantity extends DataType {
   }
 
   protected median(values: any[]): any {
-    values.sort(); // can we assume they are sorted already?
+    values.sort();
     const n = values.length;
     if (n / 2 === Math.ceil(n / 2)) {
       return values[n / 2];

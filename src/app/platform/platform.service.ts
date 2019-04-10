@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { DataPoint } from '../ehr/datalist';
 
 /**
  * Contains necessary properties for all categories.
