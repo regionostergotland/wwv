@@ -251,11 +251,9 @@ fdescribe('Ehr Types', () => {
     for (const p of test.getPoints()) {
       p.setChosen(true);
     }
-    test.setWidth(1);
+    test.setWidth(0);
     test.width_divider();
-    expect(test.getPointsInterval()[0][0].get('time').getDate()).
-    toEqual(test.getPointsInterval()[0][1].get('time').getDate());
-
+    expect(test.getPointsInterval()[0].length).toEqual(6);
   });
 
   fit('should create new datapoints with mean of the interval points numerized fields', () => {
@@ -319,10 +317,10 @@ fdescribe('Ehr Types', () => {
       p.setChosen(true);
     }
 
-    test.setMathFunction(MathFunctionEnum.MEDIAN);
+    test.setMathFunction(MathFunctionEnum.TOTAL);
     test.setWidth(1);
     test.width_divider();
     const res: DataPoint[] = test.intervalManipulation();
-    expect(res[0].get('weight')).toEqual(80);
+    expect(res[0].get('weight')).toEqual(240);
   });
 });

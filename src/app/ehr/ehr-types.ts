@@ -44,6 +44,14 @@ export enum DataTypeEnum {
  * the EHR.
  */
 export abstract class DataType {
+
+  constructor(type: DataTypeEnum, label: string,
+              description: string, required: boolean) {
+    this.type = type;
+    this.label = label;
+    this.description = description;
+    this.required = required;
+  }
   /**
    * Used to determine what class or data type an instance is (Quantity, Text
    * etc.).
@@ -61,14 +69,6 @@ export abstract class DataType {
    * Specify if data field is required in composition.
    */
   readonly required: boolean;
-
-  constructor(type: DataTypeEnum, label: string,
-              description: string, required: boolean) {
-    this.type = type;
-    this.label = label;
-    this.description = description;
-    this.required = required;
-  }
 
   /**
    * Verify that value is valid type of instance's data type.
@@ -360,14 +360,14 @@ export class DataList {
    */
   private points: DataPoint[];
 
-  private width: number; // unit? ms, days?
+  private width: number;
   private mathFunction: MathFunctionEnum;
 
   constructor(spec: CategorySpec) {
     this.spec = spec;
     this.points = [];
-    this.width = 0;
-    this.mathFunction = MathFunctionEnum.ACTUAL;
+    this.width = 3;
+    this.mathFunction = MathFunctionEnum.MEAN;
   }
 
   /**
@@ -375,24 +375,23 @@ export class DataList {
    * width.
    */
   private mergePoints(points: DataPoint[],
-                     width: number, fn: MathFunctionEnum): DataPoint[] {
+                      width: number, fn: MathFunctionEnum): DataPoint[] {
     if (width === 0 || fn === MathFunctionEnum.ACTUAL) {
       return points;
     } else {
       let newPoints: DataPoint[] = [];
-      const msInDay: number = 1000 * 60 * 60 * 24;
+      const msInDay: number = 1000 * 60 * 60 * 24; // use shorter min interval?
       while (points[0] !== undefined) {
         const oldestDate: number = points[0].get('time').setHours(0, 0, 0);
         let interval: DataPoint[] = points.filter(p =>
           (p.get('time').getTime() <= oldestDate + width * msInDay));
         points = points.filter(p =>
           (p.get('time').getTime() > oldestDate + width * msInDay));
+        // time complexity of filter? linear possible?
         let newValues: any[] = [];
         for (const [id, dataType] of this.spec.dataTypes.entries()) {
           if (id === 'time') {
-            const startDate: Date = interval[0].get('time');
-            startDate.setHours(0, 0, 0);
-            newValues.push(['time', startDate]);
+            newValues.push(['time', new Date(oldestDate)]);
           } else {
             const prevValues = interval.map((p) => p.get(id));
             const newValue = dataType.truncate(prevValues, fn);
