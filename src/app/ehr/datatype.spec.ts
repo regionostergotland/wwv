@@ -11,80 +11,115 @@ describe('Ehr Types', () => {
     ]
   }));
 
-  const dataTypes = new Map<string, DataType>([
-    [
-      'time',
-      new DataTypeDateTime(
-        ['any_event'],
-        'Tid',
-        'Tidpunkt vid mätning',
-        true, false,
-      )
-    ],
-    [
-      'systolic',
-      new DataTypeQuantity(
-        ['any_event'],
-        'Övertryck',
-        'Systoliskt övertryck av blod',
-        true, false,
-        'mm[Hg]', 0, 1000,
-      )
-    ],
-    [
-      'diastolic',
-      new DataTypeQuantity(
-        ['any_event'],
-        'Undertryck',
-        'Diastoliskt undertryck av blod',
-        true, false,
-        'mm[Hg]', 0, 1000
-      )
-    ],
-    [
-      'position',
-      new DataTypeCodedText(
-        ['any_event'],
-        'Position',
-        'Position vid mätning.',
-        false, false,
-        [
-          {
-            code: 'at1000',
-            label: 'Stående',
-            description: 'Stående under mätning.'
-          },
-          {
-            code: 'at1001',
-            label: 'Sittande',
-            description: 'Sittande under mätning.'
-          },
-          {
-            code: 'at1003',
-            label: 'Liggande',
-            description: 'Liggande under mätning.'
-          }
-        ]
-      )
-    ],
-  ]);
+  /**
+   * Test that valid DataTypeQuantity values pass validity check
+   */
+  const quantityLimited = new DataTypeQuantity(
+    ['root'], 'quantity', 'quantity limited between 10 and 100',
+    true, false,
+    'mm', 10, 100
+  );
+  it('should not accept negative quantity value', () => {
+    expect(quantityLimited.isValid(-100)).toBeFalsy();
+    expect(quantityLimited.isValid(-1)).toBeFalsy();
+  });
+  it('should not accept below minimum quantity value', () => {
+    expect(quantityLimited.isValid(9)).toBeFalsy();
+    expect(quantityLimited.isValid(0)).toBeFalsy();
+  });
+  it('should accept minimum quantity value', () => {
+    expect(quantityLimited.isValid(10)).toBeTruthy();
+  });
+  it('should accept between quantity value', () => {
+    expect(quantityLimited.isValid(50)).toBeTruthy();
+    expect(quantityLimited.isValid(11)).toBeTruthy();
+    expect(quantityLimited.isValid(99)).toBeTruthy();
+  });
+  it('should accept maximium quantity value', () => {
+    expect(quantityLimited.isValid(100)).toBeTruthy();
+  });
+  it('should not accept above maximium quantity value', () => {
+    expect(quantityLimited.isValid(100.001)).toBeFalsy();
+    expect(quantityLimited.isValid(101)).toBeFalsy();
+    expect(quantityLimited.isValid(1000)).toBeFalsy();
+  });
+  const quantityUnlimited = new DataTypeQuantity(
+    ['root'], 'quantity', 'unlimited quantity from 0',
+    true, false,
+    'mm', 0, -1
+  );
+  it('should not accept negative quantity value (unlimited)', () => {
+    expect(quantityUnlimited.isValid(-100)).toBeFalsy();
+    expect(quantityUnlimited.isValid(-1)).toBeFalsy();
+    expect(quantityUnlimited.isValid(-0.01)).toBeFalsy();
+  });
+  it('should accept minimum quantity value (unlimited)', () => {
+    expect(quantityUnlimited.isValid(0)).toBeTruthy();
+  });
+  it('should accept above minimum quantity value (unlimited)', () => {
+    expect(quantityUnlimited.isValid(1)).toBeTruthy();
+    expect(quantityUnlimited.isValid(11)).toBeTruthy();
+    expect(quantityUnlimited.isValid(99)).toBeTruthy();
+    expect(quantityUnlimited.isValid(9999999)).toBeTruthy();
+    expect(quantityUnlimited.isValid(3298439879999999)).toBeTruthy();
+  });
 
   /**
-   * Test that valid datatypes pass validity check
+   * Test that DataTypeDateTime validates correctly.
    */
-  it('should have true validity check for correct blood_pressures', () => {
-    const values: [string, any][] = [
-      [ 'time', new Date(2016, 2) ],
-      [ 'systolic', 100 ],
-      [ 'diastolic', 20 ],
-      [ 'time', new Date(2017, 1) ],
-      [ 'systolic', 11 ],
-      [ 'diastolic', 22 ],
-      [ 'position', 'at1003'],
-    ];
-    for (const [typeId, value] of values) {
-        expect(dataTypes.get(typeId).isValid(value)).toBeTruthy();
-    }
+  const dateTime = new DataTypeDateTime(['root'], 'datetime', '', true, false);
+  it('it should accept valid dates', () => {
+    expect(dateTime.isValid(new Date())).toBeTruthy();
+    expect(dateTime.isValid(new Date(2017, 32))).toBeTruthy();
+  });
+  it('it should not accept non-Date objects', () => {
+    expect(dateTime.isValid('2019-12-11')).toBeFalsy();
+    expect(dateTime.isValid('hej')).toBeFalsy();
+    expect(dateTime.isValid(238947329847)).toBeFalsy();
+  });
+
+  /**
+   * Test that codedText validates correctly.
+   */
+  const codedText = new DataTypeCodedText(
+    ['root'], 'coded', 'coded text',
+    true, false,
+    [ { code: 'at1001', label: '', description: '' },
+      { code: 'at1000', label: '', description: '' },
+      { code: 'at1003', label: '', description: '' } ]
+  );
+  it('it should accept valid code', () => {
+    expect(codedText.isValid('at1001')).toBeTruthy();
+    expect(codedText.isValid('at1000')).toBeTruthy();
+    expect(codedText.isValid('at1003')).toBeTruthy();
+  });
+  it('it should not accept invalid types for code', () => {
+    expect(codedText.isValid(4)).toBeFalsy();
+    expect(codedText.isValid(new Date())).toBeFalsy();
+    expect(codedText.isValid(codedText)).toBeFalsy();
+  });
+  it('it should not accept invalid code', () => {
+    expect(codedText.isValid('')).toBeFalsy();
+    expect(codedText.isValid('at324234')).toBeFalsy();
+    expect(codedText.isValid('hejhej')).toBeFalsy();
+    expect(codedText.isValid('oetnuhnsoethunstoehu')).toBeFalsy();
+  });
+
+  /**
+   * Test that text validates correctly.
+   */
+  const text = new DataTypeText(['root'], 'text', 'text', true, false);
+  it('it should accept valid strings', () => {
+    expect(text.isValid('at1001')).toBeTruthy();
+    expect(text.isValid('at1000')).toBeTruthy();
+    expect(text.isValid('at1003')).toBeTruthy();
+    expect(text.isValid('oenstuhonaetuhneosahunsoethu')).toBeTruthy();
+    expect(text.isValid('')).toBeTruthy();
+  });
+  it('it should not accept non-string values', () => {
+    expect(text.isValid(4)).toBeFalsy();
+    expect(text.isValid(new Date())).toBeFalsy();
+    expect(text.isValid(codedText)).toBeFalsy();
   });
 
   /**
