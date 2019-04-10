@@ -44,12 +44,13 @@ export enum DataTypeEnum {
  * the EHR.
  */
 export abstract class DataType {
-  // temporary truncate
-  truncate(values: any[], mathFunction: MathFunctionEnum): any[] {
-    let res: any[] = [];
-    const reducer = (accumulator, currentValue) => accumulator + currentValue;
-    res.push(values.reduce(reducer));
-    return res;
+
+  constructor(type: DataTypeEnum, label: string,
+              description: string, required: boolean) {
+    this.type = type;
+    this.label = label;
+    this.description = description;
+    this.required = required;
   }
   /**
    * Used to determine what class or data type an instance is (Quantity, Text
@@ -68,13 +69,12 @@ export abstract class DataType {
    * Specify if data field is required in composition.
    */
   readonly required: boolean;
-
-  constructor(type: DataTypeEnum, label: string,
-              description: string, required: boolean) {
-    this.type = type;
-    this.label = label;
-    this.description = description;
-    this.required = required;
+  // temporary truncate
+  truncate(values: any[], mathFunction: MathFunctionEnum): any[] {
+    const res: any[] = [];
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    res.push(values.reduce(reducer));
+    return res;
   }
 
   /**
@@ -450,18 +450,18 @@ export class DataList {
    */
   public intervalManipulation(): DataPoint[] {
     const dataPoints: DataPoint[] = [];
-    for (let interval of this.pointsInterval) {
+    for (const interval of this.pointsInterval) {
       const dataPointElements: any[] = [];
       const requiredIds: string[] = Array.from(this.spec.dataTypes.keys()).
       filter(f => this.spec.dataTypes.get(f).required);
-      for (let id of requiredIds) {
-        let matchingValues: any[] = [];
-        for (let point of interval) {
+      for (const id of requiredIds) {
+        const matchingValues: any[] = [];
+        for (const point of interval) {
           matchingValues.push(point.get(id));
         }
-        let values: any[] = this.spec.dataTypes.get(id).truncate(matchingValues, this.mathFunction);
-        for (let v of values) {
-          dataPointElements.push([id,v]);
+        const values: any[] = this.spec.dataTypes.get(id).truncate(matchingValues, this.mathFunction);
+        for (const v of values) {
+          dataPointElements.push([id, v]);
         }
       }
       const dataPoint: DataPoint = new DataPoint(dataPointElements);
