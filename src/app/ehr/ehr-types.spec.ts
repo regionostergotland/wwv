@@ -5,7 +5,7 @@ import { DataList, DataTypeText, DataPoint, CategorySpec, DataType,
          MathFunctionEnum} from './ehr-types';
 import { HttpClient, HttpHandler} from '@angular/common/http';
 
-fdescribe('Ehr Types', () => {
+describe('Ehr Types', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
     providers: [
@@ -128,61 +128,42 @@ fdescribe('Ehr Types', () => {
    * Test that correct blood-pressures pass validity check
    */
   it('should have true validity check for correct blood_pressures', () => {
-    const correctBps = new DataList(categories[0]);
-    correctBps.addPoints([
-      new DataPoint(
-        [
-          [ 'time', new Date() ],
-          [ 'systolic', 100 ],
-          [ 'diastolic', 20 ],
-        ]
-      ),
-      new DataPoint(
-        [
-          [ 'time', new Date() ],
-          [ 'systolic', 11 ],
-          [ 'diastolic', 22 ],
-          [ 'position', 'at1003'],
-        ]
-      )
-    ]);
-    for (const point of correctBps.getPoints()) {
-      for (const [typeId, value] of point.entries()) {
-        expect(correctBps.getDataType(typeId).isValid(value)).toBeTruthy();
-      }
+    let bloodpressure = categories[0];
+    let values: [string, any][] = [
+      [ 'time', new Date(2016, 2) ],
+      [ 'systolic', 100 ],
+      [ 'diastolic', 20 ],
+      [ 'time', new Date(2017, 1) ],
+      [ 'systolic', 11 ],
+      [ 'diastolic', 22 ],
+      [ 'position', 'at1003'],
+    ];
+    for (const [typeId, value] of values) {
+        expect(bloodpressure.dataTypes.get(typeId).isValid(value)).toBeTruthy();
     }
-
   });
 
   /**
    * Test that correct body weights pass validity check
    */
   it('should have true validity check for correct body weights', () => {
-    const correctBws = new DataList(categories[1]);
-    correctBws.addPoints([
-      new DataPoint(
-        [
-          ['time', new Date()],
-          ['weight', 90],
-          ['state_of_dress', 'at0011'],
-        ]
-      ),
-      new DataPoint(
-        [
-          ['time', new Date()],
-          ['weight', 70],
-        ]
-      )
-    ]);
-    for (const point of correctBws.getPoints()) {
-      for (const [typeId, value] of point.entries()) {
-        expect(correctBws.getDataType(typeId).isValid(value)).toBeTruthy();
-      }
+    const bodyweight = categories[1];
+    let values: [string, any][] = [
+      ['time', new Date()],
+      ['weight', 90],
+      ['state_of_dress', 'at0011'],
+      ['time', new Date()],
+      ['weight', 70],
+    ];
+    for (const [typeId, value] of values) {
+        expect(bodyweight.dataTypes.get(typeId).isValid(value)).toBeTruthy();
     }
   });
 
-  /* Test that splits datapoints into width interval, passes if date in first
-  lists are from same day */
+  /*
+   * Test that splits datapoints into width interval, passes if date count is
+   * correct.
+   */
   it('should split datapoints into one day intervals', () => {
     const test = new DataList(categories[0]);
     const date: Date = new Date();
@@ -195,6 +176,8 @@ fdescribe('Ehr Types', () => {
     date1.setDate(1);
     date2.setDate(2);
     date3.setDate(2);
+    date4.setDate(3);
+    date5.setDate(3);
     date.setHours(10);
     date1.setHours(11);
     date2.setHours(12);
@@ -248,15 +231,11 @@ fdescribe('Ehr Types', () => {
             ]
         )
     ]);
-    for (const p of test.getPoints()) {
-      p.setChosen(true);
-    }
-    test.setWidth(0);
-    test.width_divider();
-    expect(test.getPointsInterval()[0].length).toEqual(6);
+    test.setWidth(1);
+    expect(test.getPoints().length).toEqual(3);
   });
 
-  fit('should create new datapoints with mean of the interval points numerized fields', () => {
+  it('should create new datapoints with mean of the interval points numerized fields', () => {
     const test = new DataList(categories[1]);
     const date: Date = new Date();
     const date1: Date = new Date();
@@ -312,15 +291,10 @@ fdescribe('Ehr Types', () => {
             ['weight', 100],
           ]
       )
-  ]);
-    for (const p of test.getPoints()) {
-      p.setChosen(true);
-    }
-
+    ]);
     test.setMathFunction(MathFunctionEnum.TOTAL);
     test.setWidth(1);
-    test.width_divider();
-    const res: DataPoint[] = test.intervalManipulation();
+    const res: DataPoint[] = test.getPoints();
     expect(res[0].get('weight')).toEqual(240);
   });
 });
