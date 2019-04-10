@@ -44,6 +44,13 @@ export enum DataTypeEnum {
  * the EHR.
  */
 export abstract class DataType {
+  // temporary truncate
+  truncate(values: any[], mathFunction: MathFunctionEnum): any[] {
+    let res: any[] = [];
+    const reducer = (accumulator, currentValue) => accumulator + currentValue;
+    res.push(values.reduce(reducer));
+    return res;
+  }
   /**
    * Used to determine what class or data type an instance is (Quantity, Text
    * etc.).
@@ -330,7 +337,6 @@ export class DataList {
 
   constructor(spec: CategorySpec) {
     this.spec = spec;
-    this.id = 'weight';
     this.points = [];
     this.pointsInterval = [];
     this.width = 0;
@@ -444,59 +450,24 @@ export class DataList {
    */
   public intervalManipulation(): DataPoint[] {
     const dataPoints: DataPoint[] = [];
-    for (const interval of this.pointsInterval) {
+    for (let interval of this.pointsInterval) {
       const dataPointElements: any[] = [];
       const requiredIds: string[] = Array.from(this.spec.dataTypes.keys()).
       filter(f => this.spec.dataTypes.get(f).required);
-      for (const id of requiredIds) {
-        this.id = id;
-        if (id === 'time') {
-          const startDate: Date = interval[0].get('time');
-          startDate.setHours(0, 0, 0);
-          dataPointElements.push(['time', startDate]);
-        } else if (typeof interval[0].get(id) === 'number') {
-          let value = 0;
-          switch (this.mathFunction) {
-            case MathFunctionEnum.TOTAL :
-              for (const point of interval) {
-                value += point.get(id);
-              }
-              break;
-            case MathFunctionEnum.ACTUAL :
-
-              break;
-            case MathFunctionEnum.MEDIAN :
-              interval.sort(this.sortByValue.bind(this));
-              if ((interval.length - 1) / 2 === Math.ceil((interval.length - 1) / 2)) {
-                value = interval[(interval.length - 1) / 2].get(id);
-              } else {
-                value = (interval[Math.ceil((interval.length - 1) / 2)].get(id) +
-                interval[Math.floor((interval.length - 1) / 2)].get(id)) / 2;
-              }
-              break;
-            case MathFunctionEnum.MEAN :
-              for (const point of interval) {
-                value += point.get(id);
-              }
-              value = value / interval.length;
-              break;
-          }
-          dataPointElements.push([id, value]);
-        } else {
-          dataPointElements.push([id, interval[0].get(id)]);
+      for (let id of requiredIds) {
+        let matchingValues: any[] = [];
+        for (let point of interval) {
+          matchingValues.push(point.get(id));
+        }
+        let values: any[] = this.spec.dataTypes.get(id).truncate(matchingValues, this.mathFunction);
+        for (let v of values) {
+          dataPointElements.push([id,v]);
         }
       }
       const dataPoint: DataPoint = new DataPoint(dataPointElements);
       dataPoints.push(dataPoint);
     }
     return dataPoints;
-  }
-
-  /**
-   * Sort point by current ids value.
-   */
-  private sortByValue(p1: DataPoint, p2: DataPoint): number {
-    return (p1.get(this.id) - p2.get(this.id));
   }
 
   /**
