@@ -4,69 +4,72 @@ import { EhrService } from '../ehr/ehr.service';
 import { Platform } from './platform.service';
 import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
-import { MessageService } from '../message.service';
 
-import { Categories,
-         CommonFields,
-         MedicalDevice,
-         BloodPressure,
-         BodyWeight,
-         Height,
-         HeartRate} from '../ehr/ehr-config';
+import {
+  Categories,
+  CommonFields,
+  MedicalDevice,
+  BloodPressure,
+  BodyWeight,
+  Height,
+  HeartRate
+} from '../ehr/ehr-config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DummyPlatformService extends Platform {
+
   constructor(
     private ehr: EhrService
   ) {
-    super(
-      new Map([
-        [ Categories.BLOOD_PRESSURE,
-          {
-            url: '',
-            dataTypes: new Map<string, any>([
-              [CommonFields.TIME, null],
-              [MedicalDevice.NAME, null],
-              [BloodPressure.SYSTOLIC, null],
-              [BloodPressure.DIASTOLIC, null]
-            ]),
-          }
-        ],
-        [ Categories.BODY_WEIGHT,
-          {
-            url: '',
-            dataTypes: new Map<string, any>([
-              [CommonFields.TIME, null],
-              [BodyWeight.WEIGHT, null],
-            ]),
-          }
-        ],
-        [ Categories.HEIGHT,
-          {
-            url: '',
-            dataTypes: new Map<string, any>([
-              [CommonFields.TIME, null],
-              [Height.HEIGHT, null],
-            ]),
-          }
-        ],
-        [ Categories.HEART_RATE,
-          {
-            url: '',
-            dataTypes: new Map<string, any>([
-              [CommonFields.TIME, null],
-              [HeartRate.RATE, null],
-            ]),
-          }
-        ],
-      ])
-    );
+    super();
+    this.implementedCategories = new Map([
+      [Categories.BLOOD_PRESSURE,
+      {
+        url: '',
+        dataTypes: new Map<string, any>([
+          [CommonFields.TIME, null],
+          [MedicalDevice.NAME, null],
+          [BloodPressure.SYSTOLIC, null],
+          [BloodPressure.DIASTOLIC, null]
+        ]),
+      }
+      ],
+      [Categories.BODY_WEIGHT,
+      {
+        url: '',
+        dataTypes: new Map<string, any>([
+          [CommonFields.TIME, null],
+          [BodyWeight.WEIGHT, null],
+        ]),
+      }
+      ],
+      [Categories.HEIGHT,
+      {
+        url: '',
+        dataTypes: new Map<string, any>([
+          [CommonFields.TIME, null],
+          [Height.HEIGHT, null],
+        ]),
+      }
+      ],
+      [Categories.HEART_RATE,
+      {
+        url: '',
+        dataTypes: new Map<string, any>([
+          [CommonFields.TIME, null],
+          [HeartRate.RATE, null],
+        ]),
+      }
+      ],
+    ]);
   }
 
-  public async signIn() {}
-  public signOut(): void {}
+
+
+  public async signIn() { }
+  public signOut(): void { }
 
   public getAvailable(): Observable<string[]> {
     return of(Array.from(this.implementedCategories.keys()));
@@ -83,13 +86,13 @@ export class DummyPlatformService extends Platform {
   public getData(categoryId: string,
                  start: Date, end: Date): Observable<DataPoint[]> {
     const generators: Map<DataTypeEnum, (date: Date) => any> = new Map([
-      [ DataTypeEnum.QUANTITY, date => date.getDate() ],
-      [ DataTypeEnum.DATE_TIME, date => date ],
-      [ DataTypeEnum.TEXT, date => date.toString() ],
+      [DataTypeEnum.QUANTITY, date => date.getDate()],
+      [DataTypeEnum.DATE_TIME, date => date],
+      [DataTypeEnum.TEXT, date => date.toString()],
     ]);
     const lengthOfDay = 1000 * 3600 * 24;
     let current: Date = new
-                   Date(start.getTime() - start.getTime() % lengthOfDay);
+      Date(start.getTime() - start.getTime() % lengthOfDay);
     const points: DataPoint[] = [];
     while (current.getTime() < end.getTime()) {
       const fields = [];
