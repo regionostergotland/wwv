@@ -128,8 +128,8 @@ describe('Ehr Types', () => {
    * Test that correct blood-pressures pass validity check
    */
   it('should have true validity check for correct blood_pressures', () => {
-    let bloodpressure = categories[0];
-    let values: [string, any][] = [
+    const bloodpressure = categories[0];
+    const values: [string, any][] = [
       [ 'time', new Date(2016, 2) ],
       [ 'systolic', 100 ],
       [ 'diastolic', 20 ],
@@ -148,7 +148,7 @@ describe('Ehr Types', () => {
    */
   it('should have true validity check for correct body weights', () => {
     const bodyweight = categories[1];
-    let values: [string, any][] = [
+    const values: [string, any][] = [
       ['time', new Date()],
       ['weight', 90],
       ['state_of_dress', 'at0011'],

@@ -36,6 +36,16 @@ export enum DataTypeEnum {
 }
 
 /**
+ * All possible math functions to be used on a list values inside an interval.
+ */
+export enum MathFunctionEnum {
+  ACTUAL,
+  MEDIAN,
+  MEAN,
+  TOTAL,
+}
+
+/**
  * Superclass for classes that represent openEHR data types.
  * Instances of DataType correspond to a certain class of values (e.g. weight)
  * of a specific data type (e.g. Quantity).
@@ -90,7 +100,7 @@ export abstract class DataType {
   }
 
   public truncate(values: any[], fn: MathFunctionEnum): any[] {
-    let functions = new Map<MathFunctionEnum, (v: any[]) => any[]>([
+    const functions = new Map<MathFunctionEnum, (v: any[]) => any[]>([
       [MathFunctionEnum.ACTUAL, this.only.bind(this)],
       [MathFunctionEnum.MEDIAN, this.median.bind(this)],
       [MathFunctionEnum.MEAN, this.mean.bind(this)],
@@ -112,8 +122,8 @@ export abstract class DataType {
   }
 
   private only(values: any[]): any {
-    let equal: boolean = true
-    for (let value of values) {
+    let equal = true;
+    for (const value of values) {
       if (value !== values[0]) {
         equal = false;
         break;
@@ -275,19 +285,19 @@ export class DataTypeQuantity extends DataType {
   protected median(values: any[]): any {
     values.sort(); // can we assume they are sorted already?
     const n = values.length;
-    if (n/2 === Math.ceil(n/2)) {
-      return values[n/2];
+    if (n / 2 === Math.ceil(n / 2)) {
+      return values[n / 2];
     } else {
-      return (values[Math.ceil(n/2)] + values[Math.floor(n/2)]) / 2;
+      return (values[Math.ceil(n / 2)] + values[Math.floor(n / 2)]) / 2;
     }
   }
 
   protected mean(values: any[]): any {
-    return this.total(values)/values.length;
+    return this.total(values) / values.length;
   }
 
   protected total(values: any[]): any {
-    return values.reduce((acc, v) => acc+v);
+    return values.reduce((acc, v) => acc + v);
   }
 }
 
@@ -335,16 +345,6 @@ export class DataPoint {
 }
 
 /**
- * All possible math functions to be used on a list values inside an interval.
- */
-export enum MathFunctionEnum {
-  ACTUAL,
-  MEDIAN,
-  MEAN,
-  TOTAL,
-}
-
-/**
  * List of [[DataPoint]]s with certain [[DataType]]s specified by a
  * [[CategorySpec]].
  */
@@ -379,16 +379,16 @@ export class DataList {
     if (width === 0 || fn === MathFunctionEnum.ACTUAL) {
       return points;
     } else {
-      let newPoints: DataPoint[] = [];
+      const newPoints: DataPoint[] = [];
       const msInDay: number = 1000 * 60 * 60 * 24; // use shorter min interval?
       while (points[0] !== undefined) {
         const oldestDate: number = points[0].get('time').setHours(0, 0, 0);
-        let interval: DataPoint[] = points.filter(p =>
+        const interval: DataPoint[] = points.filter(p =>
           (p.get('time').getTime() <= oldestDate + width * msInDay));
         points = points.filter(p =>
           (p.get('time').getTime() > oldestDate + width * msInDay));
         // time complexity of filter? linear possible?
-        let newValues: any[] = [];
+        const newValues: any[] = [];
         for (const [id, dataType] of this.spec.dataTypes.entries()) {
           if (id === 'time') {
             newValues.push(['time', new Date(oldestDate)]);
