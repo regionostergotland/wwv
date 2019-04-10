@@ -1,5 +1,5 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import { CategorySpec, 
+import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
          DataTypeEnum} from '../../ehr/datatype';

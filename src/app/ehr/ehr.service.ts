@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { EHR_CONFIG, EhrConfig } from './ehr-config';
 
-import { CategorySpec } from './datatype'
+import { CategorySpec } from './datatype';
 import { DataList } from './datalist';
 
 @Injectable({
