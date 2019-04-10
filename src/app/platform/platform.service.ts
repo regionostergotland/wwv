@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { DataPoint } from '../ehr/ehr-types';
+import { DataPoint } from '../ehr/datalist';
 import { setInjectImplementation } from '@angular/core/src/di/injector_compatibility';
 import { strictEqual } from 'assert';
 import { stringify } from '@angular/core/src/util';
@@ -43,5 +43,5 @@ export abstract class Platform {
   }
 
   public abstract getData(categoryId: string,
-                          start: Date, end: Date): Observable<any>;
+                          start: Date, end: Date): Observable<DataPoint[]>;
 }

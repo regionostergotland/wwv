@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Conveyor } from '../../conveyor.service';
 import { Router } from '@angular/router';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material';
-import { DataList } from '../../ehr/ehr-types';
+import { DataList } from '../../ehr/datalist';
 
 @Component({
   selector: 'app-bottom-sheet-overview-example-sheet',

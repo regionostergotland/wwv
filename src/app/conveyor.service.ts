@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { DataList } from './ehr/ehr-types';
+import { DataList } from './ehr/datalist';
 import { EhrService } from './ehr/ehr.service';
 import { Platform } from './platform/platform.service';
 import { GfitService } from './platform/gfit.service';
