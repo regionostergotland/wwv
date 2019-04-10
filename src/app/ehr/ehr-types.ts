@@ -376,10 +376,11 @@ export class DataList {
   // TODO use these for processing
   private width: number;
   private mathFunction: MathFunctionEnum;
-  private id: string;
+  public id: string;
 
   constructor(spec: CategorySpec) {
     this.spec = spec;
+    this.id = 'weight';
     this.points = [];
     this.pointsInterval = [];
     this.width = 0;
@@ -498,13 +499,13 @@ export class DataList {
       const requiredIds: string[] = Array.from(this.spec.dataTypes.keys()).
       filter(f => this.spec.dataTypes.get(f).required);
       for (const id of requiredIds) {
+        this.id = id;
         if (id === 'time') {
           const startDate: Date = interval[0].get('time');
           startDate.setHours(0, 0, 0);
           dataPointElements.push(['time', startDate]);
         } else if (typeof interval[0].get(id) === 'number') {
           let value = 0;
-          this.id = id;
           switch (this.mathFunction) {
             case MathFunctionEnum.TOTAL :
               for (const point of interval) {
@@ -513,14 +514,14 @@ export class DataList {
               break;
             case MathFunctionEnum.ACTUAL :
 
-            break;
+              break;
             case MathFunctionEnum.MEDIAN :
-              interval.sort(this.sortByValue);
-              if (interval.length / 2 === Math.ceil(interval.length / 2)) {
-                value = interval[interval.length / 2].get(id);
+              interval.sort(this.sortByValue.bind(this));
+              if ((interval.length - 1) / 2 === Math.ceil((interval.length - 1) / 2)) {
+                value = interval[(interval.length - 1) / 2].get(id);
               } else {
-                value = (interval[Math.ceil(interval.length / 2)].get(id) -
-                interval[Math.floor(interval.length) / 2].get(id)) / 2;
+                value = (interval[Math.ceil((interval.length - 1) / 2)].get(id) +
+                interval[Math.floor((interval.length - 1) / 2)].get(id)) / 2;
               }
               break;
             case MathFunctionEnum.MEAN :
@@ -544,8 +545,8 @@ export class DataList {
   /**
    * Sort point by current ids value.
    */
-  public sortByValue(p1: DataPoint, p2: DataPoint): number {
-      return (p1.get(this.id) - p2.get(this.id));
+  private sortByValue(p1: DataPoint, p2: DataPoint): number {
+    return (p1.get(this.id) - p2.get(this.id));
   }
 
   /**
