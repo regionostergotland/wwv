@@ -88,6 +88,38 @@ export abstract class DataType {
   public equal(v1: any, v2: any): boolean {
     return v1 === v2;
   }
+
+  public truncate(values: any[], fn: MathFunctionEnum): any[] {
+    let functions = new Map<MathFunctionEnum, (v: any[]) => any[]>([
+      [MathFunctionEnum.ACTUAL, (v) => v],
+      [MathFunctionEnum.MEDIAN, this.median],
+      [MathFunctionEnum.MEAN, this.mean],
+    ]);
+    return functions.get(fn)(values);
+  }
+
+  protected median(values: any[]): any[] {
+    return this.only(values);
+  }
+
+  protected mean(values: any[]): any[] {
+    return this.only(values);
+  }
+
+  protected total(values: any[]): any[] {
+    return this.only(values);
+  }
+
+  private only(values: any[]): any[] {
+    let equal: boolean = true
+    for (let value of values) {
+      if (value !== values[0]) {
+        equal = false;
+        break;
+      }
+    }
+    return equal ? [values[0]] : [];
+  }
 }
 
 /**
@@ -237,6 +269,24 @@ export class DataTypeQuantity extends DataType {
       '|magnitude': value,
       '|unit': this.unit
     }];
+  }
+
+  protected median(values: any[]): any[] {
+    values.sort(); // can we assume they are sorted already?
+    const n = values.length;
+    if (n/2 === Math.ceil(n/2)) {
+      return [values[n/2]];
+    } else {
+      return [(values[Math.ceil(n/2)] + values[Math.floor(n/2)]) / 2];
+    }
+  }
+
+  protected mean(values: any[]): any[] {
+    return [values.reduce((acc, v) => acc+v)/values.length];
+  }
+
+  protected total(values: any[]): any[] {
+    return [values.reduce((acc, v) => acc+v)];
   }
 }
 
