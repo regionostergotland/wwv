@@ -14,23 +14,14 @@ import {
 } from '@angular/material';
 
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import {
-  GoogleApiModule,
-  GoogleApiService,
-  GoogleAuthService,
-  NgGapiClientConfig,
-  NG_GAPI_CONFIG
-} from 'ng-gapi';
+
 import { AmazingTimePickerService } from 'amazing-time-picker';
 
-const gapiClientConfig: NgGapiClientConfig = {
-  client_id: '***REMOVED***.apps.googleusercontent.com',
-  discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],
-  scope: [
-    'https://www.googleapis.com/auth/fitness.blood_pressure.read',
-    'https://www.googleapis.com/auth/fitness.body.read'
-  ].join(' ')
-};
+import {
+  GoogleApiService,
+  GoogleAuthService,
+} from 'ng-gapi';
+import { CustomGoogleApiModule } from '../../google-fit-config';
 
 describe('AddDataPointComponent', () => {
   let component: AddDataPointComponent;
@@ -43,16 +34,11 @@ describe('AddDataPointComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         MatInputModule,
-
         MatDatepickerModule,
         MatDialogModule,
         MatFormFieldModule,
         MatSelectModule,
-
-        GoogleApiModule.forRoot({
-          provide: NG_GAPI_CONFIG,
-          useValue: gapiClientConfig
-        })
+        CustomGoogleApiModule,
       ],
 
      providers: [
@@ -60,11 +46,9 @@ describe('AddDataPointComponent', () => {
       GoogleApiService,
       HttpClient,
       HttpHandler,
-
       {provide: MAT_DIALOG_DATA, useValue: {}},
       {provide: MatDialogRef, useValue: {}},
       AmazingTimePickerService
-
     ]
     })
     .compileComponents();

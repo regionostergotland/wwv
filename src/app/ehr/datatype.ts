@@ -344,5 +344,4 @@ export class DataTypeQuantity extends DataType {
   protected max(values: any[]): any {
     return Math.max(...values);
   }
-
 }

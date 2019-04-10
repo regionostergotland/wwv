@@ -1,50 +1,8 @@
-<app-toolbar></app-toolbar>
-<!--The content below is only a placeholder and can be replaced.
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
+
+<div class="container">
+    <app-toolbar></app-toolbar>
+    <app-progress-bar></app-progress-bar>
+    <div style="flex-grow: 1">
+        <router-outlet></router-outlet>
+    </div>
 </div>
-
-<button (click)="getPlatforms()">Get platforms</button>
-
-<h2>Sign in</h2>
-<ul>
-    <li *ngFor="let platform of platforms">
-        <button (click)="signIn(platform)">{{platform}}</button>
-    </li>
-</ul>
-
-
-
-<h2>Platforms</h2>
-<ul>
-    <li *ngFor="let platform of platforms">
-        <button (click)="getCategories(platform)">{{platform}}</button>
-    </li>
-</ul>
-
-
-<h2>Categories</h2>
-<ul>
-    <li *ngFor="let category of categories">
-        {{category}}
-        <button (click)="getData(category)">fetch</button>
-    </li>
-</ul>
-
-<h2>Data</h2>
-<table>
-    <tr>
-        <th *ngFor="let type of types">
-            {{type}}
-        </th>
-    </tr>
-    <tr *ngFor="let point of points">
-        <td *ngFor="let value of point">
-            {{value}}
-        </td>
-    </tr>
-</table>-->
-
-<router-outlet></router-outlet>
