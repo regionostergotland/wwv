@@ -383,7 +383,6 @@ export class DataPoint {
  * [[CategorySpec]].
  */
 export class DataList {
-
   /**
    * Specification for category of data list.
    */
@@ -394,12 +393,23 @@ export class DataList {
    */
   private points: DataPoint[];
 
+  /**
+   * Cached list of processed data points.
+   */
+  private processedPoints: DataPoint[];
+  /**
+   * Width of processed points. TODO unit??
+   */
   private width: number;
+  /**
+   * Math function used to process points.
+   */
   private mathFunction: MathFunctionEnum;
 
   constructor(spec: CategorySpec) {
     this.spec = spec;
     this.points = [];
+    this.processedPoints = [];
     this.width = 0;
     this.mathFunction = MathFunctionEnum.ACTUAL;
   }
@@ -436,6 +446,17 @@ export class DataList {
       }
       return newPoints;
     }
+  }
+
+  /**
+   * Process points and cache the result.
+   */
+  private processPoints() {
+    this.processedPoints = this.mergePoints(
+      this.points,
+      this.width,
+      this.mathFunction
+    );
   }
 
   /**
@@ -487,13 +508,14 @@ export class DataList {
     Array.prototype.push.apply(this.points, add);
     const compare = (p1, p2) => p1.compareTo(p2, this.spec.dataTypes);
     this.points.sort(compare.bind(this));
+    this.processPoints();
   }
 
   /**
    * Get all data points from list, processed according to options.
    */
   public getPoints(): DataPoint[] {
-    return this.mergePoints(this.points, this.width, this.mathFunction);
+    return this.processedPoints;
   }
 
   /**
@@ -505,17 +527,13 @@ export class DataList {
   }
 
   /**
-   * Set the width of intervals that data points shall represent.
+   * Set the width of intervals that data points shall represent, as well as
+   * math funciton that will determine the value of the interval.
    */
-  public setWidth(width: number): void {
+  public setInterval(width: number, mathFunction: MathFunctionEnum): void {
     this.width = width;
-  }
-
-  /**
-   * Set math function that will determing value for point of an interval.
-   */
-  public setMathFunction(mathFunction: MathFunctionEnum): void {
     this.mathFunction = mathFunction;
+    this.processPoints();
   }
 
   /**

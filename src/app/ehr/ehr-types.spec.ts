@@ -238,7 +238,7 @@ describe('Ehr Types', () => {
             ]
         )
     ]);
-    test.setWidth(1);
+    test.setInterval(1, MathFunctionEnum.MEAN);
     expect(test.getPoints().length).toEqual(3);
   });
 
@@ -254,6 +254,8 @@ describe('Ehr Types', () => {
     date1.setDate(1);
     date2.setDate(1);
     date3.setDate(2);
+    date4.setDate(3);
+    date5.setDate(3);
     date.setHours(2);
     date1.setHours(3);
     date2.setHours(4);
@@ -299,8 +301,7 @@ describe('Ehr Types', () => {
           ]
       )
     ]);
-    test.setMathFunction(MathFunctionEnum.TOTAL);
-    test.setWidth(1);
+    test.setInterval(1, MathFunctionEnum.TOTAL);
     const res: DataPoint[] = test.getPoints();
     expect(res[0].get('weight')).toEqual(240);
   });
