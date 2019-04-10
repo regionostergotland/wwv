@@ -1,6 +1,4 @@
-import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { DataPoint } from '../ehr/ehr-types';
 import { setInjectImplementation } from '@angular/core/src/di/injector_compatibility';
 import { strictEqual } from 'assert';
@@ -16,9 +14,6 @@ export interface CategoryProperties {
   dataTypes: Map<string, (src: any) => any>;
 }
 
-@Injectable({
-  providedIn: 'root',
-})
 export abstract class Platform {
   // Implemented categories for each specific health platform
   protected readonly implementedCategories: Map<string, CategoryProperties>;

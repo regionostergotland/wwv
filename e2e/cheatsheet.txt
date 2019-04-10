@@ -1,0 +1,34 @@
+
+Cheatsheet for accessing elements:
+element(by.id('firstName'))
+element(by.css('.signout'))
+element(by.model('address.city'))
+element(by.binding('address.city'));
+element(by.input('firstName'));
+element(by.input('firstName')).clear();
+element(by.buttonText('Close'));
+element(by.partialButtonText('Save'));
+element(by.linkText('Save'));
+element(by.partialLinkText('Save'));
+element(by.css('img[src*='assets/img/profile.png']'));
+element(by.css('.pet .cat'));
+element(by.cssContainingText('.pet', 'Dog'));
+allColors = element.all(by.options('c c in colors'));
+
+
+Cheatsheet for typing (sendKeys):
+element(by.id('firstName').sendKeys("John");
+sendKeys(Key.ENTER);
+sendKeys(Key.TAB);
+sendKeys(Key.BACK_SPACE)
+element(by.id('user_name')).clear()
+
+
+Cheatsheet for collection:
+var list = element.all(by.css('.items));
+var list2 = element.all(by.repeater('personhome.results'));
+expect(list.count()).toBe(3);
+expect(list.get(0).getText()).toBe('First’)
+expect(list.get(1).getText()).toBe('Second’)
+expect(list.first().getText()).toBe('First’)
+expect(list.last().getText()).toBe('Last’)
