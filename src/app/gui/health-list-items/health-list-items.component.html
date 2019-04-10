@@ -104,15 +104,15 @@
 (click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button>
 
 <div *ngIf="isEditable">
-  <!-- <mat-form-field>
-    <mat-select placeholder="funktion">
-      <mat-option *ngFor="let option of mathOptions" [value]="mathFunction">{{option}}</mat-option>
+  <mat-form-field>
+    <mat-select placeholder="Funktion" [(value)]="mathFunction">
+      <mat-option *ngFor="let option of mathOptions" value="{{option.value}}">{{option.description}}</mat-option>
     </mat-select>
   </mat-form-field>
   <mat-form-field>
-    <mat-select placeholder="intervall">
-      <mat-option *ngFor="let option of mathOptions" [value]="interval">{{option}}</mat-option>
+    <mat-select placeholder="Intervall" [(value)]="interval">
+      <mat-option *ngFor="let option of intervalOptions" value="{{option.value}}">{{option.description}}</mat-option>
     </mat-select>
-  </mat-form-field> -->
-  <button mat-raised-button color="primary" (click)="calculate(mathFunction, interval)">process</button>
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="calculate(interval, mathFunction)">process</button>
 </div>

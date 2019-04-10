@@ -10,6 +10,32 @@ import {AddDataPointComponent} from '../add-data-point/add-data-point.component'
 import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 
+export interface mathOption {
+  value: MathFunctionEnum;
+  description: string;
+}
+
+export interface intervalOption {
+  value: number;
+  description: string;
+}
+
+const MATH_OPTIONS: mathOption[] = [
+  {value: MathFunctionEnum.ACTUAL, description: "Faktiskt värde"},
+  {value: MathFunctionEnum.MAX, description: "Maximalt värde"},
+  {value: MathFunctionEnum.MEAN, description: "Medelvärde"},
+  {value: MathFunctionEnum.MEDIAN, description: "Median"},
+  {value: MathFunctionEnum.MIN, description: "Minimalt värde"},
+  {value: MathFunctionEnum.TOTAL, description: "Totala värde"},
+];
+
+const INTERVAL_OPTIONS: intervalOption[] = [
+  {value: 1000*3600, description: "Per timme"},
+  {value: 1000*3600*24, description: "Per dygn"},
+  {value: 1000*3600*24*2, description: "Varannat dygn"},
+  {value: 1000*3600*24*7, description: "Per vecka"},
+];
+
 @Component({
   selector: 'app-removal-dialog',
   templateUrl: 'removal-dialog.html',
@@ -59,17 +85,16 @@ export class HealthListItemsComponent implements OnInit {
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
   
-  mathOptions: string[] = [];
-  mathFunction: MathFunctionEnum = MathFunctionEnum.MAX;
-  interval: number = 5;
+  mathOptions: mathOption[];
+  mathFunction: string;
+  intervalOptions: intervalOption[];
+  interval: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataList: MatTableDataSource<DataPoint>;
 
   // The selected datapoints
   selection = new SelectionModel<DataPoint>(true, []);
-
-  remove = false;
 
   /**
    * Gets a string representation of the date correctly formatted to be read by a human.
@@ -166,10 +191,12 @@ export class HealthListItemsComponent implements OnInit {
     return point.get(key);
   }
 
-  calculate(func: MathFunctionEnum, interval: number) {
-    console.log(func);
+  calculate(intervalString: string, funcString: string) {
+    let interval = parseInt(intervalString, 10);
+    let func = parseInt(funcString, 10); 
     console.log(interval);
-    this.conveyor.getDataList(this.selectedCategory).setInterval(interval*1000*3600*24 , func);
+    console.log(func);
+    this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
     this.ngOnInit();
   }
 
@@ -181,11 +208,8 @@ export class HealthListItemsComponent implements OnInit {
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
 
-      for (let item in MathFunctionEnum) {
-        if (isNaN(Number(item))) {
-          this.mathOptions.push(item)
-        }
-      }
+      this.mathOptions = MATH_OPTIONS;
+      this.intervalOptions = INTERVAL_OPTIONS;
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
@@ -197,17 +221,12 @@ export class HealthListItemsComponent implements OnInit {
         }
       }
     }
-    //console.log(this.options);
     this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
     this.dataList.paginator = this.paginator;
   }
 
   trackItem(index, item) {
     return item ? index : undefined;
-  }
-
-  getMathOptions() {
-
   }
 
   /**
