@@ -400,8 +400,8 @@ export class DataList {
   constructor(spec: CategorySpec) {
     this.spec = spec;
     this.points = [];
-    this.width = 3;
-    this.mathFunction = MathFunctionEnum.MEAN;
+    this.width = 0;
+    this.mathFunction = MathFunctionEnum.ACTUAL;
   }
 
   /**
@@ -411,7 +411,7 @@ export class DataList {
   private mergePoints(points: DataPoint[],
                       width: number, fn: MathFunctionEnum): DataPoint[] {
     if (width === 0 || fn === MathFunctionEnum.ACTUAL) {
-      return points;
+      return points.slice();
     } else {
       const newPoints: DataPoint[] = [];
       const msInDay: number = 1000 * 60 * 60 * 24; // use shorter min interval?
