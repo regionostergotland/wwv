@@ -1,27 +1,17 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
-import { MessagesComponent } from './messages/messages.component';
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
-import { MatToolbarModule } from '@angular/material';
+import { ProgressBarComponent} from './gui/progress-bar/progress-bar.component';
+import { MatToolbarModule, MatGridListModule } from '@angular/material';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import {
-  GoogleApiModule,
   GoogleApiService,
   GoogleAuthService,
-  NgGapiClientConfig,
-  NG_GAPI_CONFIG
 } from 'ng-gapi';
 
-const gapiClientConfig: NgGapiClientConfig = {
-  client_id: '***REMOVED***.apps.googleusercontent.com',
-  discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],
-  scope: [
-    'https://www.googleapis.com/auth/fitness.blood_pressure.read',
-    'https://www.googleapis.com/auth/fitness.body.read'
-  ].join(' ')
-};
+import { CustomGoogleApiModule } from './google-fit-config';
 
 // describe what is being tested
 // describe(xComponent)
@@ -32,17 +22,15 @@ describe('AppComponent', () => {
       imports: [ // add all modules used in this component
         RouterTestingModule,
         MatToolbarModule,
+        MatGridListModule,
         RouterTestingModule,
-        GoogleApiModule.forRoot({
-          provide: NG_GAPI_CONFIG,
-          useValue: gapiClientConfig
-        })
+        CustomGoogleApiModule
       ],
       declarations: [ // add all components used in this component
         AppComponent,
         ToolbarComponent,
         AppComponent,
-        MessagesComponent
+        ProgressBarComponent
       ],
       providers: [
         GoogleAuthService,
@@ -76,5 +64,4 @@ describe('AppComponent', () => {
   // gets the native element of the compiled HTML
   expect(compiled.querySelector('app-toolbar')).toBeTruthy();
   });
-
 });

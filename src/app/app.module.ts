@@ -4,7 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 import { SourcesComponent } from './gui/sources/sources.component';
 import { HomeComponent } from './gui/home/home.component';
@@ -16,6 +15,8 @@ import { HealthListItemsComponent } from './gui/health-list-items/health-list-it
 import { InspectionComponent } from './gui/inspection/inspection.component';
 import { BottomSheetCategoriesComponent, SidebarComponent } from './gui/sidebar/sidebar.component';
 import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
+import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';
+import { ConfirmationComponent } from './gui/confirmation/confirmation.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 
@@ -75,7 +76,8 @@ const gapiClientConfig: NgGapiClientConfig = {
   discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],
   scope: [
     'https://www.googleapis.com/auth/fitness.blood_pressure.read',
-    'https://www.googleapis.com/auth/fitness.body.read'
+    'https://www.googleapis.com/auth/fitness.body.read',
+    'https://www.googleapis.com/auth/fitness.activity.read'
   ].join(' '),
 };
 
@@ -93,7 +95,9 @@ const gapiClientConfig: NgGapiClientConfig = {
     InspectionComponent,
     SidebarComponent,
     AddDataPointComponent,
-    BottomSheetCategoriesComponent
+    BottomSheetCategoriesComponent,
+    ProgressBarComponent,
+    ConfirmationComponent,
   ],
   imports: [
     BrowserModule,
