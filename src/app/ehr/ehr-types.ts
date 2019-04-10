@@ -91,26 +91,27 @@ export abstract class DataType {
 
   public truncate(values: any[], fn: MathFunctionEnum): any[] {
     let functions = new Map<MathFunctionEnum, (v: any[]) => any[]>([
-      [MathFunctionEnum.ACTUAL, (v) => v],
-      [MathFunctionEnum.MEDIAN, this.median],
-      [MathFunctionEnum.MEAN, this.mean],
+      [MathFunctionEnum.ACTUAL, this.only.bind(this)],
+      [MathFunctionEnum.MEDIAN, this.median.bind(this)],
+      [MathFunctionEnum.MEAN, this.mean.bind(this)],
+      [MathFunctionEnum.TOTAL, this.total.bind(this)],
     ]);
     return functions.get(fn)(values);
   }
 
-  protected median(values: any[]): any[] {
+  protected median(values: any[]): any {
     return this.only(values);
   }
 
-  protected mean(values: any[]): any[] {
+  protected mean(values: any[]): any {
     return this.only(values);
   }
 
-  protected total(values: any[]): any[] {
+  protected total(values: any[]): any {
     return this.only(values);
   }
 
-  private only(values: any[]): any[] {
+  private only(values: any[]): any {
     let equal: boolean = true
     for (let value of values) {
       if (value !== values[0]) {
@@ -118,7 +119,7 @@ export abstract class DataType {
         break;
       }
     }
-    return equal ? [values[0]] : [];
+    return equal ? values[0] : undefined;
   }
 }
 
@@ -271,22 +272,22 @@ export class DataTypeQuantity extends DataType {
     }];
   }
 
-  protected median(values: any[]): any[] {
+  protected median(values: any[]): any {
     values.sort(); // can we assume they are sorted already?
     const n = values.length;
     if (n/2 === Math.ceil(n/2)) {
-      return [values[n/2]];
+      return values[n/2];
     } else {
-      return [(values[Math.ceil(n/2)] + values[Math.floor(n/2)]) / 2];
+      return (values[Math.ceil(n/2)] + values[Math.floor(n/2)]) / 2;
     }
   }
 
-  protected mean(values: any[]): any[] {
-    return [values.reduce((acc, v) => acc+v)/values.length];
+  protected mean(values: any[]): any {
+    return this.total(values)/values.length;
   }
 
-  protected total(values: any[]): any[] {
-    return [values.reduce((acc, v) => acc+v)];
+  protected total(values: any[]): any {
+    return values.reduce((acc, v) => acc+v);
   }
 }
 
@@ -297,12 +298,6 @@ export class DataTypeQuantity extends DataType {
  * Otherwise, works similar to a Map.
  */
 export class DataPoint {
-
-  /**
-   * Point is marked as chosen
-   */
-  public chosen: boolean;
-
   /**
    * Point is marked for removal.
    */
@@ -313,8 +308,6 @@ export class DataPoint {
   private point: Map<string, any>;
 
   constructor(values = []) {
-
-    this.chosen = false;
     this.removed = false;
     this.point = new Map<string, any>(values);
   }
@@ -327,7 +320,6 @@ export class DataPoint {
   public keys() { return this.point.keys(); }
   public entries() { return this.point.entries(); }
   public has(typeId: string) { return this.point.has(typeId); }
-  public setChosen(value: boolean) {  this.chosen = value; }
 
   public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
     for (const [typeId, dataType] of dataTypes.entries()) {
@@ -368,45 +360,48 @@ export class DataList {
    */
   private points: DataPoint[];
 
-  /**
-   * List of lists of datapoints divided into interval based on width
-   */
-   public pointsInterval: DataPoint[][];
-
-  // TODO use these for processing
-  private width: number;
+  private width: number; // unit? ms, days?
   private mathFunction: MathFunctionEnum;
-  public id: string;
 
   constructor(spec: CategorySpec) {
     this.spec = spec;
-    this.id = 'weight';
     this.points = [];
-    this.pointsInterval = [];
     this.width = 0;
     this.mathFunction = MathFunctionEnum.ACTUAL;
   }
 
   /**
-   * Divides datapoints marked as chosen into lists of time intervals based on width.
-   * The lists are pushed to this.points_interval for mathematical use.
+   * Merge multiple datapoints to single point with a math function based on
+   * width.
    */
-  public width_divider(): void {
-    let chosenPoints = this.points.filter(p => p.chosen);
-    chosenPoints.sort(this.sortByEarliestComparator);
-    if (this.width === 0) {
-      this.pointsInterval = [chosenPoints];
+  private mergePoints(points: DataPoint[],
+                     width: number, fn: MathFunctionEnum): DataPoint[] {
+    if (width === 0 || fn === MathFunctionEnum.ACTUAL) {
+      return points;
     } else {
-      let datapointList: DataPoint[] = [];
+      let newPoints: DataPoint[] = [];
       const msInDay: number = 1000 * 60 * 60 * 24;
-      while (chosenPoints[0] !== undefined) {
-        const oldestDate: number = chosenPoints[0].get('time').setHours(0, 0, 0);
-        datapointList = chosenPoints.filter(p =>
-          (p.get('time').getTime() < oldestDate + this.width * msInDay));
-        chosenPoints = chosenPoints.filter(p =>
-          (p.get('time').getTime() > oldestDate + this.width * msInDay));
-        this.pointsInterval.push(datapointList);
+      while (points[0] !== undefined) {
+        const oldestDate: number = points[0].get('time').setHours(0, 0, 0);
+        let interval: DataPoint[] = points.filter(p =>
+          (p.get('time').getTime() <= oldestDate + width * msInDay));
+        points = points.filter(p =>
+          (p.get('time').getTime() > oldestDate + width * msInDay));
+        let newValues: any[] = [];
+        for (const [id, dataType] of this.spec.dataTypes.entries()) {
+          if (id === 'time') {
+            const startDate: Date = interval[0].get('time');
+            startDate.setHours(0, 0, 0);
+            newValues.push(['time', startDate]);
+          } else {
+            const prevValues = interval.map((p) => p.get(id));
+            const newValue = dataType.truncate(prevValues, fn);
+            newValues.push([id, newValue]);
+          }
+        }
+        newPoints.push(new DataPoint(newValues));
       }
+      return newPoints;
     }
   }
 
@@ -474,79 +469,7 @@ export class DataList {
    * Get all data points from list, processed according to options.
    */
   public getPoints(): DataPoint[] {
-    const points = this.points.slice();
-    // TODO process
-    return points;
-  }
-
-  /**
-   * Get the list of intervals of points.
-   * @returns a two deep list of datapoints
-   */
-   public getPointsInterval(): DataPoint[][] {
-    return this.pointsInterval;
-  }
-
-  /**
-   * The manipulation of intervals of datapoint to make one datapoint for each
-   * to represent respective interval.
-   * @returns A list of datapoints that each represent it's original interval.
-   */
-  public intervalManipulation(): DataPoint[] {
-    const dataPoints: DataPoint[] = [];
-    for (const interval of this.pointsInterval) {
-      const dataPointElements: any[] = [];
-      const requiredIds: string[] = Array.from(this.spec.dataTypes.keys()).
-      filter(f => this.spec.dataTypes.get(f).required);
-      for (const id of requiredIds) {
-        this.id = id;
-        if (id === 'time') {
-          const startDate: Date = interval[0].get('time');
-          startDate.setHours(0, 0, 0);
-          dataPointElements.push(['time', startDate]);
-        } else if (typeof interval[0].get(id) === 'number') {
-          let value = 0;
-          switch (this.mathFunction) {
-            case MathFunctionEnum.TOTAL :
-              for (const point of interval) {
-                value += point.get(id);
-              }
-              break;
-            case MathFunctionEnum.ACTUAL :
-
-              break;
-            case MathFunctionEnum.MEDIAN :
-              interval.sort(this.sortByValue.bind(this));
-              if ((interval.length - 1) / 2 === Math.ceil((interval.length - 1) / 2)) {
-                value = interval[(interval.length - 1) / 2].get(id);
-              } else {
-                value = (interval[Math.ceil((interval.length - 1) / 2)].get(id) +
-                interval[Math.floor((interval.length - 1) / 2)].get(id)) / 2;
-              }
-              break;
-            case MathFunctionEnum.MEAN :
-              for (const point of interval) {
-                value += point.get(id);
-              }
-              value = value / interval.length;
-              break;
-          }
-          dataPointElements.push([id, value]);
-        } else {
-          dataPointElements.push([id, interval[0].get(id)]);
-        }
-      }
-      const dataPoint: DataPoint = new DataPoint(dataPointElements);
-      dataPoints.push(dataPoint);
-    }
-    return dataPoints;
-  }
-
-  /**
-   * Sort point by current ids value.
-   */
-  private sortByValue(p1: DataPoint, p2: DataPoint): number {
-    return (p1.get(this.id) - p2.get(this.id));
+    return this.mergePoints(this.points, this.width, this.mathFunction);
   }
 
   /**
