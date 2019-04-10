@@ -1,6 +1,7 @@
 import { HomePage } from './home.po';
 import { browser, logging } from 'protractor';
 
+
 describe('workspace-project App', () => {
     const page = new HomePage();
     beforeEach(() => {
@@ -26,7 +27,7 @@ describe('workspace-project App', () => {
     it('Should redirect to the manual input page when the manual input button is clicked', () => {
         const input = page.getManualInputButton();
         input.click();
-        expect(browser.driver.getCurrentUrl()).toContain('/help');
+        expect(browser.driver.getCurrentUrl()).toContain('/sidebar');
     });
 
     afterEach(async () => {
