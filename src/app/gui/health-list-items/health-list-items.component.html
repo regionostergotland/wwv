@@ -102,3 +102,17 @@
 (click)="openDialog()">Lägg till datavärde</button>
 <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%" 
 (click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button>
+
+<div *ngIf="isEditable">
+  <!-- <mat-form-field>
+    <mat-select placeholder="funktion">
+      <mat-option *ngFor="let option of mathOptions" [value]="mathFunction">{{option}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-select placeholder="intervall">
+      <mat-option *ngFor="let option of mathOptions" [value]="interval">{{option}}</mat-option>
+    </mat-select>
+  </mat-form-field> -->
+  <button mat-raised-button color="primary" (click)="calculate(mathFunction, interval)">process</button>
+</div>

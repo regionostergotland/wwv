@@ -12,6 +12,7 @@ export enum Categories {
   BODY_WEIGHT = 'body_weight',
   HEIGHT = 'height_length',
   HEART_RATE = 'pulse_heart_beat',
+  STEPS = 'steps'
 }
 
 export enum SubTrees {
@@ -50,6 +51,10 @@ export enum HeartRate {
   POSITION = 'position',
 }
 
+export enum Steps {
+  STEPS = 'steps'
+}
+
 const TimeField: [string, DataType] = [
   CommonFields.TIME,
   new DataTypeDateTime(
@@ -59,6 +64,7 @@ const TimeField: [string, DataType] = [
     true, false,
   )
 ];
+
 const CommentField: [string, DataType] = [
   CommonFields.COMMENT,
   new DataTypeText(
@@ -69,6 +75,7 @@ const CommentField: [string, DataType] = [
     false, false,
   )
 ];
+
 const DeviceNameField: [string, DataType] = [
   MedicalDevice.NAME,
   new DataTypeText(
@@ -78,6 +85,7 @@ const DeviceNameField: [string, DataType] = [
     false, true,
   )
 ];
+
 const DeviceTypeField: [string, DataType] = [
   MedicalDevice.TYPE,
   new DataTypeText(
@@ -87,6 +95,7 @@ const DeviceTypeField: [string, DataType] = [
     false, true,
   )
 ];
+
 const DeviceManufacturerField: [string, DataType] = [
   MedicalDevice.MANUFACTURER,
   new DataTypeText(
@@ -252,6 +261,30 @@ export const ehrConfig: EhrConfig = {
         DeviceManufacturerField,
       ])
     },
+
+    {
+      id: Categories.STEPS,
+      label: 'Steg',
+      description: 'Antal uppmätta steg vid gång',
+      dataTypes: new Map<string, DataType>(
+        [
+          TimeField,
+          [Steps.STEPS, new DataTypeQuantity(
+            [SubTrees.EVENT],
+            'Antal steg',
+            'Antal uppnätta steg under givet tidsintervall',
+            true, false,
+            'Steg', 0, -1
+            )],
+          CommentField,
+          DeviceNameField,
+          DeviceTypeField,
+          DeviceManufacturerField,
+        ],
+      )
+    },
+
+
     {
       id : Categories.HEART_RATE,
       label : 'Puls/Hjärtfrekvens',

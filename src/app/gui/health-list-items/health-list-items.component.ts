@@ -2,7 +2,8 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
-         DataTypeEnum} from '../../ehr/datatype';
+         DataTypeEnum,
+         MathFunctionEnum} from '../../ehr/datatype';
 import { DataPoint } from '../../ehr/datalist';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
@@ -57,6 +58,10 @@ export class HealthListItemsComponent implements OnInit {
   pointDataList: DataPoint[];
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
+  
+  mathOptions: string[] = [];
+  mathFunction: MathFunctionEnum = MathFunctionEnum.MAX;
+  interval: number = 5;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataList: MatTableDataSource<DataPoint>;
@@ -134,16 +139,14 @@ export class HealthListItemsComponent implements OnInit {
       point.removed = true;
     }
     this.selection.clear();
-
+/*
     const newList: DataPoint[] = [];
     for (const point of this.conveyor.getDataList(this.selectedCategory).getPoints()) {
       if (!point.removed) {
         newList.push(point);
       }
     }
-    // console.log(this.conveyor.getDataList(this.selectedCategory).getPoints());
-    // console.log(newList);
-    this.conveyor.getDataList(this.selectedCategory).setPoints(newList);
+    this.conveyor.getDataList(this.selectedCategory).setPoints(newList);*/
     this.ngOnInit();
   }
 
@@ -163,6 +166,13 @@ export class HealthListItemsComponent implements OnInit {
     return point.get(key);
   }
 
+  calculate(func: MathFunctionEnum, interval: number) {
+    console.log(func);
+    console.log(interval);
+    this.conveyor.getDataList(this.selectedCategory).setInterval(interval*1000*3600*24 , func);
+    this.ngOnInit();
+  }
+
   ngOnInit() {
     if (this.selectedCategory) {
       // Reset all the internal lists.
@@ -170,7 +180,12 @@ export class HealthListItemsComponent implements OnInit {
       this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
-      this.selection.clear();
+
+      for (let item in MathFunctionEnum) {
+        if (isNaN(Number(item))) {
+          this.mathOptions.push(item)
+        }
+      }
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
@@ -182,13 +197,17 @@ export class HealthListItemsComponent implements OnInit {
         }
       }
     }
-    console.log(this.options);
+    //console.log(this.options);
     this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
     this.dataList.paginator = this.paginator;
   }
 
   trackItem(index, item) {
     return item ? index : undefined;
+  }
+
+  getMathOptions() {
+
   }
 
   /**
