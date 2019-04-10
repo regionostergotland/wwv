@@ -74,9 +74,10 @@ export class CategoryPickerComponent implements OnInit {
     } else {
         this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
     }
+
   }
   validateSelections(): boolean {
-    return(this.startDate && this.endDate && this.chosenCategories.length > 0);
+    return (this.startDate && this.endDate && this.chosenCategories.length > 0);
   }
 
   /**
