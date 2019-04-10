@@ -1,0 +1,12 @@
+<div class="centering">
+  <mat-progress-bar mode="buffer" *ngIf="load"></mat-progress-bar>
+  <div layout="row" layout-align="center center" class="card-height">
+  <!-- <mat-spinner color="primary" *ngIf="load"></mat-spinner> -->
+    <div *ngIf="!load" style="text-align:center;">
+      <h1 style="text-align: center">
+      Data skickat!
+      </h1>
+      <button mat-flat-button color="accent" routerLink='/home'>Tillbaka hem</button>
+    </div>
+  </div>
+</div>
