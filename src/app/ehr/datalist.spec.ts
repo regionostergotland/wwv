@@ -5,7 +5,7 @@ import { CategorySpec, DataType, MathFunctionEnum,
          DataTypeQuantity,
          DataTypeCodedText } from './datatype';
 
-describe('Ehr Types', () => {
+fdescribe('Ehr Types', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
     providers: [
@@ -204,7 +204,7 @@ describe('Ehr Types', () => {
     expect(test.getPoints().length).toEqual(3);
   });
 
-  it('should create new datapoints with mean of the interval points numerized fields', () => {
+  fit('should create new datapoints with mean of the interval points numerized fields', () => {
     const test = new DataList(categories[1]);
     const date: Date = new Date();
     const date1: Date = new Date();
@@ -263,9 +263,9 @@ describe('Ehr Types', () => {
           ]
       )
     ]);
-    test.setInterval(1, MathFunctionEnum.TOTAL);
+    test.setInterval(1, MathFunctionEnum.MAX);
     const res: DataPoint[] = test.getPoints();
-    expect(res[0].get('weight')).toEqual(240);
+    expect(res[0].get('weight')).toEqual(90);
   });
 
   /**

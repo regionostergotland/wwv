@@ -43,6 +43,8 @@ export enum MathFunctionEnum {
   MEDIAN,
   MEAN,
   TOTAL,
+  MIN,
+  MAX,
 }
 
 /**
@@ -116,6 +118,8 @@ export abstract class DataType {
       [MathFunctionEnum.MEDIAN, this.median.bind(this)],
       [MathFunctionEnum.MEAN, this.mean.bind(this)],
       [MathFunctionEnum.TOTAL, this.total.bind(this)],
+      [MathFunctionEnum.MIN, this.min.bind(this)],
+      [MathFunctionEnum.MAX, this.max.bind(this)],
     ]);
     return functions.get(fn)(values);
   }
@@ -129,6 +133,14 @@ export abstract class DataType {
   }
 
   protected total(values: any[]): any {
+    return this.only(values);
+  }
+
+  protected min(values: any[]): any {
+    return this.only(values);
+  }
+
+  protected max(values: any[]): any {
     return this.only(values);
   }
 
@@ -324,4 +336,13 @@ export class DataTypeQuantity extends DataType {
   protected total(values: any[]): any {
     return values.reduce((acc, v) => acc + v);
   }
+
+  protected min(values: any[]): any {
+    return Math.min(...values);
+  }
+
+  protected max(values: any[]): any {
+    return Math.max(...values);
+  }
+
 }

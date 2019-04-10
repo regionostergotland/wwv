@@ -27,7 +27,6 @@ export class EhrService {
     for (const cat of this.config.categories) {
       cats.push(cat.id);
     }
-
     return cats;
   }
 
@@ -70,7 +69,6 @@ export class EhrService {
               }
               element = container[p];
             }
-
             element[id] = dataType.toRest(value);
           }
         }
