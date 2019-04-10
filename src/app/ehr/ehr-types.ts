@@ -142,6 +142,16 @@ export abstract class DataType {
     }
     return equal ? values[0] : undefined;
   }
+
+  public compare(v1: any, v2: any): number {
+    if (v1 < v2) {
+      return -1;
+    } else if (v2 < v1) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 }
 
 /**
@@ -168,7 +178,7 @@ export class DataTypeDateTime extends DataType {
 
   // @override
   public equal(v1: any, v2: any): boolean {
-    return v1.valueOf() === v2.valueOf();
+    return v1.getTime() === v2.getTime();
   }
 }
 
@@ -349,13 +359,22 @@ export class DataPoint {
   public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
     for (const [typeId, dataType] of dataTypes.entries()) {
       if (dataType.required) {
-        if (!dataType.equal(p.get(typeId), this.get(typeId))) {
+        if (!dataType.equal(this.get(typeId), p.get(typeId))) {
           return false;
         }
       }
     }
-
     return true;
+  }
+
+  public compareTo(p: DataPoint, dataTypes: Map<string, DataType>): number {
+    for (const [typeId, dataType] of dataTypes.entries()) {
+      if (dataType.required) {
+        const comp = dataType.compare(this.get(typeId), p.get(typeId));
+        if (comp !== 0) { return comp; }
+      }
+    }
+    return 0;
   }
 }
 
@@ -419,11 +438,6 @@ export class DataList {
     }
   }
 
-  // make lambda?
-  private sortByEarliestComparator(p1: DataPoint, p2: DataPoint) {
-    return (p1.get('time').getTime() - p2.get('time').getTime());
-  }
-
   /**
    * Performs a binary search on the list of current points to check if
    * a given point is a duplicate
@@ -435,13 +449,13 @@ export class DataList {
     while (start <= end) {
       const current = Math.floor((start + end) / 2);
       const point = this.points[current];
-      const comp = this.sortByEarliestComparator(testPoint, point);
+      const comp = testPoint.compareTo(point, this.spec.dataTypes);
       if (comp < 0) {
         end = current - 1;
       } else if (comp > 0) {
         start = current + 1;
       } else {
-        return testPoint.equals(point, this.spec.dataTypes);
+        return true;
       }
     }
     return false;
@@ -451,21 +465,15 @@ export class DataList {
    * Add a point to the data list.
    */
   public addPoint(point: DataPoint) {
-    for (const [typeId, value] of point.entries()) {
-      if (!this.getDataType(typeId).isValid(value)) {
-        throw TypeError(value + ' invalid value for ' + typeId);
-      }
-    }
-    if (!this.containsPoint(point)) {
-      this.points.push(point);
-    }
-    this.points.sort(this.sortByEarliestComparator);
+    this.addPoints([point]);
   }
 
   /**
    * Add multiple points to the data list.
    */
   public addPoints(points: DataPoint[]) {
+    // Assumption: none of the new points are duplicates of each other.
+    const add: DataPoint[] = [];
     for (const point of points) {
       for (const [typeId, value] of point.entries()) {
         if (!this.getDataType(typeId).isValid(value)) {
@@ -473,10 +481,12 @@ export class DataList {
         }
       }
       if (!this.containsPoint(point)) {
-        this.points.push(point);
+        add.push(point);
       }
     }
-    this.points.sort(this.sortByEarliestComparator);
+    Array.prototype.push.apply(this.points, add);
+    const compare = (p1, p2) => p1.compareTo(p2, this.spec.dataTypes);
+    this.points.sort(compare.bind(this));
   }
 
   /**
