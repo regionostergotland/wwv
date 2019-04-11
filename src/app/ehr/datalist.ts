@@ -56,27 +56,23 @@ export class DataPoint {
   }
 
   /*
-   * Determine if two points are within the same time period.
+   * Determine if two dates are within the same time period.
    */
-  public static samePeriod(p1: DataPoint, p2: DataPoint,
+  public static samePeriod(t1: Date, t2: Date,
                            width: PeriodWidths): boolean {
-    const t1: Date = p1.get('time');
-    const t2: Date = p2.get('time');
     switch (width) {
       case PeriodWidths.POINT:
         return t1.getTime() === t2.getTime();
+      case PeriodWidths.WEEK:
+        return t1.getWeek() === t2.getWeek() &&
+               t1.getWeekYear() === t2.getWeekYear();
       case PeriodWidths.HOUR:
-        if (t1.getHours() !== t2.getTime()) {
+        if (t1.getHours() !== t2.getHours()) {
           return false;
         }
         /* falls through */
       case PeriodWidths.DAY:
-        if (t1.getDay() !== t2.getDay()) {
-          return false;
-        }
-        /* falls through */
-      case PeriodWidths.WEEK:
-        if (t1.getWeek() !== t2.getWeek()) {
+        if (t1.getDate() !== t2.getDate()) {
           return false;
         }
         /* falls through */
@@ -86,7 +82,7 @@ export class DataPoint {
         }
         /* falls through */
       case PeriodWidths.YEAR:
-        if (t1.getMonth() !== t2.getMonth()) {
+        if (t1.getFullYear() !== t2.getFullYear()) {
           return false;
         }
     }
@@ -102,7 +98,7 @@ export class DataPoint {
     for (let p = 1; p < points.length - 1; p++) {
       const p1: DataPoint = points[p - 1];
       const p2: DataPoint = points[p];
-      if (DataPoint.samePeriod(p1, p2, width)) {
+      if (DataPoint.samePeriod(p1.get('time'), p2.get('time'), width)) {
         groups[groups.length - 1].push(p2);
       } else {
         groups.push([p2]);
