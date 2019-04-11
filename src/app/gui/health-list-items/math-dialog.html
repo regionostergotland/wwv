@@ -1,15 +1,18 @@
 <p>Här kan du välja funktion och intervall</p>
 
-<div mat-dialog-actions></div>
-<mat-form-field>
-    <mat-select placeholder="Funktion" [(value)]="mathFunction">
-    <mat-option *ngFor="let option of mathOptions" value="{{option.value}}">{{option.description}}</mat-option>
-    </mat-select>
-</mat-form-field>
-<mat-form-field>
-    <mat-select placeholder="Intervall" [(value)]="interval">
-    <mat-option *ngFor="let option of intervalOptions" value="{{option.value}}">{{option.description}}</mat-option>
-    </mat-select>
-</mat-form-field>
-<button mat-button color="primary" (click)="closeDialog()">Avbryt</button>
-<button mat-button color="primary" (click)="calculate(interval, mathFunction)">Verkställ</button>
+<div mat-dialog-actions>
+  <mat-form-field class="math-interval-select">
+      <mat-select placeholder="Funktion" [(value)]="mathFunction">
+      <mat-option *ngFor="let option of mathOptions" value="{{option.value}}">{{option.description}}</mat-option>
+      </mat-select>
+  </mat-form-field>
+  <mat-form-field class="math-interval-select">
+      <mat-select placeholder="Intervall" [(value)]="interval">
+      <mat-option *ngFor="let option of intervalOptions" value="{{option.value}}">{{option.description}}</mat-option>
+      </mat-select>
+  </mat-form-field>
+</div>
+<div class="math-dialog-buttons">
+  <button mat-button (click)="closeDialog()">Avbryt</button>
+  <button mat-button color="primary" (click)="calculate(interval, mathFunction)">Verkställ</button>
+</div>

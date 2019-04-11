@@ -56,6 +56,7 @@ export class RemovalDialogComponent {
 @Component({
   selector: 'app-math-dialog',
   templateUrl: 'math-dialog.html',
+  styleUrls: ['./health-list-items.component.scss']
 })
 export class MathDialogComponent {
 
