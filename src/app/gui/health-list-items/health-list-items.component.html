@@ -98,21 +98,17 @@
 
 <mat-paginator [pageSizeOptions]="[5, 10, 15, 30, 50]" showFirstLastButtons></mat-paginator>
 
-<button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%"
+<div class="flex">
+  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;"
+  (click)="openDialog()">Lägg till datavärde</button>
+  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;" 
+  (click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button>
+  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;"
+  (click)="openMathDialog()">Sammanställ punkter</button>
+</div>
+<!-- <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%"
 (click)="openDialog()">Lägg till datavärde</button>
 <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%" 
 (click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button>
-
-<div *ngIf="isEditable">
-  <mat-form-field>
-    <mat-select placeholder="Funktion" [(value)]="mathFunction">
-      <mat-option *ngFor="let option of mathOptions" value="{{option.value}}">{{option.description}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <mat-form-field>
-    <mat-select placeholder="Intervall" [(value)]="interval">
-      <mat-option *ngFor="let option of intervalOptions" value="{{option.value}}">{{option.description}}</mat-option>
-    </mat-select>
-  </mat-form-field>
-  <button mat-raised-button color="primary" (click)="calculate(interval, mathFunction)">process</button>
-</div>
+<button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%"
+(click)="openMathDialog()">Sammanställ punkter</button> -->

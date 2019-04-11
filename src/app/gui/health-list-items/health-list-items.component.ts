@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, Inject} from '@angular/core';
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
@@ -7,7 +7,7 @@ import { CategorySpec,
 import { DataPoint } from '../../ehr/datalist';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 
 export interface mathOption {
@@ -31,7 +31,7 @@ const MATH_OPTIONS: mathOption[] = [
 
 const INTERVAL_OPTIONS: intervalOption[] = [
   {value: 1000*3600, description: "Per timme"},
-  {value: 1000*3600*24, description: "Per dygn"},
+  {value: 1000*3600*24-1, description: "Per dygn"},
   {value: 1000*3600*24*2, description: "Varannat dygn"},
   {value: 1000*3600*24*7, description: "Per vecka"},
 ];
@@ -49,6 +49,45 @@ export class RemovalDialogComponent {
 
   closeDialog(): void {
     this.dialogRef.close();
+  }
+
+}
+
+@Component({
+  selector: 'app-math-dialog',
+  templateUrl: 'math-dialog.html',
+})
+export class MathDialogComponent {
+
+  mathOptions: mathOption[];
+  mathFunction: string;
+  intervalOptions: intervalOption[];
+  interval: string;
+
+  selectedCategory: string;
+
+  constructor(private conveyor: Conveyor, 
+    public dialogRef: MatDialogRef<MathDialogComponent>, 
+    @Inject(MAT_DIALOG_DATA) public data: string) {
+  
+    this.selectedCategory = data;
+    this.mathOptions = MATH_OPTIONS;
+    this.intervalOptions = INTERVAL_OPTIONS;
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+
+  calculate(intervalString: string, funcString: string) {
+    if (intervalString && funcString) {
+      let interval = parseInt(intervalString, 10);
+      let func = parseInt(funcString, 10); 
+      console.log(interval);
+      console.log(func);
+      this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
+      this.closeDialog();
+    }
   }
 
 }
@@ -85,10 +124,10 @@ export class HealthListItemsComponent implements OnInit {
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
   
-  mathOptions: mathOption[];
-  mathFunction: string;
-  intervalOptions: intervalOption[];
-  interval: string;
+  // mathOptions: mathOption[];
+  // mathFunction: string;
+  // intervalOptions: intervalOption[];
+  // interval: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataList: MatTableDataSource<DataPoint>;
@@ -191,14 +230,14 @@ export class HealthListItemsComponent implements OnInit {
     return point.get(key);
   }
 
-  calculate(intervalString: string, funcString: string) {
-    let interval = parseInt(intervalString, 10);
-    let func = parseInt(funcString, 10); 
-    console.log(interval);
-    console.log(func);
-    this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
-    this.ngOnInit();
-  }
+  // calculate(intervalString: string, funcString: string) {
+  //   let interval = parseInt(intervalString, 10);
+  //   let func = parseInt(funcString, 10); 
+  //   console.log(interval);
+  //   console.log(func);
+  //   this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
+  //   this.ngOnInit();
+  // }
 
   ngOnInit() {
     if (this.selectedCategory) {
@@ -208,8 +247,8 @@ export class HealthListItemsComponent implements OnInit {
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
 
-      this.mathOptions = MATH_OPTIONS;
-      this.intervalOptions = INTERVAL_OPTIONS;
+      //this.mathOptions = MATH_OPTIONS;
+      //this.intervalOptions = INTERVAL_OPTIONS;
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
@@ -241,6 +280,19 @@ export class HealthListItemsComponent implements OnInit {
       console.log('The dialog was closed');
       this.ngOnInit();
     });
+  }
+
+  /**
+   * Opens the dialog for MathDialogComponent
+   */
+  openMathDialog(): void {
+    const dialogRef = this.dialog.open(MathDialogComponent, {
+      data: this.selectedCategory
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.ngOnInit();
+    })
   }
 
   /**
