@@ -170,8 +170,8 @@ export class DataList {
     this.spec = spec;
     this.points = [];
     this.processedPoints = [];
-    this.width = PeriodWidths.MONTH;
-    this.mathFunction = MathFunctionEnum.MEAN;
+    this.width = PeriodWidths.POINT;
+    this.mathFunction = MathFunctionEnum.ACTUAL;
   }
 
   /**
@@ -181,7 +181,7 @@ export class DataList {
   private mergePoints(points: DataPoint[],
                       width: PeriodWidths,
                       fn: MathFunctionEnum): DataPoint[] {
-    if (width === 0 || fn === MathFunctionEnum.ACTUAL) {
+    if (width === PeriodWidths.POINT || fn === MathFunctionEnum.ACTUAL) {
       return points.slice();
     } else {
       const newPoints: DataPoint[] = [];
@@ -288,7 +288,7 @@ export class DataList {
    * Set the width of intervals that data points shall represent, as well as
    * math funciton that will determine the value of the interval.
    */
-  public setInterval(width: number, mathFunction: MathFunctionEnum): void {
+  public setInterval(width: PeriodWidths, mathFunction: MathFunctionEnum): void {
     this.width = width;
     this.mathFunction = mathFunction;
     this.processPoints();
