@@ -5,7 +5,7 @@ import { CategorySpec, DataType, MathFunctionEnum,
          DataTypeQuantity,
          DataTypeCodedText } from './datatype';
 
-describe('Ehr Types', () => {
+describe('datalist', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
     providers: [
@@ -254,14 +254,17 @@ describe('Ehr Types', () => {
   });
   it('should be the start of the week', () => {
     let date = new Date();
-    date.setFullYear(2019, 3, 8);
+    date.setFullYear(2018, 11, 31);
     date.setHours(0, 0, 0, 0);
     const startOfWeek: number = date.getTime();
-    // TODO impl
-    //expect(DataPoint.startOfPeriod(
-    // new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodWidths.WEEK)
-    //  .getTime())
-    //   .toBe(startOfWeek);
+    expect(DataPoint.startOfPeriod(
+     new Date(new Date().setFullYear(2019, 0, 6)), PeriodWidths.WEEK)
+      .getTime())
+       .toBe(startOfWeek);
+    expect(DataPoint.startOfPeriod(
+     new Date(new Date().setFullYear(2019, 0, 1)), PeriodWidths.WEEK)
+      .getTime())
+       .toBe(startOfWeek);
   });
   it('should be the start of the day', () => {
     let date = new Date();

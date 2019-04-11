@@ -41,14 +41,24 @@ export class DataPoint {
     switch (width) {
     case PeriodWidths.POINT:
       beg.setTime(time.getTime());
+      break;
+    case PeriodWidths.WEEK:
+      // set the same day
+      beg.setFullYear(time.getFullYear(), time.getMonth(), time.getDate());
+      // set to monday the same week
+      const msInADay = 1000 * 3600 * 24;
+      const timeOffset = ((((beg.getDay()-1) % 7) + 7) % 7)*msInADay;
+      beg.setTime(beg.getTime()-timeOffset);
+      break;
     case PeriodWidths.HOUR:
       beg.setHours(time.getHours());
+      /* falls through */
     case PeriodWidths.DAY:
       beg.setDate(time.getDate());
-    case PeriodWidths.WEEK:
-      // TODO new.setWeek(time.getWeek());
+      /* falls through */
     case PeriodWidths.MONTH:
       beg.setMonth(time.getMonth());
+      /* falls through */
     case PeriodWidths.YEAR:
       beg.setFullYear(time.getFullYear());
     }
