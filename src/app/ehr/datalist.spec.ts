@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DataList, DataPoint} from './datalist';
+import { DataList, DataPoint, PeriodWidths } from './datalist';
 import { CategorySpec, DataType, MathFunctionEnum,
          DataTypeDateTime,
          DataTypeQuantity,
@@ -227,6 +227,61 @@ describe('Ehr Types', () => {
     for (const p of notAddedPoints) {
       expect(list.containsPoint(p)).toEqual(false);
     }
+  });
+
+  /*
+   * Test that start of period is correct and according to the locale.
+   */
+  fit('should be the start of the year', () => {
+    let date = new Date();
+    date.setFullYear(2019, 0, 1);
+    date.setHours(0, 0, 0, 0);
+    const startOf2019: number = date.getTime();
+    expect(DataPoint.startOfPeriod(
+      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodWidths.YEAR)
+        .getTime())
+          .toBe(startOf2019);
+  });
+  fit('should be the start of the month', () => {
+    let date = new Date();
+    date.setFullYear(2019, 3, 1);
+    date.setHours(0, 0, 0, 0);
+    const startOfApril: number = date.getTime();
+    expect(DataPoint.startOfPeriod(
+      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodWidths.MONTH)
+        .getTime())
+          .toBe(startOfApril);
+  });
+  fit('should be the start of the week', () => {
+    let date = new Date();
+    date.setFullYear(2019, 3, 8);
+    date.setHours(0, 0, 0, 0);
+    const startOfWeek: number = date.getTime();
+    // TODO impl
+    //expect(DataPoint.startOfPeriod(
+    // new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodWidths.WEEK)
+    //  .getTime())
+    //   .toBe(startOfWeek);
+  });
+  fit('should be the start of the day', () => {
+    let date = new Date();
+    date.setFullYear(2019, 3, 11);
+    date.setHours(0, 0, 0, 0);
+    const startOfDay: number = date.getTime();
+    expect(DataPoint.startOfPeriod(
+      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodWidths.DAY)
+        .getTime())
+          .toBe(startOfDay);
+  });
+  fit('should be the start of the hour', () => {
+    let date = new Date();
+    date.setFullYear(2019, 3, 11);
+    date.setHours(10, 0, 0, 0);
+    const startOfDay: number = date.getTime();
+    date.setHours(10, 49, 32, 233);
+    expect(DataPoint.startOfPeriod(date, PeriodWidths.HOUR)
+        .getTime())
+          .toBe(startOfDay);
   });
 
   /**
