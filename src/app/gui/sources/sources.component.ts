@@ -7,7 +7,7 @@ import { GfitService } from '../../platform/gfit.service';
 
 const googleFit = 'google-fit';
 const withings = 'withings';
-const dummy = 'dummy'
+const dummy = 'dummy';
 
 const availableSources: Map<string, Source> = new Map<string, Source>([
   [googleFit, {
