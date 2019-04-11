@@ -4,7 +4,7 @@ import { DataTypeText, CategorySpec, DataType,
          DataTypeCodedText,
          MathFunctionEnum} from './datatype';
 
-describe('Ehr Types', () => {
+describe('datatype', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
     providers: [

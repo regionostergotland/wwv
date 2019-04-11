@@ -5,7 +5,7 @@ import { CategorySpec, DataType, MathFunctionEnum,
          DataTypeQuantity,
          DataTypeCodedText } from './datatype';
 
-describe('Ehr Types', () => {
+describe('datalist', () => {
   beforeEach(() => TestBed.configureTestingModule({
     imports: [],
     providers: [
@@ -233,7 +233,7 @@ describe('Ehr Types', () => {
    * Test that start of period is correct and according to the locale.
    */
   it('should be the start of the year', () => {
-    let date = new Date();
+    const date = new Date();
     date.setFullYear(2019, 0, 1);
     date.setHours(0, 0, 0, 0);
     const startOf2019: number = date.getTime();
@@ -243,7 +243,7 @@ describe('Ehr Types', () => {
           .toBe(startOf2019);
   });
   it('should be the start of the month', () => {
-    let date = new Date();
+    const date = new Date();
     date.setFullYear(2019, 3, 1);
     date.setHours(0, 0, 0, 0);
     const startOfApril: number = date.getTime();
@@ -253,18 +253,21 @@ describe('Ehr Types', () => {
           .toBe(startOfApril);
   });
   it('should be the start of the week', () => {
-    let date = new Date();
-    date.setFullYear(2019, 3, 8);
+    const date = new Date();
+    date.setFullYear(2018, 11, 31);
     date.setHours(0, 0, 0, 0);
     const startOfWeek: number = date.getTime();
-    // TODO impl
-    //expect(DataPoint.startOfPeriod(
-    // new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodWidths.WEEK)
-    //  .getTime())
-    //   .toBe(startOfWeek);
+    expect(DataPoint.startOfPeriod(
+     new Date(new Date().setFullYear(2019, 0, 6)), PeriodWidths.WEEK)
+      .getTime())
+       .toBe(startOfWeek);
+    expect(DataPoint.startOfPeriod(
+     new Date(new Date().setFullYear(2019, 0, 1)), PeriodWidths.WEEK)
+      .getTime())
+       .toBe(startOfWeek);
   });
   it('should be the start of the day', () => {
-    let date = new Date();
+    const date = new Date();
     date.setFullYear(2019, 3, 11);
     date.setHours(0, 0, 0, 0);
     const startOfDay: number = date.getTime();
@@ -274,7 +277,7 @@ describe('Ehr Types', () => {
           .toBe(startOfDay);
   });
   it('should be the start of the hour', () => {
-    let date = new Date();
+    const date = new Date();
     date.setFullYear(2019, 3, 11);
     date.setHours(10, 0, 0, 0);
     const startOfDay: number = date.getTime();
@@ -372,8 +375,8 @@ describe('Ehr Types', () => {
     )).toBeTruthy();
   });
   it('should not match points not within the same day', () => {
-    let day1 = new Date(2018, 11, 31);
-    let day2 = new Date(2019, 0, 1);
+    const day1 = new Date(2018, 11, 31);
+    const day2 = new Date(2019, 0, 1);
     expect(DataPoint.samePeriod(day1, day2, PeriodWidths.DAY)).toBeFalsy();
     expect(DataPoint.samePeriod(
       new Date(day1.setHours(23, 59, 59, 999)),
