@@ -9,9 +9,16 @@ describe('workspace-project App', () => {
   });
 
   it('should display welcome message', () => {
-    page.navigateTo();
+    page.navigateTo('home');
     expect(page.getTitleText()).toEqual('Välkommen!');
   });
+
+  it('k2.5: klicka på ta bort data och data tas bort', () => {
+    page.navigateTo('sources');
+    expect(page.getTitleText()).toContain('Google Fit');
+    expect(page.getTitleText()).toContain('dummy');
+  });
+
 
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
