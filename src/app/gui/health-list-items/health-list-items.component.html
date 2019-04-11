@@ -1,5 +1,5 @@
 <h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label + mathOption + intervalOption : ''}}</h1>
-
+<p style="text-align: left">{{categorySpec && !isEditable ? mathOption.substring(2) + intervalOption : ''}}</p>
 <table style="text-align: left" mat-table [dataSource]="dataList" [trackBy]="trackItem">
 
   <ng-container *ngFor="let key of displayedColumns" matColumnDef={{key}}>
