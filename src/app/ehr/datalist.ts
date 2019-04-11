@@ -158,9 +158,9 @@ export class DataList {
    */
   private processedPoints: DataPoint[];
   /**
-   * Width of processed points in milliseconds.
+   * Selected period width.
    */
-  private width: number;
+  private width: PeriodWidths;
   /**
    * Math function used to process points.
    */
@@ -303,6 +303,14 @@ export class DataList {
     } else {
       throw TypeError('invalid type id -- ' + typeId);
     }
+  }
+
+  public getWidth(): PeriodWidths {
+    return this.width;
+  }
+
+  public getMathFunction(): MathFunctionEnum {
+    return this.mathFunction;
   }
 
 }

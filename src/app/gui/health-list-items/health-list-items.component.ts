@@ -10,6 +10,7 @@ import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
 import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
+import '../../shared/date.extensions';
 
 export interface mathOption {
   value: MathFunctionEnum;
@@ -70,10 +71,11 @@ export class MathDialogComponent {
 
   selectedCategory: string;
 
-  constructor(private conveyor: Conveyor, 
-    public dialogRef: MatDialogRef<MathDialogComponent>, 
+  constructor(
+    private conveyor: Conveyor,
+    public dialogRef: MatDialogRef<MathDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string) {
-  
+
     this.selectedCategory = data;
     this.mathOptions = MATH_OPTIONS;
     this.intervalOptions = INTERVAL_OPTIONS;
@@ -86,7 +88,7 @@ export class MathDialogComponent {
   calculate(intervalString: string, funcString: string) {
     if (intervalString && funcString) {
       let interval = parseInt(intervalString, 10);
-      let func = parseInt(funcString, 10); 
+      let func = parseInt(funcString, 10);
       console.log(interval);
       console.log(func);
       this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
@@ -95,6 +97,20 @@ export class MathDialogComponent {
   }
 
 }
+
+const periodLabels: Map<string, string> = new Map<string, string>([
+  ['period_DAY', 'Dag'],
+  ['period_WEEK', 'Vecka'],
+  ['period_YEAR', 'År'],
+  ['period_MONTH', 'Månad'],
+  ['date', 'Datum']]);
+
+const periodDescriptions: Map<string, string> = new Map<string, string>([
+  ['period_DAY', 'Dag för mätning'],
+  ['period_WEEK', 'Vecka för mätning'],
+  ['period_YEAR', 'År för mätning'],
+  ['period_MONTH', 'Månad för mätning'],
+  ['date', 'Datum för mätning']]);
 
 @Component({
   selector: 'app-health-list-items',
@@ -123,11 +139,26 @@ export class HealthListItemsComponent implements OnInit {
   isEditable = false;
 
   dataTypeEnum = DataTypeEnum;
+  periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
   pointDataList: DataPoint[];
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
-  
+
+  periodLabels: Map<string, string> = new Map<string, string>([
+    ['period_DAY', 'Dag'],
+    ['period_WEEK', 'Vecka'],
+    ['period_YEAR', 'År'],
+    ['period_MONTH', 'Månad'],
+    ['date', 'Datum']]);
+
+  periodDescriptions: Map<string, string> = new Map<string, string>([
+    ['period_DAY', 'Dag för mätning'],
+    ['period_WEEK', 'Vecka för mätning'],
+    ['period_YEAR', 'År för mätning'],
+    ['period_MONTH', 'Månad för mätning'],
+    ['date', 'Datum för mätning']]);
+
   // mathOptions: mathOption[];
   // mathFunction: string;
   // intervalOptions: intervalOption[];
@@ -202,7 +233,7 @@ export class HealthListItemsComponent implements OnInit {
 
   // calculate(intervalString: string, funcString: string) {
   //   let interval = parseInt(intervalString, 10);
-  //   let func = parseInt(funcString, 10); 
+  //   let func = parseInt(funcString, 10);
   //   console.log(interval);
   //   console.log(func);
   //   this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
@@ -217,8 +248,8 @@ export class HealthListItemsComponent implements OnInit {
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
 
-      //this.mathOptions = MATH_OPTIONS;
-      //this.intervalOptions = INTERVAL_OPTIONS;
+      // this.mathOptions = MATH_OPTIONS;
+      // this.intervalOptions = INTERVAL_OPTIONS;
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
@@ -280,8 +311,16 @@ export class HealthListItemsComponent implements OnInit {
         if (column === 'device_name' || column === 'type' || column === 'manufacturer') {
           continue;
         } else if (column === 'time') {
-          result.push('date');
-          result.push('time');
+          switch (this.conveyor.getDataList(this.selectedCategory).getWidth()) {
+            case PeriodWidths.DAY: result.push('period_DAY'); break;
+            case PeriodWidths.MONTH: result.push('period_MONTH'); break;
+            case PeriodWidths.WEEK: result.push('period_WEEK'); break;
+            case PeriodWidths.YEAR: result.push('period_YEAR'); break;
+            default :
+              result.push('date');
+              result.push('time');
+          }
+
         } else {
           result.push(column);
         }
