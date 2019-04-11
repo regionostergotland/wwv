@@ -1,4 +1,4 @@
-<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
+<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label + mathOption + intervalOption : ''}}</h1>
 
 <table style="text-align: left" mat-table [dataSource]="dataList" [trackBy]="trackItem">
 
@@ -21,7 +21,7 @@
       {{!categorySpec.dataTypes.has(key) ? periodLabels.get(key) : categorySpec.dataTypes.get(key).label}}
     </th>
     <td mat-cell *matCellDef="let dataPoint;">
-      <div *ngIf="key !== 'date' && key != 'time' && isEditable && dataPoint.has(key)">
+      <div *ngIf="key !== 'date' && key != 'time' && isEditable && categorySpec.dataTypes.has(key)">
 
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.CODED_TEXT">
 
@@ -54,7 +54,7 @@
 
         </div>
       </div>
-      <div *ngIf="key !== 'date' && key != 'time' && !isEditable && dataPoint.has(key)">
+      <div *ngIf="key !== 'date' && key != 'time' && !isEditable && categorySpec.dataTypes.has(key)">
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.CODED_TEXT">
 
           <div *ngFor="let option of options.get(key)">

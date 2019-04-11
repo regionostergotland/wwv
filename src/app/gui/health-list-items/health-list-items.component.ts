@@ -12,32 +12,32 @@ import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DA
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
 
-export interface mathOption {
+export interface MathOption {
   value: MathFunctionEnum;
   description: string;
 }
 
-export interface intervalOption {
+export interface IntervalOption {
   value: PeriodWidths;
   description: string;
 }
 
-const MATH_OPTIONS: mathOption[] = [
-  {value: MathFunctionEnum.ACTUAL, description: "Faktiskt värde"},
-  {value: MathFunctionEnum.MAX, description: "Maximalt värde"},
-  {value: MathFunctionEnum.MEAN, description: "Medelvärde"},
-  {value: MathFunctionEnum.MEDIAN, description: "Median"},
-  {value: MathFunctionEnum.MIN, description: "Minimalt värde"},
-  {value: MathFunctionEnum.TOTAL, description: "Totala värde"},
+const MATH_OPTIONS: MathOption[] = [
+  {value: MathFunctionEnum.ACTUAL, description: 'Faktiskt värde'},
+  {value: MathFunctionEnum.MAX, description: 'Maximalt värde'},
+  {value: MathFunctionEnum.MEAN, description: 'Medelvärde'},
+  {value: MathFunctionEnum.MEDIAN, description: 'Median'},
+  {value: MathFunctionEnum.MIN, description: 'Minimalt värde'},
+  {value: MathFunctionEnum.TOTAL, description: 'Totala värde'},
 ];
 
-const INTERVAL_OPTIONS: intervalOption[] = [
-  {value: PeriodWidths.POINT, description: "Per punkt"},
-  {value: PeriodWidths.HOUR, description: "Per timme"},
-  {value: PeriodWidths.DAY, description: "Per dygn"},
-  {value: PeriodWidths.WEEK, description: "Per vecka"},
-  {value: PeriodWidths.MONTH, description: "Per månad"},
-  {value: PeriodWidths.YEAR, description: "Per År"},
+const INTERVAL_OPTIONS: IntervalOption[] = [
+  {value: PeriodWidths.POINT, description: 'Per punkt'},
+  {value: PeriodWidths.HOUR, description: 'Per timme'},
+  {value: PeriodWidths.DAY, description: 'Per dygn'},
+  {value: PeriodWidths.WEEK, description: 'Per vecka'},
+  {value: PeriodWidths.MONTH, description: 'Per månad'},
+  {value: PeriodWidths.YEAR, description: 'Per År'},
 ];
 
 @Component({
@@ -64,9 +64,9 @@ export class RemovalDialogComponent {
 })
 export class MathDialogComponent {
 
-  mathOptions: mathOption[];
+  mathOptions: MathOption[];
   mathFunction: string;
-  intervalOptions: intervalOption[];
+  intervalOptions: IntervalOption[];
   interval: string;
 
   selectedCategory: string;
@@ -87,30 +87,14 @@ export class MathDialogComponent {
 
   calculate(intervalString: string, funcString: string) {
     if (intervalString && funcString) {
-      let interval = parseInt(intervalString, 10);
-      let func = parseInt(funcString, 10);
-      console.log(interval);
-      console.log(func);
+      const interval = parseInt(intervalString, 10);
+      const func = parseInt(funcString, 10);
       this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
       this.closeDialog();
     }
   }
 
 }
-
-const periodLabels: Map<string, string> = new Map<string, string>([
-  ['period_DAY', 'Dag'],
-  ['period_WEEK', 'Vecka'],
-  ['period_YEAR', 'År'],
-  ['period_MONTH', 'Månad'],
-  ['date', 'Datum']]);
-
-const periodDescriptions: Map<string, string> = new Map<string, string>([
-  ['period_DAY', 'Dag för mätning'],
-  ['period_WEEK', 'Vecka för mätning'],
-  ['period_YEAR', 'År för mätning'],
-  ['period_MONTH', 'Månad för mätning'],
-  ['date', 'Datum för mätning']]);
 
 @Component({
   selector: 'app-health-list-items',
@@ -159,9 +143,29 @@ export class HealthListItemsComponent implements OnInit {
     ['period_MONTH', 'Månad för mätning'],
     ['date', 'Datum för mätning']]);
 
-  // mathOptions: mathOption[];
+  mathOptions: Map<MathFunctionEnum, string> =
+    new Map<MathFunctionEnum, string>([
+    [MathFunctionEnum.MAX, ', maximalt värde '],
+    [MathFunctionEnum.MEAN, ', medelvärde '],
+    [MathFunctionEnum.MEDIAN, ', median '],
+    [MathFunctionEnum.MIN, ', minimalt värde '],
+    [MathFunctionEnum.TOTAL, ', totala värde '],
+  ]);
+
+  intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
+    [PeriodWidths.HOUR, 'per timme'],
+    [PeriodWidths.DAY, 'per dygn'],
+    [PeriodWidths.WEEK, 'per vecka'],
+    [PeriodWidths.MONTH, 'per månad'],
+    [PeriodWidths.YEAR, 'per år'],
+  ]);
+
+  mathOption: string;
+  intervalOption: string;
+
+  // mathOptions: MathOption[];
   // mathFunction: string;
-  // intervalOptions: intervalOption[];
+  // intervalOptions: IntervalOption[];
   // interval: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -260,6 +264,10 @@ export class HealthListItemsComponent implements OnInit {
           this.options.set(key, datatypes.options);
         }
       }
+      this.mathOption = this.mathOptions.has(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) ?
+        this.mathOptions.get(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) : '';
+      this.intervalOption = this.intervalOptions.has(this.conveyor.getDataList(this.selectedCategory).getWidth()) ?
+        this.intervalOptions.get(this.conveyor.getDataList(this.selectedCategory).getWidth()) : '';
     }
     this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
     this.dataList.paginator = this.paginator;
@@ -293,7 +301,7 @@ export class HealthListItemsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.ngOnInit();
-    })
+    });
   }
 
   /**

@@ -315,10 +315,16 @@ export class DataList {
     }
   }
 
+  /**
+   * Get interval width for the data list.
+   */
   public getWidth(): PeriodWidths {
     return this.width;
   }
 
+  /**
+   * Get the math function for the data list.
+   */
   public getMathFunction(): MathFunctionEnum {
     return this.mathFunction;
   }
