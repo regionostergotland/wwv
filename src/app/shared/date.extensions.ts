@@ -1,5 +1,6 @@
 interface Date {
   getWeek(): number;
+  getWeekYear(): number;
 }
 
 /*
@@ -18,3 +19,14 @@ Date.prototype.getWeek = function() {
   return 1 + Math.round(((date.getTime() - week1.getTime()) / 86400000
                         - 3 + (week1.getDay() + 6) % 7) / 7);
 };
+
+/*
+ * Returns the four-digit year corresponding to the ISO week of the date.
+ * original COPYRIGHT Christian Schmidt (weeknumber.net), modified for
+ * typescript
+ */
+Date.prototype.getWeekYear = function() {
+  const date = new Date(this.getTime());
+  date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
+  return date.getFullYear();
+}
