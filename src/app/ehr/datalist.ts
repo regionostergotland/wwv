@@ -36,7 +36,7 @@ export class DataPoint {
 
   public static startOfPeriod(time: Date,
                               width: PeriodWidths): Date {
-    let beg: Date = new Date(0);
+    const beg: Date = new Date(0);
     beg.setHours(0, 0, 0, 0); // adjust for local timezone
     switch (width) {
     case PeriodWidths.POINT:
@@ -47,8 +47,8 @@ export class DataPoint {
       beg.setFullYear(time.getFullYear(), time.getMonth(), time.getDate());
       // set to monday the same week
       const msInADay = 1000 * 3600 * 24;
-      const timeOffset = ((((beg.getDay()-1) % 7) + 7) % 7)*msInADay;
-      beg.setTime(beg.getTime()-timeOffset);
+      const timeOffset = ((((beg.getDay() - 1) % 7) + 7) % 7) * msInADay;
+      beg.setTime(beg.getTime() - timeOffset);
       break;
     case PeriodWidths.HOUR:
       beg.setHours(time.getHours());

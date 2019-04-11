@@ -29,4 +29,4 @@ Date.prototype.getWeekYear = function() {
   const date = new Date(this.getTime());
   date.setDate(date.getDate() + 3 - (date.getDay() + 6) % 7);
   return date.getFullYear();
-}
+};
