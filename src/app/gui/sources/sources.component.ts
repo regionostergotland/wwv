@@ -7,12 +7,19 @@ import { GfitService } from '../../platform/gfit.service';
 
 const googleFit = 'google-fit';
 const withings = 'withings';
+const dummy = 'dummy'
 
 const availableSources: Map<string, Source> = new Map<string, Source>([
   [googleFit, {
     id: googleFit,
     name: 'Google Fit',
     imageUrl: 'https://www.gstatic.com/images/branding/product/1x/gfit_512dp.png',
+    routerLink: '/catpicker'
+  }],
+  [dummy, {
+    id: dummy,
+    name: 'Dummy service',
+    imageUrl: '../assets/wwv.png',
     routerLink: '/catpicker'
   }],
   [withings, {
