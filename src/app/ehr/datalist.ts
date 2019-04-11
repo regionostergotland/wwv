@@ -1,4 +1,17 @@
 import { CategorySpec, DataType, MathFunctionEnum } from './datatype';
+import '../shared/date.extensions';
+
+/*
+ * Possible widths of intervals/periods.
+ */
+export enum PeriodWidths {
+  POINT,
+  HOUR,
+  DAY,
+  WEEK,
+  MONTH,
+  YEAR,
+}
 
 /**
  * Map of values to be put in a DataList.
@@ -7,6 +20,11 @@ import { CategorySpec, DataType, MathFunctionEnum } from './datatype';
  * Otherwise, works similar to a Map.
  */
 export class DataPoint {
+
+  constructor(values = []) {
+    this.removed = false;
+    this.point = new Map<string, any>(values);
+  }
   /**
    * Point is marked for removal.
    */
@@ -16,9 +34,77 @@ export class DataPoint {
    */
   private point: Map<string, any>;
 
-  constructor(values = []) {
-    this.removed = false;
-    this.point = new Map<string, any>(values);
+  public static startOfPeriod(time: Date,
+                              width: PeriodWidths): Date {
+    let beg: Date = new Date(0);
+    beg.setHours(0, 0, 0, 0); // adjust for local timezone
+    switch (width) {
+    case PeriodWidths.POINT:
+      beg.setTime(time.getTime());
+    case PeriodWidths.HOUR:
+      beg.setHours(time.getHours());
+    case PeriodWidths.DAY:
+      beg.setDate(time.getDate());
+    case PeriodWidths.WEEK:
+      // TODO new.setWeek(time.getWeek());
+    case PeriodWidths.MONTH:
+      beg.setMonth(time.getMonth());
+    case PeriodWidths.YEAR:
+      beg.setFullYear(time.getFullYear());
+    }
+    return beg;
+  }
+
+  /*
+   * Determine if two dates are within the same time period.
+   */
+  public static samePeriod(t1: Date, t2: Date,
+                           width: PeriodWidths): boolean {
+    switch (width) {
+      case PeriodWidths.POINT:
+        return t1.getTime() === t2.getTime();
+      case PeriodWidths.WEEK:
+        return t1.getWeek() === t2.getWeek() &&
+               t1.getWeekYear() === t2.getWeekYear();
+      case PeriodWidths.HOUR:
+        if (t1.getHours() !== t2.getHours()) {
+          return false;
+        }
+        /* falls through */
+      case PeriodWidths.DAY:
+        if (t1.getDate() !== t2.getDate()) {
+          return false;
+        }
+        /* falls through */
+      case PeriodWidths.MONTH:
+        if (t1.getMonth() !== t2.getMonth()) {
+          return false;
+        }
+        /* falls through */
+      case PeriodWidths.YEAR:
+        if (t1.getFullYear() !== t2.getFullYear()) {
+          return false;
+        }
+    }
+    return true;
+  }
+
+  /**
+   * Group a list of points in intervals.
+   */
+  public static groupByInterval(points: DataPoint[],
+                                width: PeriodWidths) {
+    const groups: DataPoint[][] = [[points[0]]];
+    for (let p = 1; p < points.length - 1; p++) {
+      const p1: DataPoint = points[p - 1];
+      const p2: DataPoint = points[p];
+      if (DataPoint.samePeriod(p1.get('time'), p2.get('time'), width)) {
+        groups[groups.length - 1].push(p2);
+      } else {
+        groups.push([p2]);
+      }
+    }
+    return groups;
   }
 
   // wrap Map methods because Map can't be extended
@@ -84,8 +170,8 @@ export class DataList {
     this.spec = spec;
     this.points = [];
     this.processedPoints = [];
-    this.width = 0;
-    this.mathFunction = MathFunctionEnum.MEAN;
+    this.width = PeriodWidths.POINT;
+    this.mathFunction = MathFunctionEnum.ACTUAL;
   }
 
   /**
@@ -93,23 +179,21 @@ export class DataList {
    * width.
    */
   private mergePoints(points: DataPoint[],
-                      width: number, fn: MathFunctionEnum): DataPoint[] {
-    if (width === 0 || fn === MathFunctionEnum.ACTUAL) {
+                      width: PeriodWidths,
+                      fn: MathFunctionEnum): DataPoint[] {
+    if (width === PeriodWidths.POINT || fn === MathFunctionEnum.ACTUAL) {
       return points.slice();
     } else {
       const newPoints: DataPoint[] = [];
-      while (points.length > 0) {
-        const oldestTime = points[0].get('time');
-        const startTime = oldestTime - (oldestTime % width);
-        const interval: DataPoint[] = points.filter(p =>
-          (p.get('time').getTime() <= startTime + width));
-        points = points.filter(p =>
-          (p.get('time').getTime() > startTime + width));
-        // time complexity of filter? linear possible?
+      const intervals: DataPoint[][] = DataPoint.groupByInterval(points, width);
+      for (const interval of intervals) {
         const newValues: any[] = [];
         for (const [id, dataType] of this.spec.dataTypes.entries()) {
           if (id === 'time') {
-            newValues.push(['time', new Date(startTime)]);
+            const startTime: Date =
+              DataPoint.startOfPeriod(
+                interval[0].get('time'), width);
+            newValues.push(['time', startTime]);
           } else {
             const prevValues = interval.map((p) => p.get(id));
             const newValue = dataType.truncate(prevValues, fn);
@@ -204,7 +288,7 @@ export class DataList {
    * Set the width of intervals that data points shall represent, as well as
    * math funciton that will determine the value of the interval.
    */
-  public setInterval(width: number, mathFunction: MathFunctionEnum): void {
+  public setInterval(width: PeriodWidths, mathFunction: MathFunctionEnum): void {
     this.width = width;
     this.mathFunction = mathFunction;
     this.processPoints();

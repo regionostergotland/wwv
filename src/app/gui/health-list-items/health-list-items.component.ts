@@ -3,8 +3,9 @@ import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
          DataTypeEnum,
-         MathFunctionEnum} from '../../ehr/datatype';
-import { DataPoint } from '../../ehr/datalist';
+         MathFunctionEnum,
+         } from '../../ehr/datatype';
+import { DataPoint, PeriodWidths } from '../../ehr/datalist';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
 import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
@@ -16,7 +17,7 @@ export interface mathOption {
 }
 
 export interface intervalOption {
-  value: number;
+  value: PeriodWidths;
   description: string;
 }
 
@@ -30,10 +31,12 @@ const MATH_OPTIONS: mathOption[] = [
 ];
 
 const INTERVAL_OPTIONS: intervalOption[] = [
-  {value: 1000*3600, description: "Per timme"},
-  {value: 1000*3600*24-1, description: "Per dygn"},
-  {value: 1000*3600*24*2, description: "Varannat dygn"},
-  {value: 1000*3600*24*7, description: "Per vecka"},
+  {value: PeriodWidths.POINT, description: "Per punkt"},
+  {value: PeriodWidths.HOUR, description: "Per timme"},
+  {value: PeriodWidths.DAY, description: "Per dygn"},
+  {value: PeriodWidths.WEEK, description: "Per vecka"},
+  {value: PeriodWidths.MONTH, description: "Per månad"},
+  {value: PeriodWidths.YEAR, description: "Per År"},
 ];
 
 @Component({
@@ -137,24 +140,6 @@ export class HealthListItemsComponent implements OnInit {
   selection = new SelectionModel<DataPoint>(true, []);
 
   /**
-   * Gets a string representation of the date correctly formatted to be read by a human.
-   * @param date the date to format
-   * @returns a formatted string representing a date
-   */
-  static getDate(date: Date): string {
-    return date.toISOString().slice(0, 10);
-  }
-
-  /**
-   * Gets a string representation of the time correctly formatted to be read by a human.
-   * @param date the date to get the time from to format
-   * @returns a formatted string representing a time
-   */
-  static getTime(date: Date): string {
-    return date.toTimeString().slice(0, 5);
-  }
-
-  /**
    * Sets the data category in the dataPoint to the set option
    * @param key the data category to set
    * @param point the point to set data in
@@ -213,22 +198,6 @@ export class HealthListItemsComponent implements OnInit {
     }
     this.conveyor.getDataList(this.selectedCategory).setPoints(newList);*/
     this.ngOnInit();
-  }
-
-  /**
-   * Gets the data to be displayed from the point
-   * @param point the datapoint to get the data from
-   * @param key the data category to get
-   * @returns a string of the value to show
-   */
-  getPointData(point: DataPoint, key: string): string {
-    if (key === 'date') {
-      return HealthListItemsComponent.getDate(point.get('time'));
-    }
-    if (key === 'time') {
-      return HealthListItemsComponent.getTime(point.get('time'));
-    }
-    return point.get(key);
   }
 
   // calculate(intervalString: string, funcString: string) {
@@ -297,28 +266,6 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   /**
-   * Gets all data points from the facade
-   * @returns a list of all datapoints in the category
-   */
-  getData(): DataPoint[] {
-    if (this.selectedCategory) {
-      return this.pointDataList;
-    }
-    return [];
-  }
-
-  /**
-   * Get the label for the category.
-   * @returns the label for the category.
-   */
-  getCategoryLabel(): string {
-    if (this.categorySpec) {
-      return this.categorySpec.label;
-    }
-    return '';
-  }
-
-  /**
    * Returns the columns which should be displayed in the table depending on which
    * category it is.
    * @returns a list of labels for the specified category
@@ -341,26 +288,6 @@ export class HealthListItemsComponent implements OnInit {
       }
     }
     return result;
-  }
-
-  /**
-   * Set all unset data types in a category
-   * @param key the data category to be set
-   * @param option the option to set
-   */
-  setAllOptions(key: string, option: string) {
-    let allData = true;
-    for (const point of this.getData()) {
-      if (!point.has(key)) {
-        HealthListItemsComponent.setOption(key, point, option);
-        allData = false;
-      }
-    }
-    if (allData) {
-      for (const point of this.getData()) {
-        HealthListItemsComponent.setOption(key, point, option);
-      }
-    }
   }
 
 }

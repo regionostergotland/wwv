@@ -11,23 +11,10 @@ import { InspectionComponent } from './inspection.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import {
-  GoogleApiModule,
-  GoogleApiService,
-  GoogleAuthService,
-  NgGapiClientConfig,
-  NG_GAPI_CONFIG
-} from 'ng-gapi';
 import {HealthListItemsComponent} from '../health-list-items/health-list-items.component';
 
-const gapiClientConfig: NgGapiClientConfig = {
-  client_id: '***REMOVED***.apps.googleusercontent.com',
-  discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],
-  scope: [
-    'https://www.googleapis.com/auth/fitness.blood_pressure.read',
-    'https://www.googleapis.com/auth/fitness.body.read'
-  ].join(' ')
-};
+import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';
+
 
 describe('InspectionComponent', () => {
   let component: InspectionComponent;
@@ -45,11 +32,7 @@ describe('InspectionComponent', () => {
         MatCheckboxModule,
         MatTooltipModule,
         MatSelectModule,
-
-        GoogleApiModule.forRoot({
-          provide: NG_GAPI_CONFIG,
-          useValue: gapiClientConfig
-        })
+        CustomGoogleApiModule
       ],
 
      providers: [
