@@ -63,6 +63,7 @@ const TimeField: [string, DataType] = [
     description: 'Tidpunkt vid mätning',
     required: true,
     single: false,
+    visible: true,
   })
 ];
 
@@ -75,6 +76,7 @@ const CommentField: [string, DataType] = [
     andra fält.`,
     required: false,
     single: false,
+    visible: true,
   })
 ];
 
@@ -86,6 +88,7 @@ const DeviceNameField: [string, DataType] = [
     description: `Namn på enhet som använts för mätning.`,
     required: false,
     single: true,
+    visible: false,
   })
 ];
 
@@ -97,6 +100,7 @@ const DeviceTypeField: [string, DataType] = [
     description: `Typ av enhet som använts för mätning.`,
     required: false,
     single: true,
+    visible: false,
   })
 ];
 
@@ -108,6 +112,7 @@ const DeviceManufacturerField: [string, DataType] = [
     description: `Tillverkare av enhet som använts för mätning.`,
     required: false,
     single: true,
+    visible: false,
   })
 ];
 
@@ -151,6 +156,7 @@ export const ehrConfig: EhrConfig = {
               hjärtcykeln.`,
               required: true,
               single: false,
+              visible: true,
             }, 'mm[Hg]', 0, 1000
           )
         ],
@@ -164,6 +170,7 @@ export const ehrConfig: EhrConfig = {
               uppmätt diastoliskt eller i hjärtcykelns avslappningsfas.`,
               required: true,
               single: false,
+              visible: true,
             }, 'mm[Hg]', 0, 1000
           )
         ],
@@ -176,6 +183,7 @@ export const ehrConfig: EhrConfig = {
               description: 'Individens kroppställning under mätningen.',
               required: false,
               single: false,
+              visible: true,
             }, [
               {
                 code: 'at1000',
@@ -217,6 +225,7 @@ export const ehrConfig: EhrConfig = {
               description: 'Individens vikt.',
               required: true,
               single: false,
+              visible: true,
             }, 'kg', 0, 1000
           )
         ],
@@ -230,6 +239,7 @@ export const ehrConfig: EhrConfig = {
               för vägning.`,
               required: false,
               single: false,
+              visible: true,
             }, [
               {
                 code: 'at0011',
@@ -271,6 +281,7 @@ export const ehrConfig: EhrConfig = {
               description: 'Kroppslängd från hjässa till fotsula.',
               required: true,
               single: false,
+              visible: true,
             }, 'cm', 0, 1000
           )
         ],
@@ -295,6 +306,7 @@ export const ehrConfig: EhrConfig = {
               description: 'Antal uppnätta steg under givet tidsintervall',
               required: true,
               single: false,
+              visible: true,
             }, 'Steg', 0, -1
             )],
           CommentField,
@@ -322,6 +334,7 @@ export const ehrConfig: EhrConfig = {
               description: 'Frekvensen mätt i slag per minut.',
               required: true,
               single: false,
+              visible: true,
             }, '/min', 0, -1
           )
         ],
@@ -334,6 +347,7 @@ export const ehrConfig: EhrConfig = {
               description: 'Patientens kroppsställning under observationen.',
               required: false,
               single: false,
+              visible: true,
             }, [
               {
                 code: 'at1003',

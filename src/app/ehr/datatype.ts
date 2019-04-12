@@ -69,6 +69,10 @@ export interface DataTypeSettings {
    * point.
    */
   single: boolean;
+  /**
+   * Field is a major component of point and shall be visible to the user.
+   */
+  visible: boolean;
 }
 
 /**
@@ -90,6 +94,7 @@ export abstract class DataType {
   readonly description: string;
   readonly required: boolean;
   readonly single: boolean;
+  readonly visible: boolean;
 
   constructor(type: DataTypeEnum, settings: DataTypeSettings) {
     this.type = type;
@@ -98,6 +103,7 @@ export abstract class DataType {
     this.description = settings.description;
     this.required = settings.required;
     this.single = settings.single;
+    this.visible = settings.visible;
   }
 
   /**
