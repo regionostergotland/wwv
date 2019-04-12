@@ -330,7 +330,16 @@ describe('datalist', () => {
     const spec: CategorySpec = {
       id : 'id', label : '', description : '',
       dataTypes : new Map<string, DataType>([
-        [ 'time', new DataTypeDateTime(['any_event'], '', '', true, false) ],
+        [ 'time', new DataTypeDateTime(
+          {
+            path: ['any_event'],
+            label: '',
+            description: '',
+            required: true,
+            single: false,
+            visible: true
+          })
+        ],
       ])
     };
     const list = new DataList(spec);
