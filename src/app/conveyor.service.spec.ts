@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { Conveyor } from './conveyor.service';
-import { DataList } from './ehr/ehr-types';
+import { DataList } from './ehr/datalist';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
 

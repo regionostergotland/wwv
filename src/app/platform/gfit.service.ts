@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { DataPoint, CategorySpec } from '../ehr/ehr-types';
+import { CategorySpec } from '../ehr/datatype';
+import { DataPoint } from '../ehr/datalist';
 import { Platform, CategoryProperties } from './platform.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
