@@ -15,8 +15,7 @@ describe('workspace-project App', () => {
 
   it('k2.5: klicka på ta bort data och data tas bort', () => {
     page.navigateTo('sources');
-    expect(page.getTitleText()).toContain('Google Fit');
-    expect(page.getTitleText()).toContain('dummy');
+    expect(page.getCardTitleText()).toContain('Google Fit');
   });
 
 

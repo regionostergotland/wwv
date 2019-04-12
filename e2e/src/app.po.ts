@@ -9,6 +9,11 @@ export class AppPage {
     return element(by.css('h1')).getText() as Promise<string>;
   }
 
+  getCardTitleText() {
+    return element(by.tagName('mat-card-title')).getText() as Promise<string>;
+  }
+
+
   getElementByCss(type: string) {
     return element(by.css(type)).getText() as Promise<string>;
   }
