@@ -27,7 +27,7 @@ describe('workspace-project App', () => {
     it('Should redirect to the manual input page when the manual input button is clicked', () => {
         const input = page.getManualInputButton();
         input.click();
-        expect(browser.driver.getCurrentUrl()).toContain('/sidebar');
+        expect(browser.driver.getCurrentUrl()).toContain('/edit');
     });
 
     afterEach(async () => {

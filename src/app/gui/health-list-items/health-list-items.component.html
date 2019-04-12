@@ -31,7 +31,7 @@
         </div>
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.DATE_TIME">
 
-          {{dataPoint.get(key).toISOString().slice(0,10)}}
+          {{dataPoint.get('time').getFullYear() + '-' + ('0' + (dataPoint.get('time').getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get('time').getDate()).slice(-2)}}
 
         </div>
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.QUANTITY">
@@ -60,18 +60,18 @@
         </div>
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.DATE_TIME">
 
-          {{dataPoint.get(key).toISOString().slice(0,10)}}
+          {{dataPoint.get('time').getFullYear() + '-' + ('0' + (dataPoint.get('time').getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get('time').getDate()).slice(-2)}}
 
         </div>
       </div>
       <div *ngIf="key === 'date'">
 
-        {{dataPoint.get('time').toISOString().slice(0,10)}}
+        {{dataPoint.get('time').getFullYear() + '-' + ('0' + (dataPoint.get('time').getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get('time').getDate()).slice(-2)}}
 
       </div>
       <div *ngIf="key === 'time'">
 
-        {{dataPoint.get('time').toTimeString().slice(0,5)}}
+        {{('0' + dataPoint.get('time').getHours()).slice(-2) + ':' + ('0' + dataPoint.get('time').getMinutes()).slice(-2)}}
 
       </div>
 

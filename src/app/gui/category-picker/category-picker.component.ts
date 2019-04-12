@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { Observable, forkJoin } from 'rxjs';
 import { Conveyor } from '../../conveyor.service';
-import { CategorySpec } from '../../ehr/ehr-types';
+import { CategorySpec } from '../../ehr/datatype';
 import { Router } from '@angular/router';
 
 @Component({
@@ -89,6 +89,6 @@ export class CategoryPickerComponent implements OnInit {
         this.conveyor.fetchData(this.platformId, cat,
                                 this.startDate, this.endDate));
     this.chosenCategories = [];
-    forkJoin(fetches).subscribe(_ => this.router.navigateByUrl('/sidebar'));
+    forkJoin(fetches).subscribe(_ => this.router.navigateByUrl('/edit'));
   }
 }

@@ -16,13 +16,25 @@
       </div>
     </mat-nav-list>
 
-    <button class="wide-button"  style="margin-top: 20px" mat-stroked-button color="accent" (click)="openBottomSheet()">Lägg till egen kategori</button>
-    <button class="wide-button" mat-stroked-button color="accent" routerLink='/sources' >Lägg till app-data</button>
+    <button class="wide-button"  style="margin-top: 20px" mat-stroked-button color="accent" (click)="openBottomSheet()">
+      <mat-icon>add_box</mat-icon>
+      Lägg till egen kategori
+    </button>
+    <button class="wide-button" mat-stroked-button color="accent" routerLink='/sources' >
+      <mat-icon>add_box</mat-icon>
+      Lägg till app-data
+    </button>
 
   </mat-sidenav>
 
   <mat-sidenav-content>
-
+    <div *ngIf="!selectedCategory">
+      <h2>Här kan du redigera, komplettera och kommentera dina värden.</h2>
+      <p>- Granska och redigera varje kategori i sidomenyn</p>
+      <p>- Lägg till enga kategorier med egna värden</p>
+      <p>- Hämta ytterligare värden från en plattform</p>
+      <h3>Om inga ändringar önskas, gå vidare till nästa steg.</h3>
+    </div>
     <!-- här kommer listor vara -->
     <app-health-list-items *ngIf="selectedCategory" [selectCategory]="selectedCategory" [editable]="true" style="text-align: left"></app-health-list-items>
     <button class='margin' mat-raised-button color='primary' routerLink='/inspection'>Nästa steg</button>

@@ -1,4 +1,5 @@
 import { Observable } from 'rxjs';
+import { DataPoint } from '../ehr/datalist';
 
 /**
  * Contains necessary properties for all categories.
@@ -32,5 +33,5 @@ export abstract class Platform {
   }
 
   public abstract getData(categoryId: string,
-                          start: Date, end: Date): Observable<any>;
+                          start: Date, end: Date): Observable<DataPoint[]>;
 }

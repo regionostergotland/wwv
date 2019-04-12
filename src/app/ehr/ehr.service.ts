@@ -3,7 +3,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { EHR_CONFIG, EhrConfig } from './ehr-config';
 
-import { CategorySpec, DataList } from './ehr-types';
+import { CategorySpec } from './datatype';
+import { DataList } from './datalist';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +27,6 @@ export class EhrService {
     for (const cat of this.config.categories) {
       cats.push(cat.id);
     }
-
     return cats;
   }
 
@@ -69,7 +69,6 @@ export class EhrService {
               }
               element = container[p];
             }
-
             element[id] = dataType.toRest(value);
           }
         }
