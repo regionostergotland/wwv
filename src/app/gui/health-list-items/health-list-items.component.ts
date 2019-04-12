@@ -23,7 +23,6 @@ export interface IntervalOption {
 }
 
 const MATH_OPTIONS: MathOption[] = [
-  {value: MathFunctionEnum.ACTUAL, description: 'Faktiskt värde'},
   {value: MathFunctionEnum.MAX, description: 'Maximalt värde'},
   {value: MathFunctionEnum.MEAN, description: 'Medelvärde'},
   {value: MathFunctionEnum.MEDIAN, description: 'Median'},
@@ -32,7 +31,6 @@ const MATH_OPTIONS: MathOption[] = [
 ];
 
 const INTERVAL_OPTIONS: IntervalOption[] = [
-  {value: PeriodWidths.POINT, description: 'Per punkt'},
   {value: PeriodWidths.HOUR, description: 'Per timme'},
   {value: PeriodWidths.DAY, description: 'Per dygn'},
   {value: PeriodWidths.WEEK, description: 'Per vecka'},
@@ -92,6 +90,11 @@ export class MathDialogComponent {
       this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
       this.closeDialog();
     }
+  }
+
+  changeBack() {
+    this.conveyor.getDataList(this.selectedCategory).setInterval(PeriodWidths.POINT, MathFunctionEnum.ACTUAL);
+    this.closeDialog();
   }
 
 }
@@ -235,15 +238,6 @@ export class HealthListItemsComponent implements OnInit {
     this.ngOnInit();
   }
 
-  // calculate(intervalString: string, funcString: string) {
-  //   let interval = parseInt(intervalString, 10);
-  //   let func = parseInt(funcString, 10);
-  //   console.log(interval);
-  //   console.log(func);
-  //   this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
-  //   this.ngOnInit();
-  // }
-
   ngOnInit() {
     if (this.selectedCategory) {
       // Reset all the internal lists.
@@ -251,9 +245,6 @@ export class HealthListItemsComponent implements OnInit {
       this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
-
-      // this.mathOptions = MATH_OPTIONS;
-      // this.intervalOptions = INTERVAL_OPTIONS;
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
