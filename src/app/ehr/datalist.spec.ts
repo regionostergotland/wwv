@@ -326,4 +326,36 @@ describe('datalist', () => {
     expect(p3.compareTo(p4, dataTypes)).toBe(0);
     expect(p4.compareTo(p3, dataTypes)).toBe(0);
   });
+  it('should remove unwanted points', () => {
+    const spec: CategorySpec = {
+      id : 'id', label : '', description : '',
+      dataTypes : new Map<string, DataType>([
+        [ 'time', new DataTypeDateTime(['any_event'], '', '', true, false) ],
+      ])
+    };
+    const list = new DataList(spec);
+    const keepPoints = [
+      new DataPoint([['time', new Date(2017, 1)]]),
+      new DataPoint([['time', new Date(2017, 4)]]),
+      new DataPoint([['time', new Date(2017, 3)]]),
+      new DataPoint([['time', new Date(2017, 2)]]),
+      new DataPoint([['time', new Date(2017, 5)]]),
+    ];
+    const removePoints = [
+      new DataPoint([['time', new Date(2016, 1)]]),
+      new DataPoint([['time', new Date(2016, 4)]]),
+      new DataPoint([['time', new Date(2016, 3)]]),
+      new DataPoint([['time', new Date(2016, 2)]]),
+      new DataPoint([['time', new Date(2016, 5)]]),
+    ];
+    list.addPoints(keepPoints);
+    list.addPoints(removePoints);
+    list.removePoints(removePoints);
+    for (const p of keepPoints) {
+      expect(list.containsPoint(p)).toEqual(true);
+    }
+    for (const p of removePoints) {
+      expect(list.containsPoint(p)).toEqual(false);
+    }
+  });
 });

@@ -1,13 +1,114 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, Inject} from '@angular/core';
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
-         DataTypeEnum} from '../../ehr/datatype';
+         DataTypeEnum,
+         MathFunctionEnum,
+         } from '../../ehr/datatype';
 import { DataPoint } from '../../ehr/datalist';
+import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
+import {SelectionModel} from '@angular/cdk/collections';
+import '../../shared/date.extensions';
 
+export interface MathOption {
+  value: MathFunctionEnum;
+  description: string;
+}
+
+export interface IntervalOption {
+  value: PeriodWidths;
+  description: string;
+}
+
+const MATH_OPTIONS: MathOption[] = [
+  {value: MathFunctionEnum.MAX, description: 'Maximalt värde'},
+  {value: MathFunctionEnum.MEAN, description: 'Medelvärde'},
+  {value: MathFunctionEnum.MEDIAN, description: 'Median'},
+  {value: MathFunctionEnum.MIN, description: 'Minimalt värde'},
+  {value: MathFunctionEnum.TOTAL, description: 'Totala värde'},
+];
+
+const INTERVAL_OPTIONS: IntervalOption[] = [
+  {value: PeriodWidths.HOUR, description: 'Per timme'},
+  {value: PeriodWidths.DAY, description: 'Per dygn'},
+  {value: PeriodWidths.WEEK, description: 'Per vecka'},
+  {value: PeriodWidths.MONTH, description: 'Per månad'},
+  {value: PeriodWidths.YEAR, description: 'Per År'},
+];
+
+@Component({
+  selector: 'app-removal-dialog',
+  templateUrl: 'removal-dialog.html',
+})
+export class RemovalDialogComponent {
+
+  // This boolean is sent to the health-list-items-component if the
+  // user presses the remove button
+  remove = true;
+
+  constructor(private conveyor: Conveyor, public dialogRef: MatDialogRef<RemovalDialogComponent>) {
+    }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+@Component({
+  selector: 'app-math-dialog',
+  templateUrl: 'math-dialog.html',
+  styleUrls: ['./health-list-items.component.scss']
+})
+export class MathDialogComponent {
+
+  mathOptions: MathOption[];
+  mathFunction: string;
+  intervalOptions: IntervalOption[];
+  interval: string;
+
+  selectedCategory: string;
+
+  constructor(
+    private conveyor: Conveyor,
+    public dialogRef: MatDialogRef<MathDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: string) {
+
+    this.selectedCategory = data;
+    this.mathOptions = MATH_OPTIONS;
+    this.intervalOptions = INTERVAL_OPTIONS;
+  }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+
+  /**
+   * Calls the setInterval function in order to do math manipulations on the data
+   * @param intervalString A string containing a PeriodWidths enum, must be converted to int
+   * @param funcString A string containing a Mathfunction enum, must be converted to int
+   */
+  calculate(intervalString: string, funcString: string) {
+    if (intervalString && funcString) {
+      const interval = parseInt(intervalString, 10);
+      const func = parseInt(funcString, 10);
+      this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
+      this.closeDialog();
+    }
+  }
+
+  /**
+   * Restores the datalist to the default settings
+   */
+  changeBack() {
+    this.conveyor.getDataList(this.selectedCategory).setInterval(PeriodWidths.POINT, MathFunctionEnum.ACTUAL);
+    this.closeDialog();
+  }
+
+}
 
 @Component({
   selector: 'app-health-list-items',
@@ -15,9 +116,6 @@ import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
   styleUrls: ['./health-list-items.component.scss']
 })
 export class HealthListItemsComponent implements OnInit {
-
-  selectedCategory: string;
-  isEditable = false;
 
   @Input() set selectCategory(value: string) {
     if (this.selectedCategory) {
@@ -32,14 +130,58 @@ export class HealthListItemsComponent implements OnInit {
     this.isEditable = value;
   }
 
+  constructor(private conveyor: Conveyor, public dialog: MatDialog) {
+  }
+
+  selectedCategory: string;
+  isEditable = false;
+
   dataTypeEnum = DataTypeEnum;
+  periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
   pointDataList: DataPoint[];
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
 
+  periodLabels: Map<string, string> = new Map<string, string>([
+    ['period_DAY', 'Dag'],
+    ['period_WEEK', 'Vecka'],
+    ['period_YEAR', 'År'],
+    ['period_MONTH', 'Månad'],
+    ['date', 'Datum']]);
+
+  periodDescriptions: Map<string, string> = new Map<string, string>([
+    ['period_DAY', 'Dag för mätning'],
+    ['period_WEEK', 'Vecka för mätning'],
+    ['period_YEAR', 'År för mätning'],
+    ['period_MONTH', 'Månad för mätning'],
+    ['date', 'Datum för mätning']]);
+
+  mathOptions: Map<MathFunctionEnum, string> =
+    new Map<MathFunctionEnum, string>([
+    [MathFunctionEnum.MAX, ', maximalt värde '],
+    [MathFunctionEnum.MEAN, ', medelvärde '],
+    [MathFunctionEnum.MEDIAN, ', median '],
+    [MathFunctionEnum.MIN, ', minimalt värde '],
+    [MathFunctionEnum.TOTAL, ', totala värde '],
+  ]);
+
+  intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
+    [PeriodWidths.HOUR, 'per timme'],
+    [PeriodWidths.DAY, 'per dygn'],
+    [PeriodWidths.WEEK, 'per vecka'],
+    [PeriodWidths.MONTH, 'per månad'],
+    [PeriodWidths.YEAR, 'per år'],
+  ]);
+
+  mathOption: string;
+  intervalOption: string;
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataList: MatTableDataSource<DataPoint>;
+
+  // The selected datapoints
+  selection = new SelectionModel<DataPoint>(true, []);
 
   /**
    * Sets the data category in the dataPoint to the set option
@@ -51,7 +193,47 @@ export class HealthListItemsComponent implements OnInit {
     point.set(key, option);
   }
 
-  constructor(private conveyor: Conveyor, public dialog: MatDialog) {
+  /**
+   * Checks whether the number of selected elements matches the total number of rows.
+   * @returns a boolean, true of selected elements matches total number of rows
+   */
+  isAllSelected(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataList.data.length;
+    return numSelected === numRows;
+  }
+
+  /**
+   * Selects all rows if they are not all selected; otherwise clear selection.
+   */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataList.data.forEach(row => this.selection.select(row));
+  }
+
+  /**
+   * Opens the dialog containing RemovalDialogComponent
+   */
+  openRemovalDialog() {
+    if (this.selection.selected.length > 0) {
+      const dialogRef = this.dialog.open(RemovalDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        // If result is true, that means the user pressed the button for removing selected values
+        if (result) {
+          this.removeSelected();
+        }
+      });
+    }
+  }
+
+  /**
+   * Removes all of the selected datapoints and updates the list
+   */
+  removeSelected() {
+    this.conveyor.getDataList(this.selectedCategory).removePoints(this.selection.selected);
+    this.ngOnInit();
   }
 
   ngOnInit() {
@@ -61,6 +243,7 @@ export class HealthListItemsComponent implements OnInit {
       this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
+      this.selection.clear();
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
@@ -71,8 +254,11 @@ export class HealthListItemsComponent implements OnInit {
           this.options.set(key, datatypes.options);
         }
       }
+      this.mathOption = this.mathOptions.has(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) ?
+        this.mathOptions.get(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) : '';
+      this.intervalOption = this.intervalOptions.has(this.conveyor.getDataList(this.selectedCategory).getWidth()) ?
+        this.intervalOptions.get(this.conveyor.getDataList(this.selectedCategory).getWidth()) : '';
     }
-    console.log(this.options);
     this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
     this.dataList.paginator = this.paginator;
   }
@@ -96,17 +282,44 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   /**
+   * Opens the dialog for MathDialogComponent
+   */
+  openMathDialog(): void {
+    this.selection.clear();
+    const dialogRef = this.dialog.open(MathDialogComponent, {
+      data: this.selectedCategory
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.ngOnInit();
+    });
+  }
+
+  /**
    * Returns the columns which should be displayed in the table depending on which
    * category it is.
    * @returns a list of labels for the specified category
    */
   getDisplayedColumns(): string[] {
     const result: string[] = [];
+    if (this.isEditable) {
+      result.push('select');
+    }
     if (this.selectedCategory) {
       for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
-        if (column === 'time') {
-          result.push('date');
-          result.push('time');
+        if (column === 'device_name' || column === 'type' || column === 'manufacturer') {
+          continue;
+        } else if (column === 'time') {
+          switch (this.conveyor.getDataList(this.selectedCategory).getWidth()) {
+            case PeriodWidths.DAY: result.push('period_DAY'); break;
+            case PeriodWidths.MONTH: result.push('period_MONTH'); break;
+            case PeriodWidths.WEEK: result.push('period_WEEK'); break;
+            case PeriodWidths.YEAR: result.push('period_YEAR'); break;
+            default :
+              result.push('date');
+              result.push('time');
+          }
+
         } else {
           result.push(column);
         }

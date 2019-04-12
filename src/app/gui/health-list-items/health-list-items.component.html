@@ -1,13 +1,27 @@
-<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
-
-<table mat-table [dataSource]="dataList" [trackBy]="trackItem">
+<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label + mathOption + intervalOption : ''}}</h1>
+<p style="text-align: left">{{categorySpec && !isEditable ? mathOption.substring(2) + intervalOption : ''}}</p>
+<table style="text-align: left" mat-table [dataSource]="dataList" [trackBy]="trackItem">
 
   <ng-container *ngFor="let key of displayedColumns" matColumnDef={{key}}>
-    <th mat-header-cell *matHeaderCellDef [matTooltip]="key === 'date' ? 'Datum för mätning'  : categorySpec.dataTypes.get(key).description">
-      {{key === 'date' ? 'Datum' : categorySpec.dataTypes.get(key).label}}
+    <div *ngIf="key==='select'">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </div>
+
+    <th mat-header-cell *matHeaderCellDef [matTooltip]="!categorySpec.dataTypes.has(key) ? periodDescriptions.get(key)  : categorySpec.dataTypes.get(key).description">
+      {{!categorySpec.dataTypes.has(key) ? periodLabels.get(key) : categorySpec.dataTypes.get(key).label}}
     </th>
     <td mat-cell *matCellDef="let dataPoint;">
-      <div *ngIf="key !== 'date' && key != 'time' && isEditable">
+      <div *ngIf="key !== 'date' && key != 'time' && isEditable && categorySpec.dataTypes.has(key)">
 
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.CODED_TEXT">
 
@@ -31,7 +45,7 @@
         </div>
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.DATE_TIME">
 
-          {{dataPoint.get('time').getFullYear() + '-' + ('0' + (dataPoint.get('time').getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get('time').getDate()).slice(-2)}}
+          {{dataPoint.get(key).getFullYear() + '-' + ('0' + (dataPoint.get(key).getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get(key).getDate()).slice(-2)}}
 
         </div>
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.QUANTITY">
@@ -40,7 +54,7 @@
 
         </div>
       </div>
-      <div *ngIf="key !== 'date' && key != 'time' && !isEditable">
+      <div *ngIf="key !== 'date' && key != 'time' && !isEditable && categorySpec.dataTypes.has(key)">
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.CODED_TEXT">
 
           <div *ngFor="let option of options.get(key)">
@@ -60,7 +74,7 @@
         </div>
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.DATE_TIME">
 
-          {{dataPoint.get('time').getFullYear() + '-' + ('0' + (dataPoint.get('time').getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get('time').getDate()).slice(-2)}}
+          {{dataPoint.get(key).getFullYear() + '-' + ('0' + (dataPoint.get(key).getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get(key).getDate()).slice(-2)}}
 
         </div>
       </div>
@@ -74,6 +88,26 @@
         {{('0' + dataPoint.get('time').getHours()).slice(-2) + ':' + ('0' + dataPoint.get('time').getMinutes()).slice(-2)}}
 
       </div>
+      <div *ngIf="key === 'period_YEAR'">
+
+        {{dataPoint.get('time').getFullYear()}}
+
+      </div>
+      <div *ngIf="key === 'period_MONTH'">
+
+        {{dataPoint.get('time').getFullYear() + '-' + ('0' + (dataPoint.get('time').getMonth() + 1)).slice(-2)}}
+
+      </div>
+      <div *ngIf="key === 'period_DAY'">
+
+        {{dataPoint.get('time').getFullYear() + '-' + ('0' + (dataPoint.get('time').getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get('time').getDate()).slice(-2)}}
+
+      </div>
+      <div *ngIf="key === 'period_WEEK'">
+
+        {{'v' + dataPoint.get('time').getWeek() + ', ' + dataPoint.get('time').getWeekYear()}}
+
+      </div>
 
     </td>
   </ng-container>
@@ -84,4 +118,23 @@
 
 <mat-paginator [pageSizeOptions]="[5, 10, 15, 30, 50]" showFirstLastButtons></mat-paginator>
 
-<button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%" (click)="openDialog()">Lägg till datavärde</button>
+<div class="flex">
+  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;"
+  (click)="openDialog()">Lägg till datavärde</button>
+  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;" 
+  (click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button>
+  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;"
+  (click)="openMathDialog()">Sammanställ punkter</button>
+</div>
+
+ <!-- <div *ngIf="selected.selection.length > 0"> -->
+  <!-- <div *ngFor="let key of displayedColumns">
+    <div *ngIf="key !== 'select' && key !== 'date' && key !== 'time'">
+      <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.TEXT">
+        <mat-form-field>
+          <input #textInput matInput (change)="commentSelected(key, textInput.value)" placeholder={{categorySpec.dataTypes.get(key).label}}>
+        </mat-form-field>
+      </div>
+    </div>
+  </div> -->
+<!-- </div> -->
