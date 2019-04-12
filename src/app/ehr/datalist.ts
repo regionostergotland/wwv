@@ -10,7 +10,7 @@ import '../shared/date.extensions';
  */
 export class DataPoint {
   /**
-   * Point is marked for removal.
+   * XXX Point is marked for removal. Only used for removePoint
    */
   public removed: boolean;
   /**
@@ -92,9 +92,9 @@ export class DataList {
    */
   private processedPoints: DataPoint[];
   /**
-   * Width of processed points in milliseconds.
+   * Selected period width.
    */
-  private width: number;
+  private width: PeriodWidths;
   /**
    * Math function used to process points.
    */
@@ -203,6 +203,18 @@ export class DataList {
   }
 
   /**
+   * Removes points from list by checking for equality to given points to be removed.
+   * @param points: DataPoint[] is a list of datapoints marked to be removed.
+   */
+  public removePoints(points: DataPoint[]): void {
+    for (const point of points) {
+      point.removed = true;
+    }
+    this.points = this.points.filter(p => !p.removed);
+    this.processedPoints = this.processedPoints.filter(p => !(p.removed));
+  }
+
+  /**
    * Get all data points from list, processed according to options.
    */
   public getPoints(): DataPoint[] {
@@ -236,6 +248,20 @@ export class DataList {
     } else {
       throw TypeError('invalid type id -- ' + typeId);
     }
+  }
+
+  /**
+   * Get interval width for the data list.
+   */
+  public getWidth(): PeriodWidths {
+    return this.width;
+  }
+
+  /**
+   * Get the math function for the data list.
+   */
+  public getMathFunction(): MathFunctionEnum {
+    return this.mathFunction;
   }
 
 }
