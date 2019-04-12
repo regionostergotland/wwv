@@ -20,10 +20,10 @@ export class ProgressBarComponent implements OnInit {
       case '/sources': {
         return 1;
       }
-      case '/catpicker': {
+      case '/pick-categories': {
         return 1;
       }
-      case '/sidebar': {
+      case '/edit': {
         return 2;
       }
       case '/inspection': {
