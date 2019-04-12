@@ -5,7 +5,8 @@ import { CategorySpec,
          DataTypeEnum,
          MathFunctionEnum,
          } from '../../ehr/datatype';
-import { DataPoint, PeriodWidths } from '../../ehr/datalist';
+import { DataPoint } from '../../ehr/datalist';
+import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
 import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
@@ -166,11 +167,6 @@ export class HealthListItemsComponent implements OnInit {
   mathOption: string;
   intervalOption: string;
 
-  // mathOptions: MathOption[];
-  // mathFunction: string;
-  // intervalOptions: IntervalOption[];
-  // interval: string;
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
   dataList: MatTableDataSource<DataPoint>;
 
@@ -227,16 +223,16 @@ export class HealthListItemsComponent implements OnInit {
       point.removed = true;
     }
     this.selection.clear();
-/*
-    const newList: DataPoint[] = [];
-    for (const point of this.conveyor.getDataList(this.selectedCategory).getPoints()) {
-      if (!point.removed) {
-        newList.push(point);
-      }
-    }
-    this.conveyor.getDataList(this.selectedCategory).setPoints(newList);*/
     this.ngOnInit();
   }
+/*
+  commentSelected(key: string, text: string) {
+    console.log("works");
+    for (const point of this.selection.selected) {
+      point.set(key, text);
+    }
+    this.ngOnInit();
+  }*/
 
   ngOnInit() {
     if (this.selectedCategory) {

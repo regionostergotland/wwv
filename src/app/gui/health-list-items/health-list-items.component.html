@@ -126,9 +126,15 @@
   <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;"
   (click)="openMathDialog()">Sammanställ punkter</button>
 </div>
-<!-- <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%"
-(click)="openDialog()">Lägg till datavärde</button>
-<button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%" 
-(click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button>
-<button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center; width: 100%"
-(click)="openMathDialog()">Sammanställ punkter</button> -->
+
+ <!-- <div *ngIf="selected.selection.length > 0"> -->
+  <!-- <div *ngFor="let key of displayedColumns">
+    <div *ngIf="key !== 'select' && key !== 'date' && key !== 'time'">
+      <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.TEXT">
+        <mat-form-field>
+          <input #textInput matInput (change)="commentSelected(key, textInput.value)" placeholder={{categorySpec.dataTypes.get(key).label}}>
+        </mat-form-field>
+      </div>
+    </div>
+  </div> -->
+<!-- </div> -->
