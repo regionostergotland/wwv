@@ -6,64 +6,96 @@ import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
 import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
 import { GoogleAuthService } from 'ng-gapi';
 import GoogleUser = gapi.auth2.GoogleUser;
-import { AutofillMonitor } from '@angular/cdk/text-field';
-import { cat } from 'shelljs';
-import { stringify } from '@angular/compiler/src/util';
-import { CategoryEnum, BloodPressureEnum, BodyWeightEnum } from '../ehr/ehr-config';
+import { Categories,
+         CommonFields,
+         BloodPressure,
+         BodyWeight,
+         Height,
+         HeartRate,
+         Steps,
+         MedicalDevice} from '../ehr/ehr-config';
 
 @Injectable({
   providedIn: 'root',
 })
 export class GfitService extends Platform {
   public static SESSION_STORAGE_KEY = 'accessToken';
-  private available: string[] = [];
+  private available: string[];
   private user: GoogleUser;
   private dataIsFetched: boolean;
   private baseUrl = 'https://www.googleapis.com/fitness/v1/users/me/dataSources/';
   private auth: any;
+  private devices: Set<any>;
+
+  private readonly commonDataTypes = new Map<string, (src: any) => any>(
+    [
+      [CommonFields.TIME,
+      src => new Date(src.startTimeNanos * Math.pow(10, -6))],
+      // split(':')[4] will yield the device uid from google's data
+      // [0] is device name, [1] is device type, [2] is device manufacturer
+      [MedicalDevice.NAME, src =>
+        this.getDeviceInfo(src.originDataSourceId.split(':')[4])[0]],
+      [MedicalDevice.TYPE, src =>
+        this.getDeviceInfo(src.originDataSourceId.split(':')[4])[1]],
+      [MedicalDevice.MANUFACTURER, src =>
+        this.getDeviceInfo(src.originDataSourceId.split(':')[4])[2]]
+    ]
+  );
 
   // Maps Google Fit's data type names to internal category names
   private readonly categoryDataTypeNames: Map<string, string> = new Map(
     [
-      ['com.google.blood_pressure', 'blood_pressure'],
-      ['com.google.weight', 'body_weight']
+      ['com.google.blood_pressure', Categories.BLOOD_PRESSURE],
+      ['com.google.weight', Categories.BODY_WEIGHT],
+      ['com.google.heart_rate.bpm', Categories.HEART_RATE],
+      ['com.google.height', Categories.HEIGHT],
+      ['com.google.step_count.delta', Categories.STEPS]
     ]
   );
 
   constructor(
     private googleAuth: GoogleAuthService,
     private http: HttpClient
-  ) {
-    super(new Map([
-      [ CategoryEnum.BLOOD_PRESSURE,
-        {
-          url: 'raw:com.google.blood_pressure:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
-            [
-              [BloodPressureEnum.TIME,
-               src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [BloodPressureEnum.SYSTOLIC, src => src.value[0].fpVal],
-              [BloodPressureEnum.DIASTOLIC, src => src.value[1].fpVal],
-            ]
-          ),
-        },
-      ],
-      [ CategoryEnum.BODY_WEIGHT,
-        {
-          url: 'raw:com.google.weight:com.google.android.apps.fitness:user_input',
-          dataTypes: new Map(
-            [
-              [BodyWeightEnum.TIME,
-               src => new Date(src.startTimeNanos * Math.pow(10, -6))],
-              [BodyWeightEnum.WEIGHT, src => src.value[0].fpVal]
-            ]
-          ),
-        },
-      ],
-    ]));
+    ) {
+    super();
+    this.implementedCategories = new Map([
+      [Categories.BLOOD_PRESSURE, {
+        url: 'derived:com.google.blood_pressure:com.google.android.gms:merged',
+        dataTypes: new Map<string, any>(
+          Array.from(this.commonDataTypes.entries()))
+          .set(BloodPressure.SYSTOLIC, src => src.value[0].fpVal)
+          .set(BloodPressure.DIASTOLIC, src => src.value[1].fpVal)
+      }],
+      [Categories.BODY_WEIGHT, {
+        url: 'derived:com.google.weight:com.google.android.gms:merge_weight',
+        dataTypes: new Map<string, any>(
+          Array.from(this.commonDataTypes.entries()))
+          .set(BodyWeight.WEIGHT, src => src.value[0].fpVal)
+      }],
+      [Categories.HEART_RATE, {
+        url: 'derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm',
+        dataTypes: new Map<string, any>(
+          Array.from(this.commonDataTypes.entries()))
+          .set(HeartRate.RATE, src => src.value[0].fpVal)
+      }],
+      [Categories.HEIGHT, {
+        url: 'derived:com.google.height:com.google.android.gms:merge_height',
+        dataTypes: new Map<string, any>(
+          Array.from(this.commonDataTypes.entries()))
+          .set(Height.HEIGHT, src => src.value[0].fpVal)
+      }],
+      [Categories.STEPS, {
+        url: 'derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas',
+        dataTypes: new Map<string, any>(
+          Array.from(this.commonDataTypes.entries()))
+          .set(Steps.STEPS, src => src.value[0].intVal)
+      }]
+    ]);
 
     this.dataIsFetched = false;
     this.googleAuth.getAuth().subscribe(auth => this.auth = auth);
+    this.available = [];
+    this.devices = new Set<any>();
   }
 
   public getToken(): string {
@@ -99,6 +131,24 @@ export class GfitService extends Platform {
   }
 
   /**
+   * Checks if a given device is available, and returns information
+   * about the device if it is. If the device is not found, this returns
+   * an array of empty strings.
+   * @param deviceUid unique identifier for requested device
+   * @returns an array containing information about the device
+   */
+  private getDeviceInfo(deviceUid: string): string[] {
+    const entries =  this.devices.entries();
+    let res: any;
+    for (const e of entries) {
+      if (e[0].uid === deviceUid) {
+        res = e[0];
+      }
+    }
+    return res ? [res.model, res.type, res.manufacturer] : ['', '', ''];
+  }
+
+  /**
    * This function GETs the activity metadata for the user and parses this data
    * to add categories that are available to the user.
    * @returns an observable containing an array with the available categories.
@@ -110,10 +160,14 @@ export class GfitService extends Platform {
         this.baseUrl + '?access_token=' + this.getToken()).pipe(map(res => {
           const activities: any = res;
           activities.dataSource.forEach(source => {
-            if (source.dataStreamId.split(':')[0] === 'raw') {
+            // Might want to check if last index contains the string 'merge' instead?
+            if (source.dataStreamId.split(':')[0] === 'derived') {
               const categoryId: string = this.categoryDataTypeNames
                 .get(source.dataType.name);
-              if (this.isImplemented(categoryId)) {
+              if (source.device) {
+                this.devices.add(source.device);
+              }
+              if (this.isImplemented(categoryId) && !this.available.includes(categoryId)) {
                 this.available.push(categoryId);
               }
             }
@@ -137,10 +191,11 @@ export class GfitService extends Platform {
    */
   public getData(categoryId: string,
                  start: Date, end: Date): Observable<DataPoint[]> {
+
     const startTime = String(start.getTime() * Math.pow(10, 6));
     const endTime = String(end.getTime() * Math.pow(10, 6));
     const dataSetId = startTime + '-' + endTime;
-    let url: string = this.baseUrl;
+    // console.log(dataSetId);
     const tail: string = '/datasets/' +
                           dataSetId +
                           '?access_token=' +
@@ -149,8 +204,7 @@ export class GfitService extends Platform {
     if (!this.isImplemented(categoryId)) {
       throw TypeError(categoryId + ' is unimplemented');
     } else {
-      const categoryUrl: string = this.implementedCategories.get(categoryId).url;
-      url += categoryUrl + tail;
+      const url: string = this.baseUrl + this.implementedCategories.get(categoryId).url + tail;
       return this.http.get(url).pipe(map(
         res => this.convertData(res, categoryId)));
     }
@@ -162,13 +216,12 @@ export class GfitService extends Platform {
    * category)
    * @param res result from http.get-request (json file)
    * @param categoryId specifies which category the data belongs to
-   * @returns an array containing the converted DataPoint(s)
+   *  @returns an array containing the converted DataPoint(s)
    */
   protected convertData(res: any, categoryId: string): DataPoint[] {
     const points: DataPoint[] = [];
     const dataTypeConversions: Map<string, (src: any) => any> =
       this.implementedCategories.get(categoryId).dataTypes;
-
     res.point.forEach(src => {
       const convertedData: DataPoint = new DataPoint();
       for (const [type, conversionFunc] of dataTypeConversions) {
@@ -178,4 +231,5 @@ export class GfitService extends Platform {
     });
     return points;
   }
+
 }

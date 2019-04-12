@@ -22,35 +22,39 @@ describe('Ehr Types', () => {
         [
           'time',
           new DataTypeDateTime(
+            ['any_event'],
             'Tid',
             'Tidpunkt vid mätning',
-            true,
+            true, false,
           )
         ],
         [
           'systolic',
           new DataTypeQuantity(
+            ['any_event'],
             'Övertryck',
             'Systoliskt övertryck av blod',
-            true,
+            true, false,
             'mm[Hg]', 0, 1000,
           )
         ],
         [
           'diastolic',
           new DataTypeQuantity(
+            ['any_event'],
             'Undertryck',
             'Diastoliskt undertryck av blod',
-            true,
+            true, false,
             'mm[Hg]', 0, 1000
           )
         ],
         [
           'position',
           new DataTypeCodedText(
+            ['any_event'],
             'Position',
             'Position vid mätning.',
-            false,
+            false, false,
             [
               {
                 code: 'at1000',
@@ -80,26 +84,29 @@ describe('Ehr Types', () => {
         [
           'time',
           new DataTypeDateTime(
+            ['any_event'],
             'Tid',
             'Tidpunkt vid mätning',
-            true,
+            true, false,
           )
         ],
         [
           'weight',
           new DataTypeQuantity(
+            ['any_event'],
             'Vikt',
             'Kroppsvikt',
-            true,
+            true, false,
             'kg', 0, 1000
           )
         ],
         [
           'state_of_dress',
           new DataTypeCodedText(
+            ['any_event'],
             'Klädsel',
             'Klädsel vid mätning.',
-            false,
+            false, false,
             [
               {
                 code: 'at0011',
@@ -180,4 +187,114 @@ describe('Ehr Types', () => {
     }
   });
 
+  /**
+   * Test that datatypes compares values correctly.
+   */
+  it('should compare datatype time values correctly', () => {
+    const dataType = new DataTypeDateTime(['any_event'], '', '', true, false);
+    expect(dataType.compare(new Date(2016, 1), new Date(2017, 1)))
+      .toBeLessThan(0);
+    expect(dataType.compare(new Date(2000, 1), new Date(2000, 2)))
+      .toBeLessThan(0);
+    expect(dataType.compare(new Date(2000, 4), new Date(2000, 3)))
+      .toBeGreaterThan(0);
+    expect(dataType.compare(new Date(2000, 2), new Date(2000, 2)))
+      .toBe(0);
+  });
+  it('should compare quantity datatype values correctly', () => {
+    const dataType = new DataTypeQuantity(['any_event'], '', '', true, false,
+                                        'unit', 0, -1);
+    expect(dataType.compare(5, 100)).toBeLessThan(0);
+    expect(dataType.compare(0, 0.1)).toBeLessThan(0);
+    expect(dataType.compare(0.324, 0.323)).toBeGreaterThan(0);
+    expect(dataType.compare(0.324, 0.324)).toBe(0);
+  });
+  it('should compare text datatype values correctly', () => {
+    const dataType = new DataTypeText(['any_event'], '', '', true, false);
+    expect(dataType.compare('hej', 'zzz')).toBeLessThan(0);
+    expect(dataType.compare('zzzz', 'zzz')).toBeGreaterThan(0);
+    expect(dataType.compare('eee', 'eee')).toBe(0);
+  });
+  it('should compare codedtext datatype values correctly', () => {
+    const dataType = new DataTypeCodedText(['any_event'], '', '', true, false, [
+      { code: 'at1001', label: '', description: ''},
+      { code: 'at1003', label: '', description: ''},
+      { code: 'at1002', label: '', description: ''},
+      { code: 'at1000', label: '', description: ''},
+    ]);
+    expect(dataType.compare('at1000', 'at1001')).toBeLessThan(0);
+    expect(dataType.compare('at1003', 'at1002')).toBeGreaterThan(0);
+    expect(dataType.compare('at1001', 'at1001')).toBe(0);
+  });
+
+
+  /**
+   * Test that points compare.
+   */
+  it('should compare points correctly', () => {
+    const dataTypes = new Map<string, DataType>([
+      [ 'time', new DataTypeDateTime(['any_event'], '', '', true, false) ],
+      [ 'value', new DataTypeQuantity(['any_event'], '', '', true, false,
+        'unit', 0, -1) ],
+    ]);
+    const p1 = new DataPoint([
+      ['time', new Date(2017, 1)],
+      ['value', 50],
+    ]);
+    const p2 = new DataPoint([
+      ['time', new Date(2017, 1)],
+      ['value', 51],
+    ]);
+    const p3 = new DataPoint([
+      ['time', new Date(2018, 1)],
+      ['value', 50],
+    ]);
+    const p4 = new DataPoint([
+      ['time', new Date(2018, 1)],
+      ['value', 50],
+    ]);
+
+    expect(p1.compareTo(p2, dataTypes)).toBeLessThan(0);
+    expect(p2.compareTo(p1, dataTypes)).toBeGreaterThan(0);
+    expect(p1.compareTo(p3, dataTypes)).toBeLessThan(0);
+    expect(p3.compareTo(p1, dataTypes)).toBeGreaterThan(0);
+    expect(p2.compareTo(p3, dataTypes)).toBeLessThan(0);
+    expect(p3.compareTo(p2, dataTypes)).toBeGreaterThan(0);
+    expect(p3.compareTo(p4, dataTypes)).toBe(0);
+    expect(p4.compareTo(p3, dataTypes)).toBe(0);
+  });
+
+  /**
+   * Test that list contains added points.
+   */
+  it('should contain all added points, not contain unadded points', () => {
+    const spec: CategorySpec = {
+      id : 'id', label : '', description : '',
+      dataTypes : new Map<string, DataType>([
+        [ 'time', new DataTypeDateTime(['any_event'], '', '', true, false) ],
+      ])
+    };
+    const list = new DataList(spec);
+    const addedPoints = [
+      new DataPoint([['time', new Date(2017, 1)]]),
+      new DataPoint([['time', new Date(2017, 4)]]),
+      new DataPoint([['time', new Date(2017, 3)]]),
+      new DataPoint([['time', new Date(2017, 2)]]),
+      new DataPoint([['time', new Date(2017, 5)]]),
+    ];
+    const notAddedPoints = [
+      new DataPoint([['time', new Date(2016, 1)]]),
+      new DataPoint([['time', new Date(2016, 4)]]),
+      new DataPoint([['time', new Date(2016, 3)]]),
+      new DataPoint([['time', new Date(2016, 2)]]),
+      new DataPoint([['time', new Date(2016, 5)]]),
+    ];
+    list.addPoints(addedPoints);
+    for (const p of addedPoints) {
+      expect(list.containsPoint(p)).toEqual(true);
+    }
+    for (const p of notAddedPoints) {
+      expect(list.containsPoint(p)).toEqual(false);
+    }
+  });
 });

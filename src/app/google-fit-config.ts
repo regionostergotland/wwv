@@ -3,7 +3,9 @@
 import {
   GoogleApiModule,
   NgGapiClientConfig,
-  NG_GAPI_CONFIG
+  NG_GAPI_CONFIG,
+  GoogleApiService,
+  GoogleAuthService,
 } from 'ng-gapi';
 
 const gapiClientConfig: NgGapiClientConfig = {
@@ -15,9 +17,11 @@ const gapiClientConfig: NgGapiClientConfig = {
     ].join(' ')
 };
 
-export const CustomGoogleApiModule = GoogleApiModule.forRoot({
-    provide: NG_GAPI_CONFIG,
-    useValue: gapiClientConfig
+
+const CustomGoogleApiModule = GoogleApiModule.forRoot({
+  provide: NG_GAPI_CONFIG,
+  useValue: gapiClientConfig
 });
 
+export { CustomGoogleApiModule, GoogleApiService, GoogleAuthService };
 

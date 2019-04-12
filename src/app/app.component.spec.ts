@@ -6,12 +6,7 @@ import { ProgressBarComponent} from './gui/progress-bar/progress-bar.component';
 import { MatToolbarModule, MatGridListModule } from '@angular/material';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
-import {
-  GoogleApiService,
-  GoogleAuthService,
-} from 'ng-gapi';
-
-import { CustomGoogleApiModule } from './google-fit-config';
+import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
 
 // describe what is being tested
 // describe(xComponent)
