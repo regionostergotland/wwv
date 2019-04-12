@@ -9,7 +9,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;
 }
 
 .margin {
@@ -20,4 +19,12 @@
 .wide-button {
   width: 100%;
   display: flex;
+}
+
+
+.sidebar-icon {
+  width: 30px;
+  height: 30px;
+  margin-left: 6px;
+  margin-right: 10px;
 }
