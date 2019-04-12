@@ -57,53 +57,58 @@ export enum Steps {
 
 const TimeField: [string, DataType] = [
   CommonFields.TIME,
-  new DataTypeDateTime(
-    [SubTrees.EVENT],
-    'Tid',
-    'Tidpunkt vid mätning',
-    true, false,
-  )
+  new DataTypeDateTime({
+    path: [SubTrees.EVENT],
+    label: 'Tid',
+    description: 'Tidpunkt vid mätning',
+    required: true,
+    single: false,
+  })
 ];
 
 const CommentField: [string, DataType] = [
   CommonFields.COMMENT,
-  new DataTypeText(
-    [SubTrees.EVENT],
-    'Kommentar',
-    `Ytterligare beskrivning av mätningen som inte beskrivits i andra
-    fält.`,
-    false, false,
-  )
+  new DataTypeText({
+    path: [SubTrees.EVENT],
+    label: 'Kommentar',
+    description: `Ytterligare beskrivning av mätningen som inte beskrivits i
+    andra fält.`,
+    required: false,
+    single: false,
+  })
 ];
 
 const DeviceNameField: [string, DataType] = [
   MedicalDevice.NAME,
-  new DataTypeText(
-    [SubTrees.MEDICAL_DEVICE],
-    'Enhetsnamn',
-    `Namn på enhet som använts för mätning.`,
-    false, true,
-  )
+  new DataTypeText({
+    path: [SubTrees.MEDICAL_DEVICE],
+    label: 'Enhetsnamn',
+    description: `Namn på enhet som använts för mätning.`,
+    required: false,
+    single: true,
+  })
 ];
 
 const DeviceTypeField: [string, DataType] = [
   MedicalDevice.TYPE,
-  new DataTypeText(
-    [SubTrees.MEDICAL_DEVICE],
-    'Enhetstyp',
-    `Typ av enhet som använts för mätning.`,
-    false, true,
-  )
+  new DataTypeText({
+    path: [SubTrees.MEDICAL_DEVICE],
+    label: 'Enhetstyp',
+    description: `Typ av enhet som använts för mätning.`,
+    required: false,
+    single: true,
+  })
 ];
 
 const DeviceManufacturerField: [string, DataType] = [
   MedicalDevice.MANUFACTURER,
-  new DataTypeText(
-    [SubTrees.MEDICAL_DEVICE],
-    'Enhetstillverkare',
-    `Tillverkare av enhet som använts för mätning.`,
-    false, true,
-  )
+  new DataTypeText({
+    path: [SubTrees.MEDICAL_DEVICE],
+    label: 'Enhetstillverkare',
+    description: `Tillverkare av enhet som använts för mätning.`,
+    required: false,
+    single: true,
+  })
 ];
 
 export interface EhrConfig {
@@ -138,33 +143,40 @@ export const ehrConfig: EhrConfig = {
         [
           BloodPressure.SYSTOLIC,
           new DataTypeQuantity(
-            [SubTrees.EVENT],
-            'Systoliskt',
-            `Det högsta systemiskt arteriella blodtrycket uppmätt systoliskt
-            eller under sammandragningsfasen av hjärtcykeln.`,
-            true, false,
-            'mm[Hg]', 0, 1000
+            {
+              path: [SubTrees.EVENT],
+              label: 'Systoliskt',
+              description: `Det högsta systemiskt arteriella blodtrycket
+              uppmätt systoliskt eller under sammandragningsfasen av
+              hjärtcykeln.`,
+              required: true,
+              single: false,
+            }, 'mm[Hg]', 0, 1000
           )
         ],
         [
           BloodPressure.DIASTOLIC,
           new DataTypeQuantity(
-            [SubTrees.EVENT],
-            'Diastoliskt',
-            `Det minsta systemiskt arteriella blodtrycket uppmätt diastoliskt
-            eller i hjärtcykelns avslappningsfas.`,
-            true, false,
-            'mm[Hg]', 0, 1000
+            {
+              path: [SubTrees.EVENT],
+              label: 'Diastoliskt',
+              description: `Det minsta systemiskt arteriella blodtrycket
+              uppmätt diastoliskt eller i hjärtcykelns avslappningsfas.`,
+              required: true,
+              single: false,
+            }, 'mm[Hg]', 0, 1000
           )
         ],
         [
           BloodPressure.POSITION,
           new DataTypeCodedText(
-            [SubTrees.EVENT],
-            'Ställning',
-            'Individens kroppställning under mätningen.',
-            false, false,
-            [
+            {
+              path: [SubTrees.EVENT],
+              label: 'Ställning',
+              description: 'Individens kroppställning under mätningen.',
+              required: false,
+              single: false,
+            }, [
               {
                 code: 'at1000',
                 label: 'Stående',
@@ -199,21 +211,26 @@ export const ehrConfig: EhrConfig = {
         [
           BodyWeight.WEIGHT,
           new DataTypeQuantity(
-            [SubTrees.EVENT],
-            'Vikt',
-            'Individens vikt.',
-            true, false,
-            'kg', 0, 1000
+            {
+              path: [SubTrees.EVENT],
+              label: 'Vikt',
+              description: 'Individens vikt.',
+              required: true,
+              single: false,
+            }, 'kg', 0, 1000
           )
         ],
         [
           BodyWeight.DRESS,
           new DataTypeCodedText(
-            [SubTrees.EVENT],
-            'Klädsel',
-            'Beskrivning av individens klädsel vid tidpunkten för vägning.',
-            false, false,
-            [
+            {
+              path: [SubTrees.EVENT],
+              label: 'Klädsel',
+              description: `Beskrivning av individens klädsel vid tidpunkten
+              för vägning.`,
+              required: false,
+              single: false,
+            }, [
               {
                 code: 'at0011',
                 label: 'Lätt klädd/underkläder',
@@ -248,11 +265,13 @@ export const ehrConfig: EhrConfig = {
         [
           Height.HEIGHT,
           new DataTypeQuantity(
-            [SubTrees.EVENT],
-            'Kroppslängd',
-            'Kroppslängd från hjässa till fotsula.',
-            true, false,
-            'cm', 0, 1000
+            {
+              path: [SubTrees.EVENT],
+              label: 'Kroppslängd',
+              description: 'Kroppslängd från hjässa till fotsula.',
+              required: true,
+              single: false,
+            }, 'cm', 0, 1000
           )
         ],
         CommentField,
@@ -270,11 +289,13 @@ export const ehrConfig: EhrConfig = {
         [
           TimeField,
           [Steps.STEPS, new DataTypeQuantity(
-            [SubTrees.EVENT],
-            'Antal steg',
-            'Antal uppnätta steg under givet tidsintervall',
-            true, false,
-            'Steg', 0, -1
+            {
+              path: [SubTrees.EVENT],
+              label: 'Antal steg',
+              description: 'Antal uppnätta steg under givet tidsintervall',
+              required: true,
+              single: false,
+            }, 'Steg', 0, -1
             )],
           CommentField,
           DeviceNameField,
@@ -295,21 +316,25 @@ export const ehrConfig: EhrConfig = {
         [
           HeartRate.RATE,
           new DataTypeQuantity(
-            [SubTrees.EVENT],
-            'Frekvens',
-            'Frekvensen mätt i slag per minut.',
-            true, false,
-            '/min', 0, -1
+            {
+              path: [SubTrees.EVENT],
+              label: 'Frekvens',
+              description: 'Frekvensen mätt i slag per minut.',
+              required: true,
+              single: false,
+            }, '/min', 0, -1
           )
         ],
         [
           HeartRate.POSITION,
           new DataTypeCodedText(
-            [SubTrees.EVENT],
-            'Kroppsställning',
-            'Patientens kroppsställning under observationen.',
-            false, false,
-            [
+            {
+              path: [SubTrees.EVENT],
+              label: 'Kroppsställning',
+              description: 'Patientens kroppsställning under observationen.',
+              required: false,
+              single: false,
+            }, [
               {
                 code: 'at1003',
                 label: 'Stående eller upprätt',

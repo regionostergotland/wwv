@@ -17,9 +17,13 @@ describe('datatype', () => {
    * Test that valid DataTypeQuantity values pass validity check
    */
   const quantityLimited = new DataTypeQuantity(
-    ['root'], 'quantity', 'quantity limited between 10 and 100',
-    true, false,
-    'mm', 10, 100
+    {
+      path: ['root'],
+      label: 'quantity',
+      description: 'quantity limited between 10 and 100',
+      required: true,
+      single: false,
+    }, 'mm', 10, 100
   );
   it('should not accept negative quantity value', () => {
     expect(quantityLimited.isValid(-100)).toBeFalsy();
@@ -46,9 +50,13 @@ describe('datatype', () => {
     expect(quantityLimited.isValid(1000)).toBeFalsy();
   });
   const quantityUnlimited = new DataTypeQuantity(
-    ['root'], 'quantity', 'unlimited quantity from 0',
-    true, false,
-    'mm', 0, -1
+    {
+      path: ['root'],
+      label: 'quantity',
+      description: 'unlimited quantity from 0',
+      required: true,
+      single: false,
+    }, 'mm', 0, -1
   );
   it('should not accept negative quantity value (unlimited)', () => {
     expect(quantityUnlimited.isValid(-100)).toBeFalsy();
@@ -69,7 +77,13 @@ describe('datatype', () => {
   /**
    * Test that DataTypeDateTime validates correctly.
    */
-  const dateTime = new DataTypeDateTime(['root'], 'datetime', '', true, false);
+  const dateTime = new DataTypeDateTime({
+    path: ['root'],
+    label: 'datetime',
+    description: '',
+    required: true,
+    single: false
+  });
   it('should accept valid dates', () => {
     expect(dateTime.isValid(new Date())).toBeTruthy();
     expect(dateTime.isValid(new Date(2017, 32))).toBeTruthy();
@@ -84,8 +98,13 @@ describe('datatype', () => {
    * Test that codedText validates correctly.
    */
   const codedText = new DataTypeCodedText(
-    ['root'], 'coded', 'coded text',
-    true, false,
+    {
+      path: ['root'],
+      label: 'coded',
+      description: 'coded text',
+      required: true,
+      single: false,
+    },
     [ { code: 'at1001', label: '', description: '' },
       { code: 'at1000', label: '', description: '' },
       { code: 'at1003', label: '', description: '' } ]
@@ -110,7 +129,13 @@ describe('datatype', () => {
   /**
    * Test that text validates correctly.
    */
-  const text = new DataTypeText(['root'], 'text', 'text', true, false);
+  const text = new DataTypeText({
+    path: ['root'],
+    label: 'text',
+    description: 'text',
+    required: true,
+    single: false
+  });
   it('should accept valid strings', () => {
     expect(text.isValid('at1001')).toBeTruthy();
     expect(text.isValid('at1000')).toBeTruthy();
@@ -128,7 +153,13 @@ describe('datatype', () => {
    * Test that datatypes compares values correctly.
    */
   it('should compare datatype time values correctly', () => {
-    const dataType = new DataTypeDateTime(['any_event'], '', '', true, false);
+    const dataType = new DataTypeDateTime({
+      path: ['any_event'],
+      label: '',
+      description: '',
+      required: true,
+      single: false
+    });
     expect(dataType.compare(new Date(2016, 1), new Date(2017, 1)))
       .toBeLessThan(0);
     expect(dataType.compare(new Date(2000, 1), new Date(2000, 2)))
@@ -139,21 +170,40 @@ describe('datatype', () => {
       .toBe(0);
   });
   it('should compare quantity datatype values correctly', () => {
-    const dataType = new DataTypeQuantity(['any_event'], '', '', true, false,
-                                        'unit', 0, -1);
+    const dataType = new DataTypeQuantity(
+      {
+        path: ['any_event'],
+        label: '',
+        description: '',
+        required: true,
+        single: false,
+      }, 'unit', 0, -1);
     expect(dataType.compare(5, 100)).toBeLessThan(0);
     expect(dataType.compare(0, 0.1)).toBeLessThan(0);
     expect(dataType.compare(0.324, 0.323)).toBeGreaterThan(0);
     expect(dataType.compare(0.324, 0.324)).toBe(0);
   });
   it('should compare text datatype values correctly', () => {
-    const dataType = new DataTypeText(['any_event'], '', '', true, false);
+    const dataType = new DataTypeText({
+      path: ['root'],
+      label: 'text',
+      description: 'text',
+      required: true,
+      single: false
+    });
     expect(dataType.compare('hej', 'zzz')).toBeLessThan(0);
     expect(dataType.compare('zzzz', 'zzz')).toBeGreaterThan(0);
     expect(dataType.compare('eee', 'eee')).toBe(0);
   });
   it('should compare codedtext datatype values correctly', () => {
-    const dataType = new DataTypeCodedText(['any_event'], '', '', true, false, [
+    const dataType = new DataTypeCodedText(
+      {
+        path: ['root'],
+        label: 'codez',
+        description: 'coded text',
+        required: true,
+        single: false
+      }, [
       { code: 'at1001', label: '', description: ''},
       { code: 'at1003', label: '', description: ''},
       { code: 'at1002', label: '', description: ''},

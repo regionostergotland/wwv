@@ -20,40 +20,48 @@ describe('datalist', () => {
     dataTypes : new Map<string, DataType>([
       [
         'time',
-        new DataTypeDateTime(
-          ['any_event'],
-          'Tid',
-          'Tidpunkt vid mätning',
-          true, false,
-        )
+        new DataTypeDateTime({
+          path: ['any_event'],
+          label: 'Tid',
+          description: 'Tidpunkt vid mätning',
+          required: true,
+          single: false,
+        })
       ],
       [
         'systolic',
         new DataTypeQuantity(
-          ['any_event'],
-          'Övertryck',
-          'Systoliskt övertryck av blod',
-          true, false,
-          'mm[Hg]', 0, 1000,
+          {
+            path: ['any_event'],
+            label: 'Övertryck',
+            description: 'Systoliskt övertryck av blod',
+            required: true,
+            single: false,
+          }, 'mm[Hg]', 0, 1000,
         )
       ],
       [
         'diastolic',
         new DataTypeQuantity(
-          ['any_event'],
-          'Undertryck',
-          'Diastoliskt undertryck av blod',
-          true, false,
-          'mm[Hg]', 0, 1000
+          {
+            path: ['any_event'],
+            label: 'Undertryck',
+            description: 'Diastoliskt undertryck av blod',
+            required: true,
+            single: false,
+          }, 'mm[Hg]', 0, 1000
         )
       ],
       [
         'position',
         new DataTypeCodedText(
-          ['any_event'],
-          'Position',
-          'Position vid mätning.',
-          false, false,
+          {
+            path: ['any_event'],
+            label: 'Position',
+            description: 'Position vid mätning.',
+            required: false,
+            single: false,
+          },
           [
             {
               code: 'at1000',
@@ -82,30 +90,36 @@ describe('datalist', () => {
     dataTypes : new Map<string, DataType>([
       [
         'time',
-        new DataTypeDateTime(
-          ['any_event'],
-          'Tid',
-          'Tidpunkt vid mätning',
-          true, false,
-        )
+        new DataTypeDateTime({
+          path: ['any_event'],
+          label: 'Tid',
+          description: 'Tidpunkt vid mätning',
+          required: true,
+          single: false,
+        })
       ],
       [
         'weight',
         new DataTypeQuantity(
-          ['any_event'],
-          'Vikt',
-          'Kroppsvikt',
-          true, false,
-          'kg', 0, 1000
+          {
+            path: ['any_event'],
+            label: 'Vikt',
+            description: 'Kroppsvikt',
+            required: true,
+            single: false,
+          }, 'kg', 0, 1000
         )
       ],
       [
         'state_of_dress',
         new DataTypeCodedText(
-          ['any_event'],
-          'Klädsel',
-          'Klädsel vid mätning.',
-          false, false,
+          {
+            path: ['any_event'],
+            label: 'Klädsel',
+            description: 'Klädsel vid mätning.',
+            required: false,
+            single: false,
+          },
           [
             {
               code: 'at0011',
@@ -213,9 +227,19 @@ describe('datalist', () => {
    */
   it('should contain all added points, not contain unadded points', () => {
     const spec: CategorySpec = {
-      id : 'id', label : '', description : '',
+      id : 'id',
+      label : '',
+      description : '',
       dataTypes : new Map<string, DataType>([
-        [ 'time', new DataTypeDateTime(['any_event'], '', '', true, false) ],
+        [ 'time', new DataTypeDateTime(
+          {
+            path: ['any_event'],
+            label: '',
+            description: '',
+            required: true,
+            single: false
+          })
+        ],
       ])
     };
     const list = new DataList(spec);
@@ -247,9 +271,24 @@ describe('datalist', () => {
    */
   it('should compare points correctly', () => {
     const dataTypes = new Map<string, DataType>([
-      [ 'time', new DataTypeDateTime(['any_event'], '', '', true, false) ],
-      [ 'value', new DataTypeQuantity(['any_event'], '', '', true, false,
-        'unit', 0, -1) ],
+      [ 'time', new DataTypeDateTime(
+        {
+          path: ['any_event'],
+          label: '',
+          description: '',
+          required: true,
+          single: false
+        }
+      )],
+      [ 'value', new DataTypeQuantity(
+        {
+          path: ['any_event'],
+          label: '',
+          description: '',
+          required: true,
+          single: false,
+        }, 'unit', 0, -1)
+      ],
     ]);
     const p1 = new DataPoint([
       ['time', new Date(2017, 1)],

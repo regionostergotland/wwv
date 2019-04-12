@@ -47,6 +47,30 @@ export enum MathFunctionEnum {
   MAX,
 }
 
+export interface DataTypeSettings {
+  /**
+   * Location of field in composition.
+   */
+  path: string[];
+  /**
+   * Human readable name for data type.
+   */
+  label: string;
+  /**
+   * Human readable description of data type.
+   */
+  description: string;
+  /**
+   * Specify if data field is required in composition.
+   */
+  required: boolean;
+  /**
+   * Data type corresponds to a set of data in EHR instead of just a single
+   * point.
+   */
+  single: boolean;
+}
+
 /**
  * Superclass for classes that represent openEHR data types.
  * Instances of DataType correspond to a certain class of values (e.g. weight)
@@ -61,36 +85,19 @@ export abstract class DataType {
    * etc.).
    */
   readonly type: DataTypeEnum;
-  /**
-   * Location of field in composition.
-   */
   readonly path: string[];
-  /**
-   * Human readable name for data type.
-   */
   readonly label: string;
-  /**
-   * Human readable description of data type.
-   */
   readonly description: string;
-  /**
-   * Specify if data field is required in composition.
-   */
   readonly required: boolean;
-  /**
-   * Data type corresponds to a set of data instead of just a single point.
-   */
   readonly single: boolean;
 
-  constructor(type: DataTypeEnum, path: string[],
-              label: string, description: string,
-              required: boolean, single: boolean) {
+  constructor(type: DataTypeEnum, settings: DataTypeSettings) {
     this.type = type;
-    this.path = path;
-    this.label = label;
-    this.description = description;
-    this.required = required;
-    this.single = single;
+    this.path = settings.path;
+    this.label = settings.label;
+    this.description = settings.description;
+    this.required = settings.required;
+    this.single = settings.single;
   }
 
   /**
@@ -170,9 +177,8 @@ export abstract class DataType {
  * Corresponding data type for DV_DATE_TIME in openEHR.
  */
 export class DataTypeDateTime extends DataType {
-  constructor(path: string[], label: string, description: string,
-              required: boolean, single: boolean) {
-    super(DataTypeEnum.DATE_TIME, path, label, description, required, single);
+  constructor(settings: DataTypeSettings) {
+    super(DataTypeEnum.DATE_TIME, settings);
   }
 
   /**
@@ -198,9 +204,8 @@ export class DataTypeDateTime extends DataType {
  * Corresponding data type for DV_TEXT in openEHR.
  */
 export class DataTypeText extends DataType {
-  constructor(path: string[], label: string, description: string,
-              required: boolean, single: boolean) {
-    super(DataTypeEnum.TEXT, path, label, description, required, single);
+  constructor(settings: DataTypeSettings) {
+    super(DataTypeEnum.TEXT, settings);
   }
 
   /**
@@ -244,10 +249,9 @@ export class DataTypeCodedText extends DataType {
    */
   public readonly options: DataTypeCodedTextOpt[];
 
-  constructor(path: string[], label: string, description: string,
-              required: boolean, single: boolean,
+  constructor(settings: DataTypeSettings,
               options: DataTypeCodedTextOpt[]) {
-    super(DataTypeEnum.CODED_TEXT, path, label, description, required, single);
+    super(DataTypeEnum.CODED_TEXT, settings);
     this.options = options;
   }
 
@@ -284,10 +288,9 @@ export class DataTypeQuantity extends DataType {
    */
   public readonly magnitudeMax: number;
 
-  constructor(path: string[], label: string, description: string,
-              required: boolean, single: boolean,
+  constructor(settings: DataTypeSettings,
               unit: string, magnitudeMin: number, magnitudeMax: number) {
-    super(DataTypeEnum.QUANTITY, path, label, description, required, single);
+    super(DataTypeEnum.QUANTITY, settings);
     this.unit = unit;
     this.magnitudeMin = magnitudeMin;
     this.magnitudeMax = magnitudeMax;
