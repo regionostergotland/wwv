@@ -197,6 +197,18 @@ describe('datalist', () => {
   });
 
   /**
+   * Test that correct amount of intervals are created by groupByInterval
+   */
+  it('should create correct amount of intervals', () => {
+    const points = ([
+      new DataPoint([['time', new Date(2017, 1, 2)], ['value', 2]]),
+      new DataPoint([['time', new Date(2017, 1, 3)], ['value', 3]]),
+    ]);
+    expect(DataPoint.groupByInterval(points, PeriodWidths.DAY).length)
+      .toEqual(2);
+  });
+
+  /**
    * Test that list contains added points.
    */
   it('should contain all added points, not contain unadded points', () => {

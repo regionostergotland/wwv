@@ -31,7 +31,7 @@ export class DataPoint {
   public static groupByInterval(points: DataPoint[],
                                 width: PeriodWidths): DataPoint[][] {
     const groups: DataPoint[][] = [[points[0]]];
-    for (let p = 1; p < points.length - 1; p++) {
+    for (let p = 1; p < points.length; p++) {
       const p1: DataPoint = points[p - 1];
       const p2: DataPoint = points[p];
       if (samePeriod(p1.get('time'), p2.get('time'), width)) {
