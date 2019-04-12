@@ -45,6 +45,8 @@ const INTERVAL_OPTIONS: IntervalOption[] = [
 })
 export class RemovalDialogComponent {
 
+  // This boolean is sent to the health-list-items-component if the
+  // user presses the remove button
   remove = true;
 
   constructor(private conveyor: Conveyor, public dialogRef: MatDialogRef<RemovalDialogComponent>) {
@@ -84,6 +86,11 @@ export class MathDialogComponent {
     this.dialogRef.close();
   }
 
+  /**
+   * Calls the setInterval function in order to do math manipulations on the data
+   * @param intervalString A string containing a PeriodWidths enum, must be converted to int
+   * @param funcString A string containing a Mathfunction enum, must be converted to int
+   */
   calculate(intervalString: string, funcString: string) {
     if (intervalString && funcString) {
       const interval = parseInt(intervalString, 10);
@@ -93,6 +100,9 @@ export class MathDialogComponent {
     }
   }
 
+  /**
+   * Restores the datalist to the default settings
+   */
   changeBack() {
     this.conveyor.getDataList(this.selectedCategory).setInterval(PeriodWidths.POINT, MathFunctionEnum.ACTUAL);
     this.closeDialog();
@@ -202,6 +212,9 @@ export class HealthListItemsComponent implements OnInit {
         this.dataList.data.forEach(row => this.selection.select(row));
   }
 
+  /**
+   * Opens the dialog containing RemovalDialogComponent
+   */
   openRemovalDialog() {
     if (this.selection.selected.length > 0) {
       const dialogRef = this.dialog.open(RemovalDialogComponent);
@@ -219,20 +232,9 @@ export class HealthListItemsComponent implements OnInit {
    * Removes all of the selected datapoints and updates the list
    */
   removeSelected() {
-    for (const point of this.selection.selected) {
-      point.removed = true;
-    }
-    this.selection.clear();
+    this.conveyor.getDataList(this.selectedCategory).removePoints(this.selection.selected);
     this.ngOnInit();
   }
-/*
-  commentSelected(key: string, text: string) {
-    console.log("works");
-    for (const point of this.selection.selected) {
-      point.set(key, text);
-    }
-    this.ngOnInit();
-  }*/
 
   ngOnInit() {
     if (this.selectedCategory) {
@@ -241,6 +243,7 @@ export class HealthListItemsComponent implements OnInit {
       this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
+      this.selection.clear();
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
@@ -282,6 +285,7 @@ export class HealthListItemsComponent implements OnInit {
    * Opens the dialog for MathDialogComponent
    */
   openMathDialog(): void {
+    this.selection.clear();
     const dialogRef = this.dialog.open(MathDialogComponent, {
       data: this.selectedCategory
     });

@@ -10,7 +10,7 @@ import '../shared/date.extensions';
  */
 export class DataPoint {
   /**
-   * Point is marked for removal.
+   * XXX Point is marked for removal. Only used for removePoint
    */
   public removed: boolean;
   /**
@@ -200,6 +200,18 @@ export class DataList {
     const compare = (p1, p2) => p1.compareTo(p2, this.spec.dataTypes);
     this.points.sort(compare.bind(this));
     this.processPoints();
+  }
+
+  /**
+   * Removes points from list by checking for equality to given points to be removed.
+   * @param points: DataPoint[] is a list of datapoints marked to be removed.
+   */
+  public removePoints(points: DataPoint[]): void {
+    for (const point of points) {
+      point.removed = true;
+    }
+    this.points = this.points.filter(p => !p.removed);
+    this.processedPoints = this.processedPoints.filter(p => !(p.removed));
   }
 
   /**
