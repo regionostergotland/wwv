@@ -1,30 +1,14 @@
 import { CategorySpec, DataType, MathFunctionEnum } from './datatype';
+import { PeriodWidths, startOfPeriod, samePeriod } from '../shared/period';
 import '../shared/date.extensions';
-
-/*
- * Possible widths of intervals/periods.
- */
-export enum PeriodWidths {
-  POINT,
-  HOUR,
-  DAY,
-  WEEK,
-  MONTH,
-  YEAR,
-}
 
 /**
  * Map of values to be put in a DataList.
  * Can be thought of as an n-dimensional point or a row in a data table.
  * Can be marked as removed by modifying the public removed instance variable.
- * Otherwise, works similar to a Map.
+ * works similar to a Map.
  */
 export class DataPoint {
-
-  constructor(values = []) {
-    this.removed = false;
-    this.point = new Map<string, any>(values);
-  }
   /**
    * Point is marked for removal.
    */
@@ -34,81 +18,23 @@ export class DataPoint {
    */
   private point: Map<string, any>;
 
-  public static startOfPeriod(time: Date,
-                              width: PeriodWidths): Date {
-    const beg: Date = new Date(0);
-    beg.setHours(0, 0, 0, 0); // adjust for local timezone
-    switch (width) {
-    case PeriodWidths.POINT:
-      beg.setTime(time.getTime());
-      break;
-    case PeriodWidths.WEEK:
-      // set the same day
-      beg.setFullYear(time.getFullYear(), time.getMonth(), time.getDate());
-      // set to monday the same week
-      const msInADay = 1000 * 3600 * 24;
-      const timeOffset = ((((beg.getDay() - 1) % 7) + 7) % 7) * msInADay;
-      beg.setTime(beg.getTime() - timeOffset);
-      break;
-    case PeriodWidths.HOUR:
-      beg.setHours(time.getHours());
-      /* falls through */
-    case PeriodWidths.DAY:
-      beg.setDate(time.getDate());
-      /* falls through */
-    case PeriodWidths.MONTH:
-      beg.setMonth(time.getMonth());
-      /* falls through */
-    case PeriodWidths.YEAR:
-      beg.setFullYear(time.getFullYear());
-    }
-    return beg;
-  }
-
-  /*
-   * Determine if two dates are within the same time period.
-   */
-  public static samePeriod(t1: Date, t2: Date,
-                           width: PeriodWidths): boolean {
-    switch (width) {
-      case PeriodWidths.POINT:
-        return t1.getTime() === t2.getTime();
-      case PeriodWidths.WEEK:
-        return t1.getWeek() === t2.getWeek() &&
-               t1.getWeekYear() === t2.getWeekYear();
-      case PeriodWidths.HOUR:
-        if (t1.getHours() !== t2.getHours()) {
-          return false;
-        }
-        /* falls through */
-      case PeriodWidths.DAY:
-        if (t1.getDate() !== t2.getDate()) {
-          return false;
-        }
-        /* falls through */
-      case PeriodWidths.MONTH:
-        if (t1.getMonth() !== t2.getMonth()) {
-          return false;
-        }
-        /* falls through */
-      case PeriodWidths.YEAR:
-        if (t1.getFullYear() !== t2.getFullYear()) {
-          return false;
-        }
-    }
-    return true;
+  constructor(values = []) {
+    this.removed = false;
+    this.point = new Map<string, any>(values);
   }
 
   /**
    * Group a list of points in intervals.
+   * group consecutive points if they are in the same period
+   * assumption: already sorted by time
    */
   public static groupByInterval(points: DataPoint[],
-                                width: PeriodWidths) {
+                                width: PeriodWidths): DataPoint[][] {
     const groups: DataPoint[][] = [[points[0]]];
     for (let p = 1; p < points.length - 1; p++) {
       const p1: DataPoint = points[p - 1];
       const p2: DataPoint = points[p];
-      if (DataPoint.samePeriod(p1.get('time'), p2.get('time'), width)) {
+      if (samePeriod(p1.get('time'), p2.get('time'), width)) {
         groups[groups.length - 1].push(p2);
       } else {
         groups.push([p2]);
@@ -157,12 +83,10 @@ export class DataList {
    * Specification for category of data list.
    */
   public readonly spec: CategorySpec;
-
   /**
    * All data points stored in the list.
    */
   private points: DataPoint[];
-
   /**
    * Cached list of processed data points.
    */
@@ -195,18 +119,17 @@ export class DataList {
       return points.slice();
     } else {
       const newPoints: DataPoint[] = [];
-      const intervals: DataPoint[][] = DataPoint.groupByInterval(points, width);
+      const intervals = DataPoint.groupByInterval(points, width);
       for (const interval of intervals) {
         const newValues: any[] = [];
         for (const [id, dataType] of this.spec.dataTypes.entries()) {
+          // TODO move this behaviour to datatypedatetime
           if (id === 'time') {
-            const startTime: Date =
-              DataPoint.startOfPeriod(
-                interval[0].get('time'), width);
+            const startTime = startOfPeriod(interval[0].get('time'), width);
             newValues.push(['time', startTime]);
           } else {
-            const prevValues = interval.map((p) => p.get(id));
-            const newValue = dataType.truncate(prevValues, fn);
+            const prevValues: any[] = interval.map((p) => p.get(id));
+            const newValue: any = dataType.truncate(prevValues, fn);
             newValues.push([id, newValue]);
           }
         }
@@ -283,7 +206,7 @@ export class DataList {
    * Get all data points from list, processed according to options.
    */
   public getPoints(): DataPoint[] {
-    return this.processedPoints;
+    return this.processedPoints.filter((p) => !p.removed);
   }
 
   /**

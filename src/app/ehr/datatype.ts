@@ -112,7 +112,7 @@ export abstract class DataType {
     return v1 === v2;
   }
 
-  public truncate(values: any[], fn: MathFunctionEnum): any[] {
+  public truncate(values: any[], fn: MathFunctionEnum): any {
     const functions = new Map<MathFunctionEnum, (v: any[]) => any[]>([
       [MathFunctionEnum.ACTUAL, this.only.bind(this)],
       [MathFunctionEnum.MEDIAN, this.median.bind(this)],
@@ -322,10 +322,10 @@ export class DataTypeQuantity extends DataType {
   protected median(values: any[]): any {
     values.sort();
     const n = values.length;
-    if (n / 2 === Math.ceil(n / 2)) {
-      return values[n / 2];
+    if (n % 2 === 0) {
+      return (values[n / 2 - 1] + values[n / 2]) / 2;
     } else {
-      return (values[Math.ceil(n / 2)] + values[Math.floor(n / 2)]) / 2;
+      return values[Math.floor(n / 2)];
     }
   }
 
