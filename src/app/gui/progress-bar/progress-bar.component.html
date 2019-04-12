@@ -7,8 +7,8 @@
   </mat-grid-tile>
 
   <mat-grid-tile>
-    <button mat-mini-fab *ngIf="getCurrentStep() < 2" routerLink="/sidebar">2</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 2" routerLink="/sidebar">2</button>
+    <button mat-mini-fab *ngIf="getCurrentStep() < 2">2</button>
+    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 2" routerLink="/edit">2</button>
     <p>Redigering</p>
 
   </mat-grid-tile>

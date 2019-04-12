@@ -9,7 +9,6 @@ describe('GfitService', () => {
       imports: [
         CustomGoogleApiModule
       ],
-
       providers: [GoogleAuthService, GoogleApiService, HttpClient, HttpHandler]
     })
   );

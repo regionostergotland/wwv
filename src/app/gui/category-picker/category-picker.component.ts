@@ -89,6 +89,6 @@ export class CategoryPickerComponent implements OnInit {
         this.conveyor.fetchData(this.platformId, cat,
                                 this.startDate, this.endDate));
     this.chosenCategories = [];
-    forkJoin(fetches).subscribe(_ => this.router.navigateByUrl('/sidebar'));
+    forkJoin(fetches).subscribe(_ => this.router.navigateByUrl('/edit'));
   }
 }
