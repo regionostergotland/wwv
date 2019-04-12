@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { CategoryPickerComponent } from './gui/category-picker/category-picker.component';
 import { InfoComponent } from './gui/info/info.component';
 import { HelpComponent } from './gui/help/help.component';
-import { HealthListItemsComponent } from './gui/health-list-items/health-list-items.component';
+import { HealthListItemsComponent, RemovalDialogComponent, MathDialogComponent } from './gui/health-list-items/health-list-items.component';
 import { InspectionComponent } from './gui/inspection/inspection.component';
 import { BottomSheetCategoriesComponent, SidebarComponent } from './gui/sidebar/sidebar.component';
 import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
@@ -80,6 +80,8 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
     SidebarComponent,
     AddDataPointComponent,
     BottomSheetCategoriesComponent,
+    RemovalDialogComponent,
+    MathDialogComponent,
     ProgressBarComponent,
     ConfirmationComponent,
   ],
@@ -137,6 +139,6 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
   ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'sv-SE'}],
   bootstrap: [AppComponent],
-  entryComponents: [AddDataPointComponent, BottomSheetCategoriesComponent]
+  entryComponents: [AddDataPointComponent, BottomSheetCategoriesComponent, RemovalDialogComponent, MathDialogComponent]
 })
 export class AppModule { }
