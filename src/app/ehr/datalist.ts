@@ -123,6 +123,7 @@ export class DataList {
       for (const interval of intervals) {
         const newValues: any[] = [];
         for (const [id, dataType] of this.spec.dataTypes.entries()) {
+          // TODO move this behaviour to datatypedatetime
           if (id === 'time') {
             const startTime = startOfPeriod(interval[0].get('time'), width);
             newValues.push(['time', startTime]);

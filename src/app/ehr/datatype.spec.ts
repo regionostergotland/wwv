@@ -11,6 +11,8 @@ describe('datatype', () => {
     ]
   }));
 
+  // TODO debug missing last value on truncation
+
   /**
    * Test that valid DataTypeQuantity values pass validity check
    */
@@ -68,11 +70,11 @@ describe('datatype', () => {
    * Test that DataTypeDateTime validates correctly.
    */
   const dateTime = new DataTypeDateTime(['root'], 'datetime', '', true, false);
-  it('it should accept valid dates', () => {
+  it('should accept valid dates', () => {
     expect(dateTime.isValid(new Date())).toBeTruthy();
     expect(dateTime.isValid(new Date(2017, 32))).toBeTruthy();
   });
-  it('it should not accept non-Date objects', () => {
+  it('should not accept non-Date objects', () => {
     expect(dateTime.isValid('2019-12-11')).toBeFalsy();
     expect(dateTime.isValid('hej')).toBeFalsy();
     expect(dateTime.isValid(238947329847)).toBeFalsy();
@@ -88,17 +90,17 @@ describe('datatype', () => {
       { code: 'at1000', label: '', description: '' },
       { code: 'at1003', label: '', description: '' } ]
   );
-  it('it should accept valid code', () => {
+  it('should accept valid code', () => {
     expect(codedText.isValid('at1001')).toBeTruthy();
     expect(codedText.isValid('at1000')).toBeTruthy();
     expect(codedText.isValid('at1003')).toBeTruthy();
   });
-  it('it should not accept invalid types for code', () => {
+  it('should not accept invalid types for code', () => {
     expect(codedText.isValid(4)).toBeFalsy();
     expect(codedText.isValid(new Date())).toBeFalsy();
     expect(codedText.isValid(codedText)).toBeFalsy();
   });
-  it('it should not accept invalid code', () => {
+  it('should not accept invalid code', () => {
     expect(codedText.isValid('')).toBeFalsy();
     expect(codedText.isValid('at324234')).toBeFalsy();
     expect(codedText.isValid('hejhej')).toBeFalsy();
@@ -109,14 +111,14 @@ describe('datatype', () => {
    * Test that text validates correctly.
    */
   const text = new DataTypeText(['root'], 'text', 'text', true, false);
-  it('it should accept valid strings', () => {
+  it('should accept valid strings', () => {
     expect(text.isValid('at1001')).toBeTruthy();
     expect(text.isValid('at1000')).toBeTruthy();
     expect(text.isValid('at1003')).toBeTruthy();
     expect(text.isValid('oenstuhonaetuhneosahunsoethu')).toBeTruthy();
     expect(text.isValid('')).toBeTruthy();
   });
-  it('it should not accept non-string values', () => {
+  it('should not accept non-string values', () => {
     expect(text.isValid(4)).toBeFalsy();
     expect(text.isValid(new Date())).toBeFalsy();
     expect(text.isValid(codedText)).toBeFalsy();
@@ -160,5 +162,105 @@ describe('datatype', () => {
     expect(dataType.compare('at1000', 'at1001')).toBeLessThan(0);
     expect(dataType.compare('at1003', 'at1002')).toBeGreaterThan(0);
     expect(dataType.compare('at1001', 'at1001')).toBe(0);
+  });
+
+  /*
+   * Test that quantity values are truncated correctly.
+   */
+  it('should give median of quantities', () => {
+    expect(quantityUnlimited.truncate(
+      [233, 341, 128],
+      MathFunctionEnum.MEDIAN)).toEqual(233);
+    expect(quantityUnlimited.truncate(
+      [12],
+      MathFunctionEnum.MEDIAN)).toEqual(12);
+    expect(quantityUnlimited.truncate(
+      [0, 1],
+      MathFunctionEnum.MEDIAN)).toEqual(0.5);
+    expect(quantityUnlimited.truncate(
+      [6, 1, 3, 34, 2, 2],
+      MathFunctionEnum.MEDIAN)).toEqual(2.5);
+  });
+  it('should give mean of quantities', () => {
+    expect(quantityUnlimited.truncate(
+      [233, 341, 128],
+      MathFunctionEnum.MEAN)).toEqual(234);
+    expect(quantityUnlimited.truncate(
+      [12],
+      MathFunctionEnum.MEAN)).toEqual(12);
+    expect(quantityUnlimited.truncate(
+      [6, 1, 3, 34, 2, 2],
+      MathFunctionEnum.MEAN)).toEqual(8);
+  });
+  it('should give total of quantities', () => {
+    expect(quantityUnlimited.truncate(
+      [233, 341, 128],
+      MathFunctionEnum.TOTAL)).toEqual(702);
+    expect(quantityUnlimited.truncate(
+      [12],
+      MathFunctionEnum.TOTAL)).toEqual(12);
+    expect(quantityUnlimited.truncate(
+      [6, 1, 3, 34, 2, 2],
+      MathFunctionEnum.TOTAL)).toEqual(48);
+  });
+  it('should give minimum of quantities', () => {
+    expect(quantityUnlimited.truncate(
+      [233, 341, 128],
+      MathFunctionEnum.MIN)).toEqual(128);
+    expect(quantityUnlimited.truncate(
+      [12],
+      MathFunctionEnum.MIN)).toEqual(12);
+    expect(quantityUnlimited.truncate(
+      [6, 1, 3, 34, 2, 2],
+      MathFunctionEnum.MIN)).toEqual(1);
+  });
+  it('should give maximum of quantities', () => {
+    expect(quantityUnlimited.truncate(
+      [233, 341, 128],
+      MathFunctionEnum.MAX)).toEqual(341);
+    expect(quantityUnlimited.truncate(
+      [12],
+      MathFunctionEnum.MAX)).toEqual(12);
+    expect(quantityUnlimited.truncate(
+      [6, 1, 3, 34, 2, 2],
+      MathFunctionEnum.MAX)).toEqual(34);
+  });
+
+  /*
+   * Test that text datatypes are truncated correctly.
+   */
+  it('should keep values if all are equal', () => {
+    expect(text.truncate(
+      ['hej', 'hej', 'hej'],
+      MathFunctionEnum.MEAN)).toEqual('hej');
+    expect(text.truncate(
+      ['hej', 'hej', 'hej'],
+      MathFunctionEnum.MEDIAN)).toEqual('hej');
+    expect(text.truncate(
+      ['haj', 'haj', 'haj'],
+      MathFunctionEnum.TOTAL)).toEqual('haj');
+    expect(text.truncate(
+      ['hej', 'hej', 'hej'],
+      MathFunctionEnum.MIN)).toEqual('hej');
+    expect(text.truncate(
+      ['hej', 'hej', 'hej'],
+      MathFunctionEnum.MAX)).toEqual('hej');
+  });
+  it('should keep values if all are equal', () => {
+    expect(text.truncate(
+      ['hej', 'hoj', 'hej'],
+      MathFunctionEnum.MEAN)).toEqual(undefined);
+    expect(text.truncate(
+      ['hej', 'hej', 'hij'],
+      MathFunctionEnum.MEDIAN)).toEqual(undefined);
+    expect(text.truncate(
+      ['haj', '', 'haj'],
+      MathFunctionEnum.TOTAL)).toEqual(undefined);
+    expect(text.truncate(
+      ['hej', '', 'hej'],
+      MathFunctionEnum.MIN)).toEqual(undefined);
+    expect(text.truncate(
+      ['', 'hej', 'hej'],
+      MathFunctionEnum.MAX)).toEqual(undefined);
   });
 });
