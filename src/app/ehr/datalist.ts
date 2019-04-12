@@ -6,7 +6,7 @@ import '../shared/date.extensions';
  * Map of values to be put in a DataList.
  * Can be thought of as an n-dimensional point or a row in a data table.
  * Can be marked as removed by modifying the public removed instance variable.
- * Otherwise, works similar to a Map.
+ * works similar to a Map.
  */
 export class DataPoint {
   /**
@@ -205,7 +205,7 @@ export class DataList {
    * Get all data points from list, processed according to options.
    */
   public getPoints(): DataPoint[] {
-    return this.processedPoints;
+    return this.processedPoints.filter((p) => !p.removed);
   }
 
   /**
