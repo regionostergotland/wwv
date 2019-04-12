@@ -11,7 +11,8 @@ import {
   MatBottomSheetModule,
   MatBottomSheetRef,
   MAT_BOTTOM_SHEET_DATA,
-  MatTooltipModule
+  MatTooltipModule,
+  MatIconModule
 } from '@angular/material';
 import {BottomSheetCategoriesComponent, SidebarComponent} from './sidebar.component';
 import { HealthListItemsComponent } from '../health-list-items/health-list-items.component';
@@ -40,7 +41,8 @@ describe('SidebarComponent', () => {
         MatListModule,
         MatBottomSheetModule,
         MatTooltipModule,
-        CustomGoogleApiModule
+        CustomGoogleApiModule,
+        MatIconModule
       ],
 
      providers: [

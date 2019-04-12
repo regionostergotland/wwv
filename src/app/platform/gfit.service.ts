@@ -83,7 +83,7 @@ export class GfitService extends Platform {
         url: 'derived:com.google.height:com.google.android.gms:merge_height',
         dataTypes: new Map<string, any>(
           Array.from(this.commonDataTypes.entries()))
-          .set(Height.HEIGHT, src => src.value[0].fpVal)
+          .set(Height.HEIGHT, src => src.value[0].fpVal * 100)
       }],
       [Categories.STEPS, {
         url: 'derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas',
