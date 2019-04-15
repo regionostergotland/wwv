@@ -5,7 +5,7 @@ import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 import { ProgressBarComponent} from './gui/progress-bar/progress-bar.component';
 import { MatToolbarModule, MatGridListModule } from '@angular/material';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-
+import { FooterComponent } from './gui/footer/footer.component';
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
 
 // describe what is being tested
@@ -25,7 +25,8 @@ describe('AppComponent', () => {
         AppComponent,
         ToolbarComponent,
         AppComponent,
-        ProgressBarComponent
+        ProgressBarComponent,
+        FooterComponent,
       ],
       providers: [
         GoogleAuthService,

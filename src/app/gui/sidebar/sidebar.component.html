@@ -4,14 +4,18 @@
 
     <mat-nav-list>
 
-      <mat-list-item (click)="selectCategory(null)">
+      <mat-list-item (click)="selectCategory(null)" [style.background-color]="getTitleSelected()">
         <h2>{{title}}</h2>
       </mat-list-item>
 
       <mat-divider></mat-divider>
 
-      <div *ngFor="let category of getUserCategories()">
-        <mat-list-item (click)="selectCategory(category)">{{getCategoryLabel(category)}}</mat-list-item>
+      <div  *ngFor="let category of getUserCategories()">
+        
+        <mat-list-item (click)="selectCategory(category)" [style.background-color]="getBackgroundColor(category)" >
+            <img class="sidebar-icon" [src]="(getCategoryIcon(category))"/>
+            {{getCategoryLabel(category)}}
+        </mat-list-item>
         <mat-divider></mat-divider>
       </div>
     </mat-nav-list>

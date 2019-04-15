@@ -27,6 +27,11 @@ export class BottomSheetCategoriesComponent {
     }
   }
 
+  getCategoryIcon(categoryId: string): string {
+    const baseUrl = '../../assets/flaticon/';
+    return baseUrl + this.conveyor.getCategorySpec(categoryId).id + '.png';
+  }
+
   addCategory(event: MouseEvent, categoryId: string): void {
     if (!this.conveyor.hasCategoryId(categoryId)) {
       this.conveyor.setDataList(categoryId, new DataList(this.conveyor.getCategorySpec(categoryId)));
@@ -44,7 +49,8 @@ export class BottomSheetCategoriesComponent {
 export class SidebarComponent implements OnInit {
 
   title = 'Kategorier';
-  selectedCategory: string;
+  selectedCategory: string = null;
+  selectedColor = '#e7e7e7';
 
   constructor(private conveyor: Conveyor, private router: Router, private bottomSheet: MatBottomSheet) {
 
@@ -63,6 +69,22 @@ export class SidebarComponent implements OnInit {
 
   getCategoryLabel(categoryId: string): string {
       return this.conveyor.getCategorySpec(categoryId).label;
+  }
+
+  getCategoryIcon(categoryId: string): string {
+    const baseUrl = '../../assets/flaticon/';
+    return baseUrl + this.conveyor.getCategorySpec(categoryId).id + '.png';
+  }
+
+  getTitleSelected(): string {
+    return this.selectedCategory === null ? this.selectedColor : '';
+  }
+
+  getBackgroundColor(categoryId: string): string {
+    if (categoryId === this.selectedCategory) {
+      return this.selectedColor;
+    }
+    return '';
   }
 
   openBottomSheet(): void {
