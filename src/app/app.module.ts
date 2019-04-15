@@ -63,6 +63,7 @@ import {
 
 
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
+import { FooterComponent } from './gui/footer/footer.component';
 
 
 
@@ -84,6 +85,7 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
     MathDialogComponent,
     ProgressBarComponent,
     ConfirmationComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,
