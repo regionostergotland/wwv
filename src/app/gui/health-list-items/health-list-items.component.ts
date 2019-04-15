@@ -306,11 +306,12 @@ export class HealthListItemsComponent implements OnInit {
       result.push('select');
     }
     if (this.selectedCategory) {
-      for (const column of Array.from(this.conveyor.getDataList(this.selectedCategory).spec.dataTypes.keys())) {
-        if (column === 'device_name' || column === 'type' || column === 'manufacturer') {
+      const dataList = this.conveyor.getDataList(this.selectedCategory);
+      for (const [column, dataType] of dataList.spec.dataTypes.entries()) {
+        if (!dataType.visible) {
           continue;
         } else if (column === 'time') {
-          switch (this.conveyor.getDataList(this.selectedCategory).getWidth()) {
+          switch (dataList.getWidth()) {
             case PeriodWidths.DAY: result.push('period_DAY'); break;
             case PeriodWidths.MONTH: result.push('period_MONTH'); break;
             case PeriodWidths.WEEK: result.push('period_WEEK'); break;
@@ -319,7 +320,6 @@ export class HealthListItemsComponent implements OnInit {
               result.push('date');
               result.push('time');
           }
-
         } else {
           result.push(column);
         }
