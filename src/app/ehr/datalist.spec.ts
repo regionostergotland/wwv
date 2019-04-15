@@ -26,6 +26,7 @@ describe('datalist', () => {
           description: 'Tidpunkt vid mätning',
           required: true,
           single: false,
+          visible: true,
         })
       ],
       [
@@ -37,6 +38,7 @@ describe('datalist', () => {
             description: 'Systoliskt övertryck av blod',
             required: true,
             single: false,
+            visible: true,
           }, 'mm[Hg]', 0, 1000,
         )
       ],
@@ -49,6 +51,7 @@ describe('datalist', () => {
             description: 'Diastoliskt undertryck av blod',
             required: true,
             single: false,
+            visible: true,
           }, 'mm[Hg]', 0, 1000
         )
       ],
@@ -61,6 +64,7 @@ describe('datalist', () => {
             description: 'Position vid mätning.',
             required: false,
             single: false,
+            visible: true,
           },
           [
             {
@@ -96,6 +100,7 @@ describe('datalist', () => {
           description: 'Tidpunkt vid mätning',
           required: true,
           single: false,
+          visible: true,
         })
       ],
       [
@@ -107,6 +112,7 @@ describe('datalist', () => {
             description: 'Kroppsvikt',
             required: true,
             single: false,
+            visible: true,
           }, 'kg', 0, 1000
         )
       ],
@@ -119,6 +125,7 @@ describe('datalist', () => {
             description: 'Klädsel vid mätning.',
             required: false,
             single: false,
+            visible: true,
           },
           [
             {
@@ -237,7 +244,8 @@ describe('datalist', () => {
             label: '',
             description: '',
             required: true,
-            single: false
+            single: false,
+            visible: true,
           })
         ],
       ])
@@ -277,7 +285,8 @@ describe('datalist', () => {
           label: '',
           description: '',
           required: true,
-          single: false
+          single: false,
+          visible: true,
         }
       )],
       [ 'value', new DataTypeQuantity(
@@ -287,6 +296,7 @@ describe('datalist', () => {
           description: '',
           required: true,
           single: false,
+          visible: true,
         }, 'unit', 0, -1)
       ],
     ]);
@@ -326,10 +336,11 @@ describe('datalist', () => {
             label: '',
             description: '',
             required: true,
-            single: false
-          }
-          )]
-      ]),
+            single: false,
+            visible: true
+          })
+        ],
+      ])
     };
     const list = new DataList(spec);
     const keepPoints = [

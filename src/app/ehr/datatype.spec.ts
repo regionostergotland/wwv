@@ -23,6 +23,7 @@ describe('datatype', () => {
       description: 'quantity limited between 10 and 100',
       required: true,
       single: false,
+      visible: true,
     }, 'mm', 10, 100
   );
   it('should not accept negative quantity value', () => {
@@ -56,6 +57,7 @@ describe('datatype', () => {
       description: 'unlimited quantity from 0',
       required: true,
       single: false,
+      visible: true,
     }, 'mm', 0, -1
   );
   it('should not accept negative quantity value (unlimited)', () => {
@@ -82,7 +84,8 @@ describe('datatype', () => {
     label: 'datetime',
     description: '',
     required: true,
-    single: false
+    single: false,
+    visible: true,
   });
   it('should accept valid dates', () => {
     expect(dateTime.isValid(new Date())).toBeTruthy();
@@ -104,6 +107,7 @@ describe('datatype', () => {
       description: 'coded text',
       required: true,
       single: false,
+      visible: true,
     },
     [ { code: 'at1001', label: '', description: '' },
       { code: 'at1000', label: '', description: '' },
@@ -134,7 +138,8 @@ describe('datatype', () => {
     label: 'text',
     description: 'text',
     required: true,
-    single: false
+    single: false,
+    visible: true,
   });
   it('should accept valid strings', () => {
     expect(text.isValid('at1001')).toBeTruthy();
@@ -158,7 +163,8 @@ describe('datatype', () => {
       label: '',
       description: '',
       required: true,
-      single: false
+      single: false,
+      visible: true,
     });
     expect(dataType.compare(new Date(2016, 1), new Date(2017, 1)))
       .toBeLessThan(0);
@@ -177,6 +183,7 @@ describe('datatype', () => {
         description: '',
         required: true,
         single: false,
+        visible: true,
       }, 'unit', 0, -1);
     expect(dataType.compare(5, 100)).toBeLessThan(0);
     expect(dataType.compare(0, 0.1)).toBeLessThan(0);
@@ -189,7 +196,8 @@ describe('datatype', () => {
       label: 'text',
       description: 'text',
       required: true,
-      single: false
+      single: false,
+      visible: true,
     });
     expect(dataType.compare('hej', 'zzz')).toBeLessThan(0);
     expect(dataType.compare('zzzz', 'zzz')).toBeGreaterThan(0);
@@ -202,7 +210,8 @@ describe('datatype', () => {
         label: 'codez',
         description: 'coded text',
         required: true,
-        single: false
+        single: false,
+        visible: true,
       }, [
       { code: 'at1001', label: '', description: ''},
       { code: 'at1003', label: '', description: ''},
@@ -296,7 +305,7 @@ describe('datatype', () => {
       ['hej', 'hej', 'hej'],
       MathFunctionEnum.MAX)).toEqual('hej');
   });
-  it('should keep values if all are equal', () => {
+  it('should not keep values if not all are equal', () => {
     expect(text.truncate(
       ['hej', 'hoj', 'hej'],
       MathFunctionEnum.MEAN)).toEqual(undefined);
