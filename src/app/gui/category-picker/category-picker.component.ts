@@ -23,10 +23,10 @@ export class CategoryPickerComponent implements OnInit {
 
   startDate: Date;
   endDate: Date;
-  
+
   private platformId = '';
 
-  allChosen: boolean = false; // True if all categories have been chosen
+  allChosen = false; // True if all categories have been chosen
   categoryMap: Map<string, boolean>; // Map  containing the categoryId:s and whether they have been chosen or not
 
   ngOnInit() {
@@ -82,13 +82,13 @@ export class CategoryPickerComponent implements OnInit {
         if (this.chosenCategories.indexOf(category) === -1) {
           this.chosenCategories.push(category);
         }
-        // If all available categories are chosen, make the 'select all' checkbox checked 
+        // If all available categories are chosen, make the 'select all' checkbox checked
         if (this.chosenCategories.length === this.categories.length) {
           this.allChosen = true;
         }
     } else {
-        // As long as at least one category is unchecked, allChosen should be false  
-        this.allChosen = false; 
+        // As long as at least one category is unchecked, allChosen should be false
+        this.allChosen = false;
         // Remove the category from chosenCategories
         this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
     }
@@ -100,7 +100,7 @@ export class CategoryPickerComponent implements OnInit {
    * @param event The checkbox event
    */
   updateAllCategories(event: any) {
-    for (let category of this.categories) {
+    for (const category of this.categories) {
       this.updateChosenCategories(category[0], event);
     }
   }
