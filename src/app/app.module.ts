@@ -20,7 +20,7 @@ import { ConfirmationComponent } from './gui/confirmation/confirmation.component
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 
-
+import { HomeModule } from './gui/home/HomeModule'
 import {
   /*MatAutocompleteModule,
   MatBadgeModule,
@@ -70,7 +70,6 @@ import { FooterComponent } from './gui/footer/footer.component';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     /*ToolbarComponent,
     SourcesComponent,
     CategoryPickerComponent,
@@ -89,6 +88,7 @@ import { FooterComponent } from './gui/footer/footer.component';
   ],
   imports: [
     BrowserModule,
+    HomeModule
     /*FormsModule,
     BrowserAnimationsModule,
     AppRoutingModule,

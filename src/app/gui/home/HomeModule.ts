@@ -1,9 +1,13 @@
-import { NgModule }      from '@angular/core';
+import { NgModule } from '@angular/core';
 import { HomeComponent } from './home.component';
- 
+
+import {
+    MatCardModule
+} from '@angular/material';
+
 @NgModule({
   imports: [
-    //BrowserModule,
+    MatCardModule,
   ],
   declarations: [
     HomeComponent
@@ -11,4 +15,4 @@ import { HomeComponent } from './home.component';
   exports: [ HomeComponent ],
   entryComponents: [ HomeComponent ]
 })
-export class AppModule {}
+export class HomeModule {}
