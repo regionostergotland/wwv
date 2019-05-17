@@ -73,6 +73,12 @@ export interface DataTypeSettings {
    * Field is a major component of point and shall be visible to the user.
    */
   visible: boolean;
+
+  /**
+   *  Field should be visible on mobile, used to save space on smaller screens
+   *  where field will be editable from a modal
+   */
+   visibleOnMobile: boolean;
 }
 
 /**
@@ -95,6 +101,8 @@ export abstract class DataType {
   readonly required: boolean;
   readonly single: boolean;
   readonly visible: boolean;
+  readonly visibleOnMobile: boolean;
+
 
   constructor(type: DataTypeEnum, settings: DataTypeSettings) {
     this.type = type;
@@ -104,6 +112,8 @@ export abstract class DataType {
     this.required = settings.required;
     this.single = settings.single;
     this.visible = settings.visible;
+    this.visibleOnMobile = settings.visible;
+
   }
 
   /**

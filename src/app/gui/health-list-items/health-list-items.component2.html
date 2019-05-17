@@ -83,9 +83,7 @@
         </div>
       </div>
       <div *ngIf="key === 'date'">
-
-        {{('0' + (dataPoint.get('time').getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get('time').getDate()).slice(-2)}}
-
+        {{getRepresentation(dataPoint)}}
       </div>
       <div *ngIf="key === 'time'">
 

@@ -64,6 +64,7 @@ const TimeField: [string, DataType] = [
     required: true,
     single: false,
     visible: true,
+    visibleOnMobile: false,
   })
 ];
 
@@ -77,6 +78,7 @@ const CommentField: [string, DataType] = [
     required: false,
     single: false,
     visible: true,
+    visibleOnMobile: false,
   })
 ];
 
@@ -89,6 +91,7 @@ const DeviceNameField: [string, DataType] = [
     required: false,
     single: true,
     visible: false,
+    visibleOnMobile: false,
   })
 ];
 
@@ -101,6 +104,7 @@ const DeviceTypeField: [string, DataType] = [
     required: false,
     single: true,
     visible: false,
+    visibleOnMobile: false,
   })
 ];
 
@@ -113,6 +117,7 @@ const DeviceManufacturerField: [string, DataType] = [
     required: false,
     single: true,
     visible: false,
+    visibleOnMobile: false,
   })
 ];
 
@@ -157,6 +162,7 @@ export const ehrConfig: EhrConfig = {
               required: true,
               single: false,
               visible: true,
+              visibleOnMobile: true,
             }, 'mm[Hg]', 0, 1000
           )
         ],
@@ -171,6 +177,7 @@ export const ehrConfig: EhrConfig = {
               required: true,
               single: false,
               visible: true,
+              visibleOnMobile: true,
             }, 'mm[Hg]', 0, 1000
           )
         ],
@@ -184,6 +191,7 @@ export const ehrConfig: EhrConfig = {
               required: false,
               single: false,
               visible: true,
+              visibleOnMobile: false,
             }, [
               {
                 code: 'at1000',
@@ -226,6 +234,7 @@ export const ehrConfig: EhrConfig = {
               required: true,
               single: false,
               visible: true,
+              visibleOnMobile: true,
             }, 'kg', 0, 1000
           )
         ],
@@ -240,6 +249,7 @@ export const ehrConfig: EhrConfig = {
               required: false,
               single: false,
               visible: true,
+              visibleOnMobile: false,
             }, [
               {
                 code: 'at0011',
@@ -282,6 +292,7 @@ export const ehrConfig: EhrConfig = {
               required: true,
               single: false,
               visible: true,
+              visibleOnMobile: true,
             }, 'cm', 0, 1000
           )
         ],
@@ -307,6 +318,7 @@ export const ehrConfig: EhrConfig = {
               required: true,
               single: false,
               visible: true,
+              visibleOnMobile: true,
             }, 'Steg', 0, -1
             )],
           CommentField,
@@ -335,6 +347,7 @@ export const ehrConfig: EhrConfig = {
               required: true,
               single: false,
               visible: true,
+              visibleOnMobile: true,
             }, '/min', 0, -1
           )
         ],
@@ -348,6 +361,7 @@ export const ehrConfig: EhrConfig = {
               required: false,
               single: false,
               visible: true,
+              visibleOnMobile: false,
             }, [
               {
                 code: 'at1003',

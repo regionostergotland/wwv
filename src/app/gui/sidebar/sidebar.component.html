@@ -1,4 +1,42 @@
 
+
+<mat-drawer-container class="example-container" autosize>
+    <mat-drawer #drawer class="example-sidenav" mode="side">
+      <p>Auto-resizing sidenav</p>
+      <p *ngIf="showFiller">Lorem, ipsum dolor sit amet consectetur.</p>
+      <button (click)="showFiller = !showFiller" mat-raised-button>
+        Toggle extra text
+      </button>
+    </mat-drawer>
+    
+    <div class="content-container">
+    <div class="sidebar-bar">
+        <div   *ngFor="let category of getUserCategories()">
+                <img (click)="selectCategory(category)" class="sidebar-icon" [src]="(getCategoryIcon(category))"/>
+            <mat-divider></mat-divider>
+          </div>
+
+    </div>
+    <div class="content">
+    <div *ngIf="!selectedCategory">
+        <h2>Här kan du redigera, komplettera och kommentera dina värden.</h2>
+        <p>- Granska och redigera varje kategori i sidomenyn</p>
+        <p>- Lägg till enga kategorier med egna värden</p>
+        <p>- Hämta ytterligare värden från en plattform</p>
+        <h3>Om inga ändringar önskas, gå vidare till nästa steg.</h3>
+      </div>
+    <app-health-list-items *ngIf="selectedCategory" [selectCategory]="selectedCategory" [editable]="true" style="text-align: left"></app-health-list-items>
+    <button class='margin' mat-raised-button color='primary' routerLink='/inspection'>Nästa steg</button>
+  </div>
+  </div>
+  </mat-drawer-container>
+
+<!--
+
+
+
+
+
 <mat-sidenav-container class="container">
   <mat-sidenav #sidenav #drawer mode="side" opened role="navigation" autosize class="example-sidenav">
 
@@ -32,17 +70,8 @@
   </mat-sidenav>
 
   <mat-sidenav-content>
-    <div *ngIf="!selectedCategory">
-      <h2>Här kan du redigera, komplettera och kommentera dina värden.</h2>
-      <p>- Granska och redigera varje kategori i sidomenyn</p>
-      <p>- Lägg till enga kategorier med egna värden</p>
-      <p>- Hämta ytterligare värden från en plattform</p>
-      <h3>Om inga ändringar önskas, gå vidare till nästa steg.</h3>
-    </div>
-    <!-- här kommer listor vara -->
-    <app-health-list-items *ngIf="selectedCategory" [selectCategory]="selectedCategory" [editable]="true" style="text-align: left"></app-health-list-items>
-    <button class='margin' mat-raised-button color='primary' routerLink='/inspection'>Nästa steg</button>
-
+    
   </mat-sidenav-content>
 
 </mat-sidenav-container>
+-->

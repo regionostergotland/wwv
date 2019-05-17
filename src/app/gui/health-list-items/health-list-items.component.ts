@@ -112,7 +112,7 @@ export class MathDialogComponent {
 
 @Component({
   selector: 'app-health-list-items',
-  templateUrl: './health-list-items.component.html',
+  templateUrl: './health-list-items.component2.html',
   styleUrls: ['./health-list-items.component.scss']
 })
 export class HealthListItemsComponent implements OnInit {

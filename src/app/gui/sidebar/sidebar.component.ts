@@ -51,6 +51,7 @@ export class SidebarComponent implements OnInit {
   title = 'Kategorier';
   selectedCategory: string = null;
   selectedColor = '#e7e7e7';
+  showFiller = false;
 
   constructor(private conveyor: Conveyor, private router: Router, private bottomSheet: MatBottomSheet) {
 
