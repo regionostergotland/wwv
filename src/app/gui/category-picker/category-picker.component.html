@@ -1,7 +1,7 @@
 <div class="column">
   <p>Välj vilken typ av data du vill importera och mellan vilka datum</p>
 <div class="centering">
-<div layout="row" layout-align="center center" class="card-height">
+<div fxLayout="row" fxLayout.xs="column" fxLayout.lt-sm="column" fxFlex class="wrapper">
   <mat-card class="home-card">
     <mat-card-title>
       <mat-checkbox class="top-checkbox" [(ngModel)]="allChosen" (change)='updateAllCategories($event)'>Välj alla kategorier</mat-checkbox>
@@ -32,13 +32,13 @@
       </section>
     </mat-card-content>
   </mat-card>
-
-</div>
-
+  
   <div class="next-button">
     <!-- TODO change routerlink to what it should be (not home)   -->
     <button [disabled]="!validateSelections()" mat-raised-button color="primary" (click)='getData()'>Nästa steg</button>
   </div>
+</div>
+
 
 </div>
 

@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
-import { FooterComponent } from './footer.component';
+import { HelpComponent } from './help.component';
 
 import {
-    MatToolbarModule,
+    MatCardModule,
 } from '@angular/material';
 
 @NgModule({
   imports: [
-    MatToolbarModule,
+    MatCardModule,
   ],
   declarations: [
-    FooterComponent
+    HelpComponent
   ],
-  exports: [ FooterComponent ],
-  entryComponents: [ FooterComponent ]
+  exports: [ HelpComponent ],
+  entryComponents: [ HelpComponent ]
 })
-export class FooterModule {}
+export class HelpModule {}

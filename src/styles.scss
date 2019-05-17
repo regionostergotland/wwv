@@ -2,7 +2,10 @@
 
 $light-black: #3a3b3d;
 
-html, body { height: 100vh; }
+html, body { 
+  height: 100vh; 
+  width: 100vw;
+ }
 body {
   margin: 0;
   font-family: Tahoma, Verdana, Segoe, sans-serif;

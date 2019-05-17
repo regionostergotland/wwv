@@ -1,12 +1,17 @@
+
+<div></div>
 <h1 style="text-align: center">
 Välkommen!
 </h1>
 
-<div class="centering">
-<div layout="row" layout-align="center center" class="card-height">
-
-  <mat-card class="home-card">
+<div class="centering" class="container">
+<div fxLayout="row" fxLayout.xs="column" fxLayout.lt-sm="column" fxFlex class="wrapper">
+  <mat-card  class="home-card">
+      <mat-card-title>
+          Skicka in data
+        </mat-card-title>
     <mat-card-content style="display:flex">
+       
       <p>
         Skicka hälsodata till ***REMOVED***s Digitaliseringsplattform.
       </p>
@@ -18,31 +23,37 @@ Välkommen!
     </mat-card-actions>
   </mat-card>
 
-  <mat-card class="home-card">
+  <mat-card  class="home-card">
+      <mat-card-title>
+        Hjälp
+      </mat-card-title>
     <mat-card-content>
       <p>
         Behöver du en hjälpande hand?
         Ta en titt på vår guide!
       </p>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-footer>
       <div style="text-align:center;">
         <button id="home-nav-help" mat-button routerLink='/help'>Hjälp</button>
       </div>
-    </mat-card-actions>
+    </mat-card-footer>
   </mat-card>
 
   <mat-card class="home-card">
+      <mat-card-title>
+          Lägg till egna värden
+        </mat-card-title>
     <mat-card-content>
       <p>
-        Lägg till egna värden.
+        Gå direkt till redigeraren och lägg till din egna värden.
       </p>
     </mat-card-content>
-    <mat-card-actions>
+    <mat-card-footer>
       <div style="text-align:center;">
         <button id="home-nav-input" mat-button routerLink='/edit'>Egen inmatning</button>
       </div>
-    </mat-card-actions>
+    </mat-card-footer>
   </mat-card>
 
 </div>
