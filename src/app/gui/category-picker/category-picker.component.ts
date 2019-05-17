@@ -20,9 +20,14 @@ export class CategoryPickerComponent implements OnInit {
   chosenCategories: string[] = [];
   categories: [string, string][] = [];
   categoryIds: string[] = [];
+
   startDate: Date;
   endDate: Date;
+
   private platformId = '';
+
+  allChosen = false; // True if all categories have been chosen
+  categoryMap: Map<string, boolean>; // Map  containing the categoryId:s and whether they have been chosen or not
 
   ngOnInit() {
     this.platformId = this.conveyor.getSelectedPlatform();
@@ -31,9 +36,10 @@ export class CategoryPickerComponent implements OnInit {
     this.startDate.setMonth(this.startDate.getMonth() - 1);
     this.endDate = new Date();
 
-    // finns det en platform
+    this.categoryMap = new Map<string, boolean>();
+
+    // Is there a platform
     if (this.platformId) {
-      // this.conveyor.getCategories(this.platformId).subscribe(_ => {
       this.conveyor.getAvailableCategories(this.platformId).subscribe(res => {
         this.categoryIds = res;
         this.getCategories();
@@ -49,6 +55,7 @@ export class CategoryPickerComponent implements OnInit {
     for (const id of this.categoryIds) {
       cat = this.conveyor.getCategorySpec(id);
       this.categories.push([id, cat.label]);
+      this.categoryMap.set(id, false);
     }
   }
 
@@ -65,17 +72,39 @@ export class CategoryPickerComponent implements OnInit {
   /**
    * connected to the category checkboxes
    * @param category The category to update
-   * @param event the checkbox event
+   * @param event The checkbox event
    */
   updateChosenCategories(category: string, event: any): void {
     const boxChecked: boolean = event.checked;
+    this.categoryMap.set(category, boxChecked);
     if (boxChecked) {
-        this.chosenCategories.push(category);
+        // Add to the chosen categories as long as it isn't already chosen
+        if (this.chosenCategories.indexOf(category) === -1) {
+          this.chosenCategories.push(category);
+        }
+        // If all available categories are chosen, make the 'select all' checkbox checked
+        if (this.chosenCategories.length === this.categories.length) {
+          this.allChosen = true;
+        }
     } else {
+        // As long as at least one category is unchecked, allChosen should be false
+        this.allChosen = false;
+        // Remove the category from chosenCategories
         this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
     }
-
+    console.log(this.chosenCategories);
   }
+
+  /**
+   * Selects/deselects all categories depending on the checkbox event
+   * @param event The checkbox event
+   */
+  updateAllCategories(event: any) {
+    for (const category of this.categories) {
+      this.updateChosenCategories(category[0], event);
+    }
+  }
+
   validateSelections(): boolean {
     return (this.startDate && this.endDate && this.chosenCategories.length > 0);
   }
