@@ -64,7 +64,7 @@ const TimeField: [string, DataType] = [
     required: true,
     single: false,
     visible: true,
-    visibleOnMobile: false,
+    visibleOnMobile: true,
   })
 ];
 

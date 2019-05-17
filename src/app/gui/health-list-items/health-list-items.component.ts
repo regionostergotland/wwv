@@ -12,6 +12,7 @@ import {AddDataPointComponent} from '../add-data-point/add-data-point.component'
 import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
+import * as dayjs from 'dayjs';
 
 export interface MathOption {
   value: MathFunctionEnum;
@@ -112,7 +113,7 @@ export class MathDialogComponent {
 
 @Component({
   selector: 'app-health-list-items',
-  templateUrl: './health-list-items.component2.html',
+  templateUrl: './health-list-items.component.html',
   styleUrls: ['./health-list-items.component.scss']
 })
 export class HealthListItemsComponent implements OnInit {
@@ -195,13 +196,74 @@ export class HealthListItemsComponent implements OnInit {
 
   /**
    * Checks whether the number of selected elements matches the total number of rows.
-   * @returns a boolean, true of selected elements matches total number of rows
+   *
+   *  @returns a boolean, true of selected elements matches total number of rows
    */
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataList.data.length;
     return numSelected === numRows;
   }
+
+  getCategoryTooltip(key: string): string {
+    if (!this.categorySpec.dataTypes.has(key)) {
+      return this.periodDescriptions.get(key);
+    }
+    return this.categorySpec.dataTypes.get(key).description;
+  }
+
+
+  getTextFromPoint(key: string, point: DataPoint): string {
+    if (key === 'date') {
+      return dayjs(point.get('time')).format('YY-MM-DD');
+    }
+
+    if (key.startsWith('period')) {
+      const v = point.get('time');
+      switch (key) {
+        case 'period_DAY': return dayjs(v).format('YY-MM-DD');
+        case 'period_WEEK': return 'v' + v.getWeek() + ', ' + v.getWeekYear();
+        case 'period_MONTH': return dayjs(v).format('YY-MM');
+        case 'period_YEAR': return dayjs(v).format('YY');
+      }
+    }
+
+    if (this.categorySpec.dataTypes.has(key)) {
+        const dt = this.categorySpec.dataTypes.get(key);
+        switch (dt.type) {
+          case this.dataTypeEnum.DATE_TIME: return dayjs(point.get(key)).format('hh:mm');
+          case this.dataTypeEnum.QUANTITY: return this.displayCorrectNum(point.get(key)) + ' ' + dt.unit;
+          case this.dataTypeEnum.TEXT: return point.get(key);
+        }
+    }
+
+    if (!point.has(key)) {
+      throw new Error(`${key} value function is not implemented.`)
+    }
+
+    return point.get(key);
+  }
+
+  shouldHide(key: string): boolean {
+    if (this.categorySpec.dataTypes.has(key)) {
+      return !this.categorySpec.dataTypes.get(key).visibleOnMobile;
+    }
+
+    return false;
+  }
+
+  getDataType(key: string, dataPoint: DataPoint) {
+    switch (key) {
+      case 'position':
+      case 'state_of_dress':
+        return 'select';
+      case 'comment':
+        return 'text-input';
+      default:
+        return 'text';
+    }
+  }
+
 
   /**
    * Selects all rows if they are not all selected; otherwise clear selection.
@@ -246,8 +308,7 @@ export class HealthListItemsComponent implements OnInit {
       this.selection.clear();
 
       // Fill options and visibleStrings
-      for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
-
+      for (const key of Array.from(this.categorySpec.dataTypes.keys())) {  
         // Fill options
         if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
           const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;

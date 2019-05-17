@@ -112,7 +112,7 @@ export abstract class DataType {
     this.required = settings.required;
     this.single = settings.single;
     this.visible = settings.visible;
-    this.visibleOnMobile = settings.visible;
+    this.visibleOnMobile = settings.visibleOnMobile;
 
   }
 
