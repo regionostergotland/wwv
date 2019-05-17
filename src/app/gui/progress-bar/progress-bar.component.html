@@ -2,26 +2,30 @@
 
   <mat-grid-tile>
     <button mat-mini-fab *ngIf="getCurrentStep() < 1" routerLink="/sources">1</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 1" routerLink="/sources">1</button>
+    <button mat-mini-fab class="done" *ngIf="getCurrentStep() > 1" routerLink="/sources">1</button>
+    <button mat-mini-fab class="active" *ngIf="getCurrentStep() === 1" routerLink="/sources">1</button>
     <p>Hämtning</p>
   </mat-grid-tile>
 
   <mat-grid-tile>
     <button mat-mini-fab *ngIf="getCurrentStep() < 2">2</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 2" routerLink="/edit">2</button>
+    <button mat-mini-fab class="done" *ngIf="getCurrentStep() > 2" routerLink="/edit">2</button>
+    <button mat-mini-fab class="active" *ngIf="getCurrentStep() === 2" routerLink="/edit">1</button>
     <p>Redigering</p>
   </mat-grid-tile>
 
   <mat-grid-tile>
     <button mat-mini-fab *ngIf="getCurrentStep() < 3" routerLink="/inspection">3</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 3" routerLink="/inspection">3</button>
+    <button mat-mini-fab class="done" *ngIf="getCurrentStep() > 3" routerLink="/inspection">3</button>
+    <button mat-mini-fab class="active" *ngIf="getCurrentStep() === 3" routerLink="/inspection">1</button>
     <p>Inspektion</p>
 
   </mat-grid-tile>
 
   <mat-grid-tile>
     <button mat-mini-fab *ngIf="getCurrentStep() < 4">4</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 4">4</button>
+    <button mat-mini-fab class="done" *ngIf="getCurrentStep() > 4">4</button>
+    <button mat-mini-fab class="active" *ngIf="getCurrentStep() === 4">4</button>
     <p>Skickat</p>
   </mat-grid-tile>
 
