@@ -22,7 +22,7 @@ import { AmazingTimePickerModule } from 'amazing-time-picker';
 
 
 import {
-  MatAutocompleteModule,
+  /*MatAutocompleteModule,
   MatBadgeModule,
   MatBottomSheetModule,
   MatButtonModule,
@@ -57,12 +57,12 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
-  MatFormFieldModule,
+  MatFormFieldModule,*/
   MAT_DATE_LOCALE
 } from '@angular/material';
 
 
-import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
+import { CustomGoogleApiModule } from './google-fit-config';
 import { FooterComponent } from './gui/footer/footer.component';
 
 
@@ -70,8 +70,8 @@ import { FooterComponent } from './gui/footer/footer.component';
 @NgModule({
   declarations: [
     AppComponent,
-    ToolbarComponent,
     HomeComponent,
+    /*ToolbarComponent,
     SourcesComponent,
     CategoryPickerComponent,
     InfoComponent,
@@ -85,16 +85,15 @@ import { FooterComponent } from './gui/footer/footer.component';
     MathDialogComponent,
     ProgressBarComponent,
     ConfirmationComponent,
-    FooterComponent,
+    FooterComponent,*/
   ],
   imports: [
     BrowserModule,
-    FormsModule,
+    /*FormsModule,
     BrowserAnimationsModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,
@@ -132,10 +131,9 @@ import { FooterComponent } from './gui/footer/footer.component';
     MatTreeModule,
     MatFormFieldModule,
     MatTableModule,
-
     AmazingTimePickerModule,
     BrowserModule,
-    AppRoutingModule,
+    AppRoutingModule,*/
     HttpClientModule,
     CustomGoogleApiModule
   ],
