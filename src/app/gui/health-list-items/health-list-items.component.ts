@@ -296,6 +296,19 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   /**
+   * Used to make sure the tables don't display a bunch of decimals.
+   * Checks if num is an integer or float. If num is an integer, it simply returns the number.
+   * If num is a float, it returns a string containing only 1 decimal.
+   * @param num The original number to check
+   */
+  displayCorrectNum(num: number): any {
+    if ((num % 1) === 0) {
+      return num;
+    }
+    return num.toFixed(1);
+  }
+
+  /**
    * Returns the columns which should be displayed in the table depending on which
    * category it is.
    * @returns a list of labels for the specified category
