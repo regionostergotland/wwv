@@ -50,7 +50,7 @@
         </div>
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.QUANTITY">
 
-          {{dataPoint.get(key) + ' ' + categorySpec.dataTypes.get(key).unit}}
+          {{displayCorrectNum(dataPoint.get(key)) + ' ' + categorySpec.dataTypes.get(key).unit}}
 
         </div>
       </div>
@@ -69,7 +69,7 @@
         </div>
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.QUANTITY">
 
-          {{dataPoint.get(key) + ' ' + categorySpec.dataTypes.get(key).unit}}
+          {{displayCorrectNum(dataPoint.get(key)) + ' ' + categorySpec.dataTypes.get(key).unit}}
 
         </div>
         <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.DATE_TIME">
