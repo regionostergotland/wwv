@@ -3,7 +3,9 @@
 <div class="centering">
 <div layout="row" layout-align="center center" class="card-height">
   <mat-card class="home-card">
-    <mat-checkbox [(ngModel)]="allChosen" (change)='updateAllCategories($event)'>Välj alla kategorier</mat-checkbox>
+    <mat-card-title>
+      <mat-checkbox class="top-checkbox" [(ngModel)]="allChosen" (change)='updateAllCategories($event)'>Välj alla kategorier</mat-checkbox>
+    </mat-card-title>
     <mat-card-content *ngFor="let category of categories">
       <section class="example-section">
         <mat-checkbox class="example-margin" [ngModel]="categoryMap.get(category[0])" [matTooltip]="getDescription(category[0])" 
