@@ -6,7 +6,7 @@
     <mat-checkbox [(ngModel)]="allChosen" (change)='updateAllCategories($event)'>Välj alla kategorier</mat-checkbox>
     <mat-card-content *ngFor="let category of categories">
       <section class="example-section">
-        <mat-checkbox class="example-margin" [ngModel]="cats.get(category[0])" [matTooltip]="getDescription(category[0])" 
+        <mat-checkbox class="example-margin" [ngModel]="categoryMap.get(category[0])" [matTooltip]="getDescription(category[0])" 
         matTooltipPosition='left' (change)="updateChosenCategories(category[0], $event)">{{category[1]}}</mat-checkbox>
       </section>
     </mat-card-content>
