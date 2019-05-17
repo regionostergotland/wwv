@@ -90,7 +90,9 @@ export class AddDataPointComponent implements OnInit {
     const result: string[] = [];
     if (this.conveyor.getCategoryIds().includes(this.selectedCategory)) {
       for (const column of Array.from(this.categorySpec.dataTypes.keys())) {
-        if (column === 'time') {
+        if (!this.categorySpec.dataTypes.get(column).visible) {
+          continue;
+        } else if (column === 'time') {
           result.push('date');
           result.push('time');
         } else {
