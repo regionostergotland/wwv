@@ -37,6 +37,10 @@ interface Party {
   version: number
 }
 
+// TODO create separate in-module service for API calls to EHR
+//      or at least somehow avoid repetition for calls in the methods below
+// TODO use newly available openEHR standard instead of THINKEHR
+
 @Injectable({
   providedIn: 'root',
 })
@@ -130,9 +134,6 @@ export class EhrService {
       }
     }
 
-    // TODO remove below later
-    const postData = JSON.stringify(composition, null, 2);
-    console.log(postData);
     return JSON.stringify(composition);
   }
 
@@ -175,13 +176,13 @@ export class EhrService {
 
     return this.http.get<DemographicResponse>(this.createUrl(url, params), options)
       .pipe(map(
-        res => { return res.parties[0].id; }
+        res => { return res.parties[0].id; } // assume only one person with pnr
     ));
   }
 
   private sendDataToEhr(ehrId: any, lists: DataList[]): Observable<any> {
     let url = this.config.baseUrl + '/composition'
-    // TODO get ehrId from pnr
+
     const params = [
       ['ehrId', ehrId],
       ['templateId', this.config.templateId],
