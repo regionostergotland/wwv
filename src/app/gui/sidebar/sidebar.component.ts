@@ -60,6 +60,15 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
   }
 
+  getMode(): string{
+    // lt-md / lt-sm
+    if (window.matchMedia('(max-width: 959px)').matches) {
+        return 'bottom';
+    }
+
+    return 'side';
+  }
+
   selectCategory(category: string): void {
       this.selectedCategory = category;
   }

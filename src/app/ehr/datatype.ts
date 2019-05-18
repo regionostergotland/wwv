@@ -23,6 +23,7 @@ export interface CategorySpec {
    * Data types for all possible points in category.
    */
   dataTypes: Map<string, DataType>;
+
 }
 
 /**
@@ -78,7 +79,7 @@ export interface DataTypeSettings {
    *  Field should be visible on mobile, used to save space on smaller screens
    *  where field will be editable from a modal
    */
-   visibleOnMobile: boolean;
+  visibleOnMobile: boolean;
 }
 
 /**
@@ -102,6 +103,7 @@ export abstract class DataType {
   readonly single: boolean;
   readonly visible: boolean;
   readonly visibleOnMobile: boolean;
+  readonly unit: string;
 
 
   constructor(type: DataTypeEnum, settings: DataTypeSettings) {

@@ -1,18 +1,38 @@
-<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label + mathOption + intervalOption : ''}}</h1>
-<p style="text-align: left">{{categorySpec && !isEditable ? mathOption.substring(2) + intervalOption : ''}}</p>
-<table style="text-align: left" mat-table [dataSource]="dataList" [trackBy]="trackItem">
+<div *ngIf="!isSmallScreen()">
+  <h2 style="text-align: center; margin-top: 6px; margin-bottom: 2px;">
+    {{
+      categorySpec && isEditable
+        ? categorySpec.label + mathOption + intervalOption
+        : ''
+    }}
+  </h2>
+  <p style="text-align: left">
+    {{
+      categorySpec && !isEditable ? mathOption.substring(2) + intervalOption : ''
+    }}
+  </p>
+</div>
 
-  <ng-container *ngFor="let key of displayedColumns" matColumnDef={{key}}>
-    <div *ngIf="key==='select'">
+<div class="table-container">
+<table
+  style="text-align: left"
+  class="table"
+  mat-table
+  [dataSource]="dataList"
+  [trackBy]="trackItem"
+>
+  <ng-container *ngFor="let key of displayedColumns" matColumnDef="{{ key }}">
+    <!-- CHECK BOX  -->
+    <div *ngIf="key === 'select'">
       <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox 
+        <mat-checkbox
           (change)="$event ? masterToggle() : null"
           [checked]="selection.hasValue() && isAllSelected()"
         >
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row">
-        <mat-checkbox 
+        <mat-checkbox
           (click)="$event.stopPropagation()"
           (change)="$event ? selection.toggle(row) : null"
           [checked]="selection.isSelected(row)"
@@ -21,80 +41,110 @@
       </td>
     </div>
 
-    <th mat-header-cell 
-        *matHeaderCellDef 
-        [matTooltip]="getCategoryTooltip()"
-        [fxHide.lt-sm]="shouldHide(key)"
+    <!-- DATA COLUMNS -->
+    <div *ngIf="!shouldHide(key)">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        [matTooltip]="getCategoryTooltip(key)"
       >
-      {{!categorySpec.dataTypes.has(key) ? periodLabels.get(key) : categorySpec.dataTypes.get(key).label}}
-    </th>
-    <td mat-cell *matCellDef="let dataPoint;">
-        <div [ngSwitch]="getDataType(key, dataPoint)" [fxHide.lt-sm]="shouldHide(key)">
-            <mat-form-field *ngSwitchCase="'select'">
-                <mat-select [value]="dataPoint.get(key)" (selectionChange)="dataPoint.set(key, $event.value)">
-                    <mat-option [matTooltip]="'obestämd'" matTooltipPosition='left'>-</mat-option>
-                    <mat-option 
-                        *ngFor="let option of options.get(key)" 
-                        [value]="option.code" 
-                        [matTooltip]="option.description" 
-                        matTooltipPosition='left'
-                      >
-                        {{option.label}}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <mat-form-field *ngSwitchCase="'text-input'">
-                <input 
-                    #textInput 
-                    matInput (change)="dataPoint.set(key, textInput.value)" 
-                    [value]="dataPoint.get(key) ? dataPoint.get(key) : ''" 
-                    placeholder={{categorySpec.dataTypes.get(key).label}}
-                >
-            </mat-form-field>
-
-            <div *ngSwitchCase="'text'">
-                {{getTextFromPoint(key, dataPoint)}}
-            </div>
+        <div style="display: flex; flex-direction: column;">
+          <div>{{ getCategoryLabel(key) }}</div>
+          <div *ngIf="isSmallScreen()">{{ getCategoryUnit(key) }}</div>
         </div>
-    </td>
+      </th>
+      <td mat-cell *matCellDef="let dataPoint">
+        <div [ngSwitch]="getDataType(key)">
+          <mat-form-field *ngSwitchCase="'select'">
+            <mat-select
+              [value]="dataPoint.get(key)"
+              (selectionChange)="dataPoint.set(key, $event.value)"
+            >
+              <mat-option [matTooltip]="'obestämd'" matTooltipPosition="left"
+                >-</mat-option
+              >
+              <mat-option
+                *ngFor="let option of options.get(key)"
+                [value]="option.code"
+                [matTooltip]="option.description"
+                matTooltipPosition="left"
+              >
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field *ngSwitchCase="'text-input'">
+            <input
+              #textInput
+              matInput
+              (change)="dataPoint.set(key, textInput.value)"
+              [value]="dataPoint.get(key) ? dataPoint.get(key) : ''"
+              placeholder="{{ categorySpec.dataTypes.get(key).label }}"
+            />
+          </mat-form-field>
+
+          <div *ngSwitchCase="'text'" style="text-align: center">
+            {{ getTextFromPoint(key, dataPoint) }}
+          </div>
+        </div>
+      </td>
+
+      <!-- MOBILE EDIT BUTTON -->
+    </div>
+    <div *ngIf="key === 'mobile'">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <mat-icon>
+          edit
+        </mat-icon>
+      </td>
+    </div>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
 </table>
+</div>
 
-<mat-paginator [pageSizeOptions]="[5, 10, 15, 30, 50]" showFirstLastButtons></mat-paginator>
-
+<div class="small">
+  <mat-paginator
+    [hidePageSize]="isSmallScreen()"
+    [pageSizeOptions]=" [5, 10, 15, 30, 50]"
+    showFirstLastButtons
+  ></mat-paginator>
+</div>
 <div class="flex">
-    <button 
-      *ngIf="isEditable" 
-      mat-stroked-button color="accent" 
-      style="text-align: center;"
-      (click)="openDialog()"
-    >
-      <div fxHide fxHide.lt-sm="true">Lägg till datavärde</div>
-      <div fxHide.lt-sm="false">Lägg till</div>
-    </button>
-    <button 
-      *ngIf="isEditable" 
-      mat-stroked-button 
-      color="accent" 
-      style="text-align: center;" 
-      (click)="openRemovalDialog()"
-    >
-
-      <div fxHide fxHide.lt-sm="true"> Ta bort datavärden, {{selection.selected.length}} valda</div>
-      <div fxHide.lt-sm="false"> Ta bort ({{selection.selected.length}})</div>
-    </button>
-    <button 
-      *ngIf="isEditable" 
-      mat-stroked-button 
-      color="accent" 
-      style="text-align: center;"
-      (click)="openMathDialog()"
-      >
-        <div fxHide fxHide.lt-sm="true">Sammanställ punkter</div>
-        <div fxHide.lt-sm="false">Sammanställ</div>
-    </button>
+  <button
+    *ngIf="isEditable"
+    mat-stroked-button
+    color="accent"
+    style="text-align: center;"
+    (click)="openDialog()"
+  >
+    <div fxHide fxHide.lt-sm="true">Lägg till datavärde</div>
+    <div fxHide.lt-sm="false">Lägg till</div>
+  </button>
+  <button
+    *ngIf="isEditable"
+    mat-stroked-button
+    color="accent"
+    style="text-align: center;"
+    (click)="openRemovalDialog()"
+  >
+    <div fxHide fxHide.lt-sm="true">
+      Ta bort datavärden, {{ selection.selected.length }} valda
+    </div>
+    <div fxHide.lt-sm="false">Ta bort ({{ selection.selected.length }})</div>
+  </button>
+  <button
+    *ngIf="isEditable"
+    mat-stroked-button
+    color="accent"
+    style="text-align: center;"
+    (click)="openMathDialog()"
+  >
+    <div fxHide fxHide.lt-sm="true">Sammanställ punkter</div>
+    <div fxHide.lt-sm="false">Sammanställ</div>
+  </button>
 </div>

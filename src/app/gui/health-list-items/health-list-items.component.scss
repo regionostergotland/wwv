@@ -1,7 +1,15 @@
+
+
 table {
   width: 100%;
 }
 
+.table-container {
+  height: 45vh;
+  border: 5px solid #efefef;
+  
+  overflow: auto;
+}
 button {
   margin: 10px;
   width: 100%;
@@ -18,4 +26,13 @@ button {
 .math-dialog-buttons {
   display: flex;
   justify-content: center;
+}
+
+.small {
+  background-color: green;
+}
+
+.small  .mat-paginator-range-label {
+  margin: 0 6px 0 24px !important;
+  background-color: green;
 }

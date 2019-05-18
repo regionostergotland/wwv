@@ -215,13 +215,13 @@ export class HealthListItemsComponent implements OnInit {
 
   getTextFromPoint(key: string, point: DataPoint): string {
     if (key === 'date') {
-      return dayjs(point.get('time')).format('YY-MM-DD');
+      return dayjs(point.get('time')).format('MM-DD');
     }
 
     if (key.startsWith('period')) {
       const v = point.get('time');
       switch (key) {
-        case 'period_DAY': return dayjs(v).format('YY-MM-DD');
+        case 'period_DAY': return dayjs(v).format('MM-DD');
         case 'period_WEEK': return 'v' + v.getWeek() + ', ' + v.getWeekYear();
         case 'period_MONTH': return dayjs(v).format('YY-MM');
         case 'period_YEAR': return dayjs(v).format('YY');
@@ -232,7 +232,9 @@ export class HealthListItemsComponent implements OnInit {
         const dt = this.categorySpec.dataTypes.get(key);
         switch (dt.type) {
           case this.dataTypeEnum.DATE_TIME: return dayjs(point.get(key)).format('hh:mm');
-          case this.dataTypeEnum.QUANTITY: return this.displayCorrectNum(point.get(key)) + ' ' + dt.unit;
+          case this.dataTypeEnum.QUANTITY:
+            const s = this.displayCorrectNum(point.get(key));
+            return this.isSmallScreen() ? s : s + this.getCategoryUnit(key);
           case this.dataTypeEnum.TEXT: return point.get(key);
         }
     }
@@ -244,21 +246,48 @@ export class HealthListItemsComponent implements OnInit {
     return point.get(key);
   }
 
+  /**
+   *  Uses a media-query to be in line with flex-layouts lt-sm, thats used throughout the 
+   *  app.
+   *  https://github.com/angular/flex-layout/wiki/Responsive-API
+   */
+
+  isSmallScreen(): boolean {
+    return window.matchMedia('(max-width: 599px)').matches;
+  }
+
+  /**
+   *  Determines if a category should be hidden from display on smaller screens
+   * @param key datatype of category
+   */
+
   shouldHide(key: string): boolean {
-    if (this.categorySpec.dataTypes.has(key)) {
-      return !this.categorySpec.dataTypes.get(key).visibleOnMobile;
+    if (key === 'mobile') {
+      return true;
+    }
+
+    if (!this.isSmallScreen()) {
+      return false;
+    }
+
+    if (this.categorySpec.dataTypes.has(key) || key === 'mobile') {
+      const { visibleOnMobile } = this.categorySpec.dataTypes.get(key);
+      return !visibleOnMobile;
     }
 
     return false;
   }
 
-  getDataType(key: string, dataPoint: DataPoint) {
+
+  getDataType(key: string) {
     switch (key) {
       case 'position':
       case 'state_of_dress':
         return 'select';
       case 'comment':
         return 'text-input';
+      case 'mobile-edit-button':
+        return 'monile';
       default:
         return 'text';
     }
@@ -322,6 +351,10 @@ export class HealthListItemsComponent implements OnInit {
     }
     this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
     this.dataList.paginator = this.paginator;
+
+    window.onresize = () => {
+      this.displayedColumns = this.getDisplayedColumns();
+    }
   }
 
   trackItem(index, item) {
@@ -356,6 +389,21 @@ export class HealthListItemsComponent implements OnInit {
     });
   }
 
+  getCategoryUnit(key: string): string {
+    if (!this.categorySpec.dataTypes.has(key)) {
+      return '';
+    }
+    const dataType = this.categorySpec.dataTypes.get(key);
+    return  dataType.unit ? dataType.unit : '';
+  }
+
+  getCategoryLabel(key: string): string {
+    if (!this.categorySpec.dataTypes.has(key)) {
+      return this.periodLabels.get(key);
+    }
+    return this.categorySpec.dataTypes.get(key).label;
+  }
+
   /**
    * Used to make sure the tables don't display a bunch of decimals.
    * Checks if num is an integer or float. If num is an integer, it simply returns the number.
@@ -368,6 +416,7 @@ export class HealthListItemsComponent implements OnInit {
     }
     return num.toFixed(1);
   }
+
 
   /**
    * Returns the columns which should be displayed in the table depending on which
@@ -395,10 +444,16 @@ export class HealthListItemsComponent implements OnInit {
               result.push('time');
           }
         } else {
-          result.push(column);
+          if (!this.shouldHide(column)) {
+            result.push(column);
+          }
         }
       }
+      if (this.isSmallScreen()) {
+        result.push('mobile');
+      }
     }
+
     return result;
   }
 
