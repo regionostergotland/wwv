@@ -1,16 +1,14 @@
-<div *ngIf="!isSmallScreen()">
-  <h2 style="text-align: center; margin-top: 6px; margin-bottom: 2px;">
-    {{
-      categorySpec && isEditable
-        ? categorySpec.label + mathOption + intervalOption
-        : ''
-    }}
-  </h2>
-  <p style="text-align: left">
-    {{
-      categorySpec && !isEditable ? mathOption.substring(2) + intervalOption : ''
-    }}
-  </p>
+
+
+<div *ngIf="isSmallScreen()">
+  <div style="display: flex; flex-direction: row; height: 20px;">
+    <h5 style="margin-top: 0px; margin-bottom: 0px; background-color: #efefef; padding: 4px;">
+      {{ categorySpec && isEditable ? categorySpec.label + mathOption + intervalOption : '' }}
+    </h5>
+    <p style="text-align: left">
+      {{ categorySpec && !isEditable ? mathOption.substring(2) + intervalOption : ''}}
+    </p>
+  </div>
 </div>
 
 <div class="table-container">
@@ -22,7 +20,7 @@
   [trackBy]="trackItem"
 >
   <ng-container *ngFor="let key of displayedColumns" matColumnDef="{{ key }}">
-    <!-- CHECK BOX  -->
+    <!-- SELECT CHECK BOX  -->
     <div *ngIf="key === 'select'">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox
@@ -43,6 +41,8 @@
 
     <!-- DATA COLUMNS -->
     <div *ngIf="!shouldHide(key)">
+      
+      <!-- HEADER FOR INPUT -->
       <th
         mat-header-cell
         *matHeaderCellDef
@@ -54,6 +54,8 @@
           <div *ngIf="isSmallScreen()">{{ getCategoryUnit(key) }}</div>
         </div>
       </th>
+
+      <!-- INPUT -->
       <td mat-cell *matCellDef="let dataPoint">
         <div [ngSwitch]="getDataType(key)">
           <mat-form-field *ngSwitchCase="'select'">

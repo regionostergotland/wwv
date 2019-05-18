@@ -1,12 +1,21 @@
-<div style="height:100%;width:100%;">
-  <div class="content-container">
+<div class="container-container">
+  <div
+    class="content-container"
+    [style.margin-top]="getMode() === 'side' ? '2%' : 0"
+  >
     <div class="content">
       <div *ngIf="!selectedCategory">
-        <h2>Här kan du redigera, komplettera och kommentera dina värden.</h2>
-        <p>- Granska och redigera varje kategori i sidomenyn</p>
-        <p>- Lägg till enga kategorier med egna värden</p>
-        <p>- Hämta ytterligare värden från en plattform</p>
-        <h3>Om inga ändringar önskas, gå vidare till nästa steg.</h3>
+        <h2 style="text-align: center;">
+          Här kan du redigera, komplettera och kommentera dina värden.
+        </h2>
+        <div style="text-align: center">
+          <p>Granska och redigera varje kategori i sidomenyn</p>
+          <p>Lägg till enga kategorier med egna värden</p>
+          <p>Hämta ytterligare värden från en plattform</p>
+        </div>
+        <h3 style="text-align: center">
+          Om inga ändringar önskas, gå vidare till nästa steg.
+        </h3>
       </div>
       <app-health-list-items
         *ngIf="selectedCategory"
@@ -14,18 +23,22 @@
         [editable]="true"
         style="text-align: left"
       ></app-health-list-items>
-      <button
-        class="margin"
-        mat-raised-button
-        color="primary"
-        routerLink="/inspection"
-      >
-        Nästa steg
-      </button>
+
+      <div style="width: 100%; display: flex; justify-content: center;">
+        <button
+          class="margin"
+          mat-raised-button
+          color="primary"
+          routerLink="/inspection"
+
+        >
+          Nästa steg
+        </button>
+      </div>
     </div>
 
     <div *ngIf="getMode() === 'side'">
-      <mat-nav-list>
+      <mat-nav-list style="margin-right: 3%; padding-top: 0">
         <mat-list-item
           (click)="selectCategory(null)"
           [style.background-color]="getTitleSelected()"
@@ -45,27 +58,25 @@
           </mat-list-item>
           <mat-divider></mat-divider>
         </div>
-      </mat-nav-list>
+     
 
-      <button
-        class="wide-button"
-        style="margin-top: 20px"
-        mat-stroked-button
-        color="accent"
-        (click)="openBottomSheet()"
+      <mat-list-item
+        (click)="selectCategory(category)"
+        [style.background-color]="getBackgroundColor(category)"
       >
-        <mat-icon>add_box</mat-icon>
+        <mat-icon class="sidebar-icon">add_box</mat-icon>
         Lägg till egen kategori
-      </button>
-      <button
-        class="wide-button"
-        mat-stroked-button
-        color="accent"
-        routerLink="/sources"
+      </mat-list-item>
+      <mat-divider></mat-divider>
+      <mat-list-item
+        (click)="selectCategory(category)"
+        [style.background-color]="getBackgroundColor(category)"
       >
-        <mat-icon>add_box</mat-icon>
+        <mat-icon class="sidebar-icon">add_box</mat-icon>
         Lägg till app-data
-      </button>
+      </mat-list-item>
+      
+    </mat-nav-list>
     </div>
     <div *ngIf="getMode() === 'bottom'">
       <div class="sidebar-bar">

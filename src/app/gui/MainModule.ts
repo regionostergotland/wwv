@@ -19,7 +19,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FlexItemsComponent } from './responsive/flex-items.component';
 import { AddNewDataModalComponent } from './sidebar/add-new-data-modal.component';
 
 import {
@@ -115,7 +114,6 @@ import {
     MatTableModule,
   ],
   declarations: [
-    FlexItemsComponent,
     SourcesComponent,
     CategoryPickerComponent,
     HealthListItemsComponent,
