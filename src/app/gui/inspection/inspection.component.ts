@@ -52,10 +52,10 @@ export class InspectionComponent implements OnInit {
   /**
    * Send all the data stored in the conveyor.
    */
-  sendData() {
-    this.conveyor.sendData().
+  sendData(pnr: string) {
+    this.conveyor.sendData(pnr).
       subscribe(
-        _ => console.log('success'),
+        r => console.log(r, 'success'),
         e => console.log(e)
     );
   }
