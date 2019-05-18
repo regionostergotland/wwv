@@ -30,20 +30,12 @@ export class EhrService {
     return cats;
   }
 
-  private post(baseUrl: string, params, body: string = "") : Observable<any> {
+  private createUrl(baseUrl: string, params): string{
     let url = baseUrl + '?';
     for (const [key, value] of params) {
       url += key + '=' + value + '&';
     }
-
-    const options = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + this.basicCredentials
-      })
-    };
-
-    return this.http.post(url, body, options);
+    return url;
   }
 
   private createComposition(lists: DataList[]): string {
@@ -105,7 +97,22 @@ export class EhrService {
       ['personnummer', pnr],
     ];
 
-    return this.post(url, params);
+    const options = {
+      headers: new HttpHeaders({
+        //'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + this.basicCredentials
+      })
+    }
+    
+    const query = [
+      { 
+        "key": "personnummer",
+        "value": pnr
+      }
+    ]
+
+    return this.http.post(url, query, options);
   }
 
   public sendData(pnr: string, lists: DataList[]): Observable<{}> {
@@ -119,8 +126,15 @@ export class EhrService {
 
     const composition = this.createComposition(lists);
 
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + this.basicCredentials
+      })
+    }
+
     return this.getEhrId(pnr);
-    //return this.post(url, params, composition);
+    //return this.http.post(this.createUrl(url, params), composition, options);
   }
 
   public authenticateBasic(user: string, pass: string) {
