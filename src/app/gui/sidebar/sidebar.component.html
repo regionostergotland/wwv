@@ -1,4 +1,4 @@
-<div fxFill>
+<div style="height:100%;width:100%;">
 <div class="content-container" >
   <div class="content">
     <div *ngIf="!selectedCategory">
@@ -69,7 +69,7 @@
   </div>
   <div *ngIf="getMode() === 'bottom'">
     <div class="sidebar-bar">
-      <div *ngFor="let category of getUserCategories()" [style.background-color]="getBackgroundColor(category)">
+      <div *ngFor="let category of getUserCategories()">
         <img
           (click)="selectCategory(category)"
           class="sidebar-icon"

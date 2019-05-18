@@ -1,3 +1,4 @@
+
 .container {
   height: 100%;
   width: 100%;
@@ -48,6 +49,9 @@
     justify-content: space-evenly;
     width: 100%;
     border-top: 2px solid rgba(0,0,0,0.2);
+    position: absolute;
+    bottom: 0;
+    left: 0;
     overflow-x: scroll;
   }
 } 
@@ -83,4 +87,15 @@
 
 .example-sidenav {
   padding: 20px;
+}
+
+
+.attr-container {
+  width: 100%;
+  
+  background-color: #efefef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6pt;
 }
