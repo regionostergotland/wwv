@@ -136,7 +136,7 @@ export class EhrService {
     return JSON.stringify(composition);
   }
 
-  private getEhrIdByPartyId(partyId: string): Observable<any> {
+  private getEhrId(partyId: string): Observable<any> {
     let url = this.config.baseUrl + 'ehr'
     const params = [
       ['subjectId', partyId],
@@ -155,7 +155,7 @@ export class EhrService {
       ));
   }
 
-  private getPartyId(pnr: string): Observable<string> {
+  private getPartyId(pnr: string): Observable<any> {
     let url = this.config.baseUrl + 'demographics/party/query'
     const params = [
       ["personnummer", pnr]
@@ -179,24 +179,26 @@ export class EhrService {
     ));
   }
 
-  private getEhrId(pnr: string): Observable<string> {
-    return this.getPartyId(pnr)
-      .pipe(switchMap(this.getEhrIdByPartyId.bind(this)));
-  }
-
-  public sendData(pnr: string, lists: DataList[]): Observable<any> {
+  private sendDataToEhr(ehrId: any, lists: DataList[]): Observable<any> {
     let url = this.config.baseUrl + '/composition'
     // TODO get ehrId from pnr
     const params = [
-      ['ehrId', 'c0cf738e-67b5-4c8c-8410-f83df4082ac0'],
+      ['ehrId', ehrId],
       ['templateId', this.config.templateId],
       ['format', 'STRUCTURED'],
     ];
 
     const composition = this.createComposition(lists);
 
-    return this.getEhrId(pnr);
-    //return this.post(url, params, composition);
+    return this.post(url, params, composition);
+  }
+
+  public sendData(pnr: string, lists: DataList[]): Observable<any> {
+    return this.getPartyId(pnr)
+      .pipe(switchMap(this.getEhrId.bind(this)))
+      .pipe(switchMap(
+          ehrId => { return this.sendDataToEhr(ehrId, lists); }
+      ))
   }
 
   public authenticateBasic(user: string, pass: string) {
