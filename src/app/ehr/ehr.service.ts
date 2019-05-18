@@ -30,6 +30,15 @@ export class EhrService {
     return cats;
   }
 
+  private post(baseUrl: string, params,
+               body: string, options: any) : Observable<any> {
+    let url = baseUrl + '?';
+    for (const [key, value] of params) {
+      url += key + '=' + value + '&';
+    }
+    return this.http.post(url, body, options);
+  }
+
   private createComposition(lists: DataList[]): string {
     const composition: any = {
       ctx: {
@@ -75,22 +84,26 @@ export class EhrService {
       }
     }
 
+    // TODO remove below later
     const postData = JSON.stringify(composition, null, 2);
     console.log(postData);
     return JSON.stringify(composition);
   }
 
+  /*
+  private getEhrId(pnr: string): Observable<any> {
+    return this.http.post(url, composition, options);
+  }
+  */
+
   public sendData(lists: DataList[]): Observable<{}> {
+    let url = this.config.baseUrl + '/composition'
     // TODO get ehrId from pnr
     const params = [
       ['ehrId', 'c0cf738e-67b5-4c8c-8410-f83df4082ac0'],
       ['templateId', this.config.templateId],
       ['format', 'STRUCTURED'],
     ];
-    let url = this.config.baseUrl + '?';
-    for (const [key, value] of params) {
-      url += key + '=' + value + '&';
-    }
 
     const composition = this.createComposition(lists);
 
@@ -101,8 +114,7 @@ export class EhrService {
       })
     };
 
-    console.log(url);
-    return this.http.post(url, composition, options);
+    return this.post(url, params, composition, options);
   }
 
   public authenticateBasic(user: string, pass: string) {
