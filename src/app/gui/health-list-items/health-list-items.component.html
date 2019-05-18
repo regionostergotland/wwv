@@ -46,6 +46,7 @@
       <th
         mat-header-cell
         *matHeaderCellDef
+        style="text-align: center;"
         [matTooltip]="getCategoryTooltip(key)"
       >
         <div style="display: flex; flex-direction: column;">
@@ -94,8 +95,8 @@
     </div>
     <div *ngIf="key === 'mobile'">
       <th mat-header-cell *matHeaderCellDef></th>
-      <td mat-cell *matCellDef="let element">
-        <mat-icon>
+      <td mat-cell *matCellDef="let dataPoint" style="text-align: center;" >
+        <mat-icon (click)="openEditDialog(dataPoint, key)">
           edit
         </mat-icon>
       </td>
@@ -117,6 +118,7 @@
 <div class="flex">
   <button
     *ngIf="isEditable"
+    style="margin: 0;"
     mat-stroked-button
     color="accent"
     style="text-align: center;"
@@ -127,6 +129,7 @@
   </button>
   <button
     *ngIf="isEditable"
+    style="margin: 0;"
     mat-stroked-button
     color="accent"
     style="text-align: center;"
@@ -139,6 +142,7 @@
   </button>
   <button
     *ngIf="isEditable"
+    style="margin: 0;"
     mat-stroked-button
     color="accent"
     style="text-align: center;"

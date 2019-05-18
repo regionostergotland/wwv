@@ -18,6 +18,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
+interface DialogInput {
+  point?: DataPoint;
+  category: string;
+}
+
 @Component({
   selector: 'app-add-data-point',
   templateUrl: './add-data-point.component.html',
@@ -32,20 +37,34 @@ export class AddDataPointComponent implements OnInit {
   clockTime: string;
   categorySpec: CategorySpec;
   requiredFields: string[];
+  dataPoint: DataPoint;
 
   matcher = new MyErrorStateMatcher();
 
   constructor(
     public dialogRef: MatDialogRef<AddDataPointComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string,
+    @Inject(MAT_DIALOG_DATA) public data: DialogInput,
     private conveyor: Conveyor,
     private atp: AmazingTimePickerService) {
 
-    this.selectedCategory = data;
+    this.dataPoint = data.point;
+    this.selectedCategory = data.category;
     this.pointData = new Map<string, any>();
     this.pointFormControl = new Map<string, FormControl>();
     const now: Date = new Date();
     this.clockTime = '';
+  }
+
+  setValues(): void {
+    console.log(this.dataPoint.entries())
+    console.log(Array.from(this.pointData.keys()))
+    for (const key of Array.from(this.pointData.keys())) {
+        const control = this.pointFormControl.get(key);
+        console.log("keys",key)
+        if (this.dataPoint.has(key)) {
+          control.setValue(this.dataPoint.get(key));
+        }
+    }
   }
 
   ngOnInit() {
@@ -61,6 +80,10 @@ export class AddDataPointComponent implements OnInit {
           }
         }
       }
+    }
+
+    if (this.dataPoint) {
+      this.setValues();
     }
   }
 
@@ -226,11 +249,17 @@ export class AddDataPointComponent implements OnInit {
     }
 
     // Fill the field in a new point and add it.
-    const dataPoint: DataPoint = new DataPoint();
+    console.log(this.dataPoint)
+    let dataPoint: DataPoint = this.dataPoint;
+    if (!dataPoint) {
+      dataPoint = new DataPoint();
+    }
     for (const data of Array.from(this.pointData.keys())) {
       dataPoint.set(data, this.pointData.get(data));
     }
-    this.conveyor.getDataList(this.selectedCategory).addPoint(dataPoint);
+    if (!this.dataPoint) {
+      this.conveyor.getDataList(this.selectedCategory).addPoint(dataPoint);
+    }
     this.dialogRef.close();
   }
 

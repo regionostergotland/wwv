@@ -9,6 +9,7 @@ import { DataPoint } from '../../ehr/datalist';
 import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
+
 import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
@@ -337,7 +338,7 @@ export class HealthListItemsComponent implements OnInit {
       this.selection.clear();
 
       // Fill options and visibleStrings
-      for (const key of Array.from(this.categorySpec.dataTypes.keys())) {  
+      for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
         // Fill options
         if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
           const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
@@ -355,10 +356,25 @@ export class HealthListItemsComponent implements OnInit {
     window.onresize = () => {
       this.displayedColumns = this.getDisplayedColumns();
     }
+
+    console.log(this.dataList, this.conveyor.getDataList(this.selectedCategory));
   }
 
   trackItem(index, item) {
     return item ? index : undefined;
+  }
+
+
+  openEditDialog(point: DataPoint, key: string): void {
+    console.log(point)
+    const dialogRef = this.dialog.open(AddDataPointComponent, {
+      data: {category: this.selectedCategory, point}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.ngOnInit();
+    });
   }
 
   /**
@@ -366,7 +382,7 @@ export class HealthListItemsComponent implements OnInit {
    */
   openDialog(): void {
     const dialogRef = this.dialog.open(AddDataPointComponent, {
-      data: this.selectedCategory
+      data: { category: this.selectedCategory }
     });
 
     dialogRef.afterClosed().subscribe(result => {
