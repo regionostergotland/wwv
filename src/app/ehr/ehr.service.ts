@@ -1,10 +1,30 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { EHR_CONFIG, EhrConfig } from './ehr-config';
+import { map } from 'rxjs/operators';
 
+import { EHR_CONFIG, EhrConfig } from './ehr-config';
 import { CategorySpec } from './datatype';
 import { DataList } from './datalist';
+
+interface DemographicResponse {
+  action: string,
+  meta: {},
+  parties: [Party]
+}
+
+interface Party {
+  additionalInfo: {
+    Personnummer: string,
+    civilstånd: string,
+  }
+  dateOfBirth: string,
+  firstNames: string,
+  gender : string,
+  id : string,
+  lastNames: string,
+  version: number
+}
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +50,15 @@ export class EhrService {
     return cats;
   }
 
-  private post(baseUrl: string, params, body): Observable<{}> {
+  private createUrl(baseUrl: string, params): string {
+    let url = baseUrl + '?';
+    for (const [key, value] of params) {
+      url += key + '=' + value + '&';
+    }
+    return url;
+  }
+
+  private post<T>(baseUrl: string, params, body): Observable<{}> {
     let url = baseUrl + '?';
     for (const [key, value] of params) {
       url += key + '=' + value + '&';
@@ -43,7 +71,7 @@ export class EhrService {
       })
     }
 
-    return this.http.post(url, body, options);
+    return this.http.post<T>(url, body, options);
   }
 
   private createComposition(lists: DataList[]): string {
@@ -100,10 +128,9 @@ export class EhrService {
   private getEhrId(pnr: string): Observable<{}> {
     let url = this.config.baseUrl + 'demographics/party/query'
 
-    console.log(pnr);
     const params = [
-      ['personnummer', pnr],
-    ];
+      ["personnummer", pnr]
+    ]
 
     const query = [
       { 
@@ -112,7 +139,15 @@ export class EhrService {
       }
     ]
 
-    return this.post(url, params, query);
+    const options = {
+      headers: new HttpHeaders({
+        Authorization: 'Basic ' + this.basicCredentials
+      })
+    }
+
+    return this.http.get<DemographicResponse>(this.createUrl(url, params), options).pipe(map(
+      res => { return res.parties[0].id; }
+    ));
   }
 
   public sendData(pnr: string, lists: DataList[]): Observable<{}> {
