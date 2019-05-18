@@ -9,7 +9,6 @@ import { DataPoint } from '../../ehr/datalist';
 import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-
 import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
@@ -293,6 +292,8 @@ export class HealthListItemsComponent implements OnInit {
         return 'text';
     }
   }
+
+
 
 
   /**

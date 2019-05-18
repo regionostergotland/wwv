@@ -1,10 +1,17 @@
 import { NgModule } from '@angular/core';
 import { SourcesComponent } from './sources/sources.component';
-import { CommonModule} from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { CategoryPickerComponent } from './category-picker/category-picker.component';
-import { HealthListItemsComponent, RemovalDialogComponent, MathDialogComponent } from './health-list-items/health-list-items.component';
+import {
+  HealthListItemsComponent,
+  RemovalDialogComponent,
+  MathDialogComponent,
+} from './health-list-items/health-list-items.component';
 import { InspectionComponent } from './inspection/inspection.component';
-import { BottomSheetCategoriesComponent, SidebarComponent } from './sidebar/sidebar.component';
+import {
+  BottomSheetCategoriesComponent,
+  SidebarComponent,
+} from './sidebar/sidebar.component';
 import { AddDataPointComponent } from './add-data-point/add-data-point.component';
 import { ProgressBarComponent } from './progress-bar/progress-bar.component';
 import { ConfirmationComponent } from './confirmation/confirmation.component';
@@ -13,44 +20,45 @@ import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FlexItemsComponent } from './responsive/flex-items.component';
+import { AddNewDataModalComponent } from './sidebar/add-new-data-modal.component';
 
 import {
-    MatCardModule,
-    MatButtonModule,
-    MatAutocompleteModule,
-    MatBadgeModule,
-    MatBottomSheetModule,
-    MatButtonToggleModule,
-    MatCheckboxModule,
-    MatChipsModule,
-    MatDatepickerModule,
-    MatDialogModule,
-    MatDividerModule,
-    MatGridListModule,
-    MatIconModule,
-    MatInputModule,
-    MatListModule,
-    MatMenuModule,
-    MatNativeDateModule,
-    MatPaginatorModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatRadioModule,
-    MatRippleModule,
-    MatSelectModule,
-    MatSidenavModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatStepperModule,
-    MatExpansionModule,
-    MatTabsModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatTreeModule,
-    MatFormFieldModule,
-    MatTableModule,
+  MatCardModule,
+  MatButtonModule,
+  MatAutocompleteModule,
+  MatBadgeModule,
+  MatBottomSheetModule,
+  MatButtonToggleModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatDividerModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatStepperModule,
+  MatExpansionModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+  MatTreeModule,
+  MatFormFieldModule,
+  MatTableModule,
 } from '@angular/material';
 
 /*
@@ -119,8 +127,15 @@ import {
     MathDialogComponent,
     ProgressBarComponent,
     ConfirmationComponent,
+    AddNewDataModalComponent,
   ],
-  exports: [ SourcesComponent ],
-  entryComponents: [AddDataPointComponent, BottomSheetCategoriesComponent, RemovalDialogComponent, MathDialogComponent]
+  exports: [SourcesComponent],
+  entryComponents: [
+    AddDataPointComponent,
+    BottomSheetCategoriesComponent,
+    RemovalDialogComponent,
+    MathDialogComponent,
+    AddNewDataModalComponent,
+  ],
 })
 export class MainModule {}

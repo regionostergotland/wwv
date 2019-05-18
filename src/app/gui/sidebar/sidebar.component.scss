@@ -40,19 +40,33 @@
   height: 65px;
   display: flex;
   flex-direction: column;
-  background-color: #dfdfdf;
+  background-color: #f2f2f2;
+}
+
+.bottom-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.trapezoid {
+  width: 40px;
+  height: 10px;
+  background-color: #777;
+  border-top-left-radius: 0.4rem;
+  border-top-right-radius: 0.4rem;
 }
 
 @media screen and (max-width: 959px) {
   .sidebar-bar {
-    flex-direction: row;
-    justify-content: space-evenly;
     width: 100%;
     border-top: 2px solid rgba(0,0,0,0.2);
     position: absolute;
     bottom: 0;
     left: 0;
-    overflow-x: scroll;
+    box-sizing: border-box;
   }
 } 
 

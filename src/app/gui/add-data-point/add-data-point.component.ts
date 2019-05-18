@@ -56,14 +56,10 @@ export class AddDataPointComponent implements OnInit {
   }
 
   setValues(): void {
-    console.log(this.dataPoint.entries())
-    console.log(Array.from(this.pointData.keys()))
-    for (const key of Array.from(this.pointData.keys())) {
-        const control = this.pointFormControl.get(key);
-        console.log("keys",key)
-        if (this.dataPoint.has(key)) {
-          control.setValue(this.dataPoint.get(key));
-        }
+    for (const [key, value] of Array.from(this.dataPoint.entries())) {
+      const controller = this.getFormControl(key);
+      controller.setValue(value);
+      this.pointData.set(key, value);
     }
   }
 
@@ -232,8 +228,6 @@ export class AddDataPointComponent implements OnInit {
    * an input the value will not save and the dialog will not close.
    */
   createDataPoint() {
-    console.log(this.pointData);
-
     // Are all required fields filled?
     for (const field of this.requiredFields) {
       if (!this.pointData.has(field)) {
@@ -249,7 +243,6 @@ export class AddDataPointComponent implements OnInit {
     }
 
     // Fill the field in a new point and add it.
-    console.log(this.dataPoint)
     let dataPoint: DataPoint = this.dataPoint;
     if (!dataPoint) {
       dataPoint = new DataPoint();
@@ -260,6 +253,7 @@ export class AddDataPointComponent implements OnInit {
     if (!this.dataPoint) {
       this.conveyor.getDataList(this.selectedCategory).addPoint(dataPoint);
     }
+
     this.dialogRef.close();
   }
 
@@ -270,7 +264,6 @@ export class AddDataPointComponent implements OnInit {
    * @param time the time to set.
    */
   setTime(time: string) {
-    console.log(time);
     this.clockTime = time;
     const date: Date = this.pointData.get('time') as Date;
     const strs = time.split(':');

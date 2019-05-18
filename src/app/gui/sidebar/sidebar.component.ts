@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Conveyor } from '../../conveyor.service';
 import { Router } from '@angular/router';
-import { MatBottomSheet, MatBottomSheetRef } from '@angular/material';
+import { MatBottomSheet, MatBottomSheetRef, MatDialog } from '@angular/material';
 import { DataList } from '../../ehr/datalist';
+import { AddNewDataModalComponent } from './add-new-data-modal.component'
 
 @Component({
   selector: 'app-bottom-sheet-overview-example-sheet',
@@ -53,8 +54,19 @@ export class SidebarComponent implements OnInit {
   selectedColor = '#e7e7e7';
   showFiller = false;
 
-  constructor(private conveyor: Conveyor, private router: Router, private bottomSheet: MatBottomSheet) {
+  constructor(private conveyor: Conveyor, private router: Router, private bottomSheet: MatBottomSheet, public dialog: MatDialog) {
 
+  }
+
+  openAddNewDataModal(): void {
+    const dialogRef = this.dialog.open(AddNewDataModalComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 'app') {
+        this.router.navigateByUrl('/sources');
+      } else if (result === 'category') {
+        this.openBottomSheet();
+      }
+    });
   }
 
   ngOnInit() {
