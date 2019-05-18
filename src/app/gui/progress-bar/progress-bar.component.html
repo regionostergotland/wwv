@@ -1,28 +1,29 @@
-<mat-grid-list cols="4" class="progressBar" rowHeight="5:1" [ngClass]="{'hidden': getCurrentStep() === 0 }">
+<div class="container"> 
+  <mat-grid-list cols="4" class="progressBar" rowHeight="5:1" [ngClass]="{'hidden': getCurrentStep() === 0 }">
 
-  <mat-grid-tile>
-    <button mat-mini-fab *ngIf="getCurrentStep() < 1" routerLink="/sources">1</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 1" routerLink="/sources">1</button>
-    <p>Hämtning</p>
-  </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-mini-fab *ngIf="getCurrentStep() < 1" routerLink="/sources">1</button>
+      <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 1" routerLink="/sources">1</button>
+      <div *ngIf="!onSmallScreen()"><p>Hämtning</p></div>
+    </mat-grid-tile>
 
-  <mat-grid-tile>
-    <button mat-mini-fab *ngIf="getCurrentStep() < 2">2</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 2" routerLink="/edit">2</button>
-    <p>Redigering</p>
-  </mat-grid-tile>
+    <mat-grid-tile>
+      <button mat-mini-fab *ngIf="getCurrentStep() < 2">2</button>
+      <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 2" routerLink="/edit">2</button>
+      <div *ngIf="!onSmallScreen()"><p>Redigering</p></div>
+    </mat-grid-tile>
 
-  <mat-grid-tile>
-    <button mat-mini-fab *ngIf="getCurrentStep() < 3" routerLink="/inspection">3</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 3" routerLink="/inspection">3</button>
-    <p>Inspektion</p>
+    <mat-grid-tile>
+      <button mat-mini-fab *ngIf="getCurrentStep() < 3" routerLink="/inspection">3</button>
+      <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 3" routerLink="/inspection">3</button>
+      <div *ngIf="!onSmallScreen()"><p>Inspektion</p></div>
 
-  </mat-grid-tile>
+    </mat-grid-tile>
 
-  <mat-grid-tile>
-    <button mat-mini-fab *ngIf="getCurrentStep() < 4">4</button>
-    <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 4">4</button>
-    <p>Skickat</p>
-  </mat-grid-tile>
-
-</mat-grid-list>
+    <mat-grid-tile>
+      <button mat-mini-fab *ngIf="getCurrentStep() < 4">4</button>
+      <button mat-mini-fab class="done" *ngIf="getCurrentStep() >= 4">4</button>
+      <div *ngIf="!onSmallScreen()"><p>Skickat</p></div>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>

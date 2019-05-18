@@ -16,7 +16,13 @@
         <h3 style="text-align: center">
           Om inga ändringar önskas, gå vidare till nästa steg.
         </h3>
+        <div *ngIf="getMode() === 'side'" class="arrow-container">
+            <img class="arrow" stroke="gray" fill="gray" src="../../../assets/arrow5.svg">
+            <div class="arrow-text">Börja här!</div>
+        </div>
       </div>
+     
+      
       <app-health-list-items
         *ngIf="selectedCategory"
         [selectCategory]="selectedCategory"
@@ -24,7 +30,7 @@
         style="text-align: left"
       ></app-health-list-items>
 
-      <div style="width: 100%; display: flex; justify-content: center;">
+      <div class="next-button-container">
         <button
           class="margin"
           mat-raised-button
@@ -38,7 +44,7 @@
     </div>
 
     <div *ngIf="getMode() === 'side'">
-      <mat-nav-list style="margin-right: 3%; padding-top: 0">
+      <mat-nav-list style="margin-right: 5%; padding-top: 0">
         <mat-list-item
           (click)="selectCategory(null)"
           [style.background-color]="getTitleSelected()"

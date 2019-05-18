@@ -123,7 +123,6 @@ import {
     BottomSheetCategoriesComponent,
     RemovalDialogComponent,
     MathDialogComponent,
-    ProgressBarComponent,
     ConfirmationComponent,
     AddNewDataModalComponent,
   ],

@@ -15,10 +15,8 @@
 }
 
 .container-container {
-
   display: flex;
   justify-content: center;
-  border: 1px solid gray; 
 }
 
 .content-container {
@@ -33,10 +31,32 @@
   
 }
 
+.arrow-container {
+  position: relative;
+  transform: translateY(-225%);
+  opacity: 0.6; 
+}
+
+.arrow-text {
+  position: absolute;
+  transform: translateY(-20px);
+  font-style: italic;
+}
+.arrow {
+  width: 115px; 
+  height: 75px;
+  opacity: 0.2;
+}
+
 @media screen and (max-width: 959px) {
   .content-container { 
     flex-direction: column;
     justify-content: space-between;
+    padding-left: 0;
+    padding-bottom: 5px;
+    padding-right: 0;
+    padding-top: 5px;
+
   }
 } 
 
@@ -85,10 +105,11 @@
 
 
 .next-button-container {
-  width: 100%; display: flex; justify-content: center;
+  width: 100%; display: flex; justify-content: flex-end;
 }
 .margin {
   width: 100px;
+  margin-right: 10px;
 }
 
 .wide-button {

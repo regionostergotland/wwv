@@ -1,11 +1,21 @@
 mat-grid-list.progressBar {
-  height: 7%;
-  width: 90%;
+  min-height: 25px;
   text-align: center;
+  width: 66%;
+  max-width: 1050px;
 }
 
 mat-grid-tile {
-  height: 100%;
+  height: 30px;
+  width: 100%;
+}
+
+.container {
+  width: 100%;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 25px;
 }
 
 p {
@@ -16,7 +26,7 @@ button {
  display: inline-block;
  //vertical-align: top;
  text-align:center;
- margin-left: calc(90% / 8);
+ margin-left: calc(90% / 16);
  margin-right: calc(90% / 16);
  margin-bottom: 0;
  margin-top: 0;

@@ -12,6 +12,10 @@ export class ProgressBarComponent implements OnInit {
   constructor(private conveyor: Conveyor, private router: Router) {
   }
 
+  onSmallScreen(): boolean {
+    return window.matchMedia('(max-width: 599px)').matches;
+  }
+
   ngOnInit() {
   }
 
