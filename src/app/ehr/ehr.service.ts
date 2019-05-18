@@ -1,11 +1,22 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 
 import { EHR_CONFIG, EhrConfig } from './ehr-config';
 import { CategorySpec } from './datatype';
 import { DataList } from './datalist';
+
+interface EhrResponse {
+  ehrId: string,
+  ehrStatus: {
+    modifiable: boolean,
+    queryable: boolean,
+    subjectId: string,
+    subjectNamespace: string
+  },
+  meta: {}
+}
 
 interface DemographicResponse {
   action: string,
@@ -125,13 +136,30 @@ export class EhrService {
     return JSON.stringify(composition);
   }
 
-  private getEhrId(pnr: string): Observable<{}> {
-    let url = this.config.baseUrl + 'demographics/party/query'
+  private getEhrIdByPartyId(partyId: string): Observable<any> {
+    let url = this.config.baseUrl + 'ehr'
+    const params = [
+      ['subjectId', partyId],
+      ['subjectNamespace', 'default']
+    ]
 
+    const options = {
+      headers: new HttpHeaders({
+        Authorization: 'Basic ' + this.basicCredentials
+      })
+    }
+
+    return this.http.get<EhrResponse>(this.createUrl(url, params), options)
+      .pipe(map(
+        res => { return res.ehrId; }
+      ));
+  }
+
+  private getPartyId(pnr: string): Observable<string> {
+    let url = this.config.baseUrl + 'demographics/party/query'
     const params = [
       ["personnummer", pnr]
     ]
-
     const query = [
       { 
         "key": "personnummer",
@@ -145,12 +173,18 @@ export class EhrService {
       })
     }
 
-    return this.http.get<DemographicResponse>(this.createUrl(url, params), options).pipe(map(
-      res => { return res.parties[0].id; }
+    return this.http.get<DemographicResponse>(this.createUrl(url, params), options)
+      .pipe(map(
+        res => { return res.parties[0].id; }
     ));
   }
 
-  public sendData(pnr: string, lists: DataList[]): Observable<{}> {
+  private getEhrId(pnr: string): Observable<string> {
+    return this.getPartyId(pnr)
+      .pipe(switchMap(this.getEhrIdByPartyId.bind(this)));
+  }
+
+  public sendData(pnr: string, lists: DataList[]): Observable<any> {
     let url = this.config.baseUrl + '/composition'
     // TODO get ehrId from pnr
     const params = [
