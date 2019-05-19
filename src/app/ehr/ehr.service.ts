@@ -30,7 +30,9 @@ export class EhrService {
     return cats;
   }
 
-  private createComposition(lists: DataList[]): string {
+  /* XXX public only to be testable */
+  public createComposition(lists: DataList[]): {} {
+    // TODO move to config
     const composition: any = {
       ctx: {
         language: 'en',
@@ -82,7 +84,7 @@ export class EhrService {
 
     const postData = JSON.stringify(composition, null, 2);
     console.log(postData);
-    return JSON.stringify(composition);
+    return composition;
   }
 
   public sendData(lists: DataList[]): Observable<{}> {
