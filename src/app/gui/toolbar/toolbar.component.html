@@ -11,14 +11,12 @@
           <button mat-button><img src="../assets/person.svg"  alt="profile"/></button>
         </div>
 
-        <mat-menu #menu="matMenu">
-          <button mat-button routerLink="/home">Home</button>
-          <button mat-button routerLink="/help">Hjälp</button>
-          <button mat-button routerLink="/info">Information</button>
-          <button mat-button routerLink="/info">Profil</button>
-
+        <mat-menu #menu="matMenu" class="mobile-menu">
+          <button mat-menu-item routerLink="/home">Home</button>
+          <button mat-menu-item routerLink="/help">Hjälp</button>
+          <button mat-menu-item routerLink="/info">Information</button>
+          <button mat-menu-item routerLink="/info">Profil</button>
         </mat-menu>
-  
           <button mat-button [mat-menu-trigger-for]="menu" fxHide="true" fxShow.lt-sm>
             <mat-icon>menu</mat-icon>
           </button>

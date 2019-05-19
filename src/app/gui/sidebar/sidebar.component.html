@@ -38,7 +38,7 @@ class="container-container">
           class="margin"
           mat-raised-button
           color="primary"
-          routerLink="/inspection"
+          (click)="router.navigateByUrl('/inspection')"
 
         >
           Nästa steg
@@ -70,19 +70,17 @@ class="container-container">
      
 
       <mat-list-item
-        (click)="selectCategory(category)"
-        [style.background-color]="getBackgroundColor(category)"
+        (click)="openBottomSheet()"
       >
         <mat-icon class="sidebar-icon">add_box</mat-icon>
         Lägg till egen kategori
       </mat-list-item>
       <mat-divider></mat-divider>
       <mat-list-item
-        (click)="selectCategory(category)"
-        [style.background-color]="getBackgroundColor(category)"
+        (click)="router.navigateByUrl('/sources')"
       >
         <mat-icon class="sidebar-icon">add_box</mat-icon>
-        Lägg till app-data
+        Lägg till värden från app
       </mat-list-item>
       
     </mat-nav-list>

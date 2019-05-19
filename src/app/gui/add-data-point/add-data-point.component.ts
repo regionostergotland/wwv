@@ -84,6 +84,18 @@ export class AddDataPointComponent implements OnInit {
   }
 
   /**
+   * Return the string of the button depending if the
+   * user is editing or adding a point
+   * @returns string shown in action button
+   */
+  getActionButtonText(): string {
+    if (this.dataPoint) {
+      return 'Applicera ändringar';
+    }
+    return 'Lägg till data punkt';
+  }
+
+  /**
    * The method to be fired when the dialog isn't clicked on but something else is clicked.
    */
   onNoClick(): void {
