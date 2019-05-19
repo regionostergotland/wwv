@@ -189,7 +189,7 @@ export class EhrService {
     ));
   }
 
-  /* 
+  /*
    * Create a composition of the given datalists to the EHR with the given
    * ehrID.
    * @returns composition UID of the created composition
