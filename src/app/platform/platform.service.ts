@@ -15,13 +15,24 @@ export abstract class Platform {
   // Implemented categories for each specific health platform
   protected implementedCategories: Map<string, CategoryProperties>;
 
-  constructor() {
-  }
+  constructor() {}
 
   public abstract async signIn();
   public abstract signOut(): void;
+
+  /* Check all available categories */
   public abstract getAvailable(): Observable<string[]>;
 
+  /* Fetch all data of a specific category within a date interval.
+   * @param categoryId id of category to fetch
+   * @param start start time of interval
+   * @param end end time of interval
+   * @returns a observable that fetches and converts data
+   */
+  public abstract getData(categoryId: string,
+                          start: Date, end: Date): Observable<DataPoint[]>;
+
+  /* Check if a specific category is implemented */
   protected isImplemented(categoryId: string): boolean {
     const keys: Iterable<string> = this.implementedCategories.keys();
     for (const key of keys) {
@@ -31,7 +42,4 @@ export abstract class Platform {
     }
     return false;
   }
-
-  public abstract getData(categoryId: string,
-                          start: Date, end: Date): Observable<DataPoint[]>;
 }
