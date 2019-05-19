@@ -10,4 +10,6 @@ import { ProgressBarComponent} from './gui/progress-bar/progress-bar.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {}
+export class AppComponent {
+  title = 'wwv';
+}
