@@ -141,27 +141,10 @@ export class DataList {
     }
   }
 
-  /**
-   * Check if list contains any points that are considered equal to the test
-   * point.
-   * @param testPoint DataPoint to compare against
-   */
-  public containsPoint(testPoint: DataPoint): boolean {
-    let start = 0;
-    let end = this.points.length - 1;
-    while (start <= end) {
-      const current = Math.floor((start + end) / 2);
-      const point = this.points[current];
-      const comp = testPoint.compareTo(point, this.spec.dataTypes);
-      if (comp < 0) {
-        end = current - 1;
-      } else if (comp > 0) {
-        start = current + 1;
-      } else {
-        return true;
-      }
+  private processPoints() {
+    for (let fn of this.processedPoints.keys()) {
+      this.processedPoints.set(fn, this.mergePoints(this.width, fn));
     }
-    return false;
   }
 
   /**
@@ -192,11 +175,7 @@ export class DataList {
     Array.prototype.push.apply(this.points, add);
     const compare = (p1, p2) => p1.compareTo(p2, this.spec.dataTypes);
     this.points.sort(compare.bind(this));
-
-    /* reprocess for new points */
-    for (let fn of this.processedPoints.keys()) {
-      this.processedPoints.set(fn, this.mergePoints(this.width, fn));
-    }
+    this.processPoints(); /* reprocess for new points */
   }
 
   /**
@@ -244,6 +223,7 @@ export class DataList {
    */
   public setWidth(width: PeriodWidths): void {
     this.width = width;
+    this.processPoints();
   }
 
   public resetInterval() {
@@ -254,6 +234,7 @@ export class DataList {
   }
 
   public addMathFunction(fn: MathFunctionEnum) {
+    this.processedPoints.delete(MathFunctionEnum.ACTUAL);
     this.processedPoints.set(fn, this.mergePoints(this.width, fn))
   }
 
@@ -290,4 +271,26 @@ export class DataList {
     //return this.filters[0].mathFunction;
   }
 
+  /**
+   * Check if list contains any points that are considered equal to the test
+   * point.
+   * @param testPoint DataPoint to compare against
+   */
+  public containsPoint(testPoint: DataPoint): boolean {
+    let start = 0;
+    let end = this.points.length - 1;
+    while (start <= end) {
+      const current = Math.floor((start + end) / 2);
+      const point = this.points[current];
+      const comp = testPoint.compareTo(point, this.spec.dataTypes);
+      if (comp < 0) {
+        end = current - 1;
+      } else if (comp > 0) {
+        start = current + 1;
+      } else {
+        return true;
+      }
+    }
+    return false;
+  }
 }
