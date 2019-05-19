@@ -46,10 +46,10 @@ export class EhrService {
       const root = composition.self_monitoring[spec.id];
 
       let pIndex = 0; /* index of current point in list */
-      for (let [fn, points] of list.getAllPoints()) {
+      for (const [fn, points] of list.getAllPoints()) {
         // TODO specify math function of events
         // how to specify??
-        for (let point of points) {
+        for (const point of points) {
           for (const [id, value] of point.entries()) {
             const dataType = spec.dataTypes.get(id);
             if (value !== '' && value) {

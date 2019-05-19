@@ -142,7 +142,7 @@ export class DataList {
   }
 
   private processPoints() {
-    for (let fn of this.processedPoints.keys()) {
+    for (const fn of this.processedPoints.keys()) {
       this.processedPoints.set(fn, this.mergePoints(this.width, fn));
     }
   }
@@ -187,9 +187,9 @@ export class DataList {
       point.removed = true;
     }
     this.points = this.points.filter(p => !p.removed);
-    for (let fn of this.processedPoints.keys()) {
+    for (const fn of this.processedPoints.keys()) {
       this.processedPoints.set(
-        fn, 
+        fn,
         this.processedPoints.get(fn).filter(p => !(p.removed))
       );
     }
@@ -235,7 +235,7 @@ export class DataList {
 
   public addMathFunction(fn: MathFunctionEnum) {
     this.processedPoints.delete(MathFunctionEnum.ACTUAL);
-    this.processedPoints.set(fn, this.mergePoints(this.width, fn))
+    this.processedPoints.set(fn, this.mergePoints(this.width, fn));
   }
 
   public removeMathFunction(fn: MathFunctionEnum) {
@@ -259,7 +259,7 @@ export class DataList {
    */
   public getWidth(): PeriodWidths {
     return PeriodWidths.POINT;
-    //return this.filters[0].width;
+    // return this.filters[0].width;
   }
 
   /**
@@ -268,7 +268,7 @@ export class DataList {
    */
   public getMathFunction(): MathFunctionEnum {
     return MathFunctionEnum.ACTUAL;
-    //return this.filters[0].mathFunction;
+    // return this.filters[0].mathFunction;
   }
 
   /**
