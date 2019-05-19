@@ -81,9 +81,6 @@ export class DataPoint {
   }
 }
 
-interface Filter {
-}
-
 /**
  * List of [[DataPoint]]s with certain [[DataType]]s specified by a
  * [[CategorySpec]].
@@ -100,20 +97,16 @@ export class DataList {
   /**
    * Selected period width.
    */
-  width: PeriodWidths;
+  private width: PeriodWidths;
   /**
-   * Processed points for each math function
+   * Cached processed points for each math function.
    */
   private processedPoints: Map<MathFunctionEnum, DataPoint[]>;
 
   constructor(spec: CategorySpec) {
     this.spec = spec;
     this.points = [];
-    this.processedPoints = 
-      new Map<MathFunctionEnum, DataPoint[]>([
-        [MathFunctionEnum.ACTUAL, []]
-      ]);
-    console.log(this.processedPoints)
+    this.resetInterval();
   }
 
   /**
@@ -123,13 +116,12 @@ export class DataList {
    * @param width time duration that each generated point represents
    * @param fn mathematical function to merge points with
    */
-  private mergePoints(points: DataPoint[], width: PeriodWidths,
-                      fn: MathFunctionEnum): DataPoint[] {
+  private mergePoints(width: PeriodWidths, fn: MathFunctionEnum): DataPoint[] {
     if (width === PeriodWidths.POINT || fn === MathFunctionEnum.ACTUAL) {
-      return points.slice();
+      return this.points.slice();
     } else {
       const newPoints: DataPoint[] = [];
-      const intervals = DataPoint.groupByInterval(points, width);
+      const intervals = DataPoint.groupByInterval(this.points, width);
       for (const interval of intervals) {
         const newValues: any[] = [];
         for (const [id, dataType] of this.spec.dataTypes.entries()) {
@@ -146,18 +138,6 @@ export class DataList {
         newPoints.push(new DataPoint(newValues));
       }
       return newPoints;
-    }
-  }
-
-  /**
-   * Process points and cache the result.
-   */
-  private processPoints() {
-    for (let fn of this.processedPoints.keys()) {
-      this.processedPoints.set(
-        fn,
-        this.mergePoints(this.points, this.width, fn)
-      );
     }
   }
 
@@ -212,7 +192,11 @@ export class DataList {
     Array.prototype.push.apply(this.points, add);
     const compare = (p1, p2) => p1.compareTo(p2, this.spec.dataTypes);
     this.points.sort(compare.bind(this));
-    this.processPoints();
+
+    /* reprocess for new points */
+    for (let fn of this.processedPoints.keys()) {
+      this.processedPoints.set(fn, this.mergePoints(this.width, fn));
+    }
   }
 
   /**
@@ -233,15 +217,21 @@ export class DataList {
   }
 
   /**
-   * Get all data points from list, processed according to options.
+   * Get all data points for a specific math function.
    */
-  public getPoints(): DataPoint[] {
-    return this.processedPoints.get(MathFunctionEnum.ACTUAL)
-      .filter((p) => !p.removed);
+  public getPoints(fn: MathFunctionEnum): DataPoint[] {
+    return this.processedPoints.get(fn);
   }
 
   /**
-   * Replace all points with new list of points.
+   * Get all data points for every applied math function.
+   */
+  public getAllPoints(): Map<MathFunctionEnum, DataPoint[]> {
+    return this.processedPoints;
+  }
+
+  /**
+   * Replace all original points with new list of points.
    */
   public setPoints(points: DataPoint[]) {
     this.points = [];
@@ -252,10 +242,23 @@ export class DataList {
    * Set the width of intervals that data points shall represent, as well as
    * math funciton that will determine the value of the interval.
    */
-  public setInterval(width: PeriodWidths, mathFunction: MathFunctionEnum): void {
-    //this.width = width;
-    //this.mathFunction = mathFunction;
-    //this.processPoints();
+  public setWidth(width: PeriodWidths): void {
+    this.width = width;
+  }
+
+  public resetInterval() {
+    this.width = PeriodWidths.POINT;
+    this.processedPoints = new Map<MathFunctionEnum, DataPoint[]>([
+      [MathFunctionEnum.ACTUAL, []]
+    ]);
+  }
+
+  public addMathFunction(fn: MathFunctionEnum) {
+    this.processedPoints.set(fn, this.mergePoints(this.width, fn))
+  }
+
+  public removeMathFunction(fn: MathFunctionEnum) {
+    this.processedPoints.delete(fn);
   }
 
   /**
@@ -274,7 +277,6 @@ export class DataList {
    * TODO remove
    */
   public getWidth(): PeriodWidths {
-    this.processPoints();
     return PeriodWidths.POINT;
     //return this.filters[0].width;
   }

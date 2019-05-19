@@ -45,6 +45,7 @@ export class EhrService {
       composition.self_monitoring[spec.id] = [ {} ];
       const root = composition.self_monitoring[spec.id];
 
+      /* TODO update to new data list interface
       for (let p = 0; p < list.getPoints().length; p++) {
         const point = list.getPoints()[p];
         for (const [id, value] of point.entries()) {
@@ -73,6 +74,7 @@ export class EhrService {
           }
         }
       }
+    */
     }
 
     const postData = JSON.stringify(composition, null, 2);

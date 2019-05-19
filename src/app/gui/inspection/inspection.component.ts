@@ -35,7 +35,8 @@ export class InspectionComponent implements OnInit {
    */
   isCategoryEmpty(categoryId: string): boolean {
     if (this.conveyor.getDataList(categoryId)) {
-      return this.conveyor.getDataList(categoryId).getPoints().length < 1;
+      // TODO update for multiple fns
+      return this.conveyor.getDataList(categoryId).getPoints(0).length < 1;
     }
     return false;
   }
@@ -46,7 +47,8 @@ export class InspectionComponent implements OnInit {
    * @returns the number of values in the chosen category
    */
   getNumberOfValues(category: string) {
-    return this.conveyor.getDataList(category).getPoints().length;
+    // TODO update for multiple
+    return this.conveyor.getDataList(category).getPoints(0).length;
   }
 
   /**

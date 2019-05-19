@@ -95,7 +95,8 @@ export class MathDialogComponent {
     if (intervalString && funcString) {
       const interval = parseInt(intervalString, 10);
       const func = parseInt(funcString, 10);
-      this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
+      this.conveyor.getDataList(this.selectedCategory).setWidth(interval);
+      this.conveyor.getDataList(this.selectedCategory).addMathFunction(func);
       this.closeDialog();
     }
   }
@@ -104,7 +105,7 @@ export class MathDialogComponent {
    * Restores the datalist to the default settings
    */
   changeBack() {
-    this.conveyor.getDataList(this.selectedCategory).setInterval(PeriodWidths.POINT, MathFunctionEnum.ACTUAL);
+    this.conveyor.getDataList(this.selectedCategory).resetInterval();
     this.closeDialog();
   }
 
@@ -240,7 +241,8 @@ export class HealthListItemsComponent implements OnInit {
     if (this.selectedCategory) {
       // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
-      this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
+      // TODO update for math fns
+      this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints(0);
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
