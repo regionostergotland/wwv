@@ -27,6 +27,7 @@ describe('datalist', () => {
           required: true,
           single: false,
           visible: true,
+          visibleOnMobile: false,
         })
       ],
       [
@@ -39,6 +40,7 @@ describe('datalist', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           }, 'mm[Hg]', 0, 1000,
         )
       ],
@@ -52,6 +54,7 @@ describe('datalist', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           }, 'mm[Hg]', 0, 1000
         )
       ],
@@ -65,6 +68,7 @@ describe('datalist', () => {
             required: false,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           },
           [
             {
@@ -101,6 +105,7 @@ describe('datalist', () => {
           required: true,
           single: false,
           visible: true,
+          visibleOnMobile: false,
         })
       ],
       [
@@ -113,6 +118,7 @@ describe('datalist', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           }, 'kg', 0, 1000
         )
       ],
@@ -126,6 +132,7 @@ describe('datalist', () => {
             required: false,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           },
           [
             {
@@ -246,6 +253,7 @@ describe('datalist', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           })
         ],
       ])
@@ -287,6 +295,7 @@ describe('datalist', () => {
           required: true,
           single: false,
           visible: true,
+          visibleOnMobile: false,
         }
       )],
       [ 'value', new DataTypeQuantity(
@@ -297,6 +306,7 @@ describe('datalist', () => {
           required: true,
           single: false,
           visible: true,
+          visibleOnMobile: false,
         }, 'unit', 0, -1)
       ],
     ]);
@@ -337,7 +347,8 @@ describe('datalist', () => {
             description: '',
             required: true,
             single: false,
-            visible: true
+            visible: true,
+            visibleOnMobile: false,
           })
         ],
       ])

@@ -356,9 +356,7 @@ export class HealthListItemsComponent implements OnInit {
 
     window.onresize = () => {
       this.displayedColumns = this.getDisplayedColumns();
-    }
-
-    console.log(this.dataList, this.conveyor.getDataList(this.selectedCategory));
+    };
   }
 
   trackItem(index, item) {
@@ -367,7 +365,6 @@ export class HealthListItemsComponent implements OnInit {
 
 
   openEditDialog(point: DataPoint, key: string): void {
-    console.log(point)
     const dialogRef = this.dialog.open(AddDataPointComponent, {
       data: {category: this.selectedCategory, point}
     });

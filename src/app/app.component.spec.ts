@@ -3,7 +3,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 import { ProgressBarComponent} from './gui/progress-bar/progress-bar.component';
-import { MatToolbarModule, MatGridListModule } from '@angular/material';
+import { MatToolbarModule, MatGridListModule, MatMenuModule, MatIconModule, MatDialogModule } from '@angular/material';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { FooterComponent } from './gui/footer/footer.component';
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
@@ -19,7 +19,10 @@ describe('AppComponent', () => {
         MatToolbarModule,
         MatGridListModule,
         RouterTestingModule,
-        CustomGoogleApiModule
+        CustomGoogleApiModule,
+        MatMenuModule,
+        MatIconModule,
+        MatDialogModule
       ],
       declarations: [ // add all components used in this component
         AppComponent,

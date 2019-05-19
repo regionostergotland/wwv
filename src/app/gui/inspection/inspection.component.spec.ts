@@ -6,7 +6,9 @@ import {
   MatCheckboxModule,
   MatPaginatorModule,
   MatTooltipModule,
-  MatSelectModule} from '@angular/material';
+  MatSelectModule,
+  MatIconModule
+} from '@angular/material';
 import { InspectionComponent } from './inspection.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -32,6 +34,7 @@ describe('InspectionComponent', () => {
         MatCheckboxModule,
         MatTooltipModule,
         MatSelectModule,
+        MatIconModule,
         CustomGoogleApiModule
       ],
 

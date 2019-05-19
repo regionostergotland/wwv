@@ -13,7 +13,9 @@ import {
   MatDialogRef,
   MatCheckboxModule,
   MatTooltipModule,
-  MatPaginatorModule } from '@angular/material';
+  MatPaginatorModule,
+  MatIconModule
+} from '@angular/material';
 
 import { HealthListItemsComponent } from './health-list-items.component';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -40,7 +42,8 @@ describe('HealthListItemsComponent', () => {
         MatDialogModule,
         MatTooltipModule,
         MatPaginatorModule,
-        CustomGoogleApiModule
+        CustomGoogleApiModule,
+        MatIconModule
       ],
 
      providers: [

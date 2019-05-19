@@ -13,7 +13,8 @@ import {
   MatBottomSheetRef,
   MAT_BOTTOM_SHEET_DATA,
   MatTooltipModule,
-  MatIconModule
+  MatIconModule,
+  MatDialogModule
 } from '@angular/material';
 import {BottomSheetCategoriesComponent, SidebarComponent} from './sidebar.component';
 import { HealthListItemsComponent } from '../health-list-items/health-list-items.component';
@@ -44,7 +45,8 @@ describe('SidebarComponent', () => {
         MatBottomSheetModule,
         MatTooltipModule,
         CustomGoogleApiModule,
-        MatIconModule
+        MatIconModule,
+        MatDialogModule
       ],
 
      providers: [
