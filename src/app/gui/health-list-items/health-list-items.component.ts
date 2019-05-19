@@ -240,14 +240,14 @@ export class HealthListItemsComponent implements OnInit {
     }
 
     if (!point.has(key)) {
-      throw new Error(`${key} value function is not implemented.`)
+      throw new Error(`${key} value function is not implemented.`);
     }
 
     return point.get(key);
   }
 
   /**
-   *  Uses a media-query to be in line with flex-layouts lt-sm, thats used throughout the 
+   *  Uses a media-query to be in line with flex-layouts lt-sm, thats used throughout the
    *  app.
    *  https://github.com/angular/flex-layout/wiki/Responsive-API
    */

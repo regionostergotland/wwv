@@ -3,7 +3,7 @@ import { Conveyor } from '../../conveyor.service';
 import { Router } from '@angular/router';
 import { MatBottomSheet, MatBottomSheetRef, MatDialog } from '@angular/material';
 import { DataList } from '../../ehr/datalist';
-import { AddNewDataModalComponent } from './add-new-data-modal.component'
+import { AddNewDataModalComponent } from './add-new-data-modal.component';
 
 @Component({
   selector: 'app-bottom-sheet-overview-example-sheet',
@@ -72,7 +72,7 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
   }
 
-  getMode(): string{
+  getMode(): string {
     // lt-md / lt-sm
     if (window.matchMedia('(max-width: 959px)').matches) {
         return 'bottom';
