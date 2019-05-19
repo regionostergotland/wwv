@@ -1,13 +1,44 @@
-mat-grid-list.progressBar {
-  min-height: 25px;
+.progressBar {
   text-align: center;
-  width: 66%;
+  width: 75%;
   max-width: 1050px;
+  padding-bottom: 0;
+
+  display: flex; 
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
-mat-grid-tile {
+.item-container {
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  color: white;
+  margin-top: 4px;
+    
+
+}
+.item-container button {
+  background: none;
+	color: inherit;
+	border: none;
+  padding: 0;
+  outline: none;
+  background-color: #bbb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-right: 4px;
+}
+
+.dot {
+  cursor: pointer;
+  width: 30px;
   height: 30px;
-  width: 100%;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .container {
@@ -15,23 +46,11 @@ mat-grid-tile {
   display:flex;
   align-items: center;
   justify-content: center;
-  min-height: 25px;
 }
 
 p {
   size: 10px;
-}
-
-button {
- display: inline-block;
- //vertical-align: top;
- text-align:center;
- margin-left: calc(90% / 16);
- margin-right: calc(90% / 16);
- margin-bottom: 0;
- margin-top: 0;
- box-shadow: none !important;
- background-color: #c8cfd1 !important;
+  color: black;
 }
 
 .done {
@@ -40,13 +59,4 @@ button {
 
 .hidden {
   display: none;
-}
-
-div.hr-line {
-    position: relative;
-    display: inline-block;
-    margin-left: 5px;
-    margin-right: 5px;
-    width: 100%;
-    border-bottom: 1px solid #7A7A7A;
 }

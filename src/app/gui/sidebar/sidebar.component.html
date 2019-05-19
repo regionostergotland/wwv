@@ -1,7 +1,10 @@
-<div class="container-container">
+<div
+
+class="container-container">
   <div
-    class="content-container"
-    [style.margin-top]="getMode() === 'side' ? '2%' : 0"
+    [class]="getContainerClass()"
+
+
   >
     <div class="content">
       <div *ngIf="!selectedCategory">

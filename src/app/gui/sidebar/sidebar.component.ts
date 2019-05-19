@@ -81,6 +81,14 @@ export class SidebarComponent implements OnInit {
     return 'side';
   }
 
+  getContainerClass(): string {
+    if (this.getMode() === 'side') {
+      return 'content-container border';
+    }
+
+    return 'content-container';
+  }
+
   selectCategory(category: string): void {
       this.selectedCategory = category;
   }
