@@ -16,6 +16,22 @@ export class ProgressBarComponent implements OnInit {
     return window.matchMedia('(max-width: 599px)').matches;
   }
 
+  getClass(index: number): string {
+    const step = this.getCurrentStep();
+    if (index === step) {
+      return 'dot active';
+    } else if (step > index) {
+      return 'dot done';
+    }
+    return 'dot';
+  }
+
+  navigate(to: string, index: number): void {
+    if (index !== this.getCurrentStep() && to !== '') {
+      this.router.navigateByUrl('/' + to);
+    }
+  }
+
   ngOnInit() {
   }
 

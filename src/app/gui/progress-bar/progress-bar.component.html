@@ -2,26 +2,22 @@
   <div class="progressBar" [ngClass]="{'hidden': getCurrentStep() === 0 }">
 
     <div class="item-container">
-      <button class="dot" *ngIf="getCurrentStep() < 1" routerLink="/sources">1</button>
-      <button class="dot done"  *ngIf="getCurrentStep() >= 1" routerLink="/sources">1</button>
+      <button (click)="navigate('sources', 1)" [class]="getClass(1)">1</button>
       <div *ngIf="!onSmallScreen()"><p style="margin-left: 4px;">Hämtning</p></div>
     </div>
 
     <div class="item-container">
-      <button class="dot" *ngIf="getCurrentStep() < 2">2</button>
-      <button class="dot done" *ngIf="getCurrentStep() >= 2" routerLink="/edit">2</button>
+      <button (click)="navigate('edit', 2)" [class]="getClass(2)">2</button>
       <div *ngIf="!onSmallScreen()"><p>Redigering</p></div>
     </div>
 
     <div class="item-container">
-      <button class="dot" *ngIf="getCurrentStep() < 3" routerLink="/inspection">3</button>
-      <button class="dot done" *ngIf="getCurrentStep() >= 3" routerLink="/inspection">3</button>
+      <button (click)="navigate('inspection', 1)" [class]="getClass(3)">3</button>
       <div *ngIf="!onSmallScreen()"><p>Inspektion</p></div>
     </div>
 
     <div class="item-container">
-      <button class="dot" *ngIf="getCurrentStep() < 4">4</button>
-      <button class="dot done" *ngIf="getCurrentStep() >= 4">4</button>
+      <button (click)="navigate('', -1)" [class]="getClass(4)">4</button>
       <div *ngIf="!onSmallScreen()"><p>Skickat</p></div>
     </div>
   </div>

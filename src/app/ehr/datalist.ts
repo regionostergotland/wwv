@@ -5,12 +5,12 @@ import '../shared/date.extensions';
 /**
  * Map of values to be put in a DataList.
  * Can be thought of as an n-dimensional point or a row in a data table.
- * Can be marked as removed by modifying the public removed instance variable.
- * works similar to a Map.
  */
 export class DataPoint {
   /**
-   * XXX Point is marked for removal. Only used for removePoint
+   * XXX Point is marked for removal.
+   * -Only to be used for DataList.removePoint to achieve time-complexity n.
+   *  Remove if alternative algorithm is found.
    */
   public removed: boolean;
   /**
@@ -52,6 +52,10 @@ export class DataPoint {
   public entries() { return this.point.entries(); }
   public has(typeId: string) { return this.point.has(typeId); }
 
+  /*
+   * Check if each pair of values for each required field are equal according
+   * to the datatype
+   */
   public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
     for (const [typeId, dataType] of dataTypes.entries()) {
       if (dataType.required) {
@@ -63,6 +67,9 @@ export class DataPoint {
     return true;
   }
 
+  /*
+   * Compare each pair of values for each required field with the datatype.
+   */
   public compareTo(p: DataPoint, dataTypes: Map<string, DataType>): number {
     for (const [typeId, dataType] of dataTypes.entries()) {
       if (dataType.required) {
@@ -111,6 +118,9 @@ export class DataList {
   /**
    * Merge multiple datapoints to single point with a math function based on
    * width.
+   * @param points DataPoints to merge
+   * @param width time duration that each generated point represents
+   * @param fn mathematical function to merge points with
    */
   private mergePoints(points: DataPoint[],
                       width: PeriodWidths,
@@ -151,9 +161,9 @@ export class DataList {
   }
 
   /**
-   * Performs a binary search on the list of current points to check if
-   * a given point is a duplicate
-   * @param newPoint DataPoint to be added
+   * Check if list contains any points that are considered equal to the test
+   * point.
+   * @param testPoint DataPoint to compare against
    */
   public containsPoint(testPoint: DataPoint): boolean {
     let start = 0;
@@ -175,6 +185,7 @@ export class DataList {
 
   /**
    * Add a point to the data list.
+   * @param point DataPoint to add
    */
   public addPoint(point: DataPoint) {
     this.addPoints([point]);
@@ -182,6 +193,7 @@ export class DataList {
 
   /**
    * Add multiple points to the data list.
+   * @param points list of DataPoints to add
    */
   public addPoints(points: DataPoint[]) {
     // Assumption: none of the new points are duplicates of each other.

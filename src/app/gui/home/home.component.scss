@@ -21,6 +21,20 @@
   flex-direction: column;
   text-align: center;
   justify-content: space-between;
+  border-style: solid;
+  border-width: thin;
+}
+
+.help {
+  border-color: #fed765;
+}
+
+.man {
+  border-color: #a9d7ff;
+}
+
+.source {
+  border-color: #aedfd1;
 }
 
 .item-card-container {
