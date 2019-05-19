@@ -71,6 +71,11 @@ export class EhrService {
     return cats;
   }
 
+  /*
+   * create a URL given a call and a list of parameters
+   * @param call URL to API call excluding base URL
+   * @param params list of [key, value] pairs
+   */
   private createUrl(call: string, params): string {
     let url = this.config.baseUrl + call + '?';
     for (const [key, value] of params) {
@@ -79,7 +84,12 @@ export class EhrService {
     return url;
   }
 
-  private get<T>(call: string, params): Observable<T> {
+  /*
+   * Perform a GET request to a given API call with the given parameters.
+   * @param call URL to API call excluding base URL
+   * @param params list of [key, value] pairs
+   */
+  private get<T>(call: string, params: string[][]): Observable<T> {
     const options = {
       headers: new HttpHeaders({
         Authorization: 'Basic ' + this.basicCredentials
@@ -88,7 +98,14 @@ export class EhrService {
     return this.http.get<T>(this.createUrl(call, params), options);
   }
 
-  private post<T>(call: string, params, body): Observable<T> {
+  /*
+   * Perform a POST request to a given API call with the given parameters and
+   * the given body
+   * @param call URL to API call excluding base URL
+   * @param params list of [key, value] pairs
+   * @param body JSON object to send as body
+   */
+  private post<T>(call: string, params: string[][], body): Observable<T> {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -146,6 +163,7 @@ export class EhrService {
     return JSON.stringify(composition);
   }
 
+  /* Get party ID by partyID */
   private getEhrId(partyId: string): Observable<any> {
     const params = [
       ['subjectId', partyId],
@@ -156,6 +174,7 @@ export class EhrService {
     ));
   }
 
+  /* Get party ID by personal identity number (personnummer) */
   private getPartyId(pnr: string): Observable<any> {
     const params = [['personnummer', pnr]];
     return this.get<DemographicResponse>('demographics/party/query', params)
@@ -170,6 +189,11 @@ export class EhrService {
     ));
   }
 
+  /* 
+   * Create a composition of the given datalists to the EHR with the given
+   * ehrID.
+   * @returns composition UID of the created composition
+   */
   private postComposition(ehrId: any, lists: DataList[]):
       Observable<CompositionResponse> {
     const params = [
@@ -181,6 +205,10 @@ export class EhrService {
                                           this.createComposition(lists));
   }
 
+  /*
+   * Create a composition of the given datalists to the EHR belonging to the
+   * individual with the given pnr.
+   */
   public sendData(pnr: string, lists: DataList[]): Observable<string> {
     return this.getPartyId(pnr)
       .pipe(switchMap(this.getEhrId.bind(this)))
