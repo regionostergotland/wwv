@@ -7,6 +7,12 @@ import { EHR_CONFIG, EhrConfig } from './ehr-config';
 import { CategorySpec } from './datatype';
 import { DataList } from './datalist';
 
+interface CompositionResponse {
+  action: string,
+  compositionUid: string,
+  meta: {}
+}
+
 interface EhrResponse {
   ehrId: string,
   ehrStatus: {
@@ -65,28 +71,31 @@ export class EhrService {
     return cats;
   }
 
-  private createUrl(baseUrl: string, params): string {
-    let url = baseUrl + '?';
+  private createUrl(call: string, params): string {
+    let url = this.config.baseUrl + call + '?';
     for (const [key, value] of params) {
       url += key + '=' + value + '&';
     }
     return url;
   }
 
-  private post<T>(baseUrl: string, params, body): Observable<{}> {
-    let url = baseUrl + '?';
-    for (const [key, value] of params) {
-      url += key + '=' + value + '&';
+  private get<T>(call: string, params): Observable<T> {
+    const options = {
+      headers: new HttpHeaders({
+        Authorization: 'Basic ' + this.basicCredentials
+      })
     }
+    return this.http.get<T>(this.createUrl(call, params), options);
+  }
 
+  private post<T>(call: string, params, body): Observable<T> {
     const options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + this.basicCredentials
       })
     }
-
-    return this.http.post<T>(url, body, options);
+    return this.http.post<T>(this.createUrl(call, params), body, options);
   }
 
   private createComposition(lists: DataList[]): string {
@@ -138,68 +147,47 @@ export class EhrService {
   }
 
   private getEhrId(partyId: string): Observable<any> {
-    let url = this.config.baseUrl + 'ehr'
     const params = [
       ['subjectId', partyId],
       ['subjectNamespace', 'default']
     ]
-
-    const options = {
-      headers: new HttpHeaders({
-        Authorization: 'Basic ' + this.basicCredentials
-      })
-    }
-
-    return this.http.get<EhrResponse>(this.createUrl(url, params), options)
-      .pipe(map(
+    return this.get<EhrResponse>('ehr', params).pipe(map(
         res => { return res.ehrId; }
-      ));
-  }
-
-  private getPartyId(pnr: string): Observable<any> {
-    let url = this.config.baseUrl + 'demographics/party/query'
-    const params = [
-      ["personnummer", pnr]
-    ]
-    const query = [
-      { 
-        "key": "personnummer",
-        "value": pnr
-      }
-    ]
-
-    const options = {
-      headers: new HttpHeaders({
-        Authorization: 'Basic ' + this.basicCredentials
-      })
-    }
-
-    return this.http.get<DemographicResponse>(this.createUrl(url, params), options)
-      .pipe(map(
-        res => { return res.parties[0].id; } // assume only one person with pnr
     ));
   }
 
-  private sendDataToEhr(ehrId: any, lists: DataList[]): Observable<any> {
-    let url = this.config.baseUrl + '/composition'
+  private getPartyId(pnr: string): Observable<any> {
+    const params = [["personnummer", pnr]]
+    return this.get<DemographicResponse>('demographics/party/query', params)
+      .pipe(map(
+        res => {
+          if (res && res.parties.length > 0) {
+            return res.parties[0].id; // assume only one person with pnr
+          } else {
+            throw new Error('no individual with given pnr');
+          }
+        }
+    ));
+  }
 
+  private postComposition(ehrId: any, lists: DataList[]):
+      Observable<CompositionResponse> {
     const params = [
       ['ehrId', ehrId],
       ['templateId', this.config.templateId],
       ['format', 'STRUCTURED'],
     ];
-
-    const composition = this.createComposition(lists);
-
-    return this.post(url, params, composition);
+    return this.post<CompositionResponse>('composition', params,
+                                          this.createComposition(lists));
   }
 
-  public sendData(pnr: string, lists: DataList[]): Observable<any> {
+  public sendData(pnr: string, lists: DataList[]): Observable<string> {
     return this.getPartyId(pnr)
       .pipe(switchMap(this.getEhrId.bind(this)))
       .pipe(switchMap(
-          ehrId => { return this.sendDataToEhr(ehrId, lists); }
-      ))
+          ehrId => { return this.postComposition(ehrId, lists); }))
+      .pipe(map(
+        res => res.compositionUid));
   }
 
   public authenticateBasic(user: string, pass: string) {
