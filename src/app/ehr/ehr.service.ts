@@ -8,39 +8,39 @@ import { CategorySpec } from './datatype';
 import { DataList } from './datalist';
 
 interface CompositionResponse {
-  action: string,
-  compositionUid: string,
-  meta: {}
+  action: string;
+  compositionUid: string;
+  meta: {};
 }
 
 interface EhrResponse {
-  ehrId: string,
+  ehrId: string;
   ehrStatus: {
     modifiable: boolean,
     queryable: boolean,
     subjectId: string,
     subjectNamespace: string
-  },
-  meta: {}
+  };
+  meta: {};
 }
 
 interface DemographicResponse {
-  action: string,
-  meta: {},
-  parties: [Party]
+  action: string;
+  meta: {};
+  parties: [Party];
 }
 
 interface Party {
   additionalInfo: {
     Personnummer: string,
     civilstånd: string,
-  }
-  dateOfBirth: string,
-  firstNames: string,
-  gender : string,
-  id : string,
-  lastNames: string,
-  version: number
+  };
+  dateOfBirth: string;
+  firstNames: string;
+  gender: string;
+  id: string;
+  lastNames: string;
+  version: number;
 }
 
 // TODO create separate in-module service for API calls to EHR
@@ -84,7 +84,7 @@ export class EhrService {
       headers: new HttpHeaders({
         Authorization: 'Basic ' + this.basicCredentials
       })
-    }
+    };
     return this.http.get<T>(this.createUrl(call, params), options);
   }
 
@@ -94,7 +94,7 @@ export class EhrService {
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + this.basicCredentials
       })
-    }
+    };
     return this.http.post<T>(this.createUrl(call, params), body, options);
   }
 
@@ -150,14 +150,14 @@ export class EhrService {
     const params = [
       ['subjectId', partyId],
       ['subjectNamespace', 'default']
-    ]
+    ];
     return this.get<EhrResponse>('ehr', params).pipe(map(
-        res => { return res.ehrId; }
+        res => res.ehrId
     ));
   }
 
   private getPartyId(pnr: string): Observable<any> {
-    const params = [["personnummer", pnr]]
+    const params = [['personnummer', pnr]];
     return this.get<DemographicResponse>('demographics/party/query', params)
       .pipe(map(
         res => {
@@ -185,7 +185,7 @@ export class EhrService {
     return this.getPartyId(pnr)
       .pipe(switchMap(this.getEhrId.bind(this)))
       .pipe(switchMap(
-          ehrId => { return this.postComposition(ehrId, lists); }))
+          ehrId => this.postComposition(ehrId, lists)))
       .pipe(map(
         res => res.compositionUid));
   }
