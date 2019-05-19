@@ -111,18 +111,9 @@ export class DataList {
     this.points = [];
     this.processedPoints = 
       new Map<MathFunctionEnum, DataPoint[]>([
-        [ MathFunctionEnum.ACTUAL, [new DataPoint()] ],
-        [ MathFunctionEnum.MEAN, [new DataPoint()] ],
-        [ MathFunctionEnum.MEDIAN, [new DataPoint()] ],
-        [ MathFunctionEnum.TOTAL, [new DataPoint()] ],
+        [MathFunctionEnum.ACTUAL, []]
       ]);
     console.log(this.processedPoints)
-    this.processedPoints.set(MathFunctionEnum.ACTUAL, []);
-    for (let fn in this.processedPoints.keys()) {
-      console.log(fn);
-      console.log("hej");
-    }
-    console.log("should have said hej hej hej hej above");
   }
 
   /**
@@ -162,12 +153,11 @@ export class DataList {
    * Process points and cache the result.
    */
   private processPoints() {
-    for (let fn in this.processedPoints.keys()) {
-      console.log(fn);
-      //this.processedPoints.set(
-      //  fn,
-      //  this.mergePoints(this.points, this.width, fn)
-      //);
+    for (let fn of this.processedPoints.keys()) {
+      this.processedPoints.set(
+        fn,
+        this.mergePoints(this.points, this.width, fn)
+      );
     }
   }
 
@@ -234,11 +224,11 @@ export class DataList {
       point.removed = true;
     }
     this.points = this.points.filter(p => !p.removed);
-    for (let fn in this.processedPoints.keys()) {
-      //this.processedPoints.set(
-      //  fn, 
-      //  this.processedPoints.get(filter).filter(p => !(p.removed))
-      //);
+    for (let fn of this.processedPoints.keys()) {
+      this.processedPoints.set(
+        fn, 
+        this.processedPoints.get(fn).filter(p => !(p.removed))
+      );
     }
   }
 
