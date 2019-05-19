@@ -154,7 +154,7 @@ export class EhrService {
               }
               element = container[p];
             }
-            element[id] = dataType.toRest(value);
+            element[id] = [dataType.toRest(value)];
           }
         }
       }

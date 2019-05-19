@@ -117,14 +117,37 @@ export abstract class DataType {
    * Convert data value of instance's type to JSON object that can be part of
    * data for REST API call to EHR.
    * @param value Valid value for datatype to be converted.
-   * @return Stringified JSON object represantation of value.
+   * @return JSON object representation of value that is not stringified
    */
   public abstract toRest(value: any): any;
 
+  /**
+   * Determine if two valid values should be considered equal
+   */
   public equal(v1: any, v2: any): boolean {
     return v1 === v2;
   }
 
+  /*
+   * Compare two valid values and determine if one is considered larger than
+   * the other.
+   * @returns a positive value if v1 is larger than v2, a negative value if v2
+   * is larger than v1 and zero if v1 and v2 are equal to eachother.
+   */
+  public compare(v1: any, v2: any): number {
+    if (v1 < v2) {
+      return -1;
+    } else if (v2 < v1) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
+   * Truncate a list of values to a single value with the specified math
+   * function.
+   */
   public truncate(values: any[], fn: MathFunctionEnum): any {
     const functions = new Map<MathFunctionEnum, (v: any[]) => any[]>([
       [MathFunctionEnum.ACTUAL, this.only.bind(this)],
@@ -136,6 +159,28 @@ export abstract class DataType {
     ]);
     return functions.get(fn)(values);
   }
+
+  private only(values: any[]): any {
+    let equal = true;
+    for (const value of values) {
+      if (value !== values[0]) {
+        equal = false;
+        break;
+      }
+    }
+    return equal ? values[0] : undefined;
+  }
+
+  /*
+   * Math functions with default implementations.
+   * The default implementation for all math functions simply return undefined
+   * if not all values are equal. If all values are equal, the single value
+   * that all share is returned.
+   * The default should apply to datatypes where math functions are not
+   * applicable.
+   * Methods should be overridden if math functions are applicable to the
+   * datatype.
+   */
 
   protected median(values: any[]): any {
     return this.only(values);
@@ -155,27 +200,6 @@ export abstract class DataType {
 
   protected max(values: any[]): any {
     return this.only(values);
-  }
-
-  private only(values: any[]): any {
-    let equal = true;
-    for (const value of values) {
-      if (value !== values[0]) {
-        equal = false;
-        break;
-      }
-    }
-    return equal ? values[0] : undefined;
-  }
-
-  public compare(v1: any, v2: any): number {
-    if (v1 < v2) {
-      return -1;
-    } else if (v2 < v1) {
-      return 1;
-    } else {
-      return 0;
-    }
   }
 }
 
@@ -197,7 +221,7 @@ export class DataTypeDateTime extends DataType {
   }
 
   public toRest(value: any): any {
-    return [value.toISOString()];
+    return value.toISOString();
   }
 
   // @override
@@ -224,7 +248,7 @@ export class DataTypeText extends DataType {
   }
 
   public toRest(value: any): any {
-    return [value];
+    return value;
   }
 }
 
@@ -271,9 +295,9 @@ export class DataTypeCodedText extends DataType {
   }
 
   public toRest(value: any): any {
-    return [{
+    return {
       '|code': value,
-    }];
+    };
   }
 }
 
@@ -322,10 +346,10 @@ export class DataTypeQuantity extends DataType {
   }
 
   public toRest(value: any): any {
-    return [{
+    return {
       '|magnitude': value,
       '|unit': this.unit
-    }];
+    };
   }
 
   protected median(values: any[]): any {
