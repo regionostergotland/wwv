@@ -1,6 +1,6 @@
 
 <mat-sidenav-container class="container">
-  <mat-sidenav #sidenav #drawer mode="side" opened role="navigation" autosize class="example-sidenav">
+  <mat-sidenav [disableClose]="true" #sidenav #drawer mode="side" opened role="navigation" autosize class="example-sidenav">
 
     <mat-nav-list>
 
@@ -11,7 +11,7 @@
       <mat-divider></mat-divider>
 
       <div  *ngFor="let category of getUserCategories()">
-        
+
         <mat-list-item (click)="selectCategory(category)" [style.background-color]="getBackgroundColor(category)" >
             <img class="sidebar-icon" [src]="(getCategoryIcon(category))"/>
             {{getCategoryLabel(category)}}
