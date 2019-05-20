@@ -51,6 +51,11 @@ export class BottomSheetCategoriesComponent {
     return baseUrl + this.conveyor.getCategorySpec(categoryId).id + '.png';
   }
 
+  /**
+   * If the user selects a category, it is added to the conveyor and a new datalist is created.
+   * @param event MouseEvent object contains information about user click.
+   * @param categoryId the string ID of the user-selected category.
+   */
   addCategory(event: MouseEvent, categoryId: string): void {
     if (!this.conveyor.hasCategoryId(categoryId)) {
       this.conveyor.setDataList(categoryId, new DataList(this.conveyor.getCategorySpec(categoryId)));
