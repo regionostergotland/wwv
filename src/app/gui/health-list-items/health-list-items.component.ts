@@ -242,7 +242,8 @@ export class HealthListItemsComponent implements OnInit {
       // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
       // TODO update for math fns
-      this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints(0);
+      this.pointDataList =
+        this.conveyor.getDataList(this.selectedCategory).getPoints().get(0);
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();

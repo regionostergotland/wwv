@@ -78,7 +78,7 @@ export class AddDataPointComponent implements OnInit {
   getData(): DataPoint[] {
     if (this.selectedCategory) {
       // TODO handle multiple math fns
-      return this.conveyor.getDataList(this.selectedCategory).getPoints(0);
+      return this.conveyor.getDataList(this.selectedCategory).getPoints().get(0);
     }
   }
 

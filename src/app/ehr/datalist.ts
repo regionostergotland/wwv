@@ -196,16 +196,9 @@ export class DataList {
   }
 
   /**
-   * Get all data points for a specific math function.
-   */
-  public getPoints(fn: MathFunctionEnum): DataPoint[] {
-    return this.processedPoints.get(fn);
-  }
-
-  /**
    * Get all data points for every applied math function.
    */
-  public getAllPoints(): Map<MathFunctionEnum, DataPoint[]> {
+  public getPoints(): Map<MathFunctionEnum, DataPoint[]> {
     return this.processedPoints;
   }
 
