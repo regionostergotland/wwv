@@ -59,27 +59,54 @@ export class SidebarComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Updates the current selected category by the user.
+   * @param category the id of the category clicked on.
+   */
   selectCategory(category: string): void {
       this.selectedCategory = category;
   }
 
+  /**
+   * Gets a list of the IDs of all categories available in the conveyor.
+   * @returns a list of category IDs.
+   */
   getUserCategories(): string[] {
     return this.conveyor.getCategoryIds();
   }
 
+  /**
+   * Gets the label of a specific category to display on the page.
+   * @param categoryId id of the category to get from.
+   * @returns the category label.
+   */
   getCategoryLabel(categoryId: string): string {
       return this.conveyor.getCategorySpec(categoryId).label;
   }
 
+  /**
+   * Gets the icon of a specific category to display on the page.
+   * @param categoryId id of the category to get from.
+   * @returns the project path to the icon image.
+   */
   getCategoryIcon(categoryId: string): string {
     const baseUrl = '../../assets/flaticon/';
     return baseUrl + this.conveyor.getCategorySpec(categoryId).id + '.png';
   }
 
+  /**
+   * Return the color of the selected category and return an empty string if no category is selected.
+   * @returns hex value of background color or empty string.
+   */
   getTitleSelected(): string {
     return this.selectedCategory === null ? this.selectedColor : '';
   }
 
+  /**
+   * Gets the background color to be displayed for the category-list.
+   * @param categoryId id of the category to get from.
+   * @returns hex value of background color.
+   */
   getBackgroundColor(categoryId: string): string {
     if (categoryId === this.selectedCategory) {
       return this.selectedColor;
@@ -87,6 +114,9 @@ export class SidebarComponent implements OnInit {
     return '';
   }
 
+  /**
+   * Opens the pop-up menu for selecting a new category.
+   */
   openBottomSheet(): void {
 // tslint:disable-next-line: no-use-before-declare
     this.bottomSheet.open(BottomSheetCategoriesComponent);
