@@ -13,33 +13,35 @@ describe('EhrService', () => {
     imports: [],
     providers: [
       HttpClient,
-      HttpHandler
+      HttpHandler,
     ]
   }));
 
-  const ctx = {
-      language: 'en',
-      territory: 'SE',
-  };
+  let service: EhrService;
+  let ctx;
 
-  const bloodspec: CategorySpec = {
-    id : 'bloood',
-    label : '',
-    description : '',
-    dataTypes : new Map<string, DataType>([
-      [ 'time', new DataTypeDateTime(
-        {
-          path: ['any_event'],
-          label: '',
-          description: '',
-          required: true,
-          single: false,
-          visible: true,
-        })
-      ],
-      [
-        'systolic',
-        new DataTypeQuantity(
+  let bloodSpec: CategorySpec;
+  let bloodList: DataList;
+
+  let weightSpec: CategorySpec;
+  let weightList: DataList;
+
+  beforeEach(() => {
+    service = TestBed.get(EhrService);
+  });
+
+  beforeAll(() => {
+    ctx = {
+        language: 'en',
+        territory: 'SE',
+    };
+
+    bloodSpec = {
+      id : 'bloood',
+      label : '',
+      description : '',
+      dataTypes : new Map<string, DataType>([
+        [ 'time', new DataTypeDateTime(
           {
             path: ['any_event'],
             label: '',
@@ -47,30 +49,30 @@ describe('EhrService', () => {
             required: true,
             single: false,
             visible: true,
-          }, 'mm[Hg]', 0, 1000,
-        )
-      ],
-    ])
-  };
+          })
+        ],
+        [
+          'systolic',
+          new DataTypeQuantity(
+            {
+              path: ['any_event'],
+              label: '',
+              description: '',
+              required: true,
+              single: false,
+              visible: true,
+            }, 'mm[Hg]', 0, 1000,
+          )
+        ],
+      ])
+    };
 
-  const weightspec: CategorySpec = {
-    id : 'weeight',
-    label : '',
-    description : '',
-    dataTypes : new Map<string, DataType>([
-      [ 'time', new DataTypeDateTime(
-        {
-          path: ['any_event'],
-          label: '',
-          description: '',
-          required: true,
-          single: false,
-          visible: true,
-        })
-      ],
-      [
-        'body_weight',
-        new DataTypeQuantity(
+    weightSpec = {
+      id : 'weeight',
+      label : '',
+      description : '',
+      dataTypes : new Map<string, DataType>([
+        [ 'time', new DataTypeDateTime(
           {
             path: ['any_event'],
             label: '',
@@ -78,54 +80,79 @@ describe('EhrService', () => {
             required: true,
             single: false,
             visible: true,
-          }, 'mm[Hg]', 0, 1000,
-        )
-      ],
-    ])
-  };
+          })
+        ],
+        [
+          'body_weight',
+          new DataTypeQuantity(
+            {
+              path: ['any_event'],
+              label: '',
+              description: '',
+              required: true,
+              single: false,
+              visible: true,
+            }, 'mm[Hg]', 0, 1000,
+          )
+        ],
+      ])
+    };
 
-  const service: EhrService = TestBed.get(EhrService);
+    bloodList = new DataList(bloodSpec);
+    bloodList.addPoints([
+        new DataPoint(
+            [
+                [ 'time', new Date(2016, 1, 1) ],
+                [ 'systolic', 101 ],
+            ]
+        ),
+        new DataPoint(
+            [
+                [ 'time', new Date(2016, 1, 2) ],
+                [ 'systolic', 103 ],
+            ]
+        ),
+    ]);
+
+    weightList = new DataList(weightSpec);
+    weightList.addPoints([
+        new DataPoint(
+            [
+                [ 'time', new Date(2016, 1, 1) ],
+                [ 'body_weight', 55 ],
+            ]
+        ),
+        new DataPoint(
+            [
+                [ 'time', new Date(2016, 1, 2) ],
+                [ 'body_weight', 95 ],
+            ]
+        ),
+    ]);
+  });
+
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  const bloodlist = new DataList(bloodspec);
-  bloodlist.addPoints([
-      new DataPoint(
-          [
-              [ 'time', new Date(2016, 1, 1) ],
-              [ 'systolic', 101 ],
-          ]
-      ),
-      new DataPoint(
-          [
-              [ 'time', new Date(2016, 1, 2) ],
-              [ 'systolic', 103 ],
-          ]
-      ),
-  ]);
-
-  const weightlist = new DataList(weightspec);
-  weightlist.addPoints([
-      new DataPoint(
-          [
-              [ 'time', new Date(2016, 1, 1) ],
-              [ 'systolic', 55 ],
-          ]
-      ),
-      new DataPoint(
-          [
-              [ 'time', new Date(2016, 1, 2) ],
-              [ 'systolic', 95 ],
-          ]
-      ),
-  ]);
-
   it('should create a proper composition for bloodpressure', () => {
-    expect(service.createComposition([bloodlist])).toEqual({
+    expect(service.createComposition([bloodList])).toEqual({
       ctx: ctx,
       self_monitoring: {
-        blooood: []
+        bloood: [
+          { any_event:
+            [
+              {
+                time: [ '2016-01-31T23:00:00.000Z' ],
+                systolic: [ { '|magnitude': 101, '|unit': 'mm[Hg]' } ]
+              },
+              { 
+                time: [ '2016-02-01T23:00:00.000Z' ],
+                systolic: [ { '|magnitude': 103, '|unit': 'mm[Hg]' } ]
+              }
+            ] 
+          }
+        ]
       }
     });
   });
