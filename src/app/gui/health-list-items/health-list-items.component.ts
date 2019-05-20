@@ -214,13 +214,13 @@ export class HealthListItemsComponent implements OnInit {
 
   getTextFromPoint(key: string, point: DataPoint): string {
     if (key === 'date') {
-      return dayjs(point.get('time')).format('MM-DD');
+      return dayjs(point.get('time')).format('YYYY-MM-DD');
     }
 
     if (key.startsWith('period')) {
       const v = point.get('time');
       switch (key) {
-        case 'period_DAY': return dayjs(v).format('MM-DD');
+        case 'period_DAY': return dayjs(v).format('YYYY-MM-DD');
         case 'period_WEEK': return 'v' + v.getWeek() + ', ' + v.getWeekYear();
         case 'period_MONTH': return dayjs(v).format('YY-MM');
         case 'period_YEAR': return dayjs(v).format('YY');
