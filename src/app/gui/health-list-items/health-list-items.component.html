@@ -2,11 +2,18 @@
 
 <mat-tab-group>
 <mat-tab *ngFor="let entry of dataList | keyvalue">
-<ng-template mat-tab-label>
-    {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
-    <button mat-stroked-button
-        (click)="removeFilter(entry.key)"
-        ><mat-icon>delete</mat-icon></button> 
+
+<!-- TAB LABEL -->
+<ng-template *ngIf="entry.key.width === periodWidths.POINT" mat-tab-label>
+  Ofiltrerade värden
+</ng-template>
+<ng-template *ngIf="entry.key.width !== periodWidths.POINT" mat-tab-label>
+  {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
+  <button mat-stroked-button
+      matTooltip="Ta bort filtrering"
+      (click)="removeFilter(entry.key)">
+    <mat-icon>delete</mat-icon>
+  </button>
 </ng-template>
 
 <table style="text-align: left" mat-table [dataSource]="entry.value" [trackBy]="trackItem">

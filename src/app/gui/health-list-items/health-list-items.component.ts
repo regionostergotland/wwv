@@ -136,6 +136,7 @@ export class HealthListItemsComponent implements OnInit {
   selectedCategory: string;
   isEditable = false;
 
+  // allow access to these from html component
   dataTypeEnum = DataTypeEnum;
   periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
@@ -159,11 +160,11 @@ export class HealthListItemsComponent implements OnInit {
 
   mathOptions: Map<MathFunctionEnum, string> =
     new Map<MathFunctionEnum, string>([
-    [MathFunctionEnum.MAX, 'maximalt värde '],
-    [MathFunctionEnum.MEAN, 'medelvärde '],
-    [MathFunctionEnum.MEDIAN, 'median '],
-    [MathFunctionEnum.MIN, 'minimalt värde '],
-    [MathFunctionEnum.TOTAL, 'totala värde '],
+    [MathFunctionEnum.MAX, 'Maximalt '],
+    [MathFunctionEnum.MEAN, 'Medelvärde '],
+    [MathFunctionEnum.MEDIAN, 'Median '],
+    [MathFunctionEnum.MIN, 'Minimalt '],
+    [MathFunctionEnum.TOTAL, 'Totalt '],
   ]);
 
   intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
