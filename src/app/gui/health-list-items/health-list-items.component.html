@@ -12,7 +12,20 @@
 <h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
 
 <mat-tab-group>
-<mat-tab *ngFor="let entry of dataList | keyvalue" label="{{entry.key}}">
+<mat-tab *ngFor="let entry of dataList | keyvalue">
+
+<!-- TAB LABEL -->
+<ng-template *ngIf="entry.key.width === periodWidths.POINT" mat-tab-label>
+  Ofiltrerade värden
+</ng-template>
+<ng-template *ngIf="entry.key.width !== periodWidths.POINT" mat-tab-label>
+  {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
+  <button mat-stroked-button
+      matTooltip="Ta bort filtrering"
+      (click)="removeFilter(entry.key)">
+    <mat-icon>delete</mat-icon>
+  </button>
+</ng-template>
 
 <div class="table-container">
   <table
@@ -109,8 +122,8 @@
     </ng-container>
   </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(entry.key)"></tr>
-      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(entry.key);"></tr>
+  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(entry.key)"></tr>
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(entry.key);"></tr>
   </table>
 </div>
 

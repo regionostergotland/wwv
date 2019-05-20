@@ -205,23 +205,26 @@ describe('datalist', () => {
       )
   ]);
 
-  dataList.setWidth(PeriodWidths.DAY)
-  dataList.addMathFunction(MathFunctionEnum.MEAN);
+  const filter = {
+    width: PeriodWidths.DAY,
+    fn: MathFunctionEnum.MEAN
+  }
+  dataList.addFilter(filter);
   /*
    * Test that datalist splits datapoints into width interval
    */
   it('should split datapoints into one day intervals, producing three points', () => {
-    expect(dataList.getPoints(MathFunctionEnum.MEAN).length).toEqual(3);
+    expect(dataList.getPoints().get(filter).length).toEqual(3);
   });
   it('should create new datapoints with mean of the interval points numerized fields', () => {
-    expect(dataList.getPoints(MathFunctionEnum.MEAN)[0].get('systolic')).toEqual(102);
-    expect(dataList.getPoints(MathFunctionEnum.MEAN)[0].get('diastolic')).toEqual(21);
+    expect(dataList.getPoints().get(filter)[0].get('systolic')).toEqual(102);
+    expect(dataList.getPoints().get(filter)[0].get('diastolic')).toEqual(21);
   });
   it('should keep coded text if all values are the same', () => {
-    expect(dataList.getPoints(MathFunctionEnum.MEAN)[2].get('position')).toEqual('at1003');
+    expect(dataList.getPoints().get(filter)[2].get('position')).toEqual('at1003');
   });
   it('should remove coded text if all values are not the same', () => {
-    expect(dataList.getPoints(MathFunctionEnum.MEAN)[0].get('position')).toEqual(undefined);
+    expect(dataList.getPoints().get(filter)[0].get('position')).toEqual(undefined);
   });
 
   /**

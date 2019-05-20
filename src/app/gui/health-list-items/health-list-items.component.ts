@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild, Inject} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, Inject, ViewChildren, AfterViewInit, QueryList} from '@angular/core';
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
@@ -105,7 +105,7 @@ export class MathDialogComponent {
    * Restores the datalist to the default settings
    */
   changeBack() {
-    this.conveyor.getDataList(this.selectedCategory).resetInterval();
+    this.conveyor.getDataList(this.selectedCategory).resetFilter();
     this.closeDialog();
   }
 
@@ -137,6 +137,7 @@ export class HealthListItemsComponent implements OnInit {
   selectedCategory: string;
   isEditable = false;
 
+  // allow access to these from html component
   dataTypeEnum = DataTypeEnum;
   periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
@@ -159,11 +160,11 @@ export class HealthListItemsComponent implements OnInit {
 
   mathOptions: Map<MathFunctionEnum, string> =
     new Map<MathFunctionEnum, string>([
-    [MathFunctionEnum.MAX, ', maximalt värde '],
-    [MathFunctionEnum.MEAN, ', medelvärde '],
-    [MathFunctionEnum.MEDIAN, ', median '],
-    [MathFunctionEnum.MIN, ', minimalt värde '],
-    [MathFunctionEnum.TOTAL, ', totala värde '],
+    [MathFunctionEnum.MAX, 'Maximalt '],
+    [MathFunctionEnum.MEAN, 'Medelvärde '],
+    [MathFunctionEnum.MEDIAN, 'Median '],
+    [MathFunctionEnum.MIN, 'Minimalt '],
+    [MathFunctionEnum.TOTAL, 'Totalt '],
   ]);
 
   intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
@@ -174,7 +175,9 @@ export class HealthListItemsComponent implements OnInit {
     [PeriodWidths.YEAR, 'per år'],
   ]);
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+ // @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
+  // TODO rename datalist to something else :)
   dataList: Map<Filter, MatTableDataSource<DataPoint>>;
 
   // The selected datapoints
@@ -332,7 +335,6 @@ export class HealthListItemsComponent implements OnInit {
       this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
       for (let [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
         this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
-        //this.dataList.get(filter).paginator = this.paginator;
       }
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
@@ -345,6 +347,14 @@ export class HealthListItemsComponent implements OnInit {
           this.options.set(key, datatypes.options);
         }
       }
+    }
+  }
+
+  ngAfterViewInit() {
+    let i = 0;
+    for (let table of this.dataList.values()) {
+      table.paginator = this.paginator.toArray()[i];
+      i++;
     }
   }
 
@@ -420,6 +430,11 @@ export class HealthListItemsComponent implements OnInit {
     return num.toFixed(1);
   }
 
+  removeFilter(filter: Filter): void {
+    const dataList = this.conveyor.getDataList(this.selectedCategory);
+    dataList.removeFilter(filter);
+    this.ngOnInit();
+  }
 
   /**
    * Returns the columns which should be displayed in the table depending on which
