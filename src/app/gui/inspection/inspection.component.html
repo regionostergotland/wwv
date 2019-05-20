@@ -10,7 +10,7 @@
     <mat-panel-description>Antal mätvärden: {{getNumberOfValues(category)}}</mat-panel-description>
   </mat-expansion-panel-header>
 
-  <app-health-list-items [selectCategory]="category" [editable]="false" ></app-health-list-items>
+  <app-editor [editable]="false" [selectCategory]="category"></app-editor>
 </mat-expansion-panel>
 
   <div style="margin-bottom: 10px">

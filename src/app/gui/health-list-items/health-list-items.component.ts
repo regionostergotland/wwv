@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild, Inject, ViewChildren, AfterViewInit, QueryList} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, Inject} from '@angular/core';
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
@@ -9,7 +9,7 @@ import { DataPoint, Filter } from '../../ehr/datalist';
 import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA, MatTabsModule} from '@angular/material';
+import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
 
@@ -117,29 +117,26 @@ export class MathDialogComponent {
 })
 export class HealthListItemsComponent implements OnInit {
 
-  @Input() set selectCategory(value: string) {
-    if (this.selectedCategory) {
-      this.selectedCategory = value;
-      this.ngOnInit();
-    } else {
-      this.selectedCategory = value;
-    }
-  }
+  @Input() width: PeriodWidths;
 
-  @Input() set editable(value: boolean) {
-    this.isEditable = value;
+  @Input() category: string;
+
+  @Input() isEditable: boolean;
+
+  @Input() set dataList(value: MatTableDataSource<DataPoint>) {
+    this.data = value;
   }
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
 
-  selectedCategory: string;
-  isEditable = false;
+  // selectedCategory: string;
+  //isEditable = false;
 
   dataTypeEnum = DataTypeEnum;
-  periodWidths = PeriodWidths;
+  ///periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
-  //pointDataList: Map<MathFunctionEnum, DataPoint[]>;
+  
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
 
@@ -175,8 +172,8 @@ export class HealthListItemsComponent implements OnInit {
   ]);
 
  // @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
-  dataList: Map<Filter, MatTableDataSource<DataPoint>>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  data: MatTableDataSource<DataPoint>;
 
   // The selected datapoints
   selection = new SelectionModel<DataPoint>(true, []);
@@ -195,53 +192,52 @@ export class HealthListItemsComponent implements OnInit {
    * Checks whether the number of selected elements matches the total number of rows.
    * @returns a boolean, true of selected elements matches total number of rows
    */
-  isAllSelected(filter: Filter): boolean {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataList.get(filter).data.length;
-    return numSelected === numRows;
-  }
+  // isAllSelected(filter: Filter): boolean {
+  //   const numSelected = this.selection.selected.length;
+  //   const numRows = this.dataList.get(filter).data.length;
+  //   return numSelected === numRows;
+  // }
 
-  /**
-   * Selects all rows if they are not all selected; otherwise clear selection.
-   */
-  masterToggle(filter: Filter) {
-    this.isAllSelected(filter) ?
-        this.selection.clear() :
-        this.dataList.get(filter).data.forEach(row => this.selection.select(row));
-  }
+  // /**
+  //  * Selects all rows if they are not all selected; otherwise clear selection.
+  //  */
+  // masterToggle(filter: Filter) {
+  //   this.isAllSelected(filter) ?
+  //       this.selection.clear() :
+  //       this.dataList.get(filter).data.forEach(row => this.selection.select(row));
+  // }
 
   /**
    * Opens the dialog containing RemovalDialogComponent
    */
-  openRemovalDialog() {
-    if (this.selection.selected.length > 0) {
-      const dialogRef = this.dialog.open(RemovalDialogComponent);
-      dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
-        // If result is true, that means the user pressed the button for removing selected values
-        if (result) {
-          this.removeSelected();
-        }
-      });
-    }
-  }
+  // openRemovalDialog() {
+  //   if (this.selection.selected.length > 0) {
+  //     const dialogRef = this.dialog.open(RemovalDialogComponent);
+  //     dialogRef.afterClosed().subscribe(result => {
+  //       console.log('The dialog was closed');
+  //       // If result is true, that means the user pressed the button for removing selected values
+  //       if (result) {
+  //         this.removeSelected();
+  //       }
+  //     });
+  //   }
+  // }
 
-  /**
-   * Removes all of the selected datapoints and updates the list
-   */
-  removeSelected() {
-    this.conveyor.getDataList(this.selectedCategory).removePoints(this.selection.selected);
-    this.ngOnInit();
-  }
+  // /**
+  //  * Removes all of the selected datapoints and updates the list
+  //  */
+  // removeSelected() {
+  //   this.conveyor.getDataList(this.category).removePoints(this.selection.selected);
+  //   this.ngOnInit();
+  // }
 
   ngOnInit() {
-    if (this.selectedCategory) {
+    if (this.category) {
       // Reset all the internal lists.
-      this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
-      this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
-      for (let [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
-        this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
-      }
+      this.categorySpec = this.conveyor.getCategorySpec(this.category);
+      
+      this.data.paginator = this.paginator;
+
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
 
@@ -250,18 +246,10 @@ export class HealthListItemsComponent implements OnInit {
 
         // Fill options
         if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
-          const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
+          const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.category).getDataType(key) as DataTypeCodedText;
           this.options.set(key, datatypes.options);
         }
       }
-    }
-  }
-
-  ngAfterViewInit() {
-    let i = 0;
-    for (let table of this.dataList.values()) {
-      table.paginator = this.paginator.toArray()[i];
-      i++;
     }
   }
 
@@ -269,33 +257,19 @@ export class HealthListItemsComponent implements OnInit {
     return item ? index : undefined;
   }
 
-  /**
-   * Opens the dialog to add an item in the list stored in the conveyor.
-   */
-  openDialog(): void {
-    const dialogRef = this.dialog.open(AddDataPointComponent, {
-      data: this.selectedCategory
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.ngOnInit();
-    });
-  }
-
-  /**
-   * Opens the dialog for MathDialogComponent
-   */
-  openMathDialog(): void {
-    this.selection.clear();
-    const dialogRef = this.dialog.open(MathDialogComponent, {
-      data: this.selectedCategory
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.ngOnInit();
-    });
-  }
+  // /**
+  //  * Opens the dialog for MathDialogComponent
+  //  */
+  // openMathDialog(): void {
+  //   this.selection.clear();
+  //   const dialogRef = this.dialog.open(MathDialogComponent, {
+  //     data: this.selectedCategory
+  //   });
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     console.log('The dialog was closed');
+  //     this.ngOnInit();
+  //   });
+  // }
 
   /**
    * Used to make sure the tables don't display a bunch of decimals.
@@ -315,18 +289,18 @@ export class HealthListItemsComponent implements OnInit {
    * category it is.
    * @returns a list of labels for the specified category
    */
-  getDisplayedColumns(filter: Filter): string[] {
+  getDisplayedColumns(): string[] {
     const result: string[] = [];
     if (this.isEditable) {
       result.push('select');
     }
-    if (this.selectedCategory) {
-      const dataList = this.conveyor.getDataList(this.selectedCategory);
+    if (this.category) {
+      const dataList = this.conveyor.getDataList(this.category);
       for (const [column, dataType] of dataList.spec.dataTypes.entries()) {
         if (!dataType.visible) {
           continue;
         } else if (column === 'time') {
-          switch (filter.width) {
+          switch (this.width) {
             case PeriodWidths.DAY: result.push('period_DAY'); break;
             case PeriodWidths.MONTH: result.push('period_MONTH'); break;
             case PeriodWidths.WEEK: result.push('period_WEEK'); break;

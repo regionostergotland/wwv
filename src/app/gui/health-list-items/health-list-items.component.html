@@ -1,15 +1,6 @@
-<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
+<table style="text-align: left" mat-table [dataSource]="data" [trackBy]="trackItem">
 
-<mat-tab-group>
-<mat-tab *ngFor="let entry of dataList | keyvalue">
-<ng-template mat-tab-label>
-    {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
-    <button mat-stroked-button><mat-icon>delete</mat-icon></button> 
-</ng-template>
-
-<table style="text-align: left" mat-table [dataSource]="entry.value" [trackBy]="trackItem">
-
-  <ng-container *ngFor="let key of getDisplayedColumns(entry.key)" matColumnDef={{key}}>
+  <ng-container *ngFor="let key of getDisplayedColumns(width)" matColumnDef={{key}}>
     <div *ngIf="key==='select'">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle(entry.key) : null"
@@ -119,32 +110,8 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(entry.key)"></tr>
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(entry.key);"></tr>
+  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
 </table>
 
 <mat-paginator [pageSizeOptions]="[5, 10, 15, 30, 50]" showFirstLastButtons></mat-paginator>
-
-</mat-tab>
-</mat-tab-group>
-
-<div class="flex">
-  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;"
-  (click)="openDialog()">Lägg till datavärde</button>
-  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;" 
-  (click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button>
-  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;"
-  (click)="openMathDialog()">Sammanställ punkter</button>
-</div>
-
- <!-- <div *ngIf="selected.selection.length > 0"> -->
-  <!-- <div *ngFor="let key of displayedColumns">
-    <div *ngIf="key !== 'select' && key !== 'date' && key !== 'time'">
-      <div *ngIf="categorySpec.dataTypes.get(key).type === dataTypeEnum.TEXT">
-        <mat-form-field>
-          <input #textInput matInput (change)="commentSelected(key, textInput.value)" placeholder={{categorySpec.dataTypes.get(key).label}}>
-        </mat-form-field>
-      </div>
-    </div>
-  </div> -->
-<!-- </div> -->
