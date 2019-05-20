@@ -113,7 +113,7 @@ export class DataList {
   constructor(spec: CategorySpec) {
     this.spec = spec;
     this.points = [];
-    this.resetInterval();
+    this.resetFilter();
   }
 
   /**
@@ -218,7 +218,7 @@ export class DataList {
     this.addPoints(points);
   }
 
-  public resetInterval() {
+  public resetFilter() {
     this.processedPoints = new Map<Filter, DataPoint[]>([
       [ DEFAULT_FILTER, this.points.slice() ]
     ]);
@@ -231,6 +231,10 @@ export class DataList {
 
   public removeFilter(filter: Filter) {
     this.processedPoints.delete(filter);
+    console.log(this.processedPoints.size);
+    if (this.processedPoints.size === 0) {
+      this.resetFilter();
+    }
   }
 
   /**

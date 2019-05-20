@@ -104,7 +104,7 @@ export class MathDialogComponent {
    * Restores the datalist to the default settings
    */
   changeBack() {
-    this.conveyor.getDataList(this.selectedCategory).resetInterval();
+    this.conveyor.getDataList(this.selectedCategory).resetFilter();
     this.closeDialog();
   }
 
@@ -176,6 +176,7 @@ export class HealthListItemsComponent implements OnInit {
 
  // @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
+  // TODO rename datalist to something else :)
   dataList: Map<Filter, MatTableDataSource<DataPoint>>;
 
   // The selected datapoints
@@ -308,6 +309,12 @@ export class HealthListItemsComponent implements OnInit {
       return num;
     }
     return num.toFixed(1);
+  }
+
+  removeFilter(filter: Filter): void {
+    const dataList = this.conveyor.getDataList(this.selectedCategory);
+    dataList.removeFilter(filter);
+    this.ngOnInit();
   }
 
   /**
