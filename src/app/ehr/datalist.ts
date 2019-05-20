@@ -251,8 +251,7 @@ export class DataList {
    * TODO remove
    */
   public getWidth(): PeriodWidths {
-    return PeriodWidths.POINT;
-    // return this.filters[0].width;
+    return this.width;
   }
 
   /**

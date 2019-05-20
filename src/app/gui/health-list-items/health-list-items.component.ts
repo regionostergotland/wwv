@@ -198,19 +198,19 @@ export class HealthListItemsComponent implements OnInit {
    * Checks whether the number of selected elements matches the total number of rows.
    * @returns a boolean, true of selected elements matches total number of rows
    */
-  isAllSelected(): boolean {
+  isAllSelected(fn: MathFunctionEnum): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataList.data.length;
+    const numRows = this.dataList.get(fn).data.length;
     return numSelected === numRows;
   }
 
   /**
    * Selects all rows if they are not all selected; otherwise clear selection.
    */
-  masterToggle() {
-    this.isAllSelected() ?
+  masterToggle(fn: MathFunctionEnum) {
+    this.isAllSelected(fn) ?
         this.selection.clear() :
-        this.dataList.data.forEach(row => this.selection.select(row));
+        this.dataList.get(fn).data.forEach(row => this.selection.select(row));
   }
 
   /**
