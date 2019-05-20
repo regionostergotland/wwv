@@ -5,7 +5,7 @@ import { CategorySpec,
          DataTypeEnum,
          MathFunctionEnum,
          } from '../../ehr/datatype';
-import { DataPoint } from '../../ehr/datalist';
+import { DataPoint, Filter } from '../../ehr/datalist';
 import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
@@ -93,10 +93,11 @@ export class MathDialogComponent {
    */
   calculate(intervalString: string, funcString: string) {
     if (intervalString && funcString) {
-      const interval = parseInt(intervalString, 10);
-      const func = parseInt(funcString, 10);
-      this.conveyor.getDataList(this.selectedCategory).setWidth(interval);
-      this.conveyor.getDataList(this.selectedCategory).addMathFunction(func);
+      const filter: Filter = {
+        width: parseInt(intervalString, 10),
+        fn: parseInt(funcString, 10)
+      }
+      this.conveyor.getDataList(this.selectedCategory).addFilter(filter);
       this.closeDialog();
     }
   }
@@ -175,11 +176,8 @@ export class HealthListItemsComponent implements OnInit {
     [PeriodWidths.YEAR, 'per år'],
   ]);
 
-  mathOption: string;
-  intervalOption: string;
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  dataList: Map<MathFunctionEnum, MatTableDataSource<DataPoint>>;
+  dataList: Map<Filter, MatTableDataSource<DataPoint>>;
 
   // The selected datapoints
   selection = new SelectionModel<DataPoint>(true, []);
@@ -198,19 +196,19 @@ export class HealthListItemsComponent implements OnInit {
    * Checks whether the number of selected elements matches the total number of rows.
    * @returns a boolean, true of selected elements matches total number of rows
    */
-  isAllSelected(fn: MathFunctionEnum): boolean {
+  isAllSelected(filter: Filter): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataList.get(fn).data.length;
+    const numRows = this.dataList.get(filter).data.length;
     return numSelected === numRows;
   }
 
   /**
    * Selects all rows if they are not all selected; otherwise clear selection.
    */
-  masterToggle(fn: MathFunctionEnum) {
-    this.isAllSelected(fn) ?
+  masterToggle(filter: Filter) {
+    this.isAllSelected(filter) ?
         this.selection.clear() :
-        this.dataList.get(fn).data.forEach(row => this.selection.select(row));
+        this.dataList.get(filter).data.forEach(row => this.selection.select(row));
   }
 
   /**
@@ -241,13 +239,11 @@ export class HealthListItemsComponent implements OnInit {
     if (this.selectedCategory) {
       // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
-      // TODO update for math fns
-      this.dataList = new Map<MathFunctionEnum, MatTableDataSource<DataPoint>>();
-      for (let [fn, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
-        this.dataList.set(fn, new MatTableDataSource<DataPoint>(points));
-        //this.dataList.get(fn).paginator = this.paginator;
+      this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
+      for (let [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
+        this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
+        //this.dataList.get(filter).paginator = this.paginator;
       }
-      this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
 
@@ -260,12 +256,7 @@ export class HealthListItemsComponent implements OnInit {
           this.options.set(key, datatypes.options);
         }
       }
-      this.mathOption = this.mathOptions.has(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) ?
-        this.mathOptions.get(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) : '';
-      this.intervalOption = this.intervalOptions.has(this.conveyor.getDataList(this.selectedCategory).getWidth()) ?
-        this.intervalOptions.get(this.conveyor.getDataList(this.selectedCategory).getWidth()) : '';
     }
-    //this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
   }
 
   trackItem(index, item) {
@@ -318,7 +309,7 @@ export class HealthListItemsComponent implements OnInit {
    * category it is.
    * @returns a list of labels for the specified category
    */
-  getDisplayedColumns(): string[] {
+  getDisplayedColumns(filter: Filter): string[] {
     const result: string[] = [];
     if (this.isEditable) {
       result.push('select');
@@ -329,7 +320,7 @@ export class HealthListItemsComponent implements OnInit {
         if (!dataType.visible) {
           continue;
         } else if (column === 'time') {
-          switch (dataList.getWidth()) {
+          switch (filter.width) {
             case PeriodWidths.DAY: result.push('period_DAY'); break;
             case PeriodWidths.MONTH: result.push('period_MONTH'); break;
             case PeriodWidths.WEEK: result.push('period_WEEK'); break;

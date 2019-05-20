@@ -6,7 +6,7 @@
 
 <table style="text-align: left" mat-table [dataSource]="entry.value" [trackBy]="trackItem">
 
-  <ng-container *ngFor="let key of displayedColumns" matColumnDef={{key}}>
+  <ng-container *ngFor="let key of getDisplayedColumns(entry.key)" matColumnDef={{key}}>
     <div *ngIf="key==='select'">
       <th mat-header-cell *matHeaderCellDef>
         <mat-checkbox (change)="$event ? masterToggle(entry.key) : null"
@@ -116,8 +116,8 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(entry.key)"></tr>
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(entry.key);"></tr>
 </table>
 
 <!-- <mat-paginator [pageSizeOptions]="[5, 10, 15, 30, 50]" showFirstLastButtons></mat-paginator> -->
