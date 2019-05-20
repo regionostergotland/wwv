@@ -43,7 +43,17 @@ export class SourcesComponent implements OnInit {
     const platforms = this.conveyor.getPlatforms();
     this.sources = [];
     for (const platform of platforms) {
-      this.sources.push(availableSources.get(platform));
+      let source: Source;
+      if (availableSources.has(platform)) {
+        source = availableSources.get(platform);
+      } else {
+        this.sources.push({
+          id: platform,
+          name: platform,
+          imageUrl: '',
+        });
+      }
+      this.sources.push(source);
     }
   }
 
