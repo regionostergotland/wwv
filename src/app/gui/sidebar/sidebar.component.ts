@@ -11,22 +11,41 @@ import { DataList } from '../../ehr/datalist';
 export class BottomSheetCategoriesComponent {
   constructor(private bottomSheetRef: MatBottomSheetRef<BottomSheetCategoriesComponent>, private conveyor: Conveyor) {}
 
+  /**
+   * Gets a list of the IDs of all categories available.
+   * @returns a list of category IDs.
+   */
   getAllCategories(): string[] {
     return this.conveyor.getAllCategories();
   }
 
+  /**
+   * Gets the description to be displayed of a specific category.
+   * @param categoryId id of the category to get from.
+   * @returns string description of a category type.
+   */
   getCategoryDescription(categoryId: string): string {
     if (this.conveyor.getCategorySpec(categoryId)) {
       return this.conveyor.getCategorySpec(categoryId).description;
     }
   }
 
+  /**
+   * Gets the label to be displayed of a specific category.
+   * @param categoryId id of the category to get from.
+   * @returns string label of a category.
+   */
   getCategoryLabel(categoryId: string): string {
     if (this.conveyor.getCategorySpec(categoryId)) {
       return this.conveyor.getCategorySpec(categoryId).label;
     }
   }
 
+  /**
+   * Gets the icon of a specific category to display on the page.
+   * @param categoryId id of the category to get from.
+   * @returns the project path to the icon image.
+   */
   getCategoryIcon(categoryId: string): string {
     const baseUrl = '../../assets/flaticon/';
     return baseUrl + this.conveyor.getCategorySpec(categoryId).id + '.png';
