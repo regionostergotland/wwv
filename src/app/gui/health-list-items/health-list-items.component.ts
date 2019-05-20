@@ -66,9 +66,7 @@ export class RemovalDialogComponent {
 export class MathDialogComponent {
 
   mathOptions: MathOption[];
-  mathFunction: string;
   intervalOptions: IntervalOption[];
-  interval: string;
 
   selectedCategory: string;
 
