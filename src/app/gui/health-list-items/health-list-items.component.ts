@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild, Inject} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, Inject, ViewChildren, AfterViewInit, QueryList} from '@angular/core';
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
@@ -159,11 +159,11 @@ export class HealthListItemsComponent implements OnInit {
 
   mathOptions: Map<MathFunctionEnum, string> =
     new Map<MathFunctionEnum, string>([
-    [MathFunctionEnum.MAX, ', maximalt värde '],
-    [MathFunctionEnum.MEAN, ', medelvärde '],
-    [MathFunctionEnum.MEDIAN, ', median '],
-    [MathFunctionEnum.MIN, ', minimalt värde '],
-    [MathFunctionEnum.TOTAL, ', totala värde '],
+    [MathFunctionEnum.MAX, 'maximalt värde '],
+    [MathFunctionEnum.MEAN, 'medelvärde '],
+    [MathFunctionEnum.MEDIAN, 'median '],
+    [MathFunctionEnum.MIN, 'minimalt värde '],
+    [MathFunctionEnum.TOTAL, 'totala värde '],
   ]);
 
   intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
@@ -174,7 +174,8 @@ export class HealthListItemsComponent implements OnInit {
     [PeriodWidths.YEAR, 'per år'],
   ]);
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+ // @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   dataList: Map<Filter, MatTableDataSource<DataPoint>>;
 
   // The selected datapoints
@@ -240,7 +241,6 @@ export class HealthListItemsComponent implements OnInit {
       this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
       for (let [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
         this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
-        //this.dataList.get(filter).paginator = this.paginator;
       }
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
@@ -254,6 +254,14 @@ export class HealthListItemsComponent implements OnInit {
           this.options.set(key, datatypes.options);
         }
       }
+    }
+  }
+
+  ngAfterViewInit() {
+    let i = 0;
+    for (let table of this.dataList.values()) {
+      table.paginator = this.paginator.toArray()[i];
+      i++;
     }
   }
 

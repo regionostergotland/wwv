@@ -1,7 +1,11 @@
 <h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
 
 <mat-tab-group>
-<mat-tab *ngFor="let entry of dataList | keyvalue" label="{{entry.key}}">
+<mat-tab *ngFor="let entry of dataList | keyvalue">
+<ng-template mat-tab-label>
+    {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
+    <button mat-stroked-button><mat-icon>delete</mat-icon></button> 
+</ng-template>
 
 <table style="text-align: left" mat-table [dataSource]="entry.value" [trackBy]="trackItem">
 
@@ -119,7 +123,7 @@
   <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(entry.key);"></tr>
 </table>
 
-<!-- <mat-paginator [pageSizeOptions]="[5, 10, 15, 30, 50]" showFirstLastButtons></mat-paginator> -->
+<mat-paginator [pageSizeOptions]="[5, 10, 15, 30, 50]" showFirstLastButtons></mat-paginator>
 
 </mat-tab>
 </mat-tab-group>
