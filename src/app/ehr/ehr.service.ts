@@ -76,12 +76,12 @@ export class EhrService {
    */
   private get<T>(call: string, params: HttpParams): Observable<T> {
     const options = {
-      params: params,
+      params,
       headers: new HttpHeaders({
         Authorization: 'Basic ' + this.basicCredentials
       })
     };
-    return this.http.get<T>(this.config.baseUrl+call, options);
+    return this.http.get<T>(this.config.baseUrl + call, options);
   }
 
   /*
@@ -93,13 +93,13 @@ export class EhrService {
    */
   private post<T>(call: string, params: HttpParams, body): Observable<T> {
     const options = {
-      params: params,
+      params,
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + this.basicCredentials
       })
     };
-    return this.http.post<T>(this.config.baseUrl+call, options);
+    return this.http.post<T>(this.config.baseUrl + call, options);
   }
 
   private createComposition(lists: DataList[]): string {
