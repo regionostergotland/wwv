@@ -221,7 +221,7 @@ export class DataTypeDateTime extends DataType {
   }
 
   public toRest(value: any): any {
-    return [value.toISOString()];
+    return value.toISOString();
   }
 
   // @override
@@ -248,7 +248,7 @@ export class DataTypeText extends DataType {
   }
 
   public toRest(value: any): any {
-    return [value];
+    return value;
   }
 }
 
@@ -295,9 +295,9 @@ export class DataTypeCodedText extends DataType {
   }
 
   public toRest(value: any): any {
-    return [{
+    return {
       '|code': value,
-    }];
+    };
   }
 }
 
@@ -346,10 +346,10 @@ export class DataTypeQuantity extends DataType {
   }
 
   public toRest(value: any): any {
-    return [{
+    return {
       '|magnitude': value,
       '|unit': this.unit
-    }];
+    };
   }
 
   protected median(values: any[]): any {
