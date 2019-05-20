@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { CategoryPickerComponent } from './gui/category-picker/category-picker.component';
 import { InfoComponent } from './gui/info/info.component';
 import { HelpComponent } from './gui/help/help.component';
-import { HealthListItemsComponent, RemovalDialogComponent, MathDialogComponent } from './gui/health-list-items/health-list-items.component';
+import { HealthListItemsComponent, RemovalDialogComponent} from './gui/health-list-items/health-list-items.component';
 import { InspectionComponent } from './gui/inspection/inspection.component';
 import { BottomSheetCategoriesComponent, SidebarComponent } from './gui/sidebar/sidebar.component';
 import { AddDataPointComponent } from './gui/add-data-point/add-data-point.component';
@@ -64,7 +64,7 @@ import {
 
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
 import { FooterComponent } from './gui/footer/footer.component';
-import { EditorComponent } from './gui/editor/editor.component';
+import { EditorComponent, MathDialogComponent } from './gui/editor/editor.component';
 
 
 

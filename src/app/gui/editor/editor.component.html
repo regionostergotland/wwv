@@ -1,9 +1,9 @@
-<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
+<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : 'test'}}</h1>
 
 <mat-tab-group>
 <mat-tab *ngFor="let entry of dataList | keyvalue">
 <ng-template mat-tab-label>
-    <!-- {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}} -->
+    {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
     <button mat-stroked-button><mat-icon>delete</mat-icon></button> 
 </ng-template>
 
@@ -11,12 +11,11 @@
 [isEditable]="editable" [dataList]="entry.value"></app-health-list-items>
 </mat-tab>
 </mat-tab-group>
-
 <div class="flex">
-  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;"
+  <button *ngIf="editable" mat-stroked-button color="accent" style="text-align: center;"
   (click)="openDialog()">Lägg till datavärde</button>
   <!-- <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;" 
-  (click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button>
-  <button *ngIf="isEditable" mat-stroked-button color="accent" style="text-align: center;"
-  (click)="openMathDialog()">Sammanställ punkter</button> -->
+  (click)="openRemovalDialog()">Ta bort datavärden, {{selection.selected.length}} valda</button> -->
+  <button *ngIf="editable" mat-stroked-button color="accent" style="text-align: center;"
+  (click)="openMathDialog()">Sammanställ punkter</button>
 </div>
