@@ -49,6 +49,7 @@ describe('EhrService', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           })
         ],
         [
@@ -61,6 +62,7 @@ describe('EhrService', () => {
               required: true,
               single: false,
               visible: true,
+              visibleOnMobile: false,
             }, 'mm[Hg]', 0, 1000,
           )
         ],
@@ -80,6 +82,7 @@ describe('EhrService', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           })
         ],
         [
@@ -92,6 +95,7 @@ describe('EhrService', () => {
               required: true,
               single: false,
               visible: true,
+              visibleOnMobile: false,
             }, 'mm[Hg]', 0, 1000,
           )
         ],

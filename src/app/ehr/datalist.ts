@@ -88,7 +88,7 @@ export interface Filter {
 }
 
 const DEFAULT_FILTER: Filter = {
-  width:PeriodWidths.POINT,
+  width: PeriodWidths.POINT,
   fn: MathFunctionEnum.ACTUAL
 }
 
