@@ -350,6 +350,7 @@ export class HealthListItemsComponent implements OnInit {
     }
   }
 
+  /*
   ngAfterViewInit() {
     let i = 0;
     for (const table of this.dataList.values()) {
@@ -357,6 +358,7 @@ export class HealthListItemsComponent implements OnInit {
       i++;
     }
   }
+  */
 
   trackItem(index, item) {
     return item ? index : undefined;
