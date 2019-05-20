@@ -83,14 +83,14 @@ export class DataPoint {
 
 
 export interface Filter {
-  width: PeriodWidths,
-  fn: MathFunctionEnum
+  width: PeriodWidths;
+  fn: MathFunctionEnum;
 }
 
 const DEFAULT_FILTER: Filter = {
   width: PeriodWidths.POINT,
   fn: MathFunctionEnum.ACTUAL
-}
+};
 
 /**
  * List of [[DataPoint]]s with certain [[DataType]]s specified by a

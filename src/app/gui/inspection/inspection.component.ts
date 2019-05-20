@@ -37,7 +37,7 @@ export class InspectionComponent implements OnInit {
     if (this.conveyor.getDataList(categoryId)) {
       // TODO UPDATE THIS
       return false;
-      //return this.conveyor.getDataList(categoryId).getPoints().get().length < 1;
+      // return this.conveyor.getDataList(categoryId).getPoints().get().length < 1;
     }
     return false;
   }
@@ -49,7 +49,7 @@ export class InspectionComponent implements OnInit {
    */
   getNumberOfValues(category: string) {
     // TODO update for multiple
-    let values: number = 0;
+    let values = 0;
     const pointMap = this.conveyor.getDataList(category).getPoints();
     for (const [_, points] of pointMap.entries()) {
       values += points.length;

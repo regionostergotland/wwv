@@ -95,7 +95,7 @@ export class MathDialogComponent {
       const filter: Filter = {
         width: parseInt(intervalString, 10),
         fn: parseInt(funcString, 10)
-      }
+      };
       this.conveyor.getDataList(this.selectedCategory).addFilter(filter);
       this.closeDialog();
     }
@@ -141,7 +141,7 @@ export class HealthListItemsComponent implements OnInit {
   dataTypeEnum = DataTypeEnum;
   periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
-  //pointDataList: Map<MathFunctionEnum, DataPoint[]>;
+  // pointDataList: Map<MathFunctionEnum, DataPoint[]>;
   options: Map<string, DataTypeCodedTextOpt[]>;
 
   periodLabels: Map<string, string> = new Map<string, string>([
@@ -333,7 +333,7 @@ export class HealthListItemsComponent implements OnInit {
       // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
       this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
-      for (let [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
+      for (const [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
         this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
       }
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
@@ -352,7 +352,7 @@ export class HealthListItemsComponent implements OnInit {
 
   ngAfterViewInit() {
     let i = 0;
-    for (let table of this.dataList.values()) {
+    for (const table of this.dataList.values()) {
       table.paginator = this.paginator.toArray()[i];
       i++;
     }

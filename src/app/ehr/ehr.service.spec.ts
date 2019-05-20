@@ -141,7 +141,7 @@ describe('EhrService', () => {
 
   it('should create a proper composition for bloodpressure', () => {
     expect(service.createComposition([bloodList])).toEqual({
-      ctx: ctx,
+      ctx,
       self_monitoring: {
         bloood: [
           { any_event:
@@ -150,11 +150,11 @@ describe('EhrService', () => {
                 time: [ '2016-01-31T23:00:00.000Z' ],
                 systolic: [ { '|magnitude': 101, '|unit': 'mm[Hg]' } ]
               },
-              { 
+              {
                 time: [ '2016-02-01T23:00:00.000Z' ],
                 systolic: [ { '|magnitude': 103, '|unit': 'mm[Hg]' } ]
               }
-            ] 
+            ]
           }
         ]
       }

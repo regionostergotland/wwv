@@ -208,7 +208,7 @@ describe('datalist', () => {
   const filter = {
     width: PeriodWidths.DAY,
     fn: MathFunctionEnum.MEAN
-  }
+  };
   dataList.addFilter(filter);
   /*
    * Test that datalist splits datapoints into width interval
