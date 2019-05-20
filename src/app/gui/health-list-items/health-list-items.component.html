@@ -1,38 +1,35 @@
 <div *ngIf="isSmallScreen()">
   <div style="display: flex; flex-direction: row; height: 20px;">
-    <h5 style="margin-top: 0px; margin-bottom: 0px; background-color: #efefef; padding: 4px;"
-    >
+    <h5 style="margin-top: 0px; margin-bottom: 0px; background-color: #efefef; padding: 4px;">
       {{
         categorySpec && isEditable
-          ? categorySpec.label + mathOption + intervalOption
+          ? categorySpec.label
           : ''
       }}
     </h5>
-    <p style="text-align: left">
-      {{
-        categorySpec && !isEditable
-          ? mathOption.substring(2) + intervalOption
-          : ''
-      }}
-    </p>
   </div>
 </div>
+<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
+
+<mat-tab-group>
+<mat-tab *ngFor="let entry of dataList | keyvalue" label="{{entry.key}}">
 
 <div class="table-container">
   <table
     style="text-align: left"
     class="table"
     mat-table
-    [dataSource]="dataList"
+    [dataSource]="entry.value"
     [trackBy]="trackItem"
   >
-    <ng-container *ngFor="let key of displayedColumns" matColumnDef="{{ key }}">
+  <ng-container>
+    <ng-container *ngFor="let key of getDisplayedColumns(entry.key)" matColumnDef="{{ key }}">
       <!-- SELECT CHECK BOX  -->
       <div *ngIf="key === 'select'">
         <th mat-header-cell *matHeaderCellDef>
           <mat-checkbox
-            (change)="$event ? masterToggle() : null"
-            [checked]="selection.hasValue() && isAllSelected()"
+            (change)="$event ? masterToggle(entry.key) : null"
+            [checked]="selection.hasValue() && isAllSelected(entry.key)"
           >
           </mat-checkbox>
         </th>
@@ -110,11 +107,15 @@
         </td>
       </div>
     </ng-container>
+  </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(entry.key)"></tr>
+      <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(entry.key);"></tr>
   </table>
 </div>
+
+</mat-tab>
+</mat-tab-group>
 
 <div class="small">
   <mat-paginator

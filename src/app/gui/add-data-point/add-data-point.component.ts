@@ -103,16 +103,6 @@ export class AddDataPointComponent implements OnInit {
   }
 
   /**
-   * Gets all data points from the facade
-   * @returns a list of all datapoints in the category
-   */
-  getData(): DataPoint[] {
-    if (this.selectedCategory) {
-      return this.conveyor.getDataList(this.selectedCategory).getPoints();
-    }
-  }
-
-  /**
    * Returns the columns which should be displayed in the table depending on which
    * category it is.
    * @returns a list of labels for the specified category

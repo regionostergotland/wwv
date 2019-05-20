@@ -81,6 +81,17 @@ export class DataPoint {
   }
 }
 
+
+export interface Filter {
+  width: PeriodWidths,
+  fn: MathFunctionEnum
+}
+
+const DEFAULT_FILTER: Filter = {
+  width:PeriodWidths.POINT,
+  fn: MathFunctionEnum.ACTUAL
+}
+
 /**
  * List of [[DataPoint]]s with certain [[DataType]]s specified by a
  * [[CategorySpec]].
@@ -95,24 +106,14 @@ export class DataList {
    */
   private points: DataPoint[];
   /**
-   * Cached list of processed data points.
+   * Cached processed points for each math function.
    */
-  private processedPoints: DataPoint[];
-  /**
-   * Selected period width.
-   */
-  private width: PeriodWidths;
-  /**
-   * Math function used to process points.
-   */
-  private mathFunction: MathFunctionEnum;
+  private processedPoints: Map<Filter, DataPoint[]>;
 
   constructor(spec: CategorySpec) {
     this.spec = spec;
     this.points = [];
-    this.processedPoints = [];
-    this.width = PeriodWidths.POINT;
-    this.mathFunction = MathFunctionEnum.ACTUAL;
+    this.resetInterval();
   }
 
   /**
@@ -122,24 +123,23 @@ export class DataList {
    * @param width time duration that each generated point represents
    * @param fn mathematical function to merge points with
    */
-  private mergePoints(points: DataPoint[],
-                      width: PeriodWidths,
-                      fn: MathFunctionEnum): DataPoint[] {
-    if (width === PeriodWidths.POINT || fn === MathFunctionEnum.ACTUAL) {
-      return points.slice();
+  private mergePoints(filter: Filter): DataPoint[] {
+    if (filter === DEFAULT_FILTER) {
+      return this.points.slice();
     } else {
       const newPoints: DataPoint[] = [];
-      const intervals = DataPoint.groupByInterval(points, width);
+      const intervals = DataPoint.groupByInterval(this.points, filter.width);
       for (const interval of intervals) {
         const newValues: any[] = [];
         for (const [id, dataType] of this.spec.dataTypes.entries()) {
           // TODO move this behaviour to datatypedatetime
           if (id === 'time') {
-            const startTime = startOfPeriod(interval[0].get('time'), width);
+            const startTime =
+                startOfPeriod(interval[0].get('time'), filter.width);
             newValues.push(['time', startTime]);
           } else {
             const prevValues: any[] = interval.map((p) => p.get(id));
-            const newValue: any = dataType.truncate(prevValues, fn);
+            const newValue: any = dataType.truncate(prevValues, filter.fn);
             newValues.push([id, newValue]);
           }
         }
@@ -149,38 +149,10 @@ export class DataList {
     }
   }
 
-  /**
-   * Process points and cache the result.
-   */
   private processPoints() {
-    this.processedPoints = this.mergePoints(
-      this.points,
-      this.width,
-      this.mathFunction
-    );
-  }
-
-  /**
-   * Check if list contains any points that are considered equal to the test
-   * point.
-   * @param testPoint DataPoint to compare against
-   */
-  public containsPoint(testPoint: DataPoint): boolean {
-    let start = 0;
-    let end = this.points.length - 1;
-    while (start <= end) {
-      const current = Math.floor((start + end) / 2);
-      const point = this.points[current];
-      const comp = testPoint.compareTo(point, this.spec.dataTypes);
-      if (comp < 0) {
-        end = current - 1;
-      } else if (comp > 0) {
-        start = current + 1;
-      } else {
-        return true;
-      }
+    for (const filter of this.processedPoints.keys()) {
+      this.processedPoints.set(filter, this.mergePoints(filter));
     }
-    return false;
   }
 
   /**
@@ -211,7 +183,7 @@ export class DataList {
     Array.prototype.push.apply(this.points, add);
     const compare = (p1, p2) => p1.compareTo(p2, this.spec.dataTypes);
     this.points.sort(compare.bind(this));
-    this.processPoints();
+    this.processPoints(); /* reprocess for new points */
   }
 
   /**
@@ -223,32 +195,42 @@ export class DataList {
       point.removed = true;
     }
     this.points = this.points.filter(p => !p.removed);
-    this.processedPoints = this.processedPoints.filter(p => !(p.removed));
+    for (const filter of this.processedPoints.keys()) {
+      this.processedPoints.set(
+        filter,
+        this.processedPoints.get(filter).filter(p => !(p.removed))
+      );
+    }
   }
 
   /**
-   * Get all data points from list, processed according to options.
+   * Get all data points for every applied math function.
    */
-  public getPoints(): DataPoint[] {
-    return this.processedPoints.filter((p) => !p.removed);
+  public getPoints(): Map<Filter, DataPoint[]> {
+    return this.processedPoints;
   }
 
   /**
-   * Replace all points with new list of points.
+   * Replace all original points with new list of points.
    */
   public setPoints(points: DataPoint[]) {
     this.points = [];
     this.addPoints(points);
   }
 
-  /**
-   * Set the width of intervals that data points shall represent, as well as
-   * math funciton that will determine the value of the interval.
-   */
-  public setInterval(width: PeriodWidths, mathFunction: MathFunctionEnum): void {
-    this.width = width;
-    this.mathFunction = mathFunction;
-    this.processPoints();
+  public resetInterval() {
+    this.processedPoints = new Map<Filter, DataPoint[]>([
+      [ DEFAULT_FILTER, this.points.slice() ]
+    ]);
+  }
+
+  public addFilter(filter: Filter) {
+    this.processedPoints.delete(DEFAULT_FILTER);
+    this.processedPoints.set(filter, this.mergePoints(filter));
+  }
+
+  public removeFilter(filter: Filter) {
+    this.processedPoints.delete(filter);
   }
 
   /**
@@ -263,17 +245,25 @@ export class DataList {
   }
 
   /**
-   * Get interval width for the data list.
+   * Check if list contains any points that are considered equal to the test
+   * point.
+   * @param testPoint DataPoint to compare against
    */
-  public getWidth(): PeriodWidths {
-    return this.width;
+  public containsPoint(testPoint: DataPoint): boolean {
+    let start = 0;
+    let end = this.points.length - 1;
+    while (start <= end) {
+      const current = Math.floor((start + end) / 2);
+      const point = this.points[current];
+      const comp = testPoint.compareTo(point, this.spec.dataTypes);
+      if (comp < 0) {
+        end = current - 1;
+      } else if (comp > 0) {
+        start = current + 1;
+      } else {
+        return true;
+      }
+    }
+    return false;
   }
-
-  /**
-   * Get the math function for the data list.
-   */
-  public getMathFunction(): MathFunctionEnum {
-    return this.mathFunction;
-  }
-
 }
