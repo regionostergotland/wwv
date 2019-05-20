@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { Observable, forkJoin } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Conveyor } from '../../conveyor.service';
 import { CategorySpec } from '../../ehr/datatype';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-category-picker',
@@ -13,7 +14,10 @@ import { Router } from '@angular/router';
 
 export class CategoryPickerComponent implements OnInit {
 
-  constructor(private adapter: DateAdapter<any>, private conveyor: Conveyor, private router: Router) {
+  constructor(private adapter: DateAdapter<any>,
+              private conveyor: Conveyor,
+              private route: ActivatedRoute,
+              private router: Router) {
     this.adapter.setLocale('sv');
   }
 
@@ -30,7 +34,7 @@ export class CategoryPickerComponent implements OnInit {
   categoryMap: Map<string, boolean>; // Map  containing the categoryId:s and whether they have been chosen or not
 
   ngOnInit() {
-    this.platformId = this.conveyor.getSelectedPlatform();
+    this.platformId = this.route.snapshot.paramMap.get('platform');
 
     this.startDate = new Date();
     this.startDate.setMonth(this.startDate.getMonth() - 1);

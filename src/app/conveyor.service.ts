@@ -14,7 +14,6 @@ import { map } from 'rxjs/operators';
 export class Conveyor {
   private readonly platforms: Map<string, Platform>;
   private categories: Map<string, DataList>;
-  private selectedPlatform: string;
 
   constructor(
     private ehrService: EhrService,
@@ -100,21 +99,5 @@ export class Conveyor {
 
   public sendData(): Observable<{}> {
     return this.ehrService.sendData(Array.from(this.categories.values()));
-  }
-
-  /*
-   * Saves the platform to be fetched from.
-   * @param platformId The chosen platform
-   */
-  public selectPlatform(platformId: string) {
-    this.selectedPlatform = platformId;
-  }
-
-  /*
-   * Gets the current selected platform.
-   * @returns the currently selected platform.
-   */
-  public getSelectedPlatform(): string {
-    return this.selectedPlatform;
   }
 }

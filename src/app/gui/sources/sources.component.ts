@@ -60,8 +60,7 @@ export class SourcesComponent implements OnInit {
   ngOnInit() {}
 
   async selectPlatform(platformId: string) {
-    this.conveyor.selectPlatform(platformId);
     await this.conveyor.signIn(platformId);
-    this.router.navigateByUrl('/pick-categories');
+    this.router.navigate(['/pick-categories', platformId]);
   }
 }

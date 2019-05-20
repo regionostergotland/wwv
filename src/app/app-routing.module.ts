@@ -13,6 +13,7 @@ import { ConfirmationComponent } from './gui/confirmation/confirmation.component
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'sources', component: SourcesComponent },
+  { path: 'pick-categories/:platform', component: CategoryPickerComponent },
   { path: 'pick-categories', component: CategoryPickerComponent },
   { path: 'info', component: InfoComponent },
   { path: 'help', component: HelpComponent },
