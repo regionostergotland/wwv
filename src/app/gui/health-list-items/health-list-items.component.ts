@@ -9,7 +9,7 @@ import { DataPoint } from '../../ehr/datalist';
 import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA, MatTabsModule} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
 
@@ -140,7 +140,7 @@ export class HealthListItemsComponent implements OnInit {
   dataTypeEnum = DataTypeEnum;
   periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
-  pointDataList: DataPoint[];
+  //pointDataList: Map<MathFunctionEnum, DataPoint[]>;
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
 
@@ -179,7 +179,7 @@ export class HealthListItemsComponent implements OnInit {
   intervalOption: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  dataList: MatTableDataSource<DataPoint>;
+  dataList: Map<MathFunctionEnum, MatTableDataSource<DataPoint>>;
 
   // The selected datapoints
   selection = new SelectionModel<DataPoint>(true, []);
@@ -242,8 +242,11 @@ export class HealthListItemsComponent implements OnInit {
       // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
       // TODO update for math fns
-      this.pointDataList =
-        this.conveyor.getDataList(this.selectedCategory).getPoints().get(0);
+      this.dataList = new Map<MathFunctionEnum, MatTableDataSource<DataPoint>>();
+      for (let [fn, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
+        this.dataList.set(fn, new MatTableDataSource<DataPoint>(points));
+        //this.dataList.get(fn).paginator = this.paginator;
+      }
       this.displayedColumns = this.getDisplayedColumns();
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
@@ -262,8 +265,7 @@ export class HealthListItemsComponent implements OnInit {
       this.intervalOption = this.intervalOptions.has(this.conveyor.getDataList(this.selectedCategory).getWidth()) ?
         this.intervalOptions.get(this.conveyor.getDataList(this.selectedCategory).getWidth()) : '';
     }
-    this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
-    this.dataList.paginator = this.paginator;
+    //this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
   }
 
   trackItem(index, item) {
