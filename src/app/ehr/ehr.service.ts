@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
@@ -43,8 +43,6 @@ interface Party {
   version: number;
 }
 
-// TODO create separate in-module service for API calls to EHR
-//      or at least somehow avoid repetition for calls in the methods below
 // TODO use newly available openEHR standard instead of THINKEHR
 
 @Injectable({
@@ -72,47 +70,36 @@ export class EhrService {
   }
 
   /*
-   * create a URL given a call and a list of parameters
-   * @param call URL to API call excluding base URL
-   * @param params list of [key, value] pairs
-   */
-  private createUrl(call: string, params): string {
-    let url = this.config.baseUrl + call + '?';
-    for (const [key, value] of params) {
-      url += key + '=' + value + '&';
-    }
-    return url;
-  }
-
-  /*
    * Perform a GET request to a given API call with the given parameters.
    * @param call URL to API call excluding base URL
-   * @param params list of [key, value] pairs
+   * @param params HttpParams object
    */
-  private get<T>(call: string, params: string[][]): Observable<T> {
+  private get<T>(call: string, params: HttpParams): Observable<T> {
     const options = {
+      params: params,
       headers: new HttpHeaders({
         Authorization: 'Basic ' + this.basicCredentials
       })
     };
-    return this.http.get<T>(this.createUrl(call, params), options);
+    return this.http.get<T>(this.config.baseUrl+call, options);
   }
 
   /*
    * Perform a POST request to a given API call with the given parameters and
    * the given body
    * @param call URL to API call excluding base URL
-   * @param params list of [key, value] pairs
+   * @param params HttpParams object
    * @param body JSON object to send as body
    */
-  private post<T>(call: string, params: string[][], body): Observable<T> {
+  private post<T>(call: string, params: HttpParams, body): Observable<T> {
     const options = {
+      params: params,
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: 'Basic ' + this.basicCredentials
       })
     };
-    return this.http.post<T>(this.createUrl(call, params), body, options);
+    return this.http.post<T>(this.config.baseUrl+call, options);
   }
 
   private createComposition(lists: DataList[]): string {
@@ -165,10 +152,9 @@ export class EhrService {
 
   /* Get party ID by partyID */
   private getEhrId(partyId: string): Observable<any> {
-    const params = [
-      ['subjectId', partyId],
-      ['subjectNamespace', 'default']
-    ];
+    const params = new HttpParams()
+      .set('subjectId', partyId)
+      .set('subjectNamespace', 'default');
     return this.get<EhrResponse>('ehr', params).pipe(map(
         res => res.ehrId
     ));
@@ -176,7 +162,7 @@ export class EhrService {
 
   /* Get party ID by personal identity number (personnummer) */
   private getPartyId(pnr: string): Observable<any> {
-    const params = [['personnummer', pnr]];
+    const params = new HttpParams().set('personnummer', pnr);
     return this.get<DemographicResponse>('demographics/party/query', params)
       .pipe(map(
         res => {
@@ -196,11 +182,10 @@ export class EhrService {
    */
   private postComposition(ehrId: any, lists: DataList[]):
       Observable<CompositionResponse> {
-    const params = [
-      ['ehrId', ehrId],
-      ['templateId', this.config.templateId],
-      ['format', 'STRUCTURED'],
-    ];
+    const params = new HttpParams()
+      .set('ehrId', ehrId)
+      .set('templateId', this.config.templateId)
+      .set('format', 'STRUCTURED');
     return this.post<CompositionResponse>('composition', params,
                                           this.createComposition(lists));
   }
