@@ -1,5 +1,4 @@
 <h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
-<p style="text-align: left">{{categorySpec && !isEditable ? mathOption.substring(2) + intervalOption : ''}}</p>
 
 <mat-tab-group>
 <mat-tab *ngFor="let entry of dataList | keyvalue" label="{{entry.key}}">
