@@ -165,7 +165,7 @@ export class HealthListItemsComponent implements OnInit {
       return false;
     }
 
-    if (this.categorySpec.dataTypes.has(key) || key === 'mobile') {
+    if (this.categorySpec.dataTypes.has(key)) {
       const { visibleOnMobile } = this.categorySpec.dataTypes.get(key);
       return !visibleOnMobile;
     }
@@ -184,7 +184,7 @@ export class HealthListItemsComponent implements OnInit {
       return 'mobile';
     }
 
-    if (key.startsWith('peroid_') || key === 'date') {
+    if (key.startsWith('period_') || key === 'date') {
       return 'text';
     }
 
