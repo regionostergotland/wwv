@@ -166,7 +166,7 @@ export class EditorComponent implements OnInit {
    */
   openDialog(): void {
     const dialogRef = this.dialog.open(AddDataPointComponent, {
-      data: this.selectedCategory
+      data: { category: this.selectedCategory }
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -30,6 +30,7 @@ export class HealthListItemsComponent implements OnInit {
     this.data = value;
   }
 
+  // TODO rename to selected?
   @Output() change: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
@@ -155,7 +156,6 @@ export class HealthListItemsComponent implements OnInit {
    */
 
   shouldHide(key: string): boolean {
-    console.log('should hide?', key, key==='mobile');
 
     if (key === 'mobile') {
       return true;
@@ -303,7 +303,7 @@ export class HealthListItemsComponent implements OnInit {
         }
       }
       if (this.isSmallScreen() && this.isEditable) {
-         result.push('mobile');
+        result.push('mobile');
       }
     }
 
