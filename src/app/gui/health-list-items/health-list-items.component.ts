@@ -118,7 +118,7 @@ export class HealthListItemsComponent implements OnInit {
         case 'period_DAY': return dayjs(v).format('YYYY-MM-DD');
         case 'period_WEEK': return 'v' + v.getWeek() + ', ' + v.getWeekYear();
         case 'period_MONTH': return dayjs(v).format('YY-MM');
-        case 'period_YEAR': return dayjs(v).format('YY');
+        case 'period_YEAR': return dayjs(v).format('YYYY');
       }
     }
 
