@@ -30,6 +30,7 @@ export class HealthListItemsComponent implements OnInit {
     this.data = value;
   }
 
+  // TODO rename to selected?
   @Output() change: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
