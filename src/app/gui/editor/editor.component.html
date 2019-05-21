@@ -9,7 +9,7 @@
 </ng-template>
 <ng-template *ngIf="entry.key.width !== PeriodWidths.POINT" mat-tab-label>
   {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
-  <button mat-stroked-button
+  <button *ngIf="editable" mat-stroked-button 
       matTooltip="Ta bort filtrering"
       (click)="removeFilter(entry.key)">
     <mat-icon>delete</mat-icon>

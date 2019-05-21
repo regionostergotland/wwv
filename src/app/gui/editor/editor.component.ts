@@ -95,11 +95,11 @@ export class EditorComponent implements OnInit {
 
   mathOptions: Map<MathFunctionEnum, string> =
     new Map<MathFunctionEnum, string>([
-    [MathFunctionEnum.MAX, 'maximalt värde '],
-    [MathFunctionEnum.MEAN, 'medelvärde '],
-    [MathFunctionEnum.MEDIAN, 'median '],
-    [MathFunctionEnum.MIN, 'minimalt värde '],
-    [MathFunctionEnum.TOTAL, 'totala värde '],
+    [MathFunctionEnum.MAX, 'Maximalt '],
+    [MathFunctionEnum.MEAN, 'Medelvärde '],
+    [MathFunctionEnum.MEDIAN, 'Median '],
+    [MathFunctionEnum.MIN, 'Minimalt '],
+    [MathFunctionEnum.TOTAL, 'Totalt '],
   ]);
 
   intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
@@ -145,7 +145,6 @@ export class EditorComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.ngOnInit();
     });
   }
@@ -159,7 +158,6 @@ export class EditorComponent implements OnInit {
       data: this.selectedCategory
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.ngOnInit();
     });
   }
