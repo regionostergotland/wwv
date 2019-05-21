@@ -1,5 +1,6 @@
 <h1 style="text-align: center">{{categorySpec && editable ? categorySpec.label : ''}}</h1>
 
+<div class='table-container'>
 <mat-tab-group>
 <mat-tab *ngFor="let entry of dataList | keyvalue">
 
@@ -26,11 +27,11 @@
 
 </mat-tab>
 </mat-tab-group>
+</div>
 
 <!-- EDIT BUTTONS -->
 <div class="flex">
   <button
-    *ngIf="isEditable"
     style="margin: 0;"
     mat-stroked-button
     color="accent"
@@ -41,7 +42,6 @@
     <div fxHide.lt-sm="false">Lägg till</div>
   </button>
   <button
-    *ngIf="isEditable"
     style="margin: 0;"
     mat-stroked-button
     color="accent"
@@ -54,7 +54,6 @@
     <div fxHide.lt-sm="false">Ta bort ({{ selection.selected.length }})</div>
   </button>
   <button
-    *ngIf="isEditable"
     style="margin: 0;"
     mat-stroked-button
     color="accent"
