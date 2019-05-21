@@ -103,7 +103,7 @@ export class AddDataPointComponent implements OnInit {
    * Gets the string from pointData with the given key, if no such key exist create a new Date.
    * @param key the key identifier to get from.
    */
-  getDate(key): string {
+  getDate(key: string): string {
     if (key === 'date') { // Special case for 'time', divided into 'time' and 'date'
       if (!this.pointData.has('time')) {
         this.pointData.set('time', new Date());
