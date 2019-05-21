@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild, Inject} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
@@ -13,24 +13,24 @@ import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DA
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
 
-@Component({
-  selector: 'app-removal-dialog',
-  templateUrl: 'removal-dialog.html',
-})
-export class RemovalDialogComponent {
+// @Component({
+//   selector: 'app-removal-dialog',
+//   templateUrl: 'removal-dialog.html',
+// })
+// export class RemovalDialogComponent {
 
-  // This boolean is sent to the health-list-items-component if the
-  // user presses the remove button
-  remove = true;
+//   // This boolean is sent to the health-list-items-component if the
+//   // user presses the remove button
+//   remove = true;
 
-  constructor(private conveyor: Conveyor, public dialogRef: MatDialogRef<RemovalDialogComponent>) {
-    }
+//   constructor(private conveyor: Conveyor, public dialogRef: MatDialogRef<RemovalDialogComponent>) {
+//     }
 
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
+//   closeDialog(): void {
+//     this.dialogRef.close();
+//   }
 
-}
+// }
 
 @Component({
   selector: 'app-health-list-items',
@@ -48,6 +48,8 @@ export class HealthListItemsComponent implements OnInit {
   @Input() set dataList(value: MatTableDataSource<DataPoint>) {
     this.data = value;
   }
+
+  @Output() change: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>(); 
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
@@ -110,31 +112,37 @@ export class HealthListItemsComponent implements OnInit {
     this.isAllSelected() ?
         this.selection.clear() :
         this.data.data.forEach(row => this.selection.select(row));
+    this.change.emit(this.selection.selected);
+  }
+
+  toggleRow(row) {
+    this.selection.toggle(row);
+    this.change.emit(this.selection.selected);
   }
 
   /**
    * Opens the dialog containing RemovalDialogComponent
    */
-  openRemovalDialog() {
-    if (this.selection.selected.length > 0) {
-      const dialogRef = this.dialog.open(RemovalDialogComponent);
-      dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
-        // If result is true, that means the user pressed the button for removing selected values
-        if (result) {
-          this.removeSelected();
-        }
-      });
-    }
-  }
+  // openRemovalDialog() {
+  //   if (this.selection.selected.length > 0) {
+  //     const dialogRef = this.dialog.open(RemovalDialogComponent);
+  //     dialogRef.afterClosed().subscribe(result => {
+  //       console.log('The dialog was closed');
+  //       // If result is true, that means the user pressed the button for removing selected values
+  //       if (result) {
+  //         this.removeSelected();
+  //       }
+  //     });
+  //   }
+  // }
 
-  /**
-   * Removes all of the selected datapoints and updates the list
-   */
-  removeSelected() {
-    this.conveyor.getDataList(this.category).removePoints(this.selection.selected);
-    this.ngOnInit();
-  }
+  // /**
+  //  * Removes all of the selected datapoints and updates the list
+  //  */
+  // removeSelected() {
+  //   this.conveyor.getDataList(this.category).removePoints(this.selection.selected);
+  //   this.ngOnInit();
+  // }
 
   ngOnInit() {
     if (this.category) {

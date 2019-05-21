@@ -34,6 +34,25 @@ const INTERVAL_OPTIONS: IntervalOption[] = [
 ];
 
 @Component({
+  selector: 'app-removal-dialog',
+  templateUrl: 'removal-dialog.html',
+})
+export class RemovalDialogComponent {
+
+  // This boolean is sent to the health-list-items-component if the
+  // user presses the remove button
+  remove = true;
+
+  constructor(private conveyor: Conveyor, public dialogRef: MatDialogRef<RemovalDialogComponent>) {
+    }
+
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+
+}
+
+@Component({
   selector: 'app-math-dialog',
   templateUrl: 'math-dialog.html',
   styleUrls: ['./editor.component.scss']
@@ -124,16 +143,23 @@ export class EditorComponent implements OnInit {
   categorySpec: CategorySpec;
   selectedCategory: string;
   dataList: Map<Filter, MatTableDataSource<DataPoint>>;
+  selectedRows: DataPoint[];
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) { }
 
   ngOnInit() {
+    this.selectedRows = [];
     this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
     for (let [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
       this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
     }
 
     this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
+  }
+
+  updateSelected(event) {
+    this.selectedRows = event;
+    console.log(this.selectedRows.length);
   }
 
   /**
@@ -160,6 +186,27 @@ export class EditorComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       this.ngOnInit();
     });
+  }
+
+  openRemovalDialog() {
+    if (this.selectedRows.length > 0) {
+      const dialogRef = this.dialog.open(RemovalDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        // If result is true, that means the user pressed the button for removing selected values
+        if (result) {
+          this.removeSelected();
+        }
+      });
+    }
+  }
+
+  /**
+   * Removes all of the selected datapoints and updates the list
+   */
+  removeSelected() {
+    this.conveyor.getDataList(this.selectedCategory).removePoints(this.selectedRows);
+    this.ngOnInit();
   }
 
   removeFilter(filter: Filter): void {
