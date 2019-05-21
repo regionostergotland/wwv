@@ -178,7 +178,7 @@ export class HealthListItemsComponent implements OnInit {
    */
 
   getInputType(key: string) {
-    if (key === 'mobile-edit-button') {
+    if (key === 'mobile') {
       return 'mobile';
     }
 
@@ -219,6 +219,7 @@ export class HealthListItemsComponent implements OnInit {
       // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.category);
       this.data.paginator = this.paginator;
+      this.displayedColumns = this.getDisplayedColumns();
 
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
@@ -269,11 +270,16 @@ export class HealthListItemsComponent implements OnInit {
    * category it is.
    * @returns a list of labels for the specified category
    */
+
+
+
   getDisplayedColumns(): string[] {
     const result: string[] = [];
     if (this.isEditable) {
       result.push('select');
     }
+
+    console.log(this.width, 'WIIIIIIDTH');
     if (this.category) {
       const dataList = this.conveyor.getDataList(this.category);
       for (const [column, dataType] of dataList.spec.dataTypes.entries()) {
@@ -300,6 +306,7 @@ export class HealthListItemsComponent implements OnInit {
       }
     }
 
+    console.log(result, PeriodWidths, this.width);
     return result;
   }
 

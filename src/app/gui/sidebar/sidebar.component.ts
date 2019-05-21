@@ -90,7 +90,9 @@ export class SidebarComponent implements OnInit {
   }
 
   selectCategory(category: string): void {
+      console.log(category);
       this.selectedCategory = category;
+      console.log(this.selectedCategory);
   }
 
   getUserCategories(): string[] {

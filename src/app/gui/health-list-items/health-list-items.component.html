@@ -7,7 +7,7 @@
     [trackBy]="trackItem"
   >
   <ng-container>
-    <ng-container *ngFor="let key of getDisplayedColumns()" matColumnDef="{{key}}">
+    <ng-container *ngFor="let key of displayedColumns" matColumnDef="{{key}}">
 
       <!-- SELECT CHECK BOX  -->
       <div *ngIf="key === 'select'">
@@ -38,9 +38,8 @@
           [matTooltip]="getCategoryTooltip(key)"
         >
           <div style="display: flex; flex-direction: column;">
-            hello
-            <!--<div>{{ getCategoryLabel(key) }}</div>
-            <div *ngIf="isSmallScreen()">{{ getCategoryUnit(key) }}</div>-->
+            <div>{{ getCategoryLabel(key) }}</div>
+            <div *ngIf="isSmallScreen()">{{ getCategoryUnit(key) }}</div>
           </div>
         </th>
 
@@ -84,7 +83,7 @@
       </div>
 
       <!-- MOBILE EDIT BUTTON -->
-      <div *ngIf="editable && key === 'mobile'">
+      <div *ngIf="editable && key === 'mobile' && false" >
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let dataPoint" style="text-align: center;">
           <mat-icon (click)="openEditDialog(dataPoint, key)">
@@ -95,8 +94,8 @@
     </ng-container>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
 
