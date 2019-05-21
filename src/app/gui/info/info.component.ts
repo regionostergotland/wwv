@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatCardTitle, MatCard } from '@angular/material';
 
 @Component({
   selector: 'app-info',
