@@ -56,11 +56,25 @@
   .content-container { 
     flex-direction: column;
     justify-content: space-between;
+    height: 100%;
     padding-left: 0;
     padding-bottom: 5px;
     padding-right: 0;
     padding-top: 5px;
+  }
 
+  .sidebar-bar {
+    width: 100%;
+    border-top: 2px solid rgba(0,0,0,0.2);
+    position: fixed;
+    height: 64px;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    box-sizing: border-box;
+  }
+  .container-container {
+    height: 100%;
   }
 } 
 
@@ -97,14 +111,7 @@
 }
 
 @media screen and (max-width: 959px) {
-  .sidebar-bar {
-    width: 100%;
-    border-top: 2px solid rgba(0,0,0,0.2);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    box-sizing: border-box;
-  }
+ 
 } 
 
 
