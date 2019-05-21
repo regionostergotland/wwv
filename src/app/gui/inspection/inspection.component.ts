@@ -66,12 +66,13 @@ export class InspectionComponent implements OnInit {
   sendData(pnr: string) {
     this.conveyor.sendData(pnr).
       subscribe(
-        _ => this.router.navigateByUrl('/confirmation'),
-        e => this.snackBar.open('Inrapporteringen misslyckades!', 'OK',
-             { 
-               duration: 10000,
-               panelClass: 'error'
-             })
+        compUid => this.router.navigateByUrl('/confirmation'),
+        e => this.snackBar.open(
+          'Inrapporteringen misslyckades. Fel: "'+ e.statusText + '"', 'OK',
+          { 
+            duration: 10000,
+            panelClass: 'error'
+          })
         // TODO fix snackbar styling
         // TODO send composition id to confirmation screen
     );
