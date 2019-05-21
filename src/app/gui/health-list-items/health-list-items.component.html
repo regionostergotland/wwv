@@ -3,8 +3,8 @@
   <ng-container *ngFor="let key of getDisplayedColumns(width)" matColumnDef={{key}}>
     <div *ngIf="key==='select'">
       <th mat-header-cell *matHeaderCellDef>
-        <mat-checkbox (change)="$event ? masterToggle(entry.key) : null"
-                      [checked]="selection.hasValue() && isAllSelected(entry.key)">
+        <mat-checkbox (change)="$event ? masterToggle(width) : null"
+                      [checked]="selection.hasValue() && isAllSelected(width)">
         </mat-checkbox>
       </th>
       <td mat-cell *matCellDef="let row">

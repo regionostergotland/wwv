@@ -2,9 +2,18 @@
 
 <mat-tab-group>
 <mat-tab *ngFor="let entry of dataList | keyvalue">
-<ng-template mat-tab-label>
-    {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
-    <button mat-stroked-button><mat-icon>delete</mat-icon></button> 
+
+<!-- TAB LABEL -->
+<ng-template *ngIf="entry.key.width === PeriodWidths.POINT" mat-tab-label>
+  Ofiltrerade värden
+</ng-template>
+<ng-template *ngIf="entry.key.width !== PeriodWidths.POINT" mat-tab-label>
+  {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
+  <button mat-stroked-button
+      matTooltip="Ta bort filtrering"
+      (click)="removeFilter(entry.key)">
+    <mat-icon>delete</mat-icon>
+  </button>
 </ng-template>
 
 <app-health-list-items [width]="entry.key.width" [category]="selectedCategory" 

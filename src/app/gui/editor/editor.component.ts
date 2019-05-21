@@ -3,7 +3,7 @@ import { MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@a
 import { DataPoint, Filter } from 'src/app/ehr/datalist';
 import { Conveyor } from 'src/app/conveyor.service';
 
-import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
+import { AddDataPointComponent } from '../add-data-point/add-data-point.component';
 import { MathFunctionEnum } from 'src/app/ehr/datatype';
 import { PeriodWidths } from 'src/app/shared/period';
 
@@ -79,7 +79,7 @@ export class MathDialogComponent {
    * Restores the datalist to the default settings
    */
   changeBack() {
-    this.conveyor.getDataList(this.selectedCategory).resetInterval();
+    this.conveyor.getDataList(this.selectedCategory).resetFilter();
     this.closeDialog();
   }
 
@@ -91,6 +91,7 @@ export class MathDialogComponent {
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit {
+  PeriodWidths = PeriodWidths;
 
   mathOptions: Map<MathFunctionEnum, string> =
     new Map<MathFunctionEnum, string>([
@@ -101,7 +102,7 @@ export class EditorComponent implements OnInit {
     [MathFunctionEnum.TOTAL, 'totala värde '],
   ]);
 
-intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
+  intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
     [PeriodWidths.HOUR, 'per timme'],
     [PeriodWidths.DAY, 'per dygn'],
     [PeriodWidths.WEEK, 'per vecka'],
@@ -159,4 +160,9 @@ intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
     });
   }
 
+  removeFilter(filter: Filter): void {
+    const dataList = this.conveyor.getDataList(this.selectedCategory);
+    dataList.removeFilter(filter);
+    this.ngOnInit();
+  }
 }

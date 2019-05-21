@@ -55,6 +55,7 @@ export class HealthListItemsComponent implements OnInit {
   // selectedCategory: string;
   //isEditable = false;
 
+  // allow access to these from html component
   dataTypeEnum = DataTypeEnum;
   ///periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
@@ -76,24 +77,6 @@ export class HealthListItemsComponent implements OnInit {
     ['period_MONTH', 'Månad för mätning'],
     ['date', 'Datum för mätning']]);
 
-  // mathOptions: Map<MathFunctionEnum, string> =
-  //   new Map<MathFunctionEnum, string>([
-  //   [MathFunctionEnum.MAX, 'maximalt värde '],
-  //   [MathFunctionEnum.MEAN, 'medelvärde '],
-  //   [MathFunctionEnum.MEDIAN, 'median '],
-  //   [MathFunctionEnum.MIN, 'minimalt värde '],
-  //   [MathFunctionEnum.TOTAL, 'totala värde '],
-  // ]);
-
-  // intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
-  //   [PeriodWidths.HOUR, 'per timme'],
-  //   [PeriodWidths.DAY, 'per dygn'],
-  //   [PeriodWidths.WEEK, 'per vecka'],
-  //   [PeriodWidths.MONTH, 'per månad'],
-  //   [PeriodWidths.YEAR, 'per år'],
-  // ]);
-
- // @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   data: MatTableDataSource<DataPoint>;
 
