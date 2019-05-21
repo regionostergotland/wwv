@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { PeriodWidths, samePeriod, startOfPeriod } from './period';
+import { PeriodSpan, samePeriod, startOfPeriod } from './period';
 
 describe('period', () => {
   beforeEach(() => TestBed.configureTestingModule({
@@ -17,7 +17,7 @@ describe('period', () => {
     date.setHours(0, 0, 0, 0);
     const startOf2019: number = date.getTime();
     expect(startOfPeriod(
-      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodWidths.YEAR)
+      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodSpan.YEAR)
         .getTime())
           .toBe(startOf2019);
   });
@@ -27,7 +27,7 @@ describe('period', () => {
     date.setHours(0, 0, 0, 0);
     const startOfApril: number = date.getTime();
     expect(startOfPeriod(
-      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodWidths.MONTH)
+      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodSpan.MONTH)
         .getTime())
           .toBe(startOfApril);
   });
@@ -37,11 +37,11 @@ describe('period', () => {
     date.setHours(0, 0, 0, 0);
     const startOfWeek: number = date.getTime();
     expect(startOfPeriod(
-     new Date(new Date().setFullYear(2019, 0, 6)), PeriodWidths.WEEK)
+     new Date(new Date().setFullYear(2019, 0, 6)), PeriodSpan.WEEK)
       .getTime())
        .toBe(startOfWeek);
     expect(startOfPeriod(
-     new Date(new Date().setFullYear(2019, 0, 1)), PeriodWidths.WEEK)
+     new Date(new Date().setFullYear(2019, 0, 1)), PeriodSpan.WEEK)
       .getTime())
        .toBe(startOfWeek);
   });
@@ -51,7 +51,7 @@ describe('period', () => {
     date.setHours(0, 0, 0, 0);
     const startOfDay: number = date.getTime();
     expect(startOfPeriod(
-      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodWidths.DAY)
+      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodSpan.DAY)
         .getTime())
           .toBe(startOfDay);
   });
@@ -61,7 +61,7 @@ describe('period', () => {
     date.setHours(10, 0, 0, 0);
     const startOfDay: number = date.getTime();
     date.setHours(10, 49, 32, 233);
-    expect(startOfPeriod(date, PeriodWidths.HOUR)
+    expect(startOfPeriod(date, PeriodSpan.HOUR)
         .getTime())
           .toBe(startOfDay);
   });
@@ -73,118 +73,118 @@ describe('period', () => {
     expect(samePeriod(
       new Date(new Date().setFullYear(2019, 1, 20)),
       new Date(new Date().setFullYear(2019, 0, 1)),
-      PeriodWidths.YEAR
+      PeriodSpan.YEAR
     )).toBeTruthy();
     expect(samePeriod(
       new Date(new Date().setFullYear(1970, 1, 20)),
       new Date(new Date().setFullYear(1970, 11, 31)),
-      PeriodWidths.YEAR
+      PeriodSpan.YEAR
     )).toBeTruthy();
   });
   it('should not match points not within the same year', () => {
     expect(samePeriod(
       new Date(new Date().setFullYear(2018, 11, 31)),
       new Date(new Date().setFullYear(2019, 0, 1)),
-      PeriodWidths.YEAR
+      PeriodSpan.YEAR
     )).toBeFalsy();
     expect(samePeriod(
       new Date(new Date().setFullYear(2070, 11, 31)),
       new Date(new Date().setFullYear(1970, 11, 31)),
-      PeriodWidths.YEAR
+      PeriodSpan.YEAR
     )).toBeFalsy();
   });
   it('should match points within the same month', () => {
     expect(samePeriod(
       new Date(new Date().setFullYear(2019, 0, 31)),
       new Date(new Date().setFullYear(2019, 0, 1)),
-      PeriodWidths.MONTH
+      PeriodSpan.MONTH
     )).toBeTruthy();
     expect(samePeriod(
       new Date(new Date().setFullYear(1970, 11, 1)),
       new Date(new Date().setFullYear(1970, 11, 31)),
-      PeriodWidths.MONTH
+      PeriodSpan.MONTH
     )).toBeTruthy();
   });
   it('should not match points not within the same month', () => {
     expect(samePeriod(
       new Date(new Date().setFullYear(2019, 1, 1)),
       new Date(new Date().setFullYear(2019, 0, 1)),
-      PeriodWidths.MONTH
+      PeriodSpan.MONTH
     )).toBeFalsy();
     expect(samePeriod(
       new Date(new Date().setFullYear(1970, 1, 1)),
       new Date(new Date().setFullYear(1970, 11, 31)),
-      PeriodWidths.MONTH
+      PeriodSpan.MONTH
     )).toBeFalsy();
   });
   it('should match points within the same week', () => {
     expect(samePeriod(
       new Date(new Date().setFullYear(2019, 3, 14)),
       new Date(new Date().setFullYear(2019, 3, 8)),
-      PeriodWidths.WEEK
+      PeriodSpan.WEEK
     )).toBeTruthy();
     expect(samePeriod(
       new Date(new Date().setFullYear(2018, 11, 31)),
       new Date(new Date().setFullYear(2019, 0, 6)),
-      PeriodWidths.WEEK
+      PeriodSpan.WEEK
     )).toBeTruthy();
   });
   it('should not match points not within the same week', () => {
     expect(samePeriod(
       new Date(new Date().setFullYear(2019, 3, 14)),
       new Date(new Date().setFullYear(2019, 3, 15)),
-      PeriodWidths.WEEK
+      PeriodSpan.WEEK
     )).toBeFalsy();
     expect(samePeriod(
       new Date(new Date().setFullYear(1970, 1, 1)),
       new Date(new Date().setFullYear(1971, 1, 1)),
-      PeriodWidths.WEEK
+      PeriodSpan.WEEK
     )).toBeFalsy();
   });
   it('should match points within the same day', () => {
     expect(samePeriod(
       new Date(new Date().setHours(0, 0, 0, 0)),
       new Date(new Date().setHours(23, 59, 59, 999)),
-      PeriodWidths.DAY
+      PeriodSpan.DAY
     )).toBeTruthy();
     expect(samePeriod(
       new Date(new Date().setHours(12, 34, 31, 324)),
       new Date(new Date().setHours(15, 23, 29, 972)),
-      PeriodWidths.DAY
+      PeriodSpan.DAY
     )).toBeTruthy();
   });
   it('should not match points not within the same day', () => {
     const day1 = new Date(2018, 11, 31);
     const day2 = new Date(2019, 0, 1);
-    expect(samePeriod(day1, day2, PeriodWidths.DAY)).toBeFalsy();
+    expect(samePeriod(day1, day2, PeriodSpan.DAY)).toBeFalsy();
     expect(samePeriod(
       new Date(day1.setHours(23, 59, 59, 999)),
       new Date(day2.setHours(0, 0, 0, 0)),
-      PeriodWidths.DAY
+      PeriodSpan.DAY
     )).toBeFalsy();
   });
   it('should match points within the same hour', () => {
     expect(samePeriod(
       new Date(new Date().setHours(23, 0, 0, 0)),
       new Date(new Date().setHours(23, 59, 59, 999)),
-      PeriodWidths.HOUR
+      PeriodSpan.HOUR
     )).toBeTruthy();
     expect(samePeriod(
       new Date(new Date().setHours(15, 34, 31, 324)),
       new Date(new Date().setHours(15, 23, 29, 972)),
-      PeriodWidths.HOUR
+      PeriodSpan.HOUR
     )).toBeTruthy();
   });
   it('should not match points not within the same hour', () => {
     expect(samePeriod(
       new Date(new Date().setHours(23, 59, 59, 999)),
       new Date(new Date().setHours(0, 0, 0, 0)),
-      PeriodWidths.HOUR
+      PeriodSpan.HOUR
     )).toBeFalsy();
     expect(samePeriod(
       new Date(new Date().setHours(1, 0, 0, 0)),
       new Date(new Date().setHours(0, 0, 0, 0)),
-      PeriodWidths.HOUR
+      PeriodSpan.HOUR
     )).toBeFalsy();
   });
 });

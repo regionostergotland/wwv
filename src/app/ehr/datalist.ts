@@ -1,5 +1,5 @@
 import { CategorySpec, DataType, MathFunctionEnum } from './datatype';
-import { PeriodWidths, startOfPeriod, samePeriod } from '../shared/period';
+import { PeriodSpan, startOfPeriod, samePeriod } from '../shared/period';
 import '../shared/date.extensions';
 
 /**
@@ -8,11 +8,12 @@ import '../shared/date.extensions';
  */
 export class DataPoint {
   /**
-   * XXX Point is marked for removal.
-   * -Only to be used for DataList.removePoint to achieve time-complexity n.
+   *  Decides if point is marked for removal.
+   *  Only used in DataList.removePoint to achieve time-complexity O(n).
    *  Remove if alternative algorithm is found.
    */
   public removed: boolean;
+
   /**
    * Values for data point.
    */
@@ -24,17 +25,20 @@ export class DataPoint {
   }
 
   /**
-   * Group a list of points in intervals.
-   * group consecutive points if they are in the same period
-   * assumption: already sorted by time
+   * Splits an array of DataPoints into groups of points in the same interval.
+   * The points are assumed to already be sorted by time.
+   * @param points DataPoints to be split
+   * @param span span of interval
+   * @returns an array where each element is an array containing all
+   * datapoints for one span
    */
-  public static groupByInterval(points: DataPoint[],
-                                width: PeriodWidths): DataPoint[][] {
+   public static groupByInterval(points: DataPoint[],
+                                 span: PeriodSpan): DataPoint[][] {
     const groups: DataPoint[][] = [[points[0]]];
     for (let p = 1; p < points.length; p++) {
       const p1: DataPoint = points[p - 1];
       const p2: DataPoint = points[p];
-      if (samePeriod(p1.get('time'), p2.get('time'), width)) {
+      if (samePeriod(p1.get('time'), p2.get('time'), span)) {
         groups[groups.length - 1].push(p2);
       } else {
         groups.push([p2]);
@@ -52,9 +56,11 @@ export class DataPoint {
   public entries() { return this.point.entries(); }
   public has(typeId: string) { return this.point.has(typeId); }
 
-  /*
-   * Check if each pair of values for each required field are equal according
-   * to the datatype
+  /**
+   * Check if each pair of values for all required fields are equal as defined
+   * by the datatype
+   * @param p DataPoint to compare equality against
+   * @param dataTypes dataTypes to check equality for
    */
   public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
     for (const [typeId, dataType] of dataTypes.entries()) {
@@ -67,8 +73,14 @@ export class DataPoint {
     return true;
   }
 
-  /*
-   * Compare each pair of values for each required field with the datatype.
+  /**
+   * Compares each pair of values for all required fields are equal as defined
+   * by the datatype. Uses dataType.compare to decide if one point is greater
+   * than the other.
+   * @param p DataPoint to compare against
+   * @param dataTypes dataTypes to compare
+   * @returns a number indicating if points are equal, or if one is greater
+   * or lesser than the other.
    */
   public compareTo(p: DataPoint, dataTypes: Map<string, DataType>): number {
     for (const [typeId, dataType] of dataTypes.entries()) {
@@ -90,18 +102,22 @@ export class DataList {
    * Specification for category of data list.
    */
   public readonly spec: CategorySpec;
+
   /**
    * All data points stored in the list.
    */
   private points: DataPoint[];
+
   /**
    * Cached list of processed data points.
    */
   private processedPoints: DataPoint[];
+
   /**
-   * Selected period width.
+   * Selected period span.
    */
-  private width: PeriodWidths;
+  private span: PeriodSpan;
+
   /**
    * Math function used to process points.
    */
@@ -111,31 +127,31 @@ export class DataList {
     this.spec = spec;
     this.points = [];
     this.processedPoints = [];
-    this.width = PeriodWidths.POINT;
+    this.span = PeriodSpan.POINT;
     this.mathFunction = MathFunctionEnum.ACTUAL;
   }
 
   /**
    * Merge multiple datapoints to single point with a math function based on
-   * width.
+   * span.
    * @param points DataPoints to merge
-   * @param width time duration that each generated point represents
+   * @param span time duration that each generated point represents
    * @param fn mathematical function to merge points with
    */
   private mergePoints(points: DataPoint[],
-                      width: PeriodWidths,
+                      span: PeriodSpan,
                       fn: MathFunctionEnum): DataPoint[] {
-    if (width === PeriodWidths.POINT || fn === MathFunctionEnum.ACTUAL) {
+    if (span === PeriodSpan.POINT || fn === MathFunctionEnum.ACTUAL) {
       return points.slice();
     } else {
       const newPoints: DataPoint[] = [];
-      const intervals = DataPoint.groupByInterval(points, width);
+      const intervals = DataPoint.groupByInterval(points, span);
       for (const interval of intervals) {
         const newValues: any[] = [];
         for (const [id, dataType] of this.spec.dataTypes.entries()) {
           // TODO move this behaviour to datatypedatetime
           if (id === 'time') {
-            const startTime = startOfPeriod(interval[0].get('time'), width);
+            const startTime = startOfPeriod(interval[0].get('time'), span);
             newValues.push(['time', startTime]);
           } else {
             const prevValues: any[] = interval.map((p) => p.get(id));
@@ -155,7 +171,7 @@ export class DataList {
   private processPoints() {
     this.processedPoints = this.mergePoints(
       this.points,
-      this.width,
+      this.span,
       this.mathFunction
     );
   }
@@ -215,8 +231,8 @@ export class DataList {
   }
 
   /**
-   * Removes points from list by checking for equality to given points to be removed.
-   * @param points: DataPoint[] is a list of datapoints marked to be removed.
+   * Removes points from list by checking for equality against given points to be removed.
+   * @param points: a list of datapoints marked to be removed.
    */
   public removePoints(points: DataPoint[]): void {
     for (const point of points) {
@@ -242,11 +258,11 @@ export class DataList {
   }
 
   /**
-   * Set the width of intervals that data points shall represent, as well as
+   * Set the span of intervals that data points shall represent, as well as
    * math funciton that will determine the value of the interval.
    */
-  public setInterval(width: PeriodWidths, mathFunction: MathFunctionEnum): void {
-    this.width = width;
+  public setInterval(span: PeriodSpan, mathFunction: MathFunctionEnum): void {
+    this.span = span;
     this.mathFunction = mathFunction;
     this.processPoints();
   }
@@ -263,10 +279,10 @@ export class DataList {
   }
 
   /**
-   * Get interval width for the data list.
+   * Get interval span for the data list.
    */
-  public getWidth(): PeriodWidths {
-    return this.width;
+  public getSpan(): PeriodSpan {
+    return this.span;
   }
 
   /**
