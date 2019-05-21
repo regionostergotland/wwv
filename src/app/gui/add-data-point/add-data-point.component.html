@@ -51,6 +51,6 @@
   </div>
 
 </mat-dialog-content>
-<div mat-dialog-actions>
-  <button mat-flat-button color="primary" (click)="createDataPoint()">Lägg till datapunkt</button>
+<div mat-dialog-actions class="action-button">
+  <button mat-flat-button color="primary" (click)="createDataPoint()">{{getActionButtonText()}}</button>
 </div>

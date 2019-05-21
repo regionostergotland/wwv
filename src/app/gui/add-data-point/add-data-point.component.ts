@@ -18,6 +18,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 
+interface DialogInput {
+  point?: DataPoint;
+  category: string;
+}
+
 @Component({
   selector: 'app-add-data-point',
   templateUrl: './add-data-point.component.html',
@@ -32,20 +37,42 @@ export class AddDataPointComponent implements OnInit {
   clockTime: string;
   categorySpec: CategorySpec;
   requiredFields: string[];
+  dataPoint: DataPoint;
 
   matcher = new MyErrorStateMatcher();
 
   constructor(
     public dialogRef: MatDialogRef<AddDataPointComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string,
+    @Inject(MAT_DIALOG_DATA) public data: DialogInput,
     private conveyor: Conveyor,
     private atp: AmazingTimePickerService) {
 
-    this.selectedCategory = data;
+    this.dataPoint = data.point;
+    this.selectedCategory = data.category;
     this.pointData = new Map<string, any>();
     this.pointFormControl = new Map<string, FormControl>();
     const now: Date = new Date();
     this.clockTime = '';
+  }
+
+  /**
+   * Initializes the modal for editing instead of adding a value.
+   *  Sets the form values, and disables the controllers
+   *  for values that shouldn't be able to be edited.
+   */
+
+  setValues(): void {
+    this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
+    for (const [key, value] of Array.from(this.dataPoint.entries())) {
+      const controller = this.getFormControl(key);
+
+      controller.setValue(value);
+      if (this.requiredFields.includes(key) || key === 'date' || key.startsWith('period_')) {
+        controller.disable();
+      }
+      this.pointData.set(key, value);
+    }
+    this.getFormControl('date').disable();
   }
 
   ngOnInit() {
@@ -62,6 +89,23 @@ export class AddDataPointComponent implements OnInit {
         }
       }
     }
+
+    // If a datapoint is provided, then prepare modal for editing instead of adding
+    if (this.dataPoint) {
+      this.setValues();
+    }
+  }
+
+  /**
+   * Return the string of the button depending if the
+   * user is editing or adding a point
+   * @returns string shown in action button
+   */
+  getActionButtonText(): string {
+    if (this.dataPoint) {
+      return 'Applicera ändringar';
+    }
+    return 'Lägg till datapunkt';
   }
 
   /**
@@ -69,16 +113,6 @@ export class AddDataPointComponent implements OnInit {
    */
   onNoClick(): void {
     this.dialogRef.close();
-  }
-
-  /**
-   * Gets all data points from the facade
-   * @returns a list of all datapoints in the category
-   */
-  getData(): DataPoint[] {
-    if (this.selectedCategory) {
-      return this.conveyor.getDataList(this.selectedCategory).getPoints();
-    }
   }
 
   /**
@@ -211,8 +245,6 @@ export class AddDataPointComponent implements OnInit {
    * an input the value will not save and the dialog will not close.
    */
   createDataPoint() {
-    console.log(this.pointData);
-
     // Are all required fields filled?
     for (const field of this.requiredFields) {
       if (!this.pointData.has(field)) {
@@ -227,12 +259,22 @@ export class AddDataPointComponent implements OnInit {
       }
     }
 
-    // Fill the field in a new point and add it.
-    const dataPoint: DataPoint = new DataPoint();
+    // check if we were provided a datapoint
+    let dataPoint: DataPoint = this.dataPoint;
+    if (!dataPoint) {
+      dataPoint = new DataPoint();
+    }
+
+    // set the datapoint values from the forms
     for (const data of Array.from(this.pointData.keys())) {
       dataPoint.set(data, this.pointData.get(data));
     }
-    this.conveyor.getDataList(this.selectedCategory).addPoint(dataPoint);
+
+    // Dont add a point that already exists
+    if (!this.dataPoint) {
+      this.conveyor.getDataList(this.selectedCategory).addPoint(dataPoint);
+    }
+
     this.dialogRef.close();
   }
 
@@ -243,7 +285,6 @@ export class AddDataPointComponent implements OnInit {
    * @param time the time to set.
    */
   setTime(time: string) {
-    console.log(time);
     this.clockTime = time;
     const date: Date = this.pointData.get('time') as Date;
     const strs = time.split(':');

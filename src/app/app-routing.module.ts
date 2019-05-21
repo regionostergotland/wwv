@@ -12,10 +12,11 @@ import { CompositionReceipt } from './ehr/ehr.service';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
+  { path: 'help', component: HelpComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'sources', component: SourcesComponent },
   { path: 'pick-categories/:platform', component: CategoryPickerComponent },
   { path: 'info', component: InfoComponent },
-  { path: 'help', component: HelpComponent },
   { path: 'inspection', component: InspectionComponent },
   { path: 'edit', component: SidebarComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }

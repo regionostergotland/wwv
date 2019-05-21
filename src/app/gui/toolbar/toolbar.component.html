@@ -1,13 +1,25 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>
+  <mat-toolbar-row class="container-1">
     <img src="../assets/logo.png" style="height:70%; cursor:pointer" alt="***REMOVED*** logo" routerLink="/home"/>
 
     <span class="fill-remaining-space"></span>
-    <div style="margin-right:0;">
-      <button mat-button routerLink="/home"><img src="../assets/home.svg"  alt="home"/></button>
-      <button mat-button routerLink="/help"><img src="../assets/help.svg"  alt="help"/></button>
-      <button mat-button routerLink="/info"><img src="../assets/info.svg"  alt="info"/></button>
-      <button mat-button><img src="../assets/person.svg"  alt="profile"/></button>
+    <div>
+        <div style="margin-right:0;" fxFlex fxShow="'true'" fxHide.lt-sm="'true'">
+          <button mat-button routerLink="/home"><img src="../assets/home.svg"  alt="home"/></button>
+          <button mat-button routerLink="/help"><img src="../assets/help.svg"  alt="help"/></button>
+          <button mat-button routerLink="/info"><img src="../assets/info.svg"  alt="info"/></button>
+          <button mat-button><img src="../assets/person.svg"  alt="profile"/></button>
+        </div>
+
+        <mat-menu #menu="matMenu" class="mobile-menu">
+          <button mat-menu-item routerLink="/home">Home</button>
+          <button mat-menu-item routerLink="/help">Hjälp</button>
+          <button mat-menu-item routerLink="/info">Information</button>
+          <button mat-menu-item routerLink="/info">Profil</button>
+        </mat-menu>
+          <button mat-button [mat-menu-trigger-for]="menu" fxHide="true" fxShow.lt-sm>
+            <mat-icon>menu</mat-icon>
+          </button>
     </div>
     <pre></pre>
   </mat-toolbar-row>

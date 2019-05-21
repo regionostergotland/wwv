@@ -8,19 +8,25 @@ import {
   MatSidenavModule,
   MatListModule,
   MatTableModule,
+  MatTabsModule,
   MatPaginatorModule,
   MatBottomSheetModule,
   MatBottomSheetRef,
   MAT_BOTTOM_SHEET_DATA,
   MatTooltipModule,
-  MatIconModule
+  MatIconModule,
+  MatDialogModule
 } from '@angular/material';
-import {BottomSheetCategoriesComponent, SidebarComponent} from './sidebar.component';
-import { HealthListItemsComponent } from '../health-list-items/health-list-items.component';
+import { BottomSheetCategoriesComponent,
+         SidebarComponent} from './sidebar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { CustomGoogleApiModule, GoogleApiService, GoogleAuthService } from '../../google-fit-config';
+import { CustomGoogleApiModule,
+         GoogleApiService,
+         GoogleAuthService } from '../../google-fit-config';
+
+import { HealthListItemsComponent } from '../health-list-items/health-list-items.component';
+import { EditorComponent } from '../editor/editor.component';
 
 
 describe('SidebarComponent', () => {
@@ -29,11 +35,16 @@ describe('SidebarComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SidebarComponent, HealthListItemsComponent, BottomSheetCategoriesComponent ],
+      declarations: [
+        SidebarComponent,
+        EditorComponent,
+        HealthListItemsComponent,
+        BottomSheetCategoriesComponent ],
       imports: [
         BrowserAnimationsModule,
         MatSelectModule,
         MatTableModule,
+        MatTabsModule,
         MatFormFieldModule,
         RouterTestingModule,
         MatCardModule,
@@ -44,9 +55,9 @@ describe('SidebarComponent', () => {
         MatBottomSheetModule,
         MatTooltipModule,
         CustomGoogleApiModule,
-        MatIconModule
+        MatIconModule,
+        MatDialogModule
       ],
-
      providers: [
       GoogleAuthService,
       GoogleApiService,

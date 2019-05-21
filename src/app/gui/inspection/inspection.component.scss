@@ -4,6 +4,15 @@ table {
 
 .center {
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.panel-container {
+    max-width: 1050px;
+    width: 100%;
 }
 
 .panel {
@@ -11,6 +20,17 @@ table {
     text-align: center;
 }
 
-.error {
-    background-color: "#B00020"
+.auth-buttons {
+    margin-bottom: 10px;
+    display:flex;
+    flex-direction: column;
+    width: 310px;
+
+}
+
+.auth-buttons label {
+    margin-bottom: 5px;
+    display:flex;
+    flex-direction: row;
+    justify-content: space-between;
 }

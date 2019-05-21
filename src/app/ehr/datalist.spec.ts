@@ -27,6 +27,7 @@ describe('datalist', () => {
           required: true,
           single: false,
           visible: true,
+          visibleOnMobile: false,
         })
       ],
       [
@@ -39,6 +40,7 @@ describe('datalist', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           }, 'mm[Hg]', 0, 1000,
         )
       ],
@@ -52,6 +54,7 @@ describe('datalist', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           }, 'mm[Hg]', 0, 1000
         )
       ],
@@ -65,6 +68,7 @@ describe('datalist', () => {
             required: false,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           },
           [
             {
@@ -101,6 +105,7 @@ describe('datalist', () => {
           required: true,
           single: false,
           visible: true,
+          visibleOnMobile: false,
         })
       ],
       [
@@ -113,6 +118,7 @@ describe('datalist', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           }, 'kg', 0, 1000
         )
       ],
@@ -126,6 +132,7 @@ describe('datalist', () => {
             required: false,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           },
           [
             {
@@ -198,23 +205,26 @@ describe('datalist', () => {
       )
   ]);
 
+  const filter = {
+    width: PeriodWidths.DAY,
+    fn: MathFunctionEnum.MEAN
+  };
+  dataList.addFilter(filter);
   /*
    * Test that datalist splits datapoints into width interval
    */
   it('should split datapoints into one day intervals, producing three points', () => {
-    dataList.setInterval(PeriodWidths.DAY, MathFunctionEnum.MEAN);
-    expect(dataList.getPoints().length).toEqual(3);
+    expect(dataList.getPoints().get(filter).length).toEqual(3);
   });
   it('should create new datapoints with mean of the interval points numerized fields', () => {
-    dataList.setInterval(PeriodWidths.DAY, MathFunctionEnum.MEAN);
-    expect(dataList.getPoints()[0].get('systolic')).toEqual(102);
-    expect(dataList.getPoints()[0].get('diastolic')).toEqual(21);
+    expect(dataList.getPoints().get(filter)[0].get('systolic')).toEqual(102);
+    expect(dataList.getPoints().get(filter)[0].get('diastolic')).toEqual(21);
   });
   it('should keep coded text if all values are the same', () => {
-    expect(dataList.getPoints()[2].get('position')).toEqual('at1003');
+    expect(dataList.getPoints().get(filter)[2].get('position')).toEqual('at1003');
   });
   it('should remove coded text if all values are not the same', () => {
-    expect(dataList.getPoints()[0].get('position')).toEqual(undefined);
+    expect(dataList.getPoints().get(filter)[0].get('position')).toEqual(undefined);
   });
 
   /**
@@ -246,6 +256,7 @@ describe('datalist', () => {
             required: true,
             single: false,
             visible: true,
+            visibleOnMobile: false,
           })
         ],
       ])
@@ -287,6 +298,7 @@ describe('datalist', () => {
           required: true,
           single: false,
           visible: true,
+          visibleOnMobile: false,
         }
       )],
       [ 'value', new DataTypeQuantity(
@@ -297,6 +309,7 @@ describe('datalist', () => {
           required: true,
           single: false,
           visible: true,
+          visibleOnMobile: false,
         }, 'unit', 0, -1)
       ],
     ]);
@@ -337,7 +350,8 @@ describe('datalist', () => {
             description: '',
             required: true,
             single: false,
-            visible: true
+            visible: true,
+            visibleOnMobile: false,
           })
         ],
       ])

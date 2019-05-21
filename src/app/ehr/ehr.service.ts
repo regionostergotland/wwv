@@ -179,32 +179,37 @@ export class EhrService {
       composition.self_monitoring[spec.id] = [ {} ];
       const root = composition.self_monitoring[spec.id];
 
-      for (let p = 0; p < list.getPoints().length; p++) {
-        const point = list.getPoints()[p];
-        for (const [id, value] of point.entries()) {
-          const dataType = spec.dataTypes.get(id);
-          if (value !== '') {
-            let container: any = root;
-            for (const key of dataType.path) {
-              if (!(key in container[0])) {
-                container[0][key] = [ {} ];
+      let pIndex = 0; /* index of current point in list */
+      for (const [fn, points] of list.getPoints()) {
+        // TODO specify math function of events
+        // how to specify??
+        for (const point of points) {
+          for (const [id, value] of point.entries()) {
+            const dataType = spec.dataTypes.get(id);
+            if (value !== '' && value) {
+              let container: any = root;
+              for (const key of dataType.path) {
+                if (!(key in container[0])) {
+                  container[0][key] = [ {} ];
+                }
+                container = container[0][key];
               }
-              container = container[0][key];
+              let element: any;
+              if (dataType.single) { // use/overwrite first and only element
+                if (!container[0]) {
+                  container[0] = {};
+                }
+                element = container[0];
+              } else {
+                if (!container[pIndex]) {
+                  container[pIndex] = {};
+                }
+                element = container[pIndex];
+              }
+              element[id] = [dataType.toRest(value)];
             }
-            let element: any;
-            if (dataType.single) { // use/overwrite first and only element
-              if (!container[0]) {
-                container[0] = {};
-              }
-              element = container[0];
-            } else {
-              if (!container[p]) {
-                container[p] = {};
-              }
-              element = container[p];
-            }
-            element[id] = [dataType.toRest(value)];
           }
+          pIndex++;
         }
       }
     }
