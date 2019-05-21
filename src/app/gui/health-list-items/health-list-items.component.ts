@@ -3,34 +3,14 @@ import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
          DataTypeEnum,
-         MathFunctionEnum,
          } from '../../ehr/datatype';
-import { DataPoint, Filter } from '../../ehr/datalist';
+import { DataPoint } from '../../ehr/datalist';
 import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 //import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
-
-// @Component({
-//   selector: 'app-removal-dialog',
-//   templateUrl: 'removal-dialog.html',
-// })
-// export class RemovalDialogComponent {
-
-//   // This boolean is sent to the health-list-items-component if the
-//   // user presses the remove button
-//   remove = true;
-
-//   constructor(private conveyor: Conveyor, public dialogRef: MatDialogRef<RemovalDialogComponent>) {
-//     }
-
-//   closeDialog(): void {
-//     this.dialogRef.close();
-//   }
-
-// }
 
 @Component({
   selector: 'app-health-list-items',
@@ -54,12 +34,7 @@ export class HealthListItemsComponent implements OnInit {
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
 
-  // selectedCategory: string;
-  //isEditable = false;
-
-  // allow access to these from html component
   dataTypeEnum = DataTypeEnum;
-  ///periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
   
   displayedColumns: string[];
@@ -119,30 +94,6 @@ export class HealthListItemsComponent implements OnInit {
     this.selection.toggle(row);
     this.change.emit(this.selection.selected);
   }
-
-  /**
-   * Opens the dialog containing RemovalDialogComponent
-   */
-  // openRemovalDialog() {
-  //   if (this.selection.selected.length > 0) {
-  //     const dialogRef = this.dialog.open(RemovalDialogComponent);
-  //     dialogRef.afterClosed().subscribe(result => {
-  //       console.log('The dialog was closed');
-  //       // If result is true, that means the user pressed the button for removing selected values
-  //       if (result) {
-  //         this.removeSelected();
-  //       }
-  //     });
-  //   }
-  // }
-
-  // /**
-  //  * Removes all of the selected datapoints and updates the list
-  //  */
-  // removeSelected() {
-  //   this.conveyor.getDataList(this.category).removePoints(this.selection.selected);
-  //   this.ngOnInit();
-  // }
 
   ngOnInit() {
     if (this.category) {
