@@ -8,6 +8,8 @@ describe('period', () => {
     ]
   }));
 
+  const startDate = '2019-04-11T10:34:36.844Z';
+
   /*
    * Test that start of period is correct and according to the locale.
    */
@@ -17,7 +19,7 @@ describe('period', () => {
     date.setHours(0, 0, 0, 0);
     const startOf2019: number = date.getTime();
     expect(startOfPeriod(
-      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodSpan.YEAR)
+      new Date(Date.parse(startDate)), PeriodSpan.YEAR)
         .getTime())
           .toBe(startOf2019);
   });
@@ -27,7 +29,7 @@ describe('period', () => {
     date.setHours(0, 0, 0, 0);
     const startOfApril: number = date.getTime();
     expect(startOfPeriod(
-      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodSpan.MONTH)
+      new Date(Date.parse(startDate)), PeriodSpan.MONTH)
         .getTime())
           .toBe(startOfApril);
   });
@@ -51,7 +53,7 @@ describe('period', () => {
     date.setHours(0, 0, 0, 0);
     const startOfDay: number = date.getTime();
     expect(startOfPeriod(
-      new Date(Date.parse('2019-04-11T10:34:36.844Z')), PeriodSpan.DAY)
+      new Date(Date.parse(startDate)), PeriodSpan.DAY)
         .getTime())
           .toBe(startOfDay);
   });

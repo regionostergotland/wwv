@@ -82,7 +82,8 @@ export class Conveyor {
         subscribe to */
       return platform.getData(categoryId, start, end)
       .pipe(map(res => {
-        category.addPoints(res); return EMPTY;
+        category.addPoints(res);
+        return EMPTY;
       }));
     }
 
