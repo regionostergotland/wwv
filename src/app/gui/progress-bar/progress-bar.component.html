@@ -14,11 +14,7 @@
       <button (click)="navigate('inspection', 1)" [class]="getClass(3)">
         3
       </button>
-      <div *ngIf="!onSmallScreen()"><p>Inspektion</p></div>
-    </div>
-    <div class="item-container">
-      <button (click)="navigate('', -1)" [class]="getClass(4)">4</button>
-      <div *ngIf="!onSmallScreen()"><p>Skickat</p></div>
+      <div *ngIf="!onSmallScreen()"><p>Granskning</p></div>
     </div>
   </div>
 </div>

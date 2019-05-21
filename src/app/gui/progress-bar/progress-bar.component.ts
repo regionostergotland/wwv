@@ -50,9 +50,6 @@ export class ProgressBarComponent implements OnInit {
       case '/inspection': {
         return 3;
       }
-      case '/confirmation': {
-        return 4;
-      }
       default: {
         return 0;
       }

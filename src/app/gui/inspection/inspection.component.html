@@ -1,4 +1,4 @@
-<div class="center">
+<div *ngIf="!dataSent" class="center">
 
 <p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
 
@@ -23,4 +23,15 @@
     (click)="authenticate(username.value, password.value); sendData(pnr.value)">
       Godkänn och skicka
   </button>
+</div>
+<div *ngIf="dataSent" class="center">
+  <h1 style="text-align: center">
+    Data skickat!
+  </h1>
+  <mat-card>
+    Personnummer: {{receipt.pnr}}<br>
+    EHR ID: {{receipt.ehrId}}<br>
+    Composition UID: {{receipt.compUid}}
+  </mat-card>
+  <button mat-flat-button color="accent" routerLink='/home'>Tillbaka hem</button>
 </div>

@@ -13,6 +13,7 @@ import { CategorySpec,
          DataTypeEnum} from '../../ehr/datatype';
 import { DataPoint } from '../../ehr/datalist';
 import { Conveyor } from '../../conveyor.service';
+import { CompositionReceipt } from '../../ehr/ehr.service';
 
 @Component({
   selector: 'app-inspection',
@@ -20,10 +21,12 @@ import { Conveyor } from '../../conveyor.service';
   styleUrls: ['./inspection.component.scss']
 })
 export class InspectionComponent implements OnInit {
-
   categories: string[] = [];
   categorySpecs: Map<string, CategorySpec>;
   dataTypeEnum = DataTypeEnum;
+
+  dataSent: boolean;
+  receipt: CompositionReceipt;
 
   constructor(
     private router: Router,
@@ -32,6 +35,8 @@ export class InspectionComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.dataSent = false;
+
     // Reset all the internal lists.
     this.categories = this.conveyor.getCategoryIds();
     this.categorySpecs = new Map<string, CategorySpec>();
@@ -66,7 +71,7 @@ export class InspectionComponent implements OnInit {
   sendData(pnr: string) {
     this.conveyor.sendData(pnr).
       subscribe(
-        compUid => this.router.navigateByUrl('/confirmation?compUid='+compUid),
+        receipt => { this.dataSent = true; this.receipt = receipt },
         e => this.snackBar.open(
           'Inrapporteringen misslyckades. Fel: "'+ e.statusText + '"', 'OK',
           { 
@@ -81,5 +86,4 @@ export class InspectionComponent implements OnInit {
   authenticate(user: string, pass: string): void {
     this.conveyor.authenticateBasic(user, pass);
   }
-
 }

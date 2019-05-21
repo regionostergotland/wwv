@@ -8,7 +8,7 @@ import { HelpComponent} from './gui/help/help.component';
 import { InspectionComponent} from './gui/inspection/inspection.component';
 import { SidebarComponent } from './gui/sidebar/sidebar.component';
 import {HealthListItemsComponent} from './gui/health-list-items/health-list-items.component';
-import { ConfirmationComponent } from './gui/confirmation/confirmation.component';
+import { CompositionReceipt } from './ehr/ehr.service';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -18,7 +18,6 @@ const routes: Routes = [
   { path: 'help', component: HelpComponent },
   { path: 'inspection', component: InspectionComponent },
   { path: 'edit', component: SidebarComponent },
-  { path: 'confirmation', component: ConfirmationComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 

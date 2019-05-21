@@ -7,6 +7,7 @@ import { GfitService } from './platform/gfit.service';
 import { DummyPlatformService } from './platform/dummy.service';
 import { Observable, EMPTY, forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { CompositionReceipt } from './ehr/ehr.service';
 
 @Injectable({
   providedIn: 'root'
@@ -97,7 +98,7 @@ export class Conveyor {
     this.ehrService.authenticateBasic(username, password);
   }
 
-  public sendData(pnr: string): Observable<{}> {
+  public sendData(pnr: string): Observable<CompositionReceipt> {
     const composition = this.ehrService.createComposition(
       Array.from(this.categories.values())
     );

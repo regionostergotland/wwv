@@ -8,7 +8,7 @@ import { CategorySpec } from './datatype';
 import { DataList } from './datalist';
 
 /* Receipt for composition creation */
-interface CompositionReceipt {
+export interface CompositionReceipt {
   pnr: string;
   composition: {};
   partyId: string;
