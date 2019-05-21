@@ -1,10 +1,18 @@
-import {Component, OnInit, AfterViewInit, ViewChild, ViewChildren, QueryList} from '@angular/core';
+import {Component,
+        OnInit,
+        AfterViewInit,
+        ViewChild,
+        ViewChildren,
+        QueryList} from '@angular/core';
+import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
          DataTypeEnum} from '../../ehr/datatype';
 import { DataPoint } from '../../ehr/datalist';
-import {Conveyor} from '../../conveyor.service';
+import { Conveyor } from '../../conveyor.service';
 
 @Component({
   selector: 'app-inspection',
@@ -17,8 +25,11 @@ export class InspectionComponent implements OnInit {
   categorySpecs: Map<string, CategorySpec>;
   dataTypeEnum = DataTypeEnum;
 
-  constructor(private conveyor: Conveyor) {
-  }
+  constructor(
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private conveyor: Conveyor,
+  ) {}
 
   ngOnInit() {
     // Reset all the internal lists.
@@ -55,8 +66,14 @@ export class InspectionComponent implements OnInit {
   sendData() {
     this.conveyor.sendData().
       subscribe(
-        _ => console.log('success'),
-        e => console.log(e)
+        _ => this.router.navigateByUrl('/confirmation'),
+        e => this.snackBar.open('Inrapporteringen misslyckades!', 'OK',
+             { 
+               duration: 10000,
+               panelClass: 'error'
+             })
+        // TODO fix snackbar styling
+        // TODO send composition id to confirmation screen
     );
   }
 
