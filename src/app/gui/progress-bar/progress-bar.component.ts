@@ -8,31 +8,12 @@ import { Router } from '@angular/router';
 })
 export class ProgressBarComponent implements OnInit {
   constructor(private conveyor: Conveyor, private router: Router) {}
-  onSmallScreen(): boolean {
-    return window.matchMedia('(max-width: 599px)').matches;
-  }
+
+  ngOnInit() {}
 
   onSmallScreen(): boolean {
     return window.matchMedia('(max-width: 599px)').matches;
   }
-
-  getClass(index: number): string {
-    const step = this.getCurrentStep();
-    if (index === step) {
-      return 'dot active';
-    } else if (step > index) {
-      return 'dot done';
-    }
-    return 'dot';
-  }
-
-  navigate(to: string, index: number): void {
-    if (index !== this.getCurrentStep() && to !== '') {
-      this.router.navigateByUrl('/' + to);
-    }
-  }
-
-  ngOnInit() {
 
   /**
    * @param buttonStep what step the button corresponds to.
@@ -58,24 +39,19 @@ export class ProgressBarComponent implements OnInit {
       this.router.navigateByUrl('/' + to);
     }
   }
-  ngOnInit() {}
+
   getCurrentStep(): number {
     switch (this.router.url) {
-      case '/sources': {
+      case '/sources':
         return 1;
-      }
-      case '/pick-categories': {
+      case '/pick-categories':
         return 1;
-      }
-      case '/edit': {
+      case '/edit':
         return 2;
-      }
-      case '/inspection': {
+      case '/inspection':
         return 3;
-      }
-      case '/confirmation': {
+      case '/confirmation':
         return 4;
-      }
       default: {
         return 0;
       }
