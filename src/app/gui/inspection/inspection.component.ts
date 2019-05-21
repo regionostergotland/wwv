@@ -46,7 +46,7 @@ export class InspectionComponent implements OnInit {
    * @returns the number of values in the chosen category
    */
   getNumberOfValues(category: string) {
-    let values: number = 0;
+    let values = 0;
     const pointMap = this.conveyor.getDataList(category).getPoints();
     for (const [_, points] of pointMap.entries()) {
       values += points.length;

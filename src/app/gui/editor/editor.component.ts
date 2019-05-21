@@ -88,7 +88,7 @@ export class MathDialogComponent {
       const filter: Filter = {
         width: parseInt(intervalString, 10),
         fn: parseInt(funcString, 10)
-      }
+      };
       this.conveyor.getDataList(this.selectedCategory).addFilter(filter);
       this.closeDialog();
     }
@@ -150,7 +150,7 @@ export class EditorComponent implements OnInit {
   ngOnInit() {
     this.selectedRows = [];
     this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
-    for (let [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
+    for (const [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
       this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
     }
 
@@ -179,7 +179,7 @@ export class EditorComponent implements OnInit {
    * Opens the dialog for MathDialogComponent
    */
   openMathDialog(): void {
-    //this.selection.clear();
+    // this.selection.clear();
     const dialogRef = this.dialog.open(MathDialogComponent, {
       data: this.selectedCategory
     });

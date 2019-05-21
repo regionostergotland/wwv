@@ -30,14 +30,14 @@ export class HealthListItemsComponent implements OnInit {
     this.data = value;
   }
 
-  @Output() change: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>(); 
+  @Output() change: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
 
   dataTypeEnum = DataTypeEnum;
   categorySpec: CategorySpec;
-  
+
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
 
