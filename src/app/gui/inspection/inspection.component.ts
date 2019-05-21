@@ -71,10 +71,10 @@ export class InspectionComponent implements OnInit {
   sendData(pnr: string) {
     this.conveyor.sendData(pnr).
       subscribe(
-        receipt => { this.dataSent = true; this.receipt = receipt },
+        receipt => { this.dataSent = true; this.receipt = receipt; },
         e => this.snackBar.open(
-          'Inrapporteringen misslyckades. Fel: "'+ e.statusText + '"', 'OK',
-          { 
+          'Inrapporteringen misslyckades. Fel: "' + e.statusText + '"', 'OK',
+          {
             duration: 10000,
             panelClass: 'error'
           })
