@@ -11,38 +11,23 @@
 </div>
 <h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
 
-<mat-tab-group>
-<mat-tab *ngFor="let entry of dataList | keyvalue">
-
-<!-- TAB LABEL -->
-<ng-template *ngIf="entry.key.width === periodWidths.POINT" mat-tab-label>
-  Ofiltrerade värden
-</ng-template>
-<ng-template *ngIf="entry.key.width !== periodWidths.POINT" mat-tab-label>
-  {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
-  <button mat-stroked-button
-      matTooltip="Ta bort filtrering"
-      (click)="removeFilter(entry.key)">
-    <mat-icon>delete</mat-icon>
-  </button>
-</ng-template>
-
 <div class="table-container">
   <table
     style="text-align: left"
     class="table"
     mat-table
-    [dataSource]="entry.value"
+    [dataSource]="data"
     [trackBy]="trackItem"
   >
   <ng-container>
-    <ng-container *ngFor="let key of getDisplayedColumns(entry.key)" matColumnDef="{{ key }}">
+    <ng-container *ngFor="let key of getDisplayedColumns()" matColumnDef="{{key}}">
+
       <!-- SELECT CHECK BOX  -->
       <div *ngIf="key === 'select'">
         <th mat-header-cell *matHeaderCellDef>
           <mat-checkbox
-            (change)="$event ? masterToggle(entry.key) : null"
-            [checked]="selection.hasValue() && isAllSelected(entry.key)"
+            (change)="$event ? masterToggle() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
           >
           </mat-checkbox>
         </th>
@@ -108,9 +93,9 @@
             </div>
           </div>
         </td>
-
-        <!-- MOBILE EDIT BUTTON -->
       </div>
+
+      <!-- MOBILE EDIT BUTTON -->
       <div *ngIf="key === 'mobile'">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let dataPoint" style="text-align: center;">
@@ -122,13 +107,10 @@
     </ng-container>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns(entry.key)"></tr>
-  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns(entry.key);"></tr>
+  <tr mat-header-row *matHeaderRowDef="getDisplayedColumns()"></tr>
+  <tr mat-row *matRowDef="let row; columns: getDisplayedColumns();"></tr>
   </table>
 </div>
-
-</mat-tab>
-</mat-tab-group>
 
 <div class="small">
   <mat-paginator
@@ -136,41 +118,4 @@
     [pageSizeOptions]="[5, 10, 15, 30, 50]"
     showFirstLastButtons
   ></mat-paginator>
-</div>
-<div class="flex">
-  <button
-    *ngIf="isEditable"
-    style="margin: 0;"
-    mat-stroked-button
-    color="accent"
-    style="text-align: center;"
-    (click)="openDialog()"
-  >
-    <div fxHide fxHide.lt-sm="true">Lägg till datavärde</div>
-    <div fxHide.lt-sm="false">Lägg till</div>
-  </button>
-  <button
-    *ngIf="isEditable"
-    style="margin: 0;"
-    mat-stroked-button
-    color="accent"
-    style="text-align: center;"
-    (click)="openRemovalDialog()"
-  >
-    <div fxHide fxHide.lt-sm="true">
-      Ta bort datavärden, {{ selection.selected.length }} valda
-    </div>
-    <div fxHide.lt-sm="false">Ta bort ({{ selection.selected.length }})</div>
-  </button>
-  <button
-    *ngIf="isEditable"
-    style="margin: 0;"
-    mat-stroked-button
-    color="accent"
-    style="text-align: center;"
-    (click)="openMathDialog()"
-  >
-    <div fxHide fxHide.lt-sm="true">Sammanställ punkter</div>
-    <div fxHide.lt-sm="false">Sammanställ</div>
-  </button>
 </div>

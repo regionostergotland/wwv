@@ -5,8 +5,8 @@ import { CategoryPickerComponent } from './category-picker/category-picker.compo
 import {
   HealthListItemsComponent,
   RemovalDialogComponent,
-  MathDialogComponent,
 } from './health-list-items/health-list-items.component';
+import { EditorComponent, MathDialogComponent } from './editor/editor.component';
 import { InspectionComponent } from './inspection/inspection.component';
 import {
   BottomSheetCategoriesComponent,
@@ -116,18 +116,20 @@ import {
   declarations: [
     SourcesComponent,
     CategoryPickerComponent,
-    HealthListItemsComponent,
     InspectionComponent,
     SidebarComponent,
     AddDataPointComponent,
     BottomSheetCategoriesComponent,
+    HealthListItemsComponent,
     RemovalDialogComponent,
+    EditorComponent,
     MathDialogComponent,
     ConfirmationComponent,
     AddNewDataModalComponent,
   ],
   exports: [SourcesComponent],
   entryComponents: [
+    HealthListItemsComponent,
     AddDataPointComponent,
     BottomSheetCategoriesComponent,
     RemovalDialogComponent,

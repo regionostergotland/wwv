@@ -1,0 +1,67 @@
+<h1 style="text-align: center">{{categorySpec && editable ? categorySpec.label : ''}}</h1>
+
+<mat-tab-group>
+<mat-tab *ngFor="let entry of dataList | keyvalue">
+
+<!-- TAB LABEL -->
+<ng-template *ngIf="entry.key.width === PeriodWidths.POINT" mat-tab-label>
+  Ofiltrerade värden
+</ng-template>
+<ng-template *ngIf="entry.key.width !== PeriodWidths.POINT" mat-tab-label>
+  {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
+  <button *ngIf="editable" mat-stroked-button 
+      matTooltip="Ta bort filtrering"
+      (click)="removeFilter(entry.key)">
+    <mat-icon>delete</mat-icon>
+  </button>
+</ng-template>
+
+<!-- DATA LIST -->
+<app-health-list-items
+    [width]="entry.key.width"
+    [category]="selectedCategory" 
+    [isEditable]="editable"
+    [dataList]="entry.value">
+</app-health-list-items>
+
+</mat-tab>
+</mat-tab-group>
+
+<!-- EDIT BUTTONS -->
+<div class="flex">
+  <button
+    *ngIf="isEditable"
+    style="margin: 0;"
+    mat-stroked-button
+    color="accent"
+    style="text-align: center;"
+    (click)="openDialog()"
+  >
+    <div fxHide fxHide.lt-sm="true">Lägg till datavärde</div>
+    <div fxHide.lt-sm="false">Lägg till</div>
+  </button>
+  <button
+    *ngIf="isEditable"
+    style="margin: 0;"
+    mat-stroked-button
+    color="accent"
+    style="text-align: center;"
+    (click)="openRemovalDialog()"
+  >
+    <div fxHide fxHide.lt-sm="true">
+      Ta bort datavärden, {{ selection.selected.length }} valda
+    </div>
+    <div fxHide.lt-sm="false">Ta bort ({{ selection.selected.length }})</div>
+  </button>
+  <button
+    *ngIf="isEditable"
+    style="margin: 0;"
+    mat-stroked-button
+    color="accent"
+    style="text-align: center;"
+    (click)="openMathDialog()"
+  >
+    <div fxHide fxHide.lt-sm="true">Sammanställ punkter</div>
+    <div fxHide.lt-sm="false">Sammanställ</div>
+  </button>
+</div>

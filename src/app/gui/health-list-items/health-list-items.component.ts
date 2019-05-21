@@ -1,44 +1,18 @@
-import {Component, Input, OnInit, ViewChild, Inject, ViewChildren, AfterViewInit, QueryList} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, Inject} from '@angular/core';
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
          DataTypeEnum,
          MathFunctionEnum,
          } from '../../ehr/datatype';
+import { AddDataPointComponent } from '../add-data-point/add-data-point.component';
 import { DataPoint, Filter } from '../../ehr/datalist';
 import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
-import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA, MatTabsModule} from '@angular/material';
+import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
 import * as dayjs from 'dayjs';
-
-export interface MathOption {
-  value: MathFunctionEnum;
-  description: string;
-}
-
-export interface IntervalOption {
-  value: PeriodWidths;
-  description: string;
-}
-
-const MATH_OPTIONS: MathOption[] = [
-  {value: MathFunctionEnum.MAX, description: 'Maximalt värde'},
-  {value: MathFunctionEnum.MEAN, description: 'Medelvärde'},
-  {value: MathFunctionEnum.MEDIAN, description: 'Median'},
-  {value: MathFunctionEnum.MIN, description: 'Minimalt värde'},
-  {value: MathFunctionEnum.TOTAL, description: 'Totala värde'},
-];
-
-const INTERVAL_OPTIONS: IntervalOption[] = [
-  {value: PeriodWidths.HOUR, description: 'Per timme'},
-  {value: PeriodWidths.DAY, description: 'Per dygn'},
-  {value: PeriodWidths.WEEK, description: 'Per vecka'},
-  {value: PeriodWidths.MONTH, description: 'Per månad'},
-  {value: PeriodWidths.YEAR, description: 'Per År'},
-];
 
 @Component({
   selector: 'app-removal-dialog',
@@ -60,88 +34,34 @@ export class RemovalDialogComponent {
 }
 
 @Component({
-  selector: 'app-math-dialog',
-  templateUrl: 'math-dialog.html',
-  styleUrls: ['./health-list-items.component.scss']
-})
-export class MathDialogComponent {
-
-  mathOptions: MathOption[];
-  intervalOptions: IntervalOption[];
-
-  selectedCategory: string;
-
-  constructor(
-    private conveyor: Conveyor,
-    public dialogRef: MatDialogRef<MathDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string) {
-
-    this.selectedCategory = data;
-    this.mathOptions = MATH_OPTIONS;
-    this.intervalOptions = INTERVAL_OPTIONS;
-  }
-
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
-
-  /**
-   * Calls the setInterval function in order to do math manipulations on the data
-   * @param intervalString A string containing a PeriodWidths enum, must be converted to int
-   * @param funcString A string containing a Mathfunction enum, must be converted to int
-   */
-  calculate(intervalString: string, funcString: string) {
-    if (intervalString && funcString) {
-      const filter: Filter = {
-        width: parseInt(intervalString, 10),
-        fn: parseInt(funcString, 10)
-      };
-      this.conveyor.getDataList(this.selectedCategory).addFilter(filter);
-      this.closeDialog();
-    }
-  }
-
-  /**
-   * Restores the datalist to the default settings
-   */
-  changeBack() {
-    this.conveyor.getDataList(this.selectedCategory).resetFilter();
-    this.closeDialog();
-  }
-
-}
-
-@Component({
   selector: 'app-health-list-items',
   templateUrl: './health-list-items.component.html',
   styleUrls: ['./health-list-items.component.scss']
 })
 export class HealthListItemsComponent implements OnInit {
 
-  @Input() set selectCategory(value: string) {
-    if (this.selectedCategory) {
-      this.selectedCategory = value;
-      this.ngOnInit();
-    } else {
-      this.selectedCategory = value;
-    }
-  }
+  @Input() width: PeriodWidths;
 
-  @Input() set editable(value: boolean) {
-    this.isEditable = value;
+  @Input() category: string;
+
+  @Input() isEditable: boolean;
+
+  @Input() set dataList(value: MatTableDataSource<DataPoint>) {
+    this.data = value;
   }
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
 
-  selectedCategory: string;
-  isEditable = false;
+  // selectedCategory: string;
+  //isEditable = false;
 
   // allow access to these from html component
   dataTypeEnum = DataTypeEnum;
-  periodWidths = PeriodWidths;
+  ///periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
-  // pointDataList: Map<MathFunctionEnum, DataPoint[]>;
+  
+  displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
 
   periodLabels: Map<string, string> = new Map<string, string>([
@@ -158,27 +78,8 @@ export class HealthListItemsComponent implements OnInit {
     ['period_MONTH', 'Månad för mätning'],
     ['date', 'Datum för mätning']]);
 
-  mathOptions: Map<MathFunctionEnum, string> =
-    new Map<MathFunctionEnum, string>([
-    [MathFunctionEnum.MAX, 'Maximalt '],
-    [MathFunctionEnum.MEAN, 'Medelvärde '],
-    [MathFunctionEnum.MEDIAN, 'Median '],
-    [MathFunctionEnum.MIN, 'Minimalt '],
-    [MathFunctionEnum.TOTAL, 'Totalt '],
-  ]);
-
-  intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
-    [PeriodWidths.HOUR, 'per timme'],
-    [PeriodWidths.DAY, 'per dygn'],
-    [PeriodWidths.WEEK, 'per vecka'],
-    [PeriodWidths.MONTH, 'per månad'],
-    [PeriodWidths.YEAR, 'per år'],
-  ]);
-
- // @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
-  // TODO rename datalist to something else :)
-  dataList: Map<Filter, MatTableDataSource<DataPoint>>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  data: MatTableDataSource<DataPoint>;
 
   // The selected datapoints
   selection = new SelectionModel<DataPoint>(true, []);
@@ -198,11 +99,27 @@ export class HealthListItemsComponent implements OnInit {
    *
    *  @returns a boolean, true of selected elements matches total number of rows
    */
-  isAllSelected(filter: Filter): boolean {
+  isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataList.get(filter).data.length;
+    const numRows = this.data.data.length;
     return numSelected === numRows;
   }
+
+  getCategoryUnit(key: string): string {
+    if (!this.categorySpec.dataTypes.has(key)) {
+      return '';
+    }
+    const dataType = this.categorySpec.dataTypes.get(key);
+    return dataType.unit ? dataType.unit : '';
+  }
+
+  getCategoryLabel(key: string): string {
+    if (!this.categorySpec.dataTypes.has(key)) {
+      return this.periodLabels.get(key);
+    }
+    return this.categorySpec.dataTypes.get(key).label;
+  }
+
 
   getCategoryTooltip(key: string): string {
     if (!this.categorySpec.dataTypes.has(key)) {
@@ -292,16 +209,13 @@ export class HealthListItemsComponent implements OnInit {
     }
   }
 
-
-
-
   /**
    * Selects all rows if they are not all selected; otherwise clear selection.
    */
-  masterToggle(filter: Filter) {
-    this.isAllSelected(filter) ?
+  masterToggle() {
+    this.isAllSelected() ?
         this.selection.clear() :
-        this.dataList.get(filter).data.forEach(row => this.selection.select(row));
+        this.data.data.forEach(row => this.selection.select(row));
   }
 
   /**
@@ -324,18 +238,16 @@ export class HealthListItemsComponent implements OnInit {
    * Removes all of the selected datapoints and updates the list
    */
   removeSelected() {
-    this.conveyor.getDataList(this.selectedCategory).removePoints(this.selection.selected);
+    this.conveyor.getDataList(this.category).removePoints(this.selection.selected);
     this.ngOnInit();
   }
 
   ngOnInit() {
-    if (this.selectedCategory) {
+    if (this.category) {
       // Reset all the internal lists.
-      this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
-      this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
-      for (const [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
-        this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
-      }
+      this.categorySpec = this.conveyor.getCategorySpec(this.category);
+      this.data.paginator = this.paginator;
+
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
 
@@ -343,83 +255,28 @@ export class HealthListItemsComponent implements OnInit {
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
         // Fill options
         if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
-          const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
+          const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.category).getDataType(key) as DataTypeCodedText;
           this.options.set(key, datatypes.options);
         }
       }
     }
   }
 
-  /*
-  ngAfterViewInit() {
-    let i = 0;
-    for (const table of this.dataList.values()) {
-      table.paginator = this.paginator.toArray()[i];
-      i++;
-    }
-  }
-  */
-
   trackItem(index, item) {
     return item ? index : undefined;
   }
 
-
   openEditDialog(point: DataPoint, key: string): void {
     const dialogRef = this.dialog.open(AddDataPointComponent, {
-      data: {category: this.selectedCategory, point}
+      data: {category: this.category, point}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.ngOnInit();
     });
   }
 
-  /**
-   * Opens the dialog to add an item in the list stored in the conveyor.
-   */
-  openDialog(): void {
-    const dialogRef = this.dialog.open(AddDataPointComponent, {
-      data: { category: this.selectedCategory }
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.ngOnInit();
-    });
-  }
-
-  /**
-   * Opens the dialog for MathDialogComponent
-   */
-  openMathDialog(): void {
-    this.selection.clear();
-    const dialogRef = this.dialog.open(MathDialogComponent, {
-      data: this.selectedCategory
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.ngOnInit();
-    });
-  }
-
-  getCategoryUnit(key: string): string {
-    if (!this.categorySpec.dataTypes.has(key)) {
-      return '';
-    }
-    const dataType = this.categorySpec.dataTypes.get(key);
-    return  dataType.unit ? dataType.unit : '';
-  }
-
-  getCategoryLabel(key: string): string {
-    if (!this.categorySpec.dataTypes.has(key)) {
-      return this.periodLabels.get(key);
-    }
-    return this.categorySpec.dataTypes.get(key).label;
-  }
-
-  /**
+  /*
    * Used to make sure the tables don't display a bunch of decimals.
    * Checks if num is an integer or float. If num is an integer, it simply returns the number.
    * If num is a float, it returns a string containing only 1 decimal.
@@ -432,29 +289,23 @@ export class HealthListItemsComponent implements OnInit {
     return num.toFixed(1);
   }
 
-  removeFilter(filter: Filter): void {
-    const dataList = this.conveyor.getDataList(this.selectedCategory);
-    dataList.removeFilter(filter);
-    this.ngOnInit();
-  }
-
   /**
    * Returns the columns which should be displayed in the table depending on which
    * category it is.
    * @returns a list of labels for the specified category
    */
-  getDisplayedColumns(filter: Filter): string[] {
+  getDisplayedColumns(): string[] {
     const result: string[] = [];
     if (this.isEditable) {
       result.push('select');
     }
-    if (this.selectedCategory) {
-      const dataList = this.conveyor.getDataList(this.selectedCategory);
+    if (this.category) {
+      const dataList = this.conveyor.getDataList(this.category);
       for (const [column, dataType] of dataList.spec.dataTypes.entries()) {
         if (!dataType.visible) {
           continue;
         } else if (column === 'time') {
-          switch (filter.width) {
+          switch (this.width) {
             case PeriodWidths.DAY: result.push('period_DAY'); break;
             case PeriodWidths.MONTH: result.push('period_MONTH'); break;
             case PeriodWidths.WEEK: result.push('period_WEEK'); break;

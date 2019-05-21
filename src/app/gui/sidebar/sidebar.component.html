@@ -1,11 +1,5 @@
-<div
-
-class="container-container">
-  <div
-    [class]="getContainerClass()"
-
-
-  >
+<div class="container-container">
+  <div [class]="getContainerClass()">
     <div class="content">
       <div *ngIf="!selectedCategory">
         <h2 style="text-align: center;">
@@ -13,7 +7,7 @@ class="container-container">
         </h2>
         <div style="text-align: center">
           <p>Granska och redigera varje kategori i sidomenyn</p>
-          <p>Lägg till enga kategorier med egna värden</p>
+          <p>Lägg till egna kategorier med egna värden</p>
           <p>Hämta ytterligare värden från en plattform</p>
         </div>
         <h3 style="text-align: center">
@@ -24,14 +18,13 @@ class="container-container">
             <div class="arrow-text">Börja här!</div>
         </div>
       </div>
-     
-      
-      <app-health-list-items
-        *ngIf="selectedCategory"
+
+      <!-- EDITOR / TABLE -->
+      <app-editor *ngIf="selectedCategory"
         [selectCategory]="selectedCategory"
         [editable]="true"
-        style="text-align: left"
-      ></app-health-list-items>
+        style="text-align: left">
+      </app-editor>
 
       <div class="next-button-container">
         <button
@@ -39,7 +32,6 @@ class="container-container">
           mat-raised-button
           color="primary"
           (click)="router.navigateByUrl('/inspection')"
-
         >
           Nästa steg
         </button>
@@ -68,7 +60,6 @@ class="container-container">
           <mat-divider></mat-divider>
         </div>
      
-
       <mat-list-item
         (click)="openBottomSheet()"
       >
@@ -85,6 +76,7 @@ class="container-container">
       
     </mat-nav-list>
     </div>
+
     <div *ngIf="getMode() === 'bottom'">
       <div class="sidebar-bar">
         <div
@@ -120,12 +112,8 @@ class="container-container">
     </div>
   </div>
 </div>
+
 <!--
-
-
-
-
-
 <mat-sidenav-container class="container">
   <mat-sidenav #sidenav #drawer mode="side" opened role="navigation" autosize class="example-sidenav">
 
@@ -159,8 +147,19 @@ class="container-container">
   </mat-sidenav>
 
   <mat-sidenav-content>
-    
-  </mat-sidenav-content>
+    <div *ngIf="!selectedCategory">
+      <h2>Här kan du redigera, komplettera och kommentera dina värden.</h2>
+      <p>- Granska och redigera varje kategori i sidomenyn</p>
+      <p>- Lägg till enga kategorier med egna värden</p>
+      <p>- Hämta ytterligare värden från en plattform</p>
+      <h3>Om inga ändringar önskas, gå vidare till nästa steg.</h3>
+    </div>
+    <app-editor *ngIf="selectedCategory"
+        [selectCategory]="selectedCategory"
+        [editable]="true" style="text-align: left">
+    </app-editor>
+    <button class='margin' mat-raised-button color='primary' routerLink='/inspection'>Nästa steg</button>
 
+  </mat-sidenav-content>
 </mat-sidenav-container>
 -->
