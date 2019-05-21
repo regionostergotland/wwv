@@ -184,7 +184,7 @@ export class HealthListItemsComponent implements OnInit {
       return 'mobile';
     }
 
-    if (key.startsWith('peroid_') || key === 'date') {
+    if (key.startsWith('period_') || key === 'date') {
       return 'text';
     }
 
