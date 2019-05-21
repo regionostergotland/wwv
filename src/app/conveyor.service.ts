@@ -58,6 +58,14 @@ export class Conveyor {
     return this.ehrService.getCategories();
   }
 
+  /**
+   * Fetches data from a specified timeinterval for a given category, from a given platform.
+   * @param platformId identifier for the platform which data is to be fetched from
+   * @param categoryId identifier for the category of interest
+   * @param start start of requested time interval
+   * @param end end of requested time interval
+   * @returns an empty observable, notifying any listeners that the fetching is complete
+   */
   public fetchData(platformId: string, categoryId: string,
                    start: Date, end: Date): Observable<any> {
       if (!this.platforms.has(platformId)) {
@@ -70,8 +78,8 @@ export class Conveyor {
 
       const platform = this.platforms.get(platformId);
       const category: DataList = this.getDataList(categoryId);
-      // Add points to category and return an empty observable for the GUI to
-      // subscribe to
+      /* Add points to category and return an empty observable for the GUI to
+        subscribe to */
       return platform.getData(categoryId, start, end)
       .pipe(map(res => {
         category.addPoints(res); return EMPTY;
@@ -102,18 +110,10 @@ export class Conveyor {
     return this.ehrService.sendData(Array.from(this.categories.values()));
   }
 
-  /*
-   * Saves the platform to be fetched from.
-   * @param platformId The chosen platform
-   */
   public selectPlatform(platformId: string) {
     this.selectedPlatform = platformId;
   }
 
-  /*
-   * Gets the current selected platform.
-   * @returns the currently selected platform.
-   */
   public getSelectedPlatform(): string {
     return this.selectedPlatform;
   }

@@ -8,6 +8,9 @@ import {
   GoogleAuthService,
 } from 'ng-gapi';
 
+/**
+ * Defines the client id and google fit scopes
+ */
 const gapiClientConfig: NgGapiClientConfig = {
     client_id: '***REMOVED***.apps.googleusercontent.com',
     discoveryDocs: ['https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'],

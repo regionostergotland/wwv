@@ -28,6 +28,8 @@ export class GfitService extends Platform {
   private auth: any;
   private devices: Set<any>;
 
+  /* Maps common fields such as medical device and timestamp to a function that
+  *  extracts this data from the Google Fit JSON-response */
   private readonly commonDataTypes = new Map<string, (src: any) => any>(
     [
       [CommonFields.TIME,
@@ -59,6 +61,8 @@ export class GfitService extends Platform {
     private http: HttpClient
     ) {
     super();
+    /* Maps all implemented categories to their datastream url and functions that
+      extract data of interest from the Google Fit JSON-response */
     this.implementedCategories = new Map([
       [Categories.BLOOD_PRESSURE, {
         url: 'derived:com.google.blood_pressure:com.google.android.gms:merged',
@@ -108,6 +112,11 @@ export class GfitService extends Platform {
     return sessionStorage.getItem(GfitService.SESSION_STORAGE_KEY);
   }
 
+  /**
+   * Attempts to authenticate a user against Google. The method has been assigned the
+   * 'async' prefix in order to enable the application to fully await the execution of
+   * the external process of signing in to Google.
+   */
   public async signIn() {
     if (!sessionStorage.getItem(GfitService.SESSION_STORAGE_KEY)
       || (this.user == null)) {
@@ -196,7 +205,7 @@ export class GfitService extends Platform {
     const startTime = String(start.getTime() * Math.pow(10, 6));
     const endTime = String(end.getTime() * Math.pow(10, 6));
     const dataSetId = startTime + '-' + endTime;
-    // console.log(dataSetId);
+    console.log(dataSetId);
     const tail: string = '/datasets/' +
                           dataSetId +
                           '?access_token=' +
@@ -213,7 +222,7 @@ export class GfitService extends Platform {
 
   /**
    * This function converts data from the default JSON-format which is returned
-   * by Google, to our internal representation (which varies depending on
+   * by Google, to the internal representation (which varies depending on
    * category)
    * @param res result from http.get-request (json file)
    * @param categoryId specifies which category the data belongs to
