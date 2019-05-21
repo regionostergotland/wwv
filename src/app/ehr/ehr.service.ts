@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
 import { EHR_CONFIG, EhrConfig } from './ehr-config';
@@ -228,15 +228,15 @@ export class EhrService {
       'compUid': '',
     };
     return this.getPartyId(pnr)
-      .pipe(switchMap(partyId => {
+      .pipe(switchMap((partyId: string) => {
           receipt.partyId = partyId;
-          return this.getEhrId.bind(this);
+          return this.getEhrId(partyId);
         }))
       .pipe(switchMap((ehrId: string) => {
           receipt.ehrId = ehrId;
-          return this.postComposition(ehrId, composition)
+          return this.postComposition(ehrId, composition);
         }))
-      .pipe(map(res => {
+      .pipe(map((res: CompositionResponse) => {
           receipt.compUid = res.compositionUid;
           return receipt;
         }));
