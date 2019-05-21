@@ -22,9 +22,9 @@
     [width]="entry.key.width"
     [category]="selectedCategory" 
     [isEditable]="editable"
-    [dataList]="entry.value">
+    [dataList]="entry.value"
+    (change)="updateSelected($event)">
 </app-health-list-items>
-
 </mat-tab>
 </mat-tab-group>
 </div>
@@ -49,9 +49,9 @@
     (click)="openRemovalDialog()"
   >
     <div fxHide fxHide.lt-sm="true">
-      Ta bort datavärden, {{ selection.selected.length }} valda
+      Ta bort datavärden, {{ selectedRows.length }} valda
     </div>
-    <div fxHide.lt-sm="false">Ta bort ({{ selection.selected.length }})</div>
+    <div fxHide.lt-sm="false">Ta bort ({{ selectedRows.length }})</div>
   </button>
   <button
     style="margin: 0;"

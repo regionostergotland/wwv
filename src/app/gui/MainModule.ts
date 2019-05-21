@@ -4,9 +4,10 @@ import { CommonModule } from '@angular/common';
 import { CategoryPickerComponent } from './category-picker/category-picker.component';
 import {
   HealthListItemsComponent,
-  RemovalDialogComponent,
 } from './health-list-items/health-list-items.component';
-import { EditorComponent, MathDialogComponent } from './editor/editor.component';
+import { EditorComponent,
+         MathDialogComponent,
+         RemovalDialogComponent } from './editor/editor.component';
 import { InspectionComponent } from './inspection/inspection.component';
 import {
   BottomSheetCategoriesComponent,
