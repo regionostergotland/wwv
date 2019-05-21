@@ -155,6 +155,8 @@ export class HealthListItemsComponent implements OnInit {
    */
 
   shouldHide(key: string): boolean {
+    console.log('should hide?', key, key==='mobile');
+
     if (key === 'mobile') {
       return true;
     }
@@ -172,7 +174,7 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    * @param key key of column
    * @returns string representing what type of element to use
    */
@@ -279,7 +281,6 @@ export class HealthListItemsComponent implements OnInit {
       result.push('select');
     }
 
-    console.log(this.width, 'WIIIIIIDTH');
     if (this.category) {
       const dataList = this.conveyor.getDataList(this.category);
       for (const [column, dataType] of dataList.spec.dataTypes.entries()) {
@@ -301,12 +302,11 @@ export class HealthListItemsComponent implements OnInit {
           }
         }
       }
-      if (this.isSmallScreen()) {
-        result.push('mobile');
+      if (this.isSmallScreen() && this.isEditable) {
+         result.push('mobile');
       }
     }
 
-    console.log(result, PeriodWidths, this.width);
     return result;
   }
 
