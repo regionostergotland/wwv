@@ -97,44 +97,44 @@ export class HealthListItemsComponent implements OnInit {
    * Checks whether the number of selected elements matches the total number of rows.
    * @returns a boolean, true of selected elements matches total number of rows
    */
-  // isAllSelected(filter: Filter): boolean {
-  //   const numSelected = this.selection.selected.length;
-  //   const numRows = this.dataList.get(filter).data.length;
-  //   return numSelected === numRows;
-  // }
+  isAllSelected(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.data.data.length;
+    return numSelected === numRows;
+  }
 
-  // /**
-  //  * Selects all rows if they are not all selected; otherwise clear selection.
-  //  */
-  // masterToggle(filter: Filter) {
-  //   this.isAllSelected(filter) ?
-  //       this.selection.clear() :
-  //       this.dataList.get(filter).data.forEach(row => this.selection.select(row));
-  // }
+  /**
+   * Selects all rows if they are not all selected; otherwise clear selection.
+   */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.data.data.forEach(row => this.selection.select(row));
+  }
 
   /**
    * Opens the dialog containing RemovalDialogComponent
    */
-  // openRemovalDialog() {
-  //   if (this.selection.selected.length > 0) {
-  //     const dialogRef = this.dialog.open(RemovalDialogComponent);
-  //     dialogRef.afterClosed().subscribe(result => {
-  //       console.log('The dialog was closed');
-  //       // If result is true, that means the user pressed the button for removing selected values
-  //       if (result) {
-  //         this.removeSelected();
-  //       }
-  //     });
-  //   }
-  // }
+  openRemovalDialog() {
+    if (this.selection.selected.length > 0) {
+      const dialogRef = this.dialog.open(RemovalDialogComponent);
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        // If result is true, that means the user pressed the button for removing selected values
+        if (result) {
+          this.removeSelected();
+        }
+      });
+    }
+  }
 
-  // /**
-  //  * Removes all of the selected datapoints and updates the list
-  //  */
-  // removeSelected() {
-  //   this.conveyor.getDataList(this.category).removePoints(this.selection.selected);
-  //   this.ngOnInit();
-  // }
+  /**
+   * Removes all of the selected datapoints and updates the list
+   */
+  removeSelected() {
+    this.conveyor.getDataList(this.category).removePoints(this.selection.selected);
+    this.ngOnInit();
+  }
 
   ngOnInit() {
     if (this.category) {

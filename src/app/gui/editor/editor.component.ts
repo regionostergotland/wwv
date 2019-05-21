@@ -4,7 +4,7 @@ import { DataPoint, Filter } from 'src/app/ehr/datalist';
 import { Conveyor } from 'src/app/conveyor.service';
 
 import { AddDataPointComponent } from '../add-data-point/add-data-point.component';
-import { MathFunctionEnum } from 'src/app/ehr/datatype';
+import { MathFunctionEnum, CategorySpec } from 'src/app/ehr/datatype';
 import { PeriodWidths } from 'src/app/shared/period';
 
 export interface MathOption {
@@ -120,6 +120,8 @@ export class EditorComponent implements OnInit {
       this.selectedCategory = value;
     }
   }
+
+  categorySpec: CategorySpec;
   selectedCategory: string;
   dataList: Map<Filter, MatTableDataSource<DataPoint>>;
 
@@ -130,6 +132,8 @@ export class EditorComponent implements OnInit {
     for (let [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
       this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
     }
+
+    this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
   }
 
   /**
