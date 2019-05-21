@@ -83,7 +83,7 @@
       </div>
 
       <!-- MOBILE EDIT BUTTON -->
-      <div *ngIf="key === 'mobile'">
+      <div *ngIf="editable && key === 'mobile'">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let dataPoint" style="text-align: center;">
           <mat-icon (click)="openEditDialog(dataPoint, key)">
