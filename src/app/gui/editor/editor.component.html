@@ -1,4 +1,15 @@
-<h1 style="text-align: center">{{categorySpec && editable ? categorySpec.label : ''}}</h1>
+<div *ngIf="editable">
+   <h5 *ngIf="isSmallScreen()" style="margin-top: 0px;
+                                      margin-bottom: 0px;
+                                      background-color: #efefef;
+                                      padding: 4px;
+                                      text-align: center;">
+    {{categorySpec.label}}
+  </h5>
+  <h1 *ngIf="!isSmallScreen()" style="text-align: center">
+    {{categorySpec.label}}
+  </h1>
+</div>
 
 <div class='table-container'>
 <mat-tab-group>

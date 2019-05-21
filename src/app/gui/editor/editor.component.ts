@@ -213,4 +213,8 @@ export class EditorComponent implements OnInit {
     dataList.removeFilter(filter);
     this.ngOnInit();
   }
+
+  isSmallScreen(): boolean {
+    return window.matchMedia('(max-width: 599px)').matches;
+  }
 }
