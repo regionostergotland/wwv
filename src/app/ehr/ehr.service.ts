@@ -220,12 +220,12 @@ export class EhrService {
    */
   public sendComposition(pnr: string,
                          composition: {}): Observable<CompositionReceipt> {
-    let receipt: CompositionReceipt = {
-      'pnr': pnr,
-      'composition': composition,
-      'partyId': '',
-      'ehrId': '',
-      'compUid': '',
+    const receipt: CompositionReceipt = {
+      pnr,
+      composition,
+      partyId: '',
+      ehrId: '',
+      compUid: '',
     };
     return this.getPartyId(pnr)
       .pipe(switchMap((partyId: string) => {
