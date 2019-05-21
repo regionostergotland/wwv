@@ -118,7 +118,7 @@ export class HealthListItemsComponent implements OnInit {
         case 'period_DAY': return dayjs(v).format('YYYY-MM-DD');
         case 'period_WEEK': return 'v' + v.getWeek() + ', ' + v.getWeekYear();
         case 'period_MONTH': return dayjs(v).format('YY-MM');
-        case 'period_YEAR': return dayjs(v).format('YY');
+        case 'period_YEAR': return dayjs(v).format('YYYY');
       }
     }
 
@@ -130,6 +130,13 @@ export class HealthListItemsComponent implements OnInit {
             const s = this.displayCorrectNum(point.get(key));
             return this.isSmallScreen() ? s : s + this.getCategoryUnit(key);
           case this.dataTypeEnum.TEXT: return point.get(key);
+          case this.dataTypeEnum.CODED_TEXT:
+            for (let option of this.options.get(key)) {
+              if (option.code === point.get(key)) {
+                return option.label;
+              }
+            }
+            return '';
         }
     }
 
@@ -165,7 +172,7 @@ export class HealthListItemsComponent implements OnInit {
       return false;
     }
 
-    if (this.categorySpec.dataTypes.has(key) || key === 'mobile') {
+    if (this.categorySpec.dataTypes.has(key)) {
       const { visibleOnMobile } = this.categorySpec.dataTypes.get(key);
       return !visibleOnMobile;
     }
@@ -190,9 +197,9 @@ export class HealthListItemsComponent implements OnInit {
 
     switch (this.categorySpec.dataTypes.get(key).type) {
       case this.dataTypeEnum.CODED_TEXT:
-        return 'select';
+        return this.isEditable ? 'select' : 'text';
       case this.dataTypeEnum.TEXT:
-        return 'text-input';
+        return this.isEditable ? 'text-input' : 'text';
       case this.dataTypeEnum.QUANTITY:
       case this.dataTypeEnum.DATE_TIME:
         return 'text';

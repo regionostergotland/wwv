@@ -51,7 +51,9 @@
                 [value]="dataPoint.get(key)"
                 (selectionChange)="dataPoint.set(key, $event.value)"
               >
-                <mat-option [matTooltip]="'obestämd'" matTooltipPosition="left"
+                <mat-option 
+                [matTooltip]="'obestämd'" 
+                matTooltipPosition="left"
                   >-</mat-option
                 >
                 <mat-option
