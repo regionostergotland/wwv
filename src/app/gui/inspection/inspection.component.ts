@@ -66,7 +66,7 @@ export class InspectionComponent implements OnInit {
   sendData(pnr: string) {
     this.conveyor.sendData(pnr).
       subscribe(
-        compUid => this.router.navigateByUrl('/confirmation'),
+        compUid => this.router.navigateByUrl('/confirmation?compUid='+compUid),
         e => this.snackBar.open(
           'Inrapporteringen misslyckades. Fel: "'+ e.statusText + '"', 'OK',
           { 

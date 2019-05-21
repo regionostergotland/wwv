@@ -6,6 +6,11 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./confirmation.component.scss']
 })
 export class ConfirmationComponent implements OnInit {
+  compId: string;
+
   constructor() {}
-  ngOnInit() {}
+
+  ngOnInit() {
+    this.compId = new URL(window.location.href).searchParams.get('compUid');
+  }
 }
