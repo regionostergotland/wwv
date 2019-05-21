@@ -8,13 +8,14 @@ import { GfitService } from '../../platform/gfit.service';
 const googleFit = 'google-fit';
 const withings = 'withings';
 const dummy = 'dummy';
+const pickCategoriesLink = '/pick-categories';
 
 const availableSources: Map<string, Source> = new Map<string, Source>([
   [googleFit, {
     id: googleFit,
     name: 'Google Fit',
     imageUrl: 'https://www.gstatic.com/images/branding/product/1x/gfit_512dp.png',
-    routerLink: '/pick-categories'
+    routerLink: pickCategoriesLink
   }],
   [dummy, {
     id: dummy,
@@ -26,7 +27,7 @@ const availableSources: Map<string, Source> = new Map<string, Source>([
     id: withings,
     name: 'Withings',
     imageUrl: 'http://resources.mynewsdesk.com/image/upload/c_limit,dpr_1.0,f_auto,h_700,q_auto,w_690/jymhygjz5t7hzld9qe6j.jpg',
-    routerLink: '/pick-categories'
+    routerLink: pickCategoriesLink
   }]]);
 
 @Component({
@@ -63,7 +64,7 @@ export class SourcesComponent implements OnInit {
           id: platform,
           name: platform,
           imageUrl: '',
-          routerLink: '/pick-categories/'
+          routerLink: pickCategoriesLink
         });
       }
     }
@@ -76,6 +77,6 @@ export class SourcesComponent implements OnInit {
   async selectPlatform(platformId: string) {
     this.conveyor.selectPlatform(platformId);
     await this.conveyor.signIn(platformId);
-    this.router.navigateByUrl('/pick-categories');
+    this.router.navigateByUrl(pickCategoriesLink);
   }
 }
