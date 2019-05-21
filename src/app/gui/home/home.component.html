@@ -5,7 +5,7 @@ Välkommen!
 <div class="centering">
 <div layout="row" layout-align="center center" class="card-height">
 
-  <mat-card class="home-card source">
+  <mat-card class="home-card source" routerLink='/sources'>
     <mat-card-content style="display:flex">
       <p>
         Skicka hälsodata till ***REMOVED***s Digitaliseringsplattform.
@@ -13,14 +13,14 @@ Välkommen!
     </mat-card-content>
     <mat-card-actions>
       <div style="align:center;">
-        <button id="home-nav-src" mat-button routerLink='/sources'>Välj källa
+        <button id="home-nav-src" mat-button>Välj källa
           <img src="../../assets/flaticon/diagonal-arrow.png">
         </button>
       </div>
     </mat-card-actions>
   </mat-card>
 
-  <mat-card class="home-card man">
+  <mat-card class="home-card man" routerLink='/edit'>
     <mat-card-content>
       <p>
         Lägg till egna värden.
@@ -28,14 +28,14 @@ Välkommen!
     </mat-card-content>
     <mat-card-actions>
       <div style="align:center; display:inline;">
-        <button id="home-nav-input" mat-button routerLink='/edit'>Egen inmatning
+        <button id="home-nav-input" mat-button>Egen inmatning
           <img src="../../assets/flaticon/edit.png">
         </button>
       </div>
     </mat-card-actions>
   </mat-card>
 
-  <mat-card class="home-card help">
+  <mat-card class="home-card help" routerLink='/help'>
     <mat-card-content>
       <p>
         Behöver du en hjälpande hand?
@@ -44,7 +44,7 @@ Välkommen!
     </mat-card-content>
     <mat-card-actions>
       <div style="align:center;">
-        <button id="home-nav-help" mat-button routerLink='/help'>Hjälp
+        <button id="home-nav-help" mat-button>Hjälp
           <img src="../../assets/flaticon/question.png">
         </button>
       </div>
