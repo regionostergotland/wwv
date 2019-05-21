@@ -37,10 +37,16 @@
   <h1 style="text-align: center">
     Data skickat!
   </h1>
-  <mat-card>
+  <mat-card style="margin-bottom: 15px">
     Personnummer: {{receipt.pnr}}<br>
     EHR ID: {{receipt.ehrId}}<br>
     Composition UID: {{receipt.compUid}}
   </mat-card>
-  <button mat-flat-button color="accent" routerLink='/home'>Tillbaka hem</button>
+  <button
+    mat-raised-button
+    color="primary"
+    routerLink='/home'
+  >
+    Tillbaka hem
+  </button>
 </div>
