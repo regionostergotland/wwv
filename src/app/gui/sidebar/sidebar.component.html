@@ -14,16 +14,23 @@
           Om inga ändringar önskas, gå vidare till nästa steg.
         </h3>
         <div *ngIf="getMode() === 'side'" class="arrow-container">
-            <img class="arrow" stroke="gray" fill="gray" src="../../../assets/arrow5.svg">
-            <div class="arrow-text">Börja här!</div>
+          <img
+            class="arrow"
+            stroke="gray"
+            fill="gray"
+            src="../../../assets/arrow5.svg"
+          />
+          <div class="arrow-text">Börja här!</div>
         </div>
       </div>
 
       <!-- EDITOR / TABLE -->
-      <app-editor *ngIf="selectedCategory"
+      <app-editor
+        *ngIf="selectedCategory"
         [selectCategory]="selectedCategory"
         [editable]="true"
-        style="text-align: left">
+        style="text-align: left"
+      >
       </app-editor>
 
       <div class="next-button-container">
@@ -48,7 +55,7 @@
         </mat-list-item>
 
         <mat-divider></mat-divider>
-
+        <!--- SIDE LIST -->
         <div *ngFor="let category of getUserCategories()">
           <mat-list-item
             (click)="selectCategory(category)"
@@ -59,24 +66,20 @@
           </mat-list-item>
           <mat-divider></mat-divider>
         </div>
-     
-      <mat-list-item
-        (click)="openBottomSheet()"
-      >
-        <mat-icon class="sidebar-icon">add_box</mat-icon>
-        Lägg till egen kategori
-      </mat-list-item>
-      <mat-divider></mat-divider>
-      <mat-list-item
-        (click)="router.navigateByUrl('/sources')"
-      >
-        <mat-icon class="sidebar-icon">add_box</mat-icon>
-        Lägg till värden från app
-      </mat-list-item>
-      
-    </mat-nav-list>
+
+        <mat-list-item (click)="openBottomSheet()">
+          <mat-icon class="sidebar-icon">add_box</mat-icon>
+          Lägg till egen kategori
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item (click)="router.navigateByUrl('/sources')">
+          <mat-icon class="sidebar-icon">add_box</mat-icon>
+          Lägg till värden från app
+        </mat-list-item>
+      </mat-nav-list>
     </div>
 
+    
     <div *ngIf="getMode() === 'bottom'">
       <div class="sidebar-bar">
         <div
@@ -86,6 +89,7 @@
         </div>
 
         <div class="bottom-bar">
+          <!-- BOTTOM LIST -->
           <div *ngFor="let category of getUserCategories()">
             <div [style.background-color]="getBackgroundColor(category)">
               <img

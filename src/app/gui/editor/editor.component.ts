@@ -159,7 +159,6 @@ export class EditorComponent implements OnInit {
 
   updateSelected(event) {
     this.selectedRows = event;
-    console.log(this.selectedRows.length);
   }
 
   /**

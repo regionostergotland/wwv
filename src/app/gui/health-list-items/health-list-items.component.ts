@@ -156,6 +156,7 @@ export class HealthListItemsComponent implements OnInit {
    */
 
   shouldHide(key: string): boolean {
+
     if (key === 'mobile') {
       return true;
     }
@@ -172,18 +173,31 @@ export class HealthListItemsComponent implements OnInit {
     return false;
   }
 
+  /**
+   *
+   * @param key key of column
+   * @returns string representing what type of element to use
+   */
 
-  getDataType(key: string) {
-    switch (key) {
-      case 'position':
-      case 'state_of_dress':
+  getInputType(key: string) {
+    if (key === 'mobile') {
+      return 'mobile';
+    }
+
+    if (key.startsWith('peroid_') || key === 'date') {
+      return 'text';
+    }
+
+    switch (this.categorySpec.dataTypes.get(key).type) {
+      case this.dataTypeEnum.CODED_TEXT:
         return 'select';
-      case 'comment':
+      case this.dataTypeEnum.TEXT:
         return 'text-input';
-      case 'mobile-edit-button':
-        return 'monile';
-      default:
+      case this.dataTypeEnum.QUANTITY:
+      case this.dataTypeEnum.DATE_TIME:
         return 'text';
+      default:
+        throw new Error('Datatype not recognized');
     }
   }
 
@@ -207,6 +221,7 @@ export class HealthListItemsComponent implements OnInit {
       // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.category);
       this.data.paginator = this.paginator;
+      this.displayedColumns = this.getDisplayedColumns();
 
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
@@ -220,6 +235,9 @@ export class HealthListItemsComponent implements OnInit {
         }
       }
     }
+    window.onresize = () => {
+      this.displayedColumns = this.getDisplayedColumns();
+    };
   }
 
   trackItem(index, item) {
@@ -254,11 +272,15 @@ export class HealthListItemsComponent implements OnInit {
    * category it is.
    * @returns a list of labels for the specified category
    */
+
+
+
   getDisplayedColumns(): string[] {
     const result: string[] = [];
     if (this.isEditable) {
       result.push('select');
     }
+
     if (this.category) {
       const dataList = this.conveyor.getDataList(this.category);
       for (const [column, dataType] of dataList.spec.dataTypes.entries()) {
@@ -280,7 +302,7 @@ export class HealthListItemsComponent implements OnInit {
           }
         }
       }
-      if (this.isEditable && this.isSmallScreen()) {
+      if (this.isSmallScreen() && this.isEditable) {
         result.push('mobile');
       }
     }
