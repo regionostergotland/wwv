@@ -78,6 +78,7 @@
 
         </div>
       </div>
+      
       <div *ngIf="key === 'date'">
 
         {{dataPoint.get('time').getFullYear() + '-' + ('0' + (dataPoint.get('time').getMonth() + 1)).slice(-2) + '-' + ('0' + dataPoint.get('time').getDate()).slice(-2)}}

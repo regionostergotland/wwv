@@ -171,18 +171,31 @@ export class HealthListItemsComponent implements OnInit {
     return false;
   }
 
+  /**
+   * 
+   * @param key key of column
+   * @returns string representing what type of element to use
+   */
 
-  getDataType(key: string) {
-    switch (key) {
-      case 'position':
-      case 'state_of_dress':
+  getInputType(key: string) {
+    if (key === 'mobile-edit-button') {
+      return 'mobile';
+    }
+
+    if (key.startsWith('peroid_') || key === 'date') {
+      return 'text';
+    }
+
+    switch (this.categorySpec.dataTypes.get(key).type) {
+      case this.dataTypeEnum.CODED_TEXT:
         return 'select';
-      case 'comment':
+      case this.dataTypeEnum.TEXT:
         return 'text-input';
-      case 'mobile-edit-button':
-        return 'monile';
-      default:
+      case this.dataTypeEnum.QUANTITY:
+      case this.dataTypeEnum.DATE_TIME:
         return 'text';
+      default:
+        throw new Error('Datatype not recognized');
     }
   }
 
@@ -219,6 +232,9 @@ export class HealthListItemsComponent implements OnInit {
         }
       }
     }
+    window.onresize = () => {
+      this.displayedColumns = this.getDisplayedColumns();
+    };
   }
 
   trackItem(index, item) {
