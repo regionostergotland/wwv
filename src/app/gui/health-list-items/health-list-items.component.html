@@ -1,19 +1,6 @@
-<div *ngIf="isSmallScreen()">
-  <div style="display: flex; flex-direction: row; height: 20px;">
-    <h5 style="margin-top: 0px; margin-bottom: 0px; background-color: #efefef; padding: 4px;">
-      {{
-        categorySpec && isEditable
-          ? categorySpec.label
-          : ''
-      }}
-    </h5>
-  </div>
-</div>
-<h1 style="text-align: center">{{categorySpec && isEditable ? categorySpec.label : ''}}</h1>
-
 <div class="table-container">
   <table
-    style="text-align: left"
+    style="text-align: left; width: 100%"
     class="table"
     mat-table
     [dataSource]="data"
