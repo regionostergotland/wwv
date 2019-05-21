@@ -63,6 +63,7 @@ import { FooterComponent } from './gui/footer/footer.component';
     ProgressBarComponent,
   ],
   imports: [
+    MatCardModule,
     MatProgressBarModule,
     MatButtonModule,
     MatGridListModule,

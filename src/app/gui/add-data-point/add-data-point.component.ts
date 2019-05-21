@@ -96,7 +96,7 @@ export class AddDataPointComponent implements OnInit {
     if (this.dataPoint) {
       return 'Applicera ändringar';
     }
-    return 'Lägg till data punkt';
+    return 'Lägg till datapunkt';
   }
 
   /**
