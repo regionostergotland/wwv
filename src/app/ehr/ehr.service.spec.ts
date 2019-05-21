@@ -147,11 +147,11 @@ describe('EhrService', () => {
           { any_event:
             [
               {
-                time: [ '2016-01-31T23:00:00.000Z' ],
+                time: [ new Date(2016, 1, 1).toISOString() ],
                 systolic: [ { '|magnitude': 101, '|unit': 'mm[Hg]' } ]
               },
               {
-                time: [ '2016-02-01T23:00:00.000Z' ],
+                time: [ new Date(2016, 1, 2).toISOString() ],
                 systolic: [ { '|magnitude': 103, '|unit': 'mm[Hg]' } ]
               }
             ]
