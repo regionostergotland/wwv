@@ -1,19 +1,126 @@
+
 .container {
   height: 100%;
+  width: 100%;
   display: block;
-  background: #eee;
   text-align: center;
+  box-sizing: border-box;
 }
 
 .example-sidenav {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100px;
 }
 
+.container-container {
+  display: flex;
+  justify-content: center;
+}
+
+.border {
+  border: 1px solid rgba(0,0,0,0.08);
+  margin-top: 2%;
+}
+
+.content-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 1050px;
+  display: flex;
+  flex-direction: row-reverse;
+  border-radius: 0.5rem;
+  padding: 30px;
+  
+}
+
+.arrow-container {
+  position: relative;
+  transform: translateY(-225%);
+  opacity: 0.6; 
+}
+
+.arrow-text {
+  position: absolute;
+  transform: translateY(-20px);
+  font-style: italic;
+}
+.arrow {
+  width: 115px; 
+  height: 75px;
+  opacity: 0.2;
+}
+
+@media screen and (max-width: 959px) {
+  .content-container { 
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding-left: 0;
+    padding-bottom: 5px;
+    padding-right: 0;
+    padding-top: 5px;
+  }
+
+  .sidebar-bar {
+    width: 100%;
+    border-top: 2px solid rgba(0,0,0,0.2);
+    position: fixed;
+    height: 64px;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    box-sizing: border-box;
+  }
+  .container-container {
+    height: 100%;
+  }
+} 
+
+.content {
+  width: 100%;
+  display:flex;
+  flex-direction: column;
+  overflow: auto; /* 1. overflow not `visible` */
+
+}
+
+.sidebar-bar {
+  height: 65px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f2f2f2;
+  margin-right: 30px;
+}
+
+.bottom-bar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.trapezoid {
+  width: 40px;
+  height: 10px;
+  background-color: #777;
+  border-top-left-radius: 0.4rem;
+  border-top-right-radius: 0.4rem;
+}
+
+@media screen and (max-width: 959px) {
+ 
+} 
+
+
+.next-button-container {
+  width: 100%; display: flex; justify-content: flex-end;
+}
 .margin {
-  margin-top: 10px;
-  margin-bottom: 10px;
+  width: 100px;
+  margin-right: 10px;
 }
 
 .wide-button {
@@ -21,10 +128,36 @@
   display: flex;
 }
 
-
 .sidebar-icon {
   width: 30px;
   height: 30px;
-  margin-left: 6px;
-  margin-right: 10px;
+  margin: 10px;
+}
+
+.example-container {
+  height: 100%;
+  width: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  padding: 20px;
+}
+
+
+.attr-container {
+  width: 100%;
+  
+  background-color: #efefef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 6pt;
 }

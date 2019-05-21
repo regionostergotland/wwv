@@ -8,12 +8,15 @@ import {
   MatCardModule,
   MatSidenavModule,
   MatListModule,
+  MatTabsModule,
   MatTableModule,
   MatDialogModule,
   MatDialogRef,
   MatCheckboxModule,
   MatTooltipModule,
-  MatPaginatorModule } from '@angular/material';
+  MatPaginatorModule,
+  MatIconModule
+} from '@angular/material';
 
 import { HealthListItemsComponent } from './health-list-items.component';
 import { HttpClient, HttpHandler } from '@angular/common/http';
@@ -31,6 +34,7 @@ describe('HealthListItemsComponent', () => {
         BrowserAnimationsModule,
         MatSelectModule,
         MatTableModule,
+        MatTabsModule,
         MatFormFieldModule,
         RouterTestingModule,
         MatCardModule,
@@ -40,7 +44,8 @@ describe('HealthListItemsComponent', () => {
         MatDialogModule,
         MatTooltipModule,
         MatPaginatorModule,
-        CustomGoogleApiModule
+        CustomGoogleApiModule,
+        MatIconModule
       ],
 
      providers: [

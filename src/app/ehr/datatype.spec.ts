@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DataTypeText, CategorySpec, DataType,
+import { DataTypeText, DataType,
          DataTypeDateTime, DataTypeQuantity,
          DataTypeCodedText,
          MathFunctionEnum} from './datatype';
@@ -24,6 +24,7 @@ describe('datatype', () => {
       required: true,
       single: false,
       visible: true,
+      visibleOnMobile: false,
     }, 'mm', 10, 100
   );
   it('should not accept negative quantity value', () => {
@@ -58,6 +59,7 @@ describe('datatype', () => {
       required: true,
       single: false,
       visible: true,
+      visibleOnMobile: false,
     }, 'mm', 0, -1
   );
   it('should not accept negative quantity value (unlimited)', () => {
@@ -86,6 +88,7 @@ describe('datatype', () => {
     required: true,
     single: false,
     visible: true,
+    visibleOnMobile: false,
   });
   it('should accept valid dates', () => {
     expect(dateTime.isValid(new Date())).toBeTruthy();
@@ -108,6 +111,7 @@ describe('datatype', () => {
       required: true,
       single: false,
       visible: true,
+      visibleOnMobile: false,
     },
     [ { code: 'at1001', label: '', description: '' },
       { code: 'at1000', label: '', description: '' },
@@ -140,6 +144,7 @@ describe('datatype', () => {
     required: true,
     single: false,
     visible: true,
+    visibleOnMobile: false,
   });
   it('should accept valid strings', () => {
     expect(text.isValid('at1001')).toBeTruthy();
@@ -165,6 +170,7 @@ describe('datatype', () => {
       required: true,
       single: false,
       visible: true,
+      visibleOnMobile: false,
     });
     expect(dataType.compare(new Date(2016, 1), new Date(2017, 1)))
       .toBeLessThan(0);
@@ -184,6 +190,7 @@ describe('datatype', () => {
         required: true,
         single: false,
         visible: true,
+        visibleOnMobile: false,
       }, 'unit', 0, -1);
     expect(dataType.compare(5, 100)).toBeLessThan(0);
     expect(dataType.compare(0, 0.1)).toBeLessThan(0);
@@ -198,6 +205,7 @@ describe('datatype', () => {
       required: true,
       single: false,
       visible: true,
+      visibleOnMobile: false,
     });
     expect(dataType.compare('hej', 'zzz')).toBeLessThan(0);
     expect(dataType.compare('zzzz', 'zzz')).toBeGreaterThan(0);
@@ -212,6 +220,7 @@ describe('datatype', () => {
         required: true,
         single: false,
         visible: true,
+        visibleOnMobile: false,
       }, [
       { code: 'at1001', label: '', description: ''},
       { code: 'at1003', label: '', description: ''},

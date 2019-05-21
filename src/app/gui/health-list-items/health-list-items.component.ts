@@ -1,114 +1,17 @@
-import {Component, Input, OnInit, ViewChild, Inject} from '@angular/core';
+import {Component, Input, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
          DataTypeEnum,
-         MathFunctionEnum,
          } from '../../ehr/datatype';
 import { DataPoint } from '../../ehr/datalist';
 import { PeriodWidths } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
-import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
-import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
+import { AddDataPointComponent } from '../add-data-point/add-data-point.component';
+import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
 import '../../shared/date.extensions';
-
-export interface MathOption {
-  value: MathFunctionEnum;
-  description: string;
-}
-
-export interface IntervalOption {
-  value: PeriodWidths;
-  description: string;
-}
-
-const MATH_OPTIONS: MathOption[] = [
-  {value: MathFunctionEnum.MAX, description: 'Maximalt värde'},
-  {value: MathFunctionEnum.MEAN, description: 'Medelvärde'},
-  {value: MathFunctionEnum.MEDIAN, description: 'Median'},
-  {value: MathFunctionEnum.MIN, description: 'Minimalt värde'},
-  {value: MathFunctionEnum.TOTAL, description: 'Totala värde'},
-];
-
-const INTERVAL_OPTIONS: IntervalOption[] = [
-  {value: PeriodWidths.HOUR, description: 'Per timme'},
-  {value: PeriodWidths.DAY, description: 'Per dygn'},
-  {value: PeriodWidths.WEEK, description: 'Per vecka'},
-  {value: PeriodWidths.MONTH, description: 'Per månad'},
-  {value: PeriodWidths.YEAR, description: 'Per År'},
-];
-
-@Component({
-  selector: 'app-removal-dialog',
-  templateUrl: 'removal-dialog.html',
-})
-export class RemovalDialogComponent {
-
-  // This boolean is sent to the health-list-items-component if the
-  // user presses the remove button
-  remove = true;
-
-  constructor(private conveyor: Conveyor, public dialogRef: MatDialogRef<RemovalDialogComponent>) {
-    }
-
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
-
-}
-
-@Component({
-  selector: 'app-math-dialog',
-  templateUrl: 'math-dialog.html',
-  styleUrls: ['./health-list-items.component.scss']
-})
-export class MathDialogComponent {
-
-  mathOptions: MathOption[];
-  mathFunction: string;
-  intervalOptions: IntervalOption[];
-  interval: string;
-
-  selectedCategory: string;
-
-  constructor(
-    private conveyor: Conveyor,
-    public dialogRef: MatDialogRef<MathDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string) {
-
-    this.selectedCategory = data;
-    this.mathOptions = MATH_OPTIONS;
-    this.intervalOptions = INTERVAL_OPTIONS;
-  }
-
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
-
-  /**
-   * Calls the setInterval function in order to do math manipulations on the data
-   * @param intervalString A string containing a PeriodWidths enum, must be converted to int
-   * @param funcString A string containing a Mathfunction enum, must be converted to int
-   */
-  calculate(intervalString: string, funcString: string) {
-    if (intervalString && funcString) {
-      const interval = parseInt(intervalString, 10);
-      const func = parseInt(funcString, 10);
-      this.conveyor.getDataList(this.selectedCategory).setInterval(interval, func);
-      this.closeDialog();
-    }
-  }
-
-  /**
-   * Restores the datalist to the default settings
-   */
-  changeBack() {
-    this.conveyor.getDataList(this.selectedCategory).setInterval(PeriodWidths.POINT, MathFunctionEnum.ACTUAL);
-    this.closeDialog();
-  }
-
-}
+import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'app-health-list-items',
@@ -117,29 +20,25 @@ export class MathDialogComponent {
 })
 export class HealthListItemsComponent implements OnInit {
 
-  @Input() set selectCategory(value: string) {
-    if (this.selectedCategory) {
-      this.selectedCategory = value;
-      this.ngOnInit();
-    } else {
-      this.selectedCategory = value;
-    }
+  @Input() width: PeriodWidths;
+
+  @Input() category: string;
+
+  @Input() isEditable: boolean;
+
+  @Input() set dataList(value: MatTableDataSource<DataPoint>) {
+    this.data = value;
   }
 
-  @Input() set editable(value: boolean) {
-    this.isEditable = value;
-  }
+  // TODO rename to selected?
+  @Output() change: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) {
   }
 
-  selectedCategory: string;
-  isEditable = false;
-
   dataTypeEnum = DataTypeEnum;
-  periodWidths = PeriodWidths;
   categorySpec: CategorySpec;
-  pointDataList: DataPoint[];
+
   displayedColumns: string[];
   options: Map<string, DataTypeCodedTextOpt[]>;
 
@@ -157,28 +56,8 @@ export class HealthListItemsComponent implements OnInit {
     ['period_MONTH', 'Månad för mätning'],
     ['date', 'Datum för mätning']]);
 
-  mathOptions: Map<MathFunctionEnum, string> =
-    new Map<MathFunctionEnum, string>([
-    [MathFunctionEnum.MAX, ', maximalt värde '],
-    [MathFunctionEnum.MEAN, ', medelvärde '],
-    [MathFunctionEnum.MEDIAN, ', median '],
-    [MathFunctionEnum.MIN, ', minimalt värde '],
-    [MathFunctionEnum.TOTAL, ', totala värde '],
-  ]);
-
-  intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
-    [PeriodWidths.HOUR, 'per timme'],
-    [PeriodWidths.DAY, 'per dygn'],
-    [PeriodWidths.WEEK, 'per vecka'],
-    [PeriodWidths.MONTH, 'per månad'],
-    [PeriodWidths.YEAR, 'per år'],
-  ]);
-
-  mathOption: string;
-  intervalOption: string;
-
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  dataList: MatTableDataSource<DataPoint>;
+  data: MatTableDataSource<DataPoint>;
 
   // The selected datapoints
   selection = new SelectionModel<DataPoint>(true, []);
@@ -195,12 +74,156 @@ export class HealthListItemsComponent implements OnInit {
 
   /**
    * Checks whether the number of selected elements matches the total number of rows.
-   * @returns a boolean, true of selected elements matches total number of rows
+   *
+   *  @returns a boolean, true of selected elements matches total number of rows
    */
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataList.data.length;
+    const numRows = this.data.data.length;
     return numSelected === numRows;
+  }
+
+  /**
+   *
+   * @param key datatype key
+   * @returns the datatypes unit (e.g. kg or m)
+   */
+  getDataTypeUnit(key: string): string {
+    if (!this.categorySpec.dataTypes.has(key)) {
+      return '';
+    }
+    const dataType = this.categorySpec.dataTypes.get(key);
+    return dataType.unit ? dataType.unit : '';
+  }
+
+  /**
+   *  @param key datatype key
+   *  @returns human readable label of datatype
+   */
+  getDataTypeLabel(key: string): string {
+    if (!this.categorySpec.dataTypes.has(key)) {
+      return this.periodLabels.get(key);
+    }
+    return this.categorySpec.dataTypes.get(key).label;
+  }
+
+  /**
+   *  @param key keyn of column
+   *  @returns description of datatype
+   */
+  getCategoryTooltip(key: string): string {
+    if (!this.categorySpec.dataTypes.has(key)) {
+      return this.periodDescriptions.get(key);
+    }
+    return this.categorySpec.dataTypes.get(key).description;
+  }
+
+  /**
+   *
+   * Retrieve text formatting for a text field
+   * @param key key of the field
+   * @param point point containing the value
+   * @returns formatted string to display
+   */
+  getFormattedTextFromPoint(key: string, point: DataPoint): string {
+    if (key === 'date') {
+      return dayjs(point.get('time')).format('YYYY-MM-DD');
+    }
+
+    if (key.startsWith('period')) {
+      const v = point.get('time');
+      switch (key) {
+        case 'period_DAY': return dayjs(v).format('YYYY-MM-DD');
+        case 'period_WEEK': return 'v' + v.getWeek() + ', ' + v.getWeekYear();
+        case 'period_MONTH': return dayjs(v).format('YY-MM');
+        case 'period_YEAR': return dayjs(v).format('YYYY');
+      }
+    }
+
+    if (this.categorySpec.dataTypes.has(key)) {
+        const dt = this.categorySpec.dataTypes.get(key);
+        switch (dt.type) {
+          case this.dataTypeEnum.DATE_TIME: return dayjs(point.get(key)).format('hh:mm');
+          case this.dataTypeEnum.QUANTITY:
+            const s = this.displayCorrectNum(point.get(key));
+            return this.isSmallScreen() ? s : s + this.getDataTypeUnit(key);
+          case this.dataTypeEnum.TEXT: return point.get(key);
+          case this.dataTypeEnum.CODED_TEXT:
+            for (const option of this.options.get(key)) {
+              if (option.code === point.get(key)) {
+                return option.label;
+              }
+            }
+            return '';
+        }
+    }
+
+    if (!point.has(key)) {
+      throw new Error(`${key} value function is not implemented.`);
+    }
+
+    return point.get(key);
+  }
+
+  /**
+   *  Uses a media-query to be in line with flex-layouts lt-sm, thats used throughout the
+   *  app.
+   *  https://github.com/angular/flex-layout/wiki/Responsive-API
+   */
+
+  isSmallScreen(): boolean {
+    return window.matchMedia('(max-width: 599px)').matches;
+  }
+
+  /**
+   *  Determines if a category should be hidden from display on smaller screens
+   *  @param key column name
+   */
+
+  shouldHide(key: string): boolean {
+
+    if (key === 'mobile') {
+      return true;
+    }
+
+    if (!this.isSmallScreen()) {
+      return false;
+    }
+
+    if (this.categorySpec.dataTypes.has(key)) {
+      const { visibleOnMobile } = this.categorySpec.dataTypes.get(key);
+      return !visibleOnMobile;
+    }
+
+    return false;
+  }
+
+  /**
+   *
+   * @param key key of column
+   * @returns string representing what type of element to use
+   */
+
+  getInputType(key: string) {
+    if (key === 'mobile') {
+      return 'mobile';
+    }
+
+    if (key.startsWith('period_') || key === 'date') {
+      return 'text';
+    }
+
+    switch (this.categorySpec.dataTypes.get(key).type) {
+      case this.dataTypeEnum.CODED_TEXT:
+        return this.isEditable ? 'select' : 'text';
+      case this.dataTypeEnum.TEXT:
+        return this.isEditable ? 'text-input' : 'text';
+      case this.dataTypeEnum.QUANTITY:
+      case this.dataTypeEnum.DATE_TIME:
+        return 'text';
+      default:
+        throw new Error('Datatype not recognized');
+    }
   }
 
   /**
@@ -209,93 +232,54 @@ export class HealthListItemsComponent implements OnInit {
   masterToggle() {
     this.isAllSelected() ?
         this.selection.clear() :
-        this.dataList.data.forEach(row => this.selection.select(row));
+        this.data.data.forEach(row => this.selection.select(row));
+    this.change.emit(this.selection.selected);
   }
 
-  /**
-   * Opens the dialog containing RemovalDialogComponent
-   */
-  openRemovalDialog() {
-    if (this.selection.selected.length > 0) {
-      const dialogRef = this.dialog.open(RemovalDialogComponent);
-      dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
-        // If result is true, that means the user pressed the button for removing selected values
-        if (result) {
-          this.removeSelected();
-        }
-      });
-    }
-  }
-
-  /**
-   * Removes all of the selected datapoints and updates the list
-   */
-  removeSelected() {
-    this.conveyor.getDataList(this.selectedCategory).removePoints(this.selection.selected);
-    this.ngOnInit();
+  toggleRow(row) {
+    this.selection.toggle(row);
+    this.change.emit(this.selection.selected);
   }
 
   ngOnInit() {
-    if (this.selectedCategory) {
+    if (this.category) {
       // Reset all the internal lists.
-      this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
-      this.pointDataList = this.conveyor.getDataList(this.selectedCategory).getPoints();
+      this.categorySpec = this.conveyor.getCategorySpec(this.category);
+      this.data.paginator = this.paginator;
       this.displayedColumns = this.getDisplayedColumns();
+
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
       this.selection.clear();
 
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
-
         // Fill options
         if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
-          const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
+          const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.category).getDataType(key) as DataTypeCodedText;
           this.options.set(key, datatypes.options);
         }
       }
-      this.mathOption = this.mathOptions.has(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) ?
-        this.mathOptions.get(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) : '';
-      this.intervalOption = this.intervalOptions.has(this.conveyor.getDataList(this.selectedCategory).getWidth()) ?
-        this.intervalOptions.get(this.conveyor.getDataList(this.selectedCategory).getWidth()) : '';
     }
-    this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
-    this.dataList.paginator = this.paginator;
+    window.onresize = () => {
+      this.displayedColumns = this.getDisplayedColumns();
+    };
   }
 
   trackItem(index, item) {
     return item ? index : undefined;
   }
 
-  /**
-   * Opens the dialog to add an item in the list stored in the conveyor.
-   */
-  openDialog(): void {
+  openEditDialog(point: DataPoint, key: string): void {
     const dialogRef = this.dialog.open(AddDataPointComponent, {
-      data: this.selectedCategory
+      data: {category: this.category, point}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
       this.ngOnInit();
     });
   }
 
-  /**
-   * Opens the dialog for MathDialogComponent
-   */
-  openMathDialog(): void {
-    this.selection.clear();
-    const dialogRef = this.dialog.open(MathDialogComponent, {
-      data: this.selectedCategory
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.ngOnInit();
-    });
-  }
-
-  /**
+  /*
    * Used to make sure the tables don't display a bunch of decimals.
    * Checks if num is an integer or float. If num is an integer, it simply returns the number.
    * If num is a float, it returns a string containing only 1 decimal.
@@ -313,18 +297,22 @@ export class HealthListItemsComponent implements OnInit {
    * category it is.
    * @returns a list of labels for the specified category
    */
+
   getDisplayedColumns(): string[] {
     const result: string[] = [];
+
+    // Add checkbox for selecting rows
     if (this.isEditable) {
       result.push('select');
     }
-    if (this.selectedCategory) {
-      const dataList = this.conveyor.getDataList(this.selectedCategory);
+
+    if (this.category) {
+      const dataList = this.conveyor.getDataList(this.category);
       for (const [column, dataType] of dataList.spec.dataTypes.entries()) {
         if (!dataType.visible) {
           continue;
         } else if (column === 'time') {
-          switch (dataList.getWidth()) {
+          switch (this.width) {
             case PeriodWidths.DAY: result.push('period_DAY'); break;
             case PeriodWidths.MONTH: result.push('period_MONTH'); break;
             case PeriodWidths.WEEK: result.push('period_WEEK'); break;
@@ -334,10 +322,17 @@ export class HealthListItemsComponent implements OnInit {
               result.push('time');
           }
         } else {
-          result.push(column);
+          if (!this.shouldHide(column)) {
+            result.push(column);
+          }
         }
       }
+      // Add edit button for mobile screens
+      if (this.isSmallScreen() && this.isEditable) {
+        result.push('mobile');
+      }
     }
+
     return result;
   }
 

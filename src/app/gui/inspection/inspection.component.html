@@ -1,25 +1,33 @@
 <div class="center">
+  <p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
 
-<p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
+  <div class="panel-container">
+    <mat-expansion-panel *ngFor="let category of categories" class="panel">
+      <mat-expansion-panel-header *ngIf="!isCategoryEmpty(category)">
+        <mat-panel-title>{{
+          categorySpecs.get(category).label
+        }}
+        </mat-panel-title>
+        <mat-panel-description
+          >Antal mätvärden:
+          {{ getNumberOfValues(category) }}</mat-panel-description
+        >
+      </mat-expansion-panel-header>
 
+      <app-editor [editable]="false" [selectCategory]="category"></app-editor>
+    </mat-expansion-panel>
+  </div>
 
-<mat-expansion-panel *ngFor="let category of categories" class="panel">
-
-  <mat-expansion-panel-header *ngIf="!isCategoryEmpty(category)">
-    <mat-panel-title>{{categorySpecs.get(category).label}}</mat-panel-title>
-    <mat-panel-description>Antal mätvärden: {{getNumberOfValues(category)}}</mat-panel-description>
-  </mat-expansion-panel-header>
-
-  <app-health-list-items [selectCategory]="category" [editable]="false" ></app-health-list-items>
-</mat-expansion-panel>
-
-  <div style="margin-bottom: 10px">
+  <div class="auth-buttons">
     <label>Username: <input #username /> </label>
     <label>Password: <input type="password" #password /> </label>
   </div>
 
-  <button mat-raised-button color='primary'
-    (click)="authenticate(username.value, password.value); sendData()">
-      Godkänn och skicka
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="authenticate(username.value, password.value); sendData()"
+  >
+    Godkänn och skicka
   </button>
 </div>

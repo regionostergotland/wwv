@@ -1,7 +1,3 @@
-table {
-  width: 100%;
-}
-
 button {
   margin: 10px;
   width: 100%;
@@ -11,12 +7,11 @@ button {
   display: flex;
 }
 
-.math-interval-select {
-  margin-left: 10px;
-  margin-right: 10px;
+.small {
+  background-color: green;
 }
 
-.math-dialog-buttons {
-  display: flex;
-  justify-content: center;
+.small  .mat-paginator-range-label {
+  margin: 0 6px 0 24px !important;
+  background-color: green;
 }
