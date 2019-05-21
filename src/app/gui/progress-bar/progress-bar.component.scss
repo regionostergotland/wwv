@@ -1,47 +1,55 @@
-
-mat-grid-list.progressBar {
-  height: 7%;
-  width: 90%;
+.progressBar {
   text-align: center;
+  width: 75%;
+  max-width: 1050px;
+  padding-bottom: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
-
-mat-grid-tile {
-  height: 100%;
+.item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  color: white;
+  margin-top: 4px;
 }
-
+.item-container button {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  outline: none;
+  background-color: #bbb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 4px;
+}
+.dot {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 p {
   size: 10px;
+  color: black;
 }
-
-button {
- display: inline-block;
- //vertical-align: top;
- text-align:center;
- margin-left: calc(90% / 8);
- margin-right: calc(90% / 16);
- margin-bottom: 0;
- margin-top: 0;
- box-shadow: none !important;
- background-color: #c8cfd1 !important;
-}
-
 .done {
   background-color: #aedfd1 !important;
 }
-
 .active {
-  background-color: #0066B3 !important;
+  background-color: #0066b3 !important;
 }
-
 .hidden {
   display: none;
-}
-
-div.hr-line {
-    position: relative;
-    display: inline-block;
-    margin-left: 5px;
-    margin-right: 5px;
-    width: 100%;
-    border-bottom: 1px solid #7A7A7A;
 }
