@@ -134,9 +134,8 @@ export interface EhrConfig {
 }
 
 export const ehrConfig: EhrConfig = {
-  baseUrl: 'https://rest.ehrscape.com/rest/v1/composition',
+  baseUrl: 'https://rest.ehrscape.com/rest/v1/',
   templateId : 'self-reporting',
-// TODO generate these specifications automatically from templates in ehr
   categories: [
     {
       id : Categories.BLOOD_PRESSURE,

@@ -97,7 +97,7 @@ export class Conveyor {
     this.ehrService.authenticateBasic(username, password);
   }
 
-  public sendData(): Observable<{}> {
-    return this.ehrService.sendData(Array.from(this.categories.values()));
+  public sendData(pnr: string): Observable<{}> {
+    return this.ehrService.sendData(pnr, Array.from(this.categories.values()));
   }
 }

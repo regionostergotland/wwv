@@ -14,12 +14,13 @@
 </mat-expansion-panel>
 
   <div style="margin-bottom: 10px">
+    <label>Personnummer: <input #pnr /> </label>
     <label>Username: <input #username /> </label>
     <label>Password: <input type="password" #password /> </label>
   </div>
 
   <button mat-raised-button color='primary'
-    (click)="authenticate(username.value, password.value); sendData()">
+    (click)="authenticate(username.value, password.value); sendData(pnr.value)">
       Godkänn och skicka
   </button>
 </div>

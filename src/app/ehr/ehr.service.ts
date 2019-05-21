@@ -1,10 +1,49 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { EHR_CONFIG, EhrConfig } from './ehr-config';
+import { switchMap, map } from 'rxjs/operators';
 
+import { EHR_CONFIG, EhrConfig } from './ehr-config';
 import { CategorySpec } from './datatype';
 import { DataList } from './datalist';
+
+interface CompositionResponse {
+  action: string;
+  compositionUid: string;
+  meta: {};
+}
+
+interface EhrResponse {
+  ehrId: string;
+  ehrStatus: {
+    modifiable: boolean,
+    queryable: boolean,
+    subjectId: string,
+    subjectNamespace: string
+  };
+  meta: {};
+}
+
+interface DemographicResponse {
+  action: string;
+  meta: {};
+  parties: [Party];
+}
+
+interface Party {
+  additionalInfo: {
+    Personnummer: string,
+    civilstånd: string,
+  };
+  dateOfBirth: string;
+  firstNames: string;
+  gender: string;
+  id: string;
+  lastNames: string;
+  version: number;
+}
+
+// TODO use newly available openEHR standard instead of THINKEHR
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +67,39 @@ export class EhrService {
       cats.push(cat.id);
     }
     return cats;
+  }
+
+  /*
+   * Perform a GET request to a given API call with the given parameters.
+   * @param call URL to API call excluding base URL
+   * @param params HttpParams object
+   */
+  private get<T>(call: string, params: HttpParams): Observable<T> {
+    const options = {
+      params,
+      headers: new HttpHeaders({
+        Authorization: 'Basic ' + this.basicCredentials
+      })
+    };
+    return this.http.get<T>(this.config.baseUrl + call, options);
+  }
+
+  /*
+   * Perform a POST request to a given API call with the given parameters and
+   * the given body
+   * @param call URL to API call excluding base URL
+   * @param params HttpParams object
+   * @param body JSON object to send as body
+   */
+  private post<T>(call: string, params: HttpParams, body): Observable<T> {
+    const options = {
+      params,
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Basic ' + this.basicCredentials
+      })
+    };
+    return this.http.post<T>(this.config.baseUrl + call, options);
   }
 
   private createComposition(lists: DataList[]): string {
@@ -75,34 +147,60 @@ export class EhrService {
       }
     }
 
-    const postData = JSON.stringify(composition, null, 2);
-    console.log(postData);
     return JSON.stringify(composition);
   }
 
-  public sendData(lists: DataList[]): Observable<{}> {
-    // TODO get ehrId from pnr
-    const params = [
-      ['ehrId', 'c0cf738e-67b5-4c8c-8410-f83df4082ac0'],
-      ['templateId', this.config.templateId],
-      ['format', 'STRUCTURED'],
-    ];
-    let url = this.config.baseUrl + '?';
-    for (const [key, value] of params) {
-      url += key + '=' + value + '&';
-    }
+  /* Get party ID by partyID */
+  private getEhrId(partyId: string): Observable<any> {
+    const params = new HttpParams()
+      .set('subjectId', partyId)
+      .set('subjectNamespace', 'default');
+    return this.get<EhrResponse>('ehr', params).pipe(map(
+        res => res.ehrId
+    ));
+  }
 
-    const composition = this.createComposition(lists);
+  /* Get party ID by personal identity number (personnummer) */
+  private getPartyId(pnr: string): Observable<any> {
+    const params = new HttpParams().set('personnummer', pnr);
+    return this.get<DemographicResponse>('demographics/party/query', params)
+      .pipe(map(
+        res => {
+          if (res && res.parties.length > 0) {
+            return res.parties[0].id; // assume only one person with pnr
+          } else {
+            throw new Error('no individual with given pnr');
+          }
+        }
+    ));
+  }
 
-    const options = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + this.basicCredentials
-      })
-    };
+  /*
+   * Create a composition of the given datalists to the EHR with the given
+   * ehrID.
+   * @returns composition UID of the created composition
+   */
+  private postComposition(ehrId: any, lists: DataList[]):
+      Observable<CompositionResponse> {
+    const params = new HttpParams()
+      .set('ehrId', ehrId)
+      .set('templateId', this.config.templateId)
+      .set('format', 'STRUCTURED');
+    return this.post<CompositionResponse>('composition', params,
+                                          this.createComposition(lists));
+  }
 
-    console.log(url);
-    return this.http.post(url, composition, options);
+  /*
+   * Create a composition of the given datalists to the EHR belonging to the
+   * individual with the given pnr.
+   */
+  public sendData(pnr: string, lists: DataList[]): Observable<string> {
+    return this.getPartyId(pnr)
+      .pipe(switchMap(this.getEhrId.bind(this)))
+      .pipe(switchMap(
+          ehrId => this.postComposition(ehrId, lists)))
+      .pipe(map(
+        res => res.compositionUid));
   }
 
   public authenticateBasic(user: string, pass: string) {

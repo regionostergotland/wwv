@@ -63,8 +63,8 @@ export class InspectionComponent implements OnInit {
   /**
    * Send all the data stored in the conveyor.
    */
-  sendData() {
-    this.conveyor.sendData().
+  sendData(pnr: string) {
+    this.conveyor.sendData(pnr).
       subscribe(
         _ => this.router.navigateByUrl('/confirmation'),
         e => this.snackBar.open('Inrapporteringen misslyckades!', 'OK',
