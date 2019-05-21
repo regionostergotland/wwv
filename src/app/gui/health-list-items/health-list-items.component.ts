@@ -118,7 +118,7 @@ export class HealthListItemsComponent implements OnInit {
         case 'period_DAY': return dayjs(v).format('YYYY-MM-DD');
         case 'period_WEEK': return 'v' + v.getWeek() + ', ' + v.getWeekYear();
         case 'period_MONTH': return dayjs(v).format('YY-MM');
-        case 'period_YEAR': return dayjs(v).format('YY');
+        case 'period_YEAR': return dayjs(v).format('YYYY');
       }
     }
 
@@ -172,7 +172,7 @@ export class HealthListItemsComponent implements OnInit {
       return false;
     }
 
-    if (this.categorySpec.dataTypes.has(key) || key === 'mobile') {
+    if (this.categorySpec.dataTypes.has(key)) {
       const { visibleOnMobile } = this.categorySpec.dataTypes.get(key);
       return !visibleOnMobile;
     }
@@ -191,7 +191,7 @@ export class HealthListItemsComponent implements OnInit {
       return 'mobile';
     }
 
-    if (key.startsWith('peroid_') || key === 'date') {
+    if (key.startsWith('period_') || key === 'date') {
       return 'text';
     }
 
