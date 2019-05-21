@@ -131,7 +131,7 @@ export class HealthListItemsComponent implements OnInit {
             return this.isSmallScreen() ? s : s + this.getCategoryUnit(key);
           case this.dataTypeEnum.TEXT: return point.get(key);
           case this.dataTypeEnum.CODED_TEXT:
-            for (let option of this.options.get(key)) {
+            for (const option of this.options.get(key)) {
               if (option.code === point.get(key)) {
                 return option.label;
               }

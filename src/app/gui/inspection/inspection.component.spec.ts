@@ -26,11 +26,11 @@ describe('InspectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ 
+      declarations: [
         EditorComponent,
-        InspectionComponent, 
+        InspectionComponent,
         HealthListItemsComponent ],
-      imports: [ 
+      imports: [
         MatExpansionModule,
         MatMenuModule,
         MatTableModule,
