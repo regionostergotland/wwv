@@ -59,12 +59,14 @@ export class AddDataPointComponent implements OnInit {
     this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
     for (const [key, value] of Array.from(this.dataPoint.entries())) {
       const controller = this.getFormControl(key);
+
       controller.setValue(value);
       if (this.requiredFields.includes(key) || key === 'date' || key.startsWith('period_')) {
         controller.disable();
       }
       this.pointData.set(key, value);
     }
+    this.getFormControl('date').disable();
   }
 
   ngOnInit() {
