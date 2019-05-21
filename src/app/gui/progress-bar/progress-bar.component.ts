@@ -26,7 +26,7 @@ export class ProgressBarComponent implements OnInit {
   }
 
   /**
-   * 
+   *
    * @param to path to navigate to
    * @param buttonStep what step the button button pressed corresponds to.
    */
