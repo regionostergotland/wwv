@@ -7,12 +7,23 @@ import { EHR_CONFIG, EhrConfig } from './ehr-config';
 import { CategorySpec } from './datatype';
 import { DataList } from './datalist';
 
+/* Receipt for composition creation */
+interface CompositionReceipt {
+  pnr: string;
+  composition: {};
+  partyId: string;
+  ehrId: string;
+  compUid: string;
+}
+
+/* Response from composition API call */
 interface CompositionResponse {
   action: string;
   compositionUid: string;
   meta: {};
 }
 
+/* Response from ehr API call */
 interface EhrResponse {
   ehrId: string;
   ehrStatus: {
@@ -24,12 +35,14 @@ interface EhrResponse {
   meta: {};
 }
 
+/* Response from demographic API call */
 interface DemographicResponse {
   action: string;
   meta: {};
   parties: [Party];
 }
 
+/* Representation of individual in EHR */
 interface Party {
   additionalInfo: {
     Personnummer: string,
@@ -56,10 +69,14 @@ export class EhrService {
     private http: HttpClient
   ) {}
 
+  /* Get the specification of an available category.
+   * @param id of category returned by getCategories.
+   */
   public getCategorySpec(categoryId: string): CategorySpec {
     return this.config.categories.find(e => e.id === categoryId);
   }
 
+  /* Get a list of available categories of data. */
   public getCategories(): string[] {
     const cats = [];
 
@@ -102,7 +119,52 @@ export class EhrService {
     return this.http.post<T>(this.config.baseUrl + call, body, options);
   }
 
-  private createComposition(lists: DataList[]): string {
+  /* Get party ID by personal identity number (personnummer) */
+  private getPartyId(pnr: string): Observable<any> {
+    const params = new HttpParams().set('personnummer', pnr);
+    return this.get<DemographicResponse>('demographics/party/query', params)
+      .pipe(map(
+        res => {
+          if (res && res.parties.length > 0) {
+            return res.parties[0].id; // assume only one person with pnr
+          } else {
+            throw new Error('no individual with given pnr');
+          }
+        }
+    ));
+  }
+
+  /*
+   * Create a composition of the given datalists to the EHR with the given
+   * ehrID.
+   * @returns composition UID of the created composition
+   */
+  private postComposition(ehrId: any, composition: {}):
+      Observable<CompositionResponse> {
+    const params = new HttpParams()
+      .set('ehrId', ehrId)
+      .set('templateId', this.config.templateId)
+      .set('format', 'STRUCTURED');
+    return this.post<CompositionResponse>('composition', params, composition);
+  }
+
+  /* Get party ID by partyID */
+  private getEhrId(partyId: string): Observable<string> {
+    const params = new HttpParams()
+      .set('subjectId', partyId)
+      .set('subjectNamespace', 'default');
+    return this.get<EhrResponse>('ehr', params).pipe(map(
+        res => res.ehrId
+    ));
+  }
+
+  /* Authenticate to EHR with username and password */
+  public authenticateBasic(user: string, pass: string) {
+    this.basicCredentials = btoa(user + ':' + pass);
+  }
+
+  /* Create a composition of given data lists */
+  public createComposition(lists: DataList[]): {} {
     const composition: any = {
       ctx: {
         language: 'en',
@@ -147,63 +209,36 @@ export class EhrService {
       }
     }
 
-    return JSON.stringify(composition);
-  }
-
-  /* Get party ID by partyID */
-  private getEhrId(partyId: string): Observable<any> {
-    const params = new HttpParams()
-      .set('subjectId', partyId)
-      .set('subjectNamespace', 'default');
-    return this.get<EhrResponse>('ehr', params).pipe(map(
-        res => res.ehrId
-    ));
-  }
-
-  /* Get party ID by personal identity number (personnummer) */
-  private getPartyId(pnr: string): Observable<any> {
-    const params = new HttpParams().set('personnummer', pnr);
-    return this.get<DemographicResponse>('demographics/party/query', params)
-      .pipe(map(
-        res => {
-          if (res && res.parties.length > 0) {
-            return res.parties[0].id; // assume only one person with pnr
-          } else {
-            throw new Error('no individual with given pnr');
-          }
-        }
-    ));
+    return composition;
   }
 
   /*
-   * Create a composition of the given datalists to the EHR with the given
-   * ehrID.
-   * @returns composition UID of the created composition
+   * Send a composition to the EHR of individual with given pnr.
+   * @param pnr Personal identity number of individual associated with ehr the
+   * composition is created in.
+   * @param composition Composition created using createComposition method
    */
-  private postComposition(ehrId: any, lists: DataList[]):
-      Observable<CompositionResponse> {
-    const params = new HttpParams()
-      .set('ehrId', ehrId)
-      .set('templateId', this.config.templateId)
-      .set('format', 'STRUCTURED');
-    return this.post<CompositionResponse>('composition', params,
-                                          this.createComposition(lists));
-  }
-
-  /*
-   * Create a composition of the given datalists to the EHR belonging to the
-   * individual with the given pnr.
-   */
-  public sendData(pnr: string, lists: DataList[]): Observable<string> {
+  public sendComposition(pnr: string,
+                         composition: {}): Observable<CompositionReceipt> {
+    let receipt: CompositionReceipt = {
+      'pnr': pnr,
+      'composition': composition,
+      'partyId': '',
+      'ehrId': '',
+      'compUid': '',
+    };
     return this.getPartyId(pnr)
-      .pipe(switchMap(this.getEhrId.bind(this)))
-      .pipe(switchMap(
-          ehrId => this.postComposition(ehrId, lists)))
-      .pipe(map(
-        res => res.compositionUid));
-  }
-
-  public authenticateBasic(user: string, pass: string) {
-    this.basicCredentials = btoa(user + ':' + pass);
+      .pipe(switchMap(partyId => {
+          receipt.partyId = partyId;
+          return this.getEhrId.bind(this);
+        }))
+      .pipe(switchMap((ehrId: string) => {
+          receipt.ehrId = ehrId;
+          return this.postComposition(ehrId, composition)
+        }))
+      .pipe(map(res => {
+          receipt.compUid = res.compositionUid;
+          return receipt;
+        }));
   }
 }

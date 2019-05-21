@@ -99,7 +99,10 @@ export class Conveyor {
   }
 
   public sendData(pnr: string): Observable<{}> {
-    return this.ehrService.sendData(pnr, Array.from(this.categories.values()));
+    const composition = this.ehrService.createComposition(
+      Array.from(this.categories.values())
+    );
+    return this.ehrService.sendComposition(pnr, composition);
   }
 
   /*
