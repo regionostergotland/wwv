@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mat-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.mat-card-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  max-width: 1050px;
+}
+p {
+  font-size: 18px;
+  width: 80%;
+  
+}
