@@ -99,7 +99,7 @@ export class EhrService {
         Authorization: 'Basic ' + this.basicCredentials
       })
     };
-    return this.http.post<T>(this.config.baseUrl + call, options);
+    return this.http.post<T>(this.config.baseUrl + call, body, options);
   }
 
   private createComposition(lists: DataList[]): string {
