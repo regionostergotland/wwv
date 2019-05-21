@@ -118,7 +118,7 @@ const DeviceManufacturerField: [string, DataType] = [
 
 export interface EhrConfig {
   /**
-   * Identifier used to specify category.
+   * Base part of the url which is used in all EHR-related HTTP-requests.
    */
   baseUrl: string;
 
@@ -136,7 +136,6 @@ export interface EhrConfig {
 export const ehrConfig: EhrConfig = {
   baseUrl: 'https://rest.ehrscape.com/rest/v1/composition',
   templateId : 'self-reporting',
-// TODO generate these specifications automatically from templates in ehr
   categories: [
     {
       id : Categories.BLOOD_PRESSURE,

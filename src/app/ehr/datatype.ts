@@ -165,6 +165,10 @@ export abstract class DataType {
     return functions.get(fn)(values);
   }
 
+  /**
+   * Used to calculate a default value for mathematical functions for dataTypes
+   * which are not suited to mathematical manipulation by nature, such as text.
+   */
   private only(values: any[]): any {
     let equal = true;
     for (const value of values) {
@@ -265,10 +269,12 @@ export interface DataTypeCodedTextOpt {
    * Code from openEHR template that specifies option.
    */
   readonly code: string;
+
   /**
    * Human readable name of option.
    */
   readonly label: string;
+
   /**
    * Human readable description of option.
    */
@@ -314,12 +320,14 @@ export class DataTypeQuantity extends DataType {
    * Unit of data type's value.
    */
   public readonly unit: string;
+
   /**
-   * Minimum value of value.
+   * Minimum value of values.
    */
   public readonly magnitudeMin: number;
+
   /**
-   * Maximum value of value.
+   * Maximum value of values.
    */
   public readonly magnitudeMax: number;
 

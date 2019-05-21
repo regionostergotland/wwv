@@ -4,7 +4,7 @@ import { DataPoint } from '../ehr/datalist';
 /**
  * Contains necessary properties for all categories.
  * dataTypes maps category strings to functions that convert
- * category-specific datatypes to the internal format. 
+ * category-specific datatypes to the internal format.
  */
 export interface CategoryProperties {
   url: string;
