@@ -13,13 +13,11 @@ import { ConfirmationComponent } from './gui/confirmation/confirmation.component
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'sources', component: SourcesComponent },
-  { path: 'pick-categories', component: CategoryPickerComponent },
+  { path: 'pick-categories/:platform', component: CategoryPickerComponent },
   { path: 'info', component: InfoComponent },
   { path: 'help', component: HelpComponent },
   { path: 'inspection', component: InspectionComponent },
   { path: 'edit', component: SidebarComponent },
-  { path: 'edit/:id', component: SidebarComponent },
-  { path: 'health-list', component: HealthListItemsComponent },
   { path: 'confirmation', component: ConfirmationComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
