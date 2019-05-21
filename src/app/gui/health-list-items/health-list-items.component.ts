@@ -280,7 +280,7 @@ export class HealthListItemsComponent implements OnInit {
           }
         }
       }
-      if (this.isSmallScreen()) {
+      if (this.isEditable && this.isSmallScreen()) {
         result.push('mobile');
       }
     }
