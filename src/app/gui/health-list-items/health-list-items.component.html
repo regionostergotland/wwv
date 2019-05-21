@@ -38,8 +38,8 @@
           [matTooltip]="getCategoryTooltip(key)"
         >
           <div style="display: flex; flex-direction: column;">
-            <div>{{ getCategoryLabel(key) }}</div>
-            <div *ngIf="isSmallScreen()">{{ getCategoryUnit(key) }}</div>
+            <div>{{ getDataTypeLabel(key) }}</div>
+            <div *ngIf="isSmallScreen()">{{ getDataTypeUnit(key) }}</div>
           </div>
         </th>
 
@@ -78,7 +78,7 @@
             </mat-form-field>
 
             <div *ngSwitchCase="'text'" style="text-align: center">
-              {{ getTextFromPoint(key, dataPoint) }}
+              {{ getFormattedTextFromPoint(key, dataPoint) }}
             </div>
           </div>
         </td>

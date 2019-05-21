@@ -83,7 +83,12 @@ export class HealthListItemsComponent implements OnInit {
     return numSelected === numRows;
   }
 
-  getCategoryUnit(key: string): string {
+  /**
+   *
+   * @param key datatype key
+   * @returns the datatypes unit (e.g. kg or m)
+   */
+  getDataTypeUnit(key: string): string {
     if (!this.categorySpec.dataTypes.has(key)) {
       return '';
     }
@@ -91,14 +96,21 @@ export class HealthListItemsComponent implements OnInit {
     return dataType.unit ? dataType.unit : '';
   }
 
-  getCategoryLabel(key: string): string {
+  /**
+   *  @param key datatype key
+   *  @returns human readable label of datatype
+   */
+  getDataTypeLabel(key: string): string {
     if (!this.categorySpec.dataTypes.has(key)) {
       return this.periodLabels.get(key);
     }
     return this.categorySpec.dataTypes.get(key).label;
   }
 
-
+  /**
+   *  @param key keyn of column
+   *  @returns description of datatype
+   */
   getCategoryTooltip(key: string): string {
     if (!this.categorySpec.dataTypes.has(key)) {
       return this.periodDescriptions.get(key);
@@ -106,8 +118,14 @@ export class HealthListItemsComponent implements OnInit {
     return this.categorySpec.dataTypes.get(key).description;
   }
 
-
-  getTextFromPoint(key: string, point: DataPoint): string {
+  /**
+   *
+   * Retrieve text formatting for a text field
+   * @param key key of the field
+   * @param point point containing the value
+   * @returns formatted string to display
+   */
+  getFormattedTextFromPoint(key: string, point: DataPoint): string {
     if (key === 'date') {
       return dayjs(point.get('time')).format('YYYY-MM-DD');
     }
@@ -128,7 +146,7 @@ export class HealthListItemsComponent implements OnInit {
           case this.dataTypeEnum.DATE_TIME: return dayjs(point.get(key)).format('hh:mm');
           case this.dataTypeEnum.QUANTITY:
             const s = this.displayCorrectNum(point.get(key));
-            return this.isSmallScreen() ? s : s + this.getCategoryUnit(key);
+            return this.isSmallScreen() ? s : s + this.getDataTypeUnit(key);
           case this.dataTypeEnum.TEXT: return point.get(key);
           case this.dataTypeEnum.CODED_TEXT:
             for (const option of this.options.get(key)) {
@@ -159,7 +177,7 @@ export class HealthListItemsComponent implements OnInit {
 
   /**
    *  Determines if a category should be hidden from display on smaller screens
-   * @param key datatype of category
+   *  @param key column name
    */
 
   shouldHide(key: string): boolean {
@@ -280,10 +298,10 @@ export class HealthListItemsComponent implements OnInit {
    * @returns a list of labels for the specified category
    */
 
-
-
   getDisplayedColumns(): string[] {
     const result: string[] = [];
+
+    // Add checkbox for selecting rows
     if (this.isEditable) {
       result.push('select');
     }
@@ -309,6 +327,7 @@ export class HealthListItemsComponent implements OnInit {
           }
         }
       }
+      // Add edit button for mobile screens
       if (this.isSmallScreen() && this.isEditable) {
         result.push('mobile');
       }

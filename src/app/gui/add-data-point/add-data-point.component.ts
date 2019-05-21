@@ -55,6 +55,12 @@ export class AddDataPointComponent implements OnInit {
     this.clockTime = '';
   }
 
+  /**
+   * Initializes the modal for editing instead of adding a value.
+   *  Sets the form values, and disables the controllers
+   *  for values that shouldn't be able to be edited.
+   */
+
   setValues(): void {
     this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
     for (const [key, value] of Array.from(this.dataPoint.entries())) {
@@ -84,6 +90,7 @@ export class AddDataPointComponent implements OnInit {
       }
     }
 
+    // If a datapoint is provided, then prepare modal for editing instead of adding
     if (this.dataPoint) {
       this.setValues();
     }
@@ -252,14 +259,18 @@ export class AddDataPointComponent implements OnInit {
       }
     }
 
-    // Fill the field in a new point and add it.
+    // check if we were provided a datapoint
     let dataPoint: DataPoint = this.dataPoint;
     if (!dataPoint) {
       dataPoint = new DataPoint();
     }
+
+    // set the datapoint values from the forms
     for (const data of Array.from(this.pointData.keys())) {
       dataPoint.set(data, this.pointData.get(data));
     }
+
+    // Dont add a point that already exists
     if (!this.dataPoint) {
       this.conveyor.getDataList(this.selectedCategory).addPoint(dataPoint);
     }
