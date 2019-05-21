@@ -69,6 +69,10 @@ export class SourcesComponent implements OnInit {
     }
   }
 
+  /**
+   * User selected platform is sent to conveyor, awaits for succesful sign in.
+   * @param Id of selected platform
+   */
   async selectPlatform(platformId: string) {
     this.conveyor.selectPlatform(platformId);
     await this.conveyor.signIn(platformId);
