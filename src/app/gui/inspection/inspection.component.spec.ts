@@ -6,11 +6,13 @@ import {
   MatCheckboxModule,
   MatPaginatorModule,
   MatTooltipModule,
+  MatCardModule,
+  MatSnackBarModule,
   MatSelectModule} from '@angular/material';
 import { InspectionComponent } from './inspection.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { HttpClient, HttpHandler } from '@angular/common/http';
+
 import {HealthListItemsComponent} from '../health-list-items/health-list-items.component';
 
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';
@@ -23,7 +25,8 @@ describe('InspectionComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ InspectionComponent, HealthListItemsComponent ],
-      imports: [ MatExpansionModule,
+      imports: [
+        MatExpansionModule,
         MatMenuModule,
         MatTableModule,
         MatPaginatorModule,
@@ -32,14 +35,15 @@ describe('InspectionComponent', () => {
         MatCheckboxModule,
         MatTooltipModule,
         MatSelectModule,
+        MatCardModule,
+        MatSnackBarModule,
         CustomGoogleApiModule
       ],
-
      providers: [
       GoogleAuthService,
       GoogleApiService,
       HttpClient,
-      HttpHandler
+      HttpHandler,
     ]
     })
     .compileComponents();
