@@ -4,10 +4,11 @@ import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
 import {
-    MatToolbarModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule,
+  MatToolbarModule,
+  MatButtonModule,
+  MatMenuModule,
+  MatIconModule,
+  MatTooltipModule,
 } from '@angular/material';
 
 @NgModule({
@@ -17,7 +18,8 @@ import {
     RouterModule,
     FlexLayoutModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule,
   ],
   declarations: [
     ToolbarComponent
