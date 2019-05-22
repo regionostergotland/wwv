@@ -5,6 +5,7 @@ import {Component,
         ViewChildren,
         QueryList} from '@angular/core';
 import { MatSnackBar } from '@angular/material';
+import { Router } from '@angular/router';
 
 import { CategorySpec,
          DataTypeCodedText,
@@ -30,6 +31,7 @@ export class InspectionComponent implements OnInit {
   constructor(
     private snackBar: MatSnackBar,
     private conveyor: Conveyor,
+    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -82,7 +84,6 @@ export class InspectionComponent implements OnInit {
             panelClass: 'error'
           })
         // TODO fix snackbar styling
-        // TODO send composition id to confirmation screen
     );
   }
 
