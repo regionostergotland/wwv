@@ -5,15 +5,16 @@ $light-black: #3a3b3d;
 html, body { 
   height: 100vh; 
   width: 100vw;
- }
-body {
+}
+
+body, .mat-body1 {
   margin: 0;
   font-family: Tahoma, Verdana, Segoe, sans-serif;
   color: $light-black;
   font-weight: normal;
 }
 
-h1 {
+h1, .mat-h1, .mat-headline {
   font-family: Georgia, Times, "Times New Roman", sans-serif;
   font-style: normal;
   font-variant: normal;
@@ -21,7 +22,7 @@ h1 {
   font-weight: normal;
 }
 
-h2 {
+h2, .mat-h2, .mat-title, .mat-card-header {
   font-family: Georgia, Times, "Times New Roman", sans-serif;
   font-style: light;
   font-variant: normal;
@@ -29,7 +30,7 @@ h2 {
   font-weight: normal;
 }
 
-h3 {
+h3, .mat-h3, .mat-subheading-2 {
   font-family: Georgia, Times, "Times New Roman", sans-serif;
   font-style: normal;
   font-variant: normal;
@@ -37,8 +38,8 @@ h3 {
   font-weight: normal;
 }
 
-p {
-  font-family: Tahoma, Verdana, Segoe, sans-serif;
+p, .mat-body2, .mat-button {
+  font-family: Tahoma, Verdana, Segoe, sans-serif !important;
 }
 
 blockquote {
