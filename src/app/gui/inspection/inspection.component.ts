@@ -44,6 +44,18 @@ export class InspectionComponent implements OnInit {
       this.categorySpecs.set(category, this.conveyor.getCategorySpec(category));
     }
   }
+
+  hasData(): boolean {
+    if (this.categories.length > 0) {
+      for (const cat of this.categories) {
+        if (!this.isCategoryEmpty(cat)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   /**
    * Checks if a category is empty.
    * @param categoryId the category to check values from.
