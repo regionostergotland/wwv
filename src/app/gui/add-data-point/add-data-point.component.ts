@@ -67,10 +67,13 @@ export class AddDataPointComponent implements OnInit {
       const controller = this.getFormControl(key);
 
       controller.setValue(value);
-      if (this.requiredFields.includes(key) || key === 'date' || key.startsWith('period_')) {
+      if (this.requiredFields.includes(key)) {
         controller.disable();
       }
-      this.pointData.set(key, value);
+
+      if (value) {
+        this.pointData.set(key, value);
+      }
     }
     this.getFormControl('date').disable();
   }
@@ -251,7 +254,6 @@ export class AddDataPointComponent implements OnInit {
         return;
       }
     }
-
     // Are all fields valid?
     for (const [typeId, value] of this.pointData.entries()) {
       if (!this.categorySpec.dataTypes.get(typeId).isValid(value)) {
