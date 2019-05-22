@@ -25,6 +25,17 @@
   border-width: thin;
 }
 
+img {
+  height: 20px;
+  width: auto;
+  object-fit: scale-down;
+  margin-left: 4px;
+}
+
+mat-card {
+  cursor:pointer;
+}
+
 .help {
   border-color: #fed765;
 }
