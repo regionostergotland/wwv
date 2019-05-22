@@ -20,6 +20,7 @@ import { HttpClient, HttpHandler } from '@angular/common/http';
 import {HealthListItemsComponent} from '../health-list-items/health-list-items.component';
 
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';
+import { RouterTestingModule } from '@angular/router/testing';
 
 
 describe('InspectionComponent', () => {
@@ -34,6 +35,7 @@ describe('InspectionComponent', () => {
         HealthListItemsComponent ],
       imports: [
         MatExpansionModule,
+        RouterTestingModule,
         MatMenuModule,
         MatTableModule,
         MatTabsModule,
