@@ -1,5 +1,5 @@
 import { CategorySpec, DataType, MathFunctionEnum } from './datatype';
-import { PeriodWidths, startOfPeriod, samePeriod } from '../shared/period';
+import { PeriodWidth, startOfPeriod, samePeriod } from '../shared/period';
 import '../shared/date.extensions';
 
 /**
@@ -8,11 +8,12 @@ import '../shared/date.extensions';
  */
 export class DataPoint {
   /**
-   * XXX Point is marked for removal.
-   * -Only to be used for DataList.removePoint to achieve time-complexity n.
+   *  Decides if point is marked for removal.
+   *  Only used in DataList.removePoint to achieve time-complexity O(n).
    *  Remove if alternative algorithm is found.
    */
   public removed: boolean;
+
   /**
    * Values for data point.
    */
@@ -24,17 +25,20 @@ export class DataPoint {
   }
 
   /**
-   * Group a list of points in intervals.
-   * group consecutive points if they are in the same period
-   * assumption: already sorted by time
+   * Splits an array of DataPoints into groups of points in the same interval.
+   * The points are assumed to already be sorted by time.
+   * @param points DataPoints to be split
+   * @param span span of interval
+   * @returns an array where each element is an array containing all
+   * datapoints for one span
    */
-  public static groupByInterval(points: DataPoint[],
-                                width: PeriodWidths): DataPoint[][] {
+   public static groupByInterval(points: DataPoint[],
+                                 span: PeriodWidth): DataPoint[][] {
     const groups: DataPoint[][] = [[points[0]]];
     for (let p = 1; p < points.length; p++) {
       const p1: DataPoint = points[p - 1];
       const p2: DataPoint = points[p];
-      if (samePeriod(p1.get('time'), p2.get('time'), width)) {
+      if (samePeriod(p1.get('time'), p2.get('time'), span)) {
         groups[groups.length - 1].push(p2);
       } else {
         groups.push([p2]);
@@ -52,9 +56,11 @@ export class DataPoint {
   public entries() { return this.point.entries(); }
   public has(typeId: string) { return this.point.has(typeId); }
 
-  /*
-   * Check if each pair of values for each required field are equal according
-   * to the datatype
+  /**
+   * Check if each pair of values for all required fields are equal as defined
+   * by the datatype
+   * @param p DataPoint to compare equality against
+   * @param dataTypes dataTypes to check equality for
    */
   public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
     for (const [typeId, dataType] of dataTypes.entries()) {
@@ -67,8 +73,14 @@ export class DataPoint {
     return true;
   }
 
-  /*
-   * Compare each pair of values for each required field with the datatype.
+  /**
+   * Compares each pair of values for all required fields are equal as defined
+   * by the datatype. Uses dataType.compare to decide if one point is greater
+   * than the other.
+   * @param p DataPoint to compare against
+   * @param dataTypes dataTypes to compare
+   * @returns a number indicating if points are equal, or if one is greater
+   * or lesser than the other.
    */
   public compareTo(p: DataPoint, dataTypes: Map<string, DataType>): number {
     for (const [typeId, dataType] of dataTypes.entries()) {
@@ -83,12 +95,12 @@ export class DataPoint {
 
 
 export interface Filter {
-  width: PeriodWidths;
+  width: PeriodWidth;
   fn: MathFunctionEnum;
 }
 
 const DEFAULT_FILTER: Filter = {
-  width: PeriodWidths.POINT,
+  width: PeriodWidth.POINT,
   fn: MathFunctionEnum.ACTUAL
 };
 
@@ -101,10 +113,12 @@ export class DataList {
    * Specification for category of data list.
    */
   public readonly spec: CategorySpec;
+
   /**
    * All data points stored in the list.
    */
   private points: DataPoint[];
+
   /**
    * Cached processed points for each math function.
    */
@@ -118,9 +132,9 @@ export class DataList {
 
   /**
    * Merge multiple datapoints to single point with a math function based on
-   * width.
+   * span.
    * @param points DataPoints to merge
-   * @param width time duration that each generated point represents
+   * @param span time duration that each generated point represents
    * @param fn mathematical function to merge points with
    */
   private mergePoints(filter: Filter): DataPoint[] {
@@ -187,8 +201,8 @@ export class DataList {
   }
 
   /**
-   * Removes points from list by checking for equality to given points to be removed.
-   * @param points: DataPoint[] is a list of datapoints marked to be removed.
+   * Removes points from list by checking for equality against given points to be removed.
+   * @param points: a list of datapoints marked to be removed.
    */
   public removePoints(points: DataPoint[]): void {
     for (const point of points) {

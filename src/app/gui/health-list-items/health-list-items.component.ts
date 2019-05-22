@@ -5,7 +5,7 @@ import { CategorySpec,
          DataTypeEnum,
          } from '../../ehr/datatype';
 import { DataPoint } from '../../ehr/datalist';
-import { PeriodWidths } from '../../shared/period';
+import { PeriodWidth } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 import { AddDataPointComponent } from '../add-data-point/add-data-point.component';
 import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
@@ -20,7 +20,7 @@ import * as dayjs from 'dayjs';
 })
 export class HealthListItemsComponent implements OnInit {
 
-  @Input() width: PeriodWidths;
+  @Input() width: PeriodWidth;
 
   @Input() category: string;
 
@@ -313,10 +313,10 @@ export class HealthListItemsComponent implements OnInit {
           continue;
         } else if (column === 'time') {
           switch (this.width) {
-            case PeriodWidths.DAY: result.push('period_DAY'); break;
-            case PeriodWidths.MONTH: result.push('period_MONTH'); break;
-            case PeriodWidths.WEEK: result.push('period_WEEK'); break;
-            case PeriodWidths.YEAR: result.push('period_YEAR'); break;
+            case PeriodWidth.DAY: result.push('period_DAY'); break;
+            case PeriodWidth.MONTH: result.push('period_MONTH'); break;
+            case PeriodWidth.WEEK: result.push('period_WEEK'); break;
+            case PeriodWidth.YEAR: result.push('period_YEAR'); break;
             default :
               result.push('date');
               result.push('time');

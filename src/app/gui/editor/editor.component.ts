@@ -5,7 +5,7 @@ import { Conveyor } from 'src/app/conveyor.service';
 
 import { AddDataPointComponent } from '../add-data-point/add-data-point.component';
 import { MathFunctionEnum, CategorySpec } from 'src/app/ehr/datatype';
-import { PeriodWidths } from 'src/app/shared/period';
+import { PeriodWidth } from 'src/app/shared/period';
 
 export interface MathOption {
   value: MathFunctionEnum;
@@ -13,7 +13,7 @@ export interface MathOption {
 }
 
 export interface IntervalOption {
-  value: PeriodWidths;
+  value: PeriodWidth;
   description: string;
 }
 
@@ -26,11 +26,11 @@ const MATH_OPTIONS: MathOption[] = [
 ];
 
 const INTERVAL_OPTIONS: IntervalOption[] = [
-  {value: PeriodWidths.HOUR, description: 'Per timme'},
-  {value: PeriodWidths.DAY, description: 'Per dygn'},
-  {value: PeriodWidths.WEEK, description: 'Per vecka'},
-  {value: PeriodWidths.MONTH, description: 'Per månad'},
-  {value: PeriodWidths.YEAR, description: 'Per År'},
+  {value: PeriodWidth.HOUR, description: 'Per timme'},
+  {value: PeriodWidth.DAY, description: 'Per dygn'},
+  {value: PeriodWidth.WEEK, description: 'Per vecka'},
+  {value: PeriodWidth.MONTH, description: 'Per månad'},
+  {value: PeriodWidth.YEAR, description: 'Per År'},
 ];
 
 @Component({
@@ -80,7 +80,7 @@ export class MathDialogComponent {
 
   /**
    * Calls the setInterval function in order to do math manipulations on the data
-   * @param intervalString A string containing a PeriodWidths enum, must be converted to int
+   * @param intervalString A string containing a PeriodWidth enum, must be converted to int
    * @param funcString A string containing a Mathfunction enum, must be converted to int
    */
   calculate(intervalString: string, funcString: string) {
@@ -110,7 +110,7 @@ export class MathDialogComponent {
   styleUrls: ['./editor.component.scss']
 })
 export class EditorComponent implements OnInit {
-  PeriodWidths = PeriodWidths;
+  PeriodWidth = PeriodWidth;
 
   mathOptions: Map<MathFunctionEnum, string> =
     new Map<MathFunctionEnum, string>([
@@ -121,12 +121,12 @@ export class EditorComponent implements OnInit {
     [MathFunctionEnum.TOTAL, 'Totalt '],
   ]);
 
-  intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
-    [PeriodWidths.HOUR, 'per timme'],
-    [PeriodWidths.DAY, 'per dygn'],
-    [PeriodWidths.WEEK, 'per vecka'],
-    [PeriodWidths.MONTH, 'per månad'],
-    [PeriodWidths.YEAR, 'per år'],
+  intervalOptions: Map<PeriodWidth, string> = new Map<PeriodWidth, string>([
+    [PeriodWidth.HOUR, 'per timme'],
+    [PeriodWidth.DAY, 'per dygn'],
+    [PeriodWidth.WEEK, 'per vecka'],
+    [PeriodWidth.MONTH, 'per månad'],
+    [PeriodWidth.YEAR, 'per år'],
   ]);
 
   @Input() editable: boolean;
