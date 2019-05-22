@@ -31,7 +31,10 @@ export class ChartComponent implements OnInit {
     this.ngOnInit();
   }
 
-  mathOptions: Map<MathFunctionEnum, string> = new Map<MathFunctionEnum, string>([
+  mathOptions: Map<MathFunctionEnum, string> = new Map<
+    MathFunctionEnum,
+    string
+  >([
     [MathFunctionEnum.MAX, 'Maximalt '],
     [MathFunctionEnum.MEAN, 'Medelvärde '],
     [MathFunctionEnum.MEDIAN, 'Median '],
@@ -53,8 +56,7 @@ export class ChartComponent implements OnInit {
   xAxisLabel = 'datum';
   yAxisLabel = 'yAxisLabel';
 
-
-  constructor(private conveyor: Conveyor) {  }
+  constructor(private conveyor: Conveyor) {}
 
   getDataTypeUnit(key: string): string {
     const categorySpec = this.conveyor.getCategorySpec(this.category);
@@ -70,33 +72,39 @@ export class ChartComponent implements OnInit {
     const res = {};
     this.yAxisLabel = '';
 
-    for (const [filter, points] of this.chartData) {
-      let name = this.mathOptions.get(filter.fn) ? this.mathOptions.get(filter.fn) : '';
-      name += this.intervalOptions.get(filter.width) ? this.intervalOptions.get(filter.width) : '';
-      points.forEach(point => {
-        Array.from(point.keys()).forEach(key => {
-          const val = point.get(key);
-          const k = name + key;
-          if (typeof val === 'number') {
-            if (!(k in res)) {
-              res[k] = [];
-            }
+    if (this.chartData && this.category) {
+      for (const [filter, points] of this.chartData) {
+        let name = this.mathOptions.get(filter.fn)
+          ? this.mathOptions.get(filter.fn)
+          : '';
+        name += this.intervalOptions.get(filter.width)
+          ? this.intervalOptions.get(filter.width)
+          : '';
+        points.forEach(point => {
+          Array.from(point.keys()).forEach(key => {
+            const val = point.get(key);
+            const k = name + key;
+            if (typeof val === 'number') {
+              if (!(k in res)) {
+                res[k] = [];
+              }
 
-            res[k].push({
-              name: point.get('time'),
-              value: point.get(key),
-            });
+              res[k].push({
+                name: point.get('time'),
+                value: point.get(key),
+              });
 
-            if (this.yAxisLabel === '') {
-              this.yAxisLabel = this.getDataTypeUnit(key);
+              if (this.yAxisLabel === '') {
+                this.yAxisLabel = this.getDataTypeUnit(key);
+              }
             }
-          }
+          });
         });
+      }
+
+      Object.keys(res).forEach(key => {
+        this.results.push({ name: key, series: res[key] });
       });
     }
-
-    Object.keys(res).forEach(key => {
-      this.results.push({ name: key, series: res[key] });
-    });
   }
 }

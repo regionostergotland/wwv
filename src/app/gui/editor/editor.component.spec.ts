@@ -13,6 +13,7 @@ import {
 import { EditorComponent } from './editor.component';
 import { HealthListItemsComponent } from '../health-list-items/health-list-items.component';
 import { HttpClient, HttpHandler } from '@angular/common/http';
+import { ChartComponent } from '../chart/chart.component';
 
 import { CustomGoogleApiModule,
          GoogleApiService,
@@ -38,6 +39,7 @@ describe('EditorComponent', () => {
       declarations: [
         EditorComponent,
         HealthListItemsComponent,
+        ChartComponent
       ],
       providers: [
         GoogleApiService,
