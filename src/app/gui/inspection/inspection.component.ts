@@ -82,7 +82,6 @@ export class InspectionComponent implements OnInit {
             panelClass: 'error'
           })
         // TODO fix snackbar styling
-        // TODO send composition id to confirmation screen
     );
   }
 

@@ -1,3 +1,18 @@
+<div *ngIf="categories.length == 0">
+  <h1 style="text-align: center">
+    Hoppsan!
+  </h1>
+  <p>Du har inte hämtat eller matat in någon data!</p>
+  <button
+    mat-raised-button
+    color="primary"
+    routerLink='/home'
+  >
+    Tillbaka hem
+  </button>
+</div>
+
+<div *ngIf="categories.length > 0">
 <div *ngIf="!dataSent" class="center">
   <p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
 
@@ -49,4 +64,5 @@
   >
     Tillbaka hem
   </button>
+</div>
 </div>
