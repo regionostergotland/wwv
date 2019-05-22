@@ -47,9 +47,10 @@ export class InspectionComponent implements OnInit {
 
   hasData(): boolean {
     if (this.categories.length > 0) {
-      for (let cat of this.categories) {
-        if (!this.isCategoryEmpty(cat))
+      for (const cat of this.categories) {
+        if (!this.isCategoryEmpty(cat)) {
           return true;
+        }
       }
     }
     return false;
