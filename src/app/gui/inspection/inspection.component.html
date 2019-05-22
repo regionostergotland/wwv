@@ -1,4 +1,4 @@
-<div *ngIf="categories.length == 0">
+<div *ngIf="!hasData()">
   <h1 style="text-align: center">
     Hoppsan!
   </h1>
@@ -12,7 +12,7 @@
   </button>
 </div>
 
-<div *ngIf="categories.length > 0">
+<div *ngIf="hasData()">
 <div *ngIf="!dataSent" class="center">
   <p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
 
