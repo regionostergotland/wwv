@@ -269,9 +269,9 @@ export class HealthListItemsComponent implements OnInit {
     return item ? index : undefined;
   }
 
-  openEditDialog(point: DataPoint, key: string): void {
+  openEditDialog(point: DataPoint, key: string, isEditable: boolean): void {
     const dialogRef = this.dialog.open(AddDataPointComponent, {
-      data: {category: this.category, point}
+      data: {category: this.category, point, isEditable}
     });
 
     dialogRef.afterClosed().subscribe(result => {
