@@ -30,6 +30,11 @@ export class EhrService {
     return cats;
   }
 
+  /**
+   * Creates a JSON-formated composition from an array of DataList(s)
+   * @param lists DataLists which the composition is to be created from
+   * @returns JSON-formated composition
+   */
   private createComposition(lists: DataList[]): string {
     const composition: any = {
       ctx: {
@@ -80,8 +85,13 @@ export class EhrService {
     return JSON.stringify(composition);
   }
 
+  /**
+   * Posts data to the journal via a HTTP-request. Uses createComposition()
+   * to convert the data to a proper format before posting it.
+   * @param lists DataLists containing data to be posted
+   * @returns an observable notifying of the HTTP-requests completion
+   */
   public sendData(lists: DataList[]): Observable<{}> {
-    // TODO get ehrId from pnr
     const params = [
       ['ehrId', 'c0cf738e-67b5-4c8c-8410-f83df4082ac0'],
       ['templateId', this.config.templateId],

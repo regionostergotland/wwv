@@ -52,23 +52,28 @@ export interface DataTypeSettings {
    * Location of field in composition.
    */
   path: string[];
+
   /**
    * Human readable name for data type.
    */
   label: string;
+
   /**
    * Human readable description of data type.
    */
   description: string;
+
   /**
    * Specify if data field is required in composition.
    */
   required: boolean;
+
   /**
    * Data type corresponds to a set of data in EHR instead of just a single
    * point.
    */
   single: boolean;
+
   /**
    * Field is a major component of point and shall be visible to the user.
    */
@@ -81,7 +86,7 @@ export interface DataTypeSettings {
  * of a specific data type (e.g. Quantity).
  *
  * The DataType instance handles validity checking and conversion to JSON for
- * the EHR.
+ * the data to be sent to EHR.
  */
 export abstract class DataType {
   /**
@@ -107,15 +112,15 @@ export abstract class DataType {
   }
 
   /**
-   * Verify that value is valid type of instance's data type.
-   * @param value Value to be tested if valid for instance's data type.
+   * Verify that value is ia valid type of the instance's data type.
+   * @param value value to be tested for validity
    * @return true if value is valid according to instance, otherwise false.
    */
   public abstract isValid(value: any): boolean;
 
   /**
    * Convert data value of instance's type to JSON object that can be part of
-   * data for REST API call to EHR.
+   * the data in the REST API call to EHR.
    * @param value Valid value for datatype to be converted.
    * @return JSON object representation of value that is not stringified
    */
@@ -128,8 +133,8 @@ export abstract class DataType {
     return v1 === v2;
   }
 
-  /*
-   * Compare two valid values and determine if one is considered larger than
+  /**
+   * Compare two valid values and determine if one is considered greater than
    * the other.
    * @returns a positive value if v1 is larger than v2, a negative value if v2
    * is larger than v1 and zero if v1 and v2 are equal to eachother.
@@ -160,6 +165,10 @@ export abstract class DataType {
     return functions.get(fn)(values);
   }
 
+  /**
+   * Used to calculate a default value for mathematical functions for dataTypes
+   * which are not suited to mathematical manipulation by nature, such as text.
+   */
   private only(values: any[]): any {
     let equal = true;
     for (const value of values) {
@@ -260,10 +269,12 @@ export interface DataTypeCodedTextOpt {
    * Code from openEHR template that specifies option.
    */
   readonly code: string;
+
   /**
    * Human readable name of option.
    */
   readonly label: string;
+
   /**
    * Human readable description of option.
    */
@@ -309,12 +320,14 @@ export class DataTypeQuantity extends DataType {
    * Unit of data type's value.
    */
   public readonly unit: string;
+
   /**
-   * Minimum value of value.
+   * Minimum value of values.
    */
   public readonly magnitudeMin: number;
+
   /**
-   * Maximum value of value.
+   * Maximum value of values.
    */
   public readonly magnitudeMax: number;
 

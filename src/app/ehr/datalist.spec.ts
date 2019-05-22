@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DataList, DataPoint } from './datalist';
-import { PeriodWidths } from '../shared/period';
+import { PeriodSpan } from '../shared/period';
 import { CategorySpec, DataType, MathFunctionEnum,
          DataTypeDateTime,
          DataTypeQuantity,
@@ -199,14 +199,14 @@ describe('datalist', () => {
   ]);
 
   /*
-   * Test that datalist splits datapoints into width interval
+   * Test that datalist splits datapoints into span interval
    */
   it('should split datapoints into one day intervals, producing three points', () => {
-    dataList.setInterval(PeriodWidths.DAY, MathFunctionEnum.MEAN);
+    dataList.setInterval(PeriodSpan.DAY, MathFunctionEnum.MEAN);
     expect(dataList.getPoints().length).toEqual(3);
   });
   it('should create new datapoints with mean of the interval points numerized fields', () => {
-    dataList.setInterval(PeriodWidths.DAY, MathFunctionEnum.MEAN);
+    dataList.setInterval(PeriodSpan.DAY, MathFunctionEnum.MEAN);
     expect(dataList.getPoints()[0].get('systolic')).toEqual(102);
     expect(dataList.getPoints()[0].get('diastolic')).toEqual(21);
   });
@@ -225,7 +225,7 @@ describe('datalist', () => {
       new DataPoint([['time', new Date(2017, 1, 2)], ['value', 2]]),
       new DataPoint([['time', new Date(2017, 1, 3)], ['value', 3]]),
     ]);
-    expect(DataPoint.groupByInterval(points, PeriodWidths.DAY).length)
+    expect(DataPoint.groupByInterval(points, PeriodSpan.DAY).length)
       .toEqual(2);
   });
 

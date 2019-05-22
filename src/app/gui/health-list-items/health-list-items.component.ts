@@ -6,7 +6,7 @@ import { CategorySpec,
          MathFunctionEnum,
          } from '../../ehr/datatype';
 import { DataPoint } from '../../ehr/datalist';
-import { PeriodWidths } from '../../shared/period';
+import { PeriodSpan } from '../../shared/period';
 import {Conveyor} from '../../conveyor.service';
 import {AddDataPointComponent} from '../add-data-point/add-data-point.component';
 import {MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA} from '@angular/material';
@@ -19,7 +19,7 @@ export interface MathOption {
 }
 
 export interface IntervalOption {
-  value: PeriodWidths;
+  value: PeriodSpan;
   description: string;
 }
 
@@ -32,11 +32,11 @@ const MATH_OPTIONS: MathOption[] = [
 ];
 
 const INTERVAL_OPTIONS: IntervalOption[] = [
-  {value: PeriodWidths.HOUR, description: 'Per timme'},
-  {value: PeriodWidths.DAY, description: 'Per dygn'},
-  {value: PeriodWidths.WEEK, description: 'Per vecka'},
-  {value: PeriodWidths.MONTH, description: 'Per månad'},
-  {value: PeriodWidths.YEAR, description: 'Per År'},
+  {value: PeriodSpan.HOUR, description: 'Per timme'},
+  {value: PeriodSpan.DAY, description: 'Per dygn'},
+  {value: PeriodSpan.WEEK, description: 'Per vecka'},
+  {value: PeriodSpan.MONTH, description: 'Per månad'},
+  {value: PeriodSpan.YEAR, description: 'Per År'},
 ];
 
 @Component({
@@ -88,7 +88,7 @@ export class MathDialogComponent {
 
   /**
    * Calls the setInterval function in order to do math manipulations on the data
-   * @param intervalString A string containing a PeriodWidths enum, must be converted to int
+   * @param intervalString A string containing a PeriodSpan enum, must be converted to int
    * @param funcString A string containing a Mathfunction enum, must be converted to int
    */
   calculate(intervalString: string, funcString: string) {
@@ -104,7 +104,7 @@ export class MathDialogComponent {
    * Restores the datalist to the default settings
    */
   changeBack() {
-    this.conveyor.getDataList(this.selectedCategory).setInterval(PeriodWidths.POINT, MathFunctionEnum.ACTUAL);
+    this.conveyor.getDataList(this.selectedCategory).setInterval(PeriodSpan.POINT, MathFunctionEnum.ACTUAL);
     this.closeDialog();
   }
 
@@ -137,7 +137,7 @@ export class HealthListItemsComponent implements OnInit {
   isEditable = false;
 
   dataTypeEnum = DataTypeEnum;
-  periodWidths = PeriodWidths;
+  PeriodSpan = PeriodSpan;
   categorySpec: CategorySpec;
   pointDataList: DataPoint[];
   displayedColumns: string[];
@@ -166,12 +166,12 @@ export class HealthListItemsComponent implements OnInit {
     [MathFunctionEnum.TOTAL, ', totala värde '],
   ]);
 
-  intervalOptions: Map<PeriodWidths, string> = new Map<PeriodWidths, string>([
-    [PeriodWidths.HOUR, 'per timme'],
-    [PeriodWidths.DAY, 'per dygn'],
-    [PeriodWidths.WEEK, 'per vecka'],
-    [PeriodWidths.MONTH, 'per månad'],
-    [PeriodWidths.YEAR, 'per år'],
+  intervalOptions: Map<PeriodSpan, string> = new Map<PeriodSpan, string>([
+    [PeriodSpan.HOUR, 'per timme'],
+    [PeriodSpan.DAY, 'per dygn'],
+    [PeriodSpan.WEEK, 'per vecka'],
+    [PeriodSpan.MONTH, 'per månad'],
+    [PeriodSpan.YEAR, 'per år'],
   ]);
 
   mathOption: string;
@@ -256,8 +256,8 @@ export class HealthListItemsComponent implements OnInit {
       }
       this.mathOption = this.mathOptions.has(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) ?
         this.mathOptions.get(this.conveyor.getDataList(this.selectedCategory).getMathFunction()) : '';
-      this.intervalOption = this.intervalOptions.has(this.conveyor.getDataList(this.selectedCategory).getWidth()) ?
-        this.intervalOptions.get(this.conveyor.getDataList(this.selectedCategory).getWidth()) : '';
+      this.intervalOption = this.intervalOptions.has(this.conveyor.getDataList(this.selectedCategory).getSpan()) ?
+        this.intervalOptions.get(this.conveyor.getDataList(this.selectedCategory).getSpan()) : '';
     }
     this.dataList = new MatTableDataSource<DataPoint>(this.pointDataList);
     this.dataList.paginator = this.paginator;
@@ -324,11 +324,11 @@ export class HealthListItemsComponent implements OnInit {
         if (!dataType.visible) {
           continue;
         } else if (column === 'time') {
-          switch (dataList.getWidth()) {
-            case PeriodWidths.DAY: result.push('period_DAY'); break;
-            case PeriodWidths.MONTH: result.push('period_MONTH'); break;
-            case PeriodWidths.WEEK: result.push('period_WEEK'); break;
-            case PeriodWidths.YEAR: result.push('period_YEAR'); break;
+          switch (dataList.getSpan()) {
+            case PeriodSpan.DAY: result.push('period_DAY'); break;
+            case PeriodSpan.MONTH: result.push('period_MONTH'); break;
+            case PeriodSpan.WEEK: result.push('period_WEEK'); break;
+            case PeriodSpan.YEAR: result.push('period_YEAR'); break;
             default :
               result.push('date');
               result.push('time');

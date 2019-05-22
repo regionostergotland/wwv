@@ -13,7 +13,6 @@ import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/form
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
     return !!(control && control.invalid);
   }
 }
@@ -44,7 +43,6 @@ export class AddDataPointComponent implements OnInit {
     this.selectedCategory = data;
     this.pointData = new Map<string, any>();
     this.pointFormControl = new Map<string, FormControl>();
-    const now: Date = new Date();
     this.clockTime = '';
   }
 
@@ -107,7 +105,7 @@ export class AddDataPointComponent implements OnInit {
    * Gets the string from pointData with the given key, if no such key exist create a new Date.
    * @param key the key identifier to get from.
    */
-  getDate(key): string {
+  getDate(key: string): string {
     if (key === 'date') { // Special case for 'time', divided into 'time' and 'date'
       if (!this.pointData.has('time')) {
         this.pointData.set('time', new Date());

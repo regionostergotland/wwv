@@ -82,7 +82,7 @@ export class DummyPlatformService extends Platform {
    * @param start start of time interval for which data is to be fetched
    * @param end end of time interval for which data is to fetched
    * @returns an observable containing data that has been converted to
-   * our internal format
+   * the internal format
    */
   public getData(categoryId: string,
                  start: Date, end: Date): Observable<DataPoint[]> {
