@@ -182,7 +182,7 @@ export class HealthListItemsComponent implements OnInit {
 
   shouldHide(key: string): boolean {
 
-    if (key === 'mobile') {
+    if (key.startsWith('mobile')) {
       return true;
     }
 
@@ -205,8 +205,8 @@ export class HealthListItemsComponent implements OnInit {
    */
 
   getInputType(key: string) {
-    if (key === 'mobile') {
-      return 'mobile';
+    if (key.startsWith('mobile')) {
+      return key;
     }
 
     if (key.startsWith('period_') || key === 'date') {
@@ -269,9 +269,9 @@ export class HealthListItemsComponent implements OnInit {
     return item ? index : undefined;
   }
 
-  openEditDialog(point: DataPoint, key: string): void {
+  openEditDialog(point: DataPoint, key: string, isEditable: boolean): void {
     const dialogRef = this.dialog.open(AddDataPointComponent, {
-      data: {category: this.category, point}
+      data: {category: this.category, point, isEditable}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -328,8 +328,8 @@ export class HealthListItemsComponent implements OnInit {
         }
       }
       // Add edit button for mobile screens
-      if (this.isSmallScreen() && this.isEditable) {
-        result.push('mobile');
+      if (this.isSmallScreen()) {
+        result.push(this.isEditable ? 'mobile-edit' : 'mobile-inspect');
       }
     }
 

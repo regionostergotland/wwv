@@ -1,34 +1,48 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {ErrorStateMatcher, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {Conveyor} from '../../conveyor.service';
-import { CategorySpec,
-         DataTypeCodedText,
-         DataTypeCodedTextOpt,
-         DataTypeEnum,
-         DataTypeQuantity} from '../../ehr/datatype';
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  ErrorStateMatcher,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material';
+import { Conveyor } from '../../conveyor.service';
+import {
+  CategorySpec,
+  DataTypeCodedText,
+  DataTypeCodedTextOpt,
+  DataTypeEnum,
+  DataTypeQuantity,
+} from '../../ehr/datatype';
 import { DataPoint } from '../../ehr/datalist';
 import { AmazingTimePickerService } from 'amazing-time-picker';
-import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import {
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  Validators,
+} from '@angular/forms';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+  isErrorState(
+    control: FormControl | null,
+    form: FormGroupDirective | NgForm | null
+  ): boolean {
     return !!(control && control.invalid);
   }
 }
 
 interface DialogInput {
   point?: DataPoint;
+  isEditable?: boolean;
   category: string;
 }
 
 @Component({
   selector: 'app-add-data-point',
   templateUrl: './add-data-point.component.html',
-  styleUrls: ['./add-data-point.component.scss']
+  styleUrls: ['./add-data-point.component.scss'],
 })
 export class AddDataPointComponent implements OnInit {
-
   selectedCategory: string;
   dataTypeEnum = DataTypeEnum;
   pointData: Map<string, any>;
@@ -37,6 +51,7 @@ export class AddDataPointComponent implements OnInit {
   categorySpec: CategorySpec;
   requiredFields: string[];
   dataPoint: DataPoint;
+  isEditable: boolean;
 
   matcher = new MyErrorStateMatcher();
 
@@ -44,9 +59,10 @@ export class AddDataPointComponent implements OnInit {
     public dialogRef: MatDialogRef<AddDataPointComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogInput,
     private conveyor: Conveyor,
-    private atp: AmazingTimePickerService) {
-
+    private atp: AmazingTimePickerService
+  ) {
     this.dataPoint = data.point;
+    this.isEditable = data.isEditable;
     this.selectedCategory = data.category;
     this.pointData = new Map<string, any>();
     this.pointFormControl = new Map<string, FormControl>();
@@ -65,12 +81,21 @@ export class AddDataPointComponent implements OnInit {
       const controller = this.getFormControl(key);
 
       controller.setValue(value);
-      if (this.requiredFields.includes(key) || key === 'date' || key.startsWith('period_')) {
+      if (this.requiredFields.includes(key) || !this.isEditable) {
         controller.disable();
       }
-      this.pointData.set(key, value);
+
+      if (value) {
+        this.pointData.set(key, value);
+      }
     }
+
     this.getFormControl('date').disable();
+    if (!this.isEditable) {
+      Array.from(this.categorySpec.dataTypes.keys()).forEach(key => {
+        this.getFormControl(key).disable();
+      });
+    }
   }
 
   ngOnInit() {
@@ -101,7 +126,7 @@ export class AddDataPointComponent implements OnInit {
    */
   getActionButtonText(): string {
     if (this.dataPoint) {
-      return 'Applicera ändringar';
+      return !this.isEditable ? 'Stäng' : 'Applicera ändringar';
     }
     return 'Lägg till datapunkt';
   }
@@ -139,13 +164,17 @@ export class AddDataPointComponent implements OnInit {
    * Gets the string from pointData with the given key, if no such key exist create a new Date.
    * @param key the key identifier to get from.
    */
-  getDate(key: string): string {
-    if (key === 'date') { // Special case for 'time', divided into 'time' and 'date'
+  getDate(key): string {
+    if (key === 'date') {
+      // Special case for 'time', divided into 'time' and 'date'
       if (!this.pointData.has('time')) {
         this.pointData.set('time', new Date());
       }
       const now = this.pointData.get('time') as Date;
-      this.clockTime = now.toLocaleTimeString('sv-SE', {hour: '2-digit', minute: '2-digit'});
+      this.clockTime = now.toLocaleTimeString('sv-SE', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
       return this.pointData.get('time');
     }
     if (!this.pointData.has(key)) {
@@ -160,12 +189,19 @@ export class AddDataPointComponent implements OnInit {
    */
   getFormControl(key: string): FormControl {
     if (!this.pointFormControl.has(key)) {
-      if (key === 'date') { // Special case for separation of date and time.
-        this.pointFormControl.set(key, new FormControl('', [Validators.required]));
+      if (key === 'date') {
+        // Special case for separation of date and time.
+        this.pointFormControl.set(
+          key,
+          new FormControl('', [Validators.required])
+        );
       } else {
         if (this.categorySpec.dataTypes.get(key).required) {
           // if the value is required! Wait from EHR implementation
-          this.pointFormControl.set(key, new FormControl('', [Validators.required]));
+          this.pointFormControl.set(
+            key,
+            new FormControl('', [Validators.required])
+          );
         } else {
           this.pointFormControl.set(key, new FormControl(''));
         }
@@ -184,7 +220,9 @@ export class AddDataPointComponent implements OnInit {
       return 'Datum';
     }
     if (this.conveyor.getDataList(this.selectedCategory)) {
-      return this.conveyor.getDataList(this.selectedCategory).getDataType(labelId).label;
+      return this.conveyor
+        .getDataList(this.selectedCategory)
+        .getDataType(labelId).label;
     }
     return '';
   }
@@ -210,7 +248,9 @@ export class AddDataPointComponent implements OnInit {
    */
   getOptions(key: string): DataTypeCodedTextOpt[] {
     if (this.conveyor.getDataList(this.selectedCategory)) {
-      const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeCodedText;
+      const datatypes: DataTypeCodedText = this.conveyor
+        .getDataList(this.selectedCategory)
+        .getDataType(key) as DataTypeCodedText;
       return datatypes.options;
     }
     return [];
@@ -223,7 +263,9 @@ export class AddDataPointComponent implements OnInit {
    */
   getMinOfRange(key: string): number {
     if (this.conveyor.getDataList(this.selectedCategory)) {
-      const datatype: DataTypeQuantity = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeQuantity;
+      const datatype: DataTypeQuantity = this.conveyor
+        .getDataList(this.selectedCategory)
+        .getDataType(key) as DataTypeQuantity;
       return datatype.magnitudeMin;
     }
   }
@@ -234,7 +276,9 @@ export class AddDataPointComponent implements OnInit {
    * @returns The maximum number accepted of the DataTypeQuantity.
    */
   getMaxOfRange(key: string): number {
-    const datatype: DataTypeQuantity = this.conveyor.getDataList(this.selectedCategory).getDataType(key) as DataTypeQuantity;
+    const datatype: DataTypeQuantity = this.conveyor
+      .getDataList(this.selectedCategory)
+      .getDataType(key) as DataTypeQuantity;
     return datatype.magnitudeMax;
   }
 
@@ -249,7 +293,6 @@ export class AddDataPointComponent implements OnInit {
         return;
       }
     }
-
     // Are all fields valid?
     for (const [typeId, value] of this.pointData.entries()) {
       if (!this.categorySpec.dataTypes.get(typeId).isValid(value)) {

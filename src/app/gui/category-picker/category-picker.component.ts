@@ -96,7 +96,6 @@ export class CategoryPickerComponent implements OnInit {
         // Remove the category from chosenCategories
         this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
     }
-    console.log(this.chosenCategories);
   }
 
   /**
