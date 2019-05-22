@@ -109,6 +109,10 @@ export class CategoryPickerComponent implements OnInit {
     }
   }
 
+  /**
+   * Checks if the dates are in a valid interval and 1 or more categories is selected
+   * @returns Boolean for valid/invalid selections
+   */
   validateSelections(): boolean {
     return (this.startDate && this.endDate && this.chosenCategories.length > 0);
   }

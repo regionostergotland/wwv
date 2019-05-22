@@ -123,7 +123,7 @@ const DeviceManufacturerField: [string, DataType] = [
 
 export interface EhrConfig {
   /**
-   * Identifier used to specify category.
+   * Base part of the url which is used in all EHR-related HTTP-requests.
    */
   baseUrl: string;
 

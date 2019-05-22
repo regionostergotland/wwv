@@ -87,6 +87,11 @@ export class InspectionComponent implements OnInit {
     );
   }
 
+  /**
+   * Calls the conveyor authenticate method
+   * @param String for username
+   * @param String for user password
+   */
   authenticate(user: string, pass: string): void {
     this.conveyor.authenticateBasic(user, pass);
   }

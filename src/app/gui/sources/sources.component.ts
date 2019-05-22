@@ -11,22 +11,8 @@ interface Source {
 const googleFit = 'google-fit';
 const withings = 'withings';
 const dummy = 'dummy';
+const pickCategoriesLink = '/pick-categories';
 
-/*
-interface Source {
-  readonly name: string;
-  readonly imageUrl: string;
-  readonly routerLink: '/pick-categories';
-};
-
-const availableSources2 = {
-  [googleFit]: {
-    name: 'Google Fit',
-    imageUrl: '',
-    routerlink: '/pick-categories'
-  },
-};
-*/
 const availableSources: Map<string, Source> = new Map<string, Source>([
   [googleFit, {
     id: googleFit,

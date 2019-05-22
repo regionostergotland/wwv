@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { DataList, DataPoint } from './datalist';
-import { PeriodWidths } from '../shared/period';
+import { PeriodWidth } from '../shared/period';
 import { CategorySpec, DataType, MathFunctionEnum,
          DataTypeDateTime,
          DataTypeQuantity,
@@ -206,12 +206,12 @@ describe('datalist', () => {
   ]);
 
   const filter = {
-    width: PeriodWidths.DAY,
+    width: PeriodWidth.DAY,
     fn: MathFunctionEnum.MEAN
   };
   dataList.addFilter(filter);
   /*
-   * Test that datalist splits datapoints into width interval
+   * Test that datalist splits datapoints into span interval
    */
   it('should split datapoints into one day intervals, producing three points', () => {
     expect(dataList.getPoints().get(filter).length).toEqual(3);
@@ -235,7 +235,7 @@ describe('datalist', () => {
       new DataPoint([['time', new Date(2017, 1, 2)], ['value', 2]]),
       new DataPoint([['time', new Date(2017, 1, 3)], ['value', 3]]),
     ]);
-    expect(DataPoint.groupByInterval(points, PeriodWidths.DAY).length)
+    expect(DataPoint.groupByInterval(points, PeriodWidth.DAY).length)
       .toEqual(2);
   });
 
