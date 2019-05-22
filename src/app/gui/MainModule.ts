@@ -20,7 +20,8 @@ import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AddNewDataModalComponent } from './sidebar/add-new-data-modal.component';
-
+import { ChartComponent } from './chart/chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import {
   MatCardModule,
   MatButtonModule,
@@ -60,11 +61,10 @@ import {
   MatTableModule,
 } from '@angular/material';
 
-/*
-   ,
-*/
+
 @NgModule({
   imports: [
+    NgxChartsModule,
     FlexLayoutModule,
     ReactiveFormsModule,
     AmazingTimePickerModule,
@@ -114,6 +114,7 @@ import {
     MatTableModule,
   ],
   declarations: [
+    ChartComponent,
     SourcesComponent,
     CategoryPickerComponent,
     InspectionComponent,
