@@ -55,7 +55,7 @@ export class ChartComponent implements OnInit {
     if (this.chartData && this.category) {
       for (const [filter, points] of this.chartData) {
         const filtStr =
-          filter.width && ' (' + filter.fn ? filterString(filter) + ')' : '';
+          filter.width && filter.fn ? ' (' + filterString(filter) + ')' : '';
         points.forEach(point => {
           Array.from(point.keys()).forEach(key => {
             const label = spec.dataTypes.get(key).label;
