@@ -1,37 +1,12 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import { MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { DataPoint, Filter } from 'src/app/ehr/datalist';
+import { DataPoint, Filter, filterString } from 'src/app/ehr/datalist';
 import { Conveyor } from 'src/app/conveyor.service';
 
 import { AddDataPointComponent } from '../add-data-point/add-data-point.component';
-import { MathFunctionEnum, CategorySpec } from 'src/app/ehr/datatype';
-import { PeriodWidth } from 'src/app/shared/period';
-
-export interface MathOption {
-  value: MathFunctionEnum;
-  description: string;
-}
-
-export interface IntervalOption {
-  value: PeriodWidth;
-  description: string;
-}
-
-const MATH_OPTIONS: MathOption[] = [
-  {value: MathFunctionEnum.MAX, description: 'Maximalt värde'},
-  {value: MathFunctionEnum.MEAN, description: 'Medelvärde'},
-  {value: MathFunctionEnum.MEDIAN, description: 'Median'},
-  {value: MathFunctionEnum.MIN, description: 'Minimalt värde'},
-  {value: MathFunctionEnum.TOTAL, description: 'Totala värde'},
-];
-
-const INTERVAL_OPTIONS: IntervalOption[] = [
-  {value: PeriodWidth.HOUR, description: 'Per timme'},
-  {value: PeriodWidth.DAY, description: 'Per dygn'},
-  {value: PeriodWidth.WEEK, description: 'Per vecka'},
-  {value: PeriodWidth.MONTH, description: 'Per månad'},
-  {value: PeriodWidth.YEAR, description: 'Per År'},
-];
+import { MathFunctionEnum, mathFunctionString,
+         CategorySpec } from 'src/app/ehr/datatype';
+import { PeriodWidth, periodString } from 'src/app/shared/period';
 
 @Component({
   selector: 'app-removal-dialog',
@@ -43,13 +18,14 @@ export class RemovalDialogComponent {
   // user presses the remove button
   remove = true;
 
-  constructor(private conveyor: Conveyor, public dialogRef: MatDialogRef<RemovalDialogComponent>) {
-    }
+  constructor(
+    private conveyor: Conveyor,
+    public dialogRef: MatDialogRef<RemovalDialogComponent>
+  ) { }
 
   closeDialog(): void {
     this.dialogRef.close();
   }
-
 }
 
 @Component({
@@ -58,9 +34,22 @@ export class RemovalDialogComponent {
   styleUrls: ['./editor.component.scss']
 })
 export class MathDialogComponent {
-
-  mathOptions: MathOption[];
-  intervalOptions: IntervalOption[];
+  mathOptions: MathFunctionEnum[] = [
+    MathFunctionEnum.MAX,
+    MathFunctionEnum.MEAN,
+    MathFunctionEnum.MEDIAN,
+    MathFunctionEnum.MIN,
+    MathFunctionEnum.TOTAL,
+  ];
+  intervalOptions: PeriodWidth[] = [
+    PeriodWidth.HOUR,
+    PeriodWidth.DAY,
+    PeriodWidth.WEEK,
+    PeriodWidth.MONTH,
+    PeriodWidth.YEAR,
+  ];
+  mathFunctionString = mathFunctionString;
+  periodString = periodString;
 
   selectedCategory: string;
 
@@ -68,10 +57,7 @@ export class MathDialogComponent {
     private conveyor: Conveyor,
     public dialogRef: MatDialogRef<MathDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string) {
-
     this.selectedCategory = data;
-    this.mathOptions = MATH_OPTIONS;
-    this.intervalOptions = INTERVAL_OPTIONS;
   }
 
   closeDialog(): void {
@@ -101,7 +87,6 @@ export class MathDialogComponent {
     this.conveyor.getDataList(this.selectedCategory).resetFilter();
     this.closeDialog();
   }
-
 }
 
 @Component({
@@ -111,23 +96,7 @@ export class MathDialogComponent {
 })
 export class EditorComponent implements OnInit {
   PeriodWidth = PeriodWidth;
-
-  mathOptions: Map<MathFunctionEnum, string> =
-    new Map<MathFunctionEnum, string>([
-    [MathFunctionEnum.MAX, 'Maximalt '],
-    [MathFunctionEnum.MEAN, 'Medelvärde '],
-    [MathFunctionEnum.MEDIAN, 'Median '],
-    [MathFunctionEnum.MIN, 'Minimalt '],
-    [MathFunctionEnum.TOTAL, 'Totalt '],
-  ]);
-
-  intervalOptions: Map<PeriodWidth, string> = new Map<PeriodWidth, string>([
-    [PeriodWidth.HOUR, 'per timme'],
-    [PeriodWidth.DAY, 'per dygn'],
-    [PeriodWidth.WEEK, 'per vecka'],
-    [PeriodWidth.MONTH, 'per månad'],
-    [PeriodWidth.YEAR, 'per år'],
-  ]);
+  filterString = filterString;
 
   @Input() editable: boolean;
 
@@ -204,7 +173,8 @@ export class EditorComponent implements OnInit {
    * Removes all of the selected datapoints and updates the list
    */
   removeSelected() {
-    this.conveyor.getDataList(this.selectedCategory).removePoints(this.selectedRows);
+    this.conveyor.getDataList(this.selectedCategory)
+      .removePoints(this.selectedRows);
     this.ngOnInit();
   }
 

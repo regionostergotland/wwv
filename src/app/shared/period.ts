@@ -14,6 +14,17 @@ export enum PeriodWidth {
   YEAR,
 }
 
+export function periodString(period: PeriodWidth): string {
+  const periods: Map<PeriodWidth, string> = new Map([
+    [PeriodWidth.HOUR, 'Per timme'],
+    [PeriodWidth.DAY, 'Per dygn'],
+    [PeriodWidth.WEEK, 'Per vecka'],
+    [PeriodWidth.MONTH, 'Per månad'],
+    [PeriodWidth.YEAR, 'Per år'],
+  ]);
+  return periods.get(period);
+}
+
 /*
  * Calculate the start of the period that a date is within.
  * example:

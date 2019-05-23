@@ -22,7 +22,7 @@
   Ofiltrerade värden
 </ng-template>
 <ng-template *ngIf="entry.key.width !== PeriodWidth.POINT" mat-tab-label>
-  {{mathOptions.get(entry.key.fn)}} {{intervalOptions.get(entry.key.width)}}
+  {{filterString(entry.key)}}
   <button *ngIf="editable" mat-stroked-button 
       matTooltip="Ta bort filtrering"
       (click)="removeFilter(entry.key)">

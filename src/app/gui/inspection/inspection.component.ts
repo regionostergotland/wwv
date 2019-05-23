@@ -92,8 +92,8 @@ export class InspectionComponent implements OnInit {
         e => this.snackBar.open(
           'Inrapporteringen misslyckades. Fel: "' + e.statusText + '"', 'OK',
           {
-            duration: 10000,
-            panelClass: 'error'
+            duration: 100000000,
+            panelClass: ['error-snackbar']
           })
         // TODO fix snackbar styling
     );

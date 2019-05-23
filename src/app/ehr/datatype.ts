@@ -48,6 +48,17 @@ export enum MathFunctionEnum {
   MAX,
 }
 
+export function mathFunctionString(fn: MathFunctionEnum): string {
+  const fns: Map<MathFunctionEnum, string> = new Map([
+    [MathFunctionEnum.MAX, 'Maximalt'],
+    [MathFunctionEnum.MEAN, 'Medelvärde'],
+    [MathFunctionEnum.MEDIAN, 'Median'],
+    [MathFunctionEnum.MIN, 'Minimalt'],
+    [MathFunctionEnum.TOTAL, 'Totalt'],
+  ]);
+  return fns.get(fn);
+}
+
 export interface DataTypeSettings {
   /**
    * Location of field in composition.

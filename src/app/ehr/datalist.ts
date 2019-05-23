@@ -1,5 +1,11 @@
-import { CategorySpec, DataType, MathFunctionEnum } from './datatype';
-import { PeriodWidth, startOfPeriod, samePeriod } from '../shared/period';
+import { CategorySpec,
+         DataType,
+         MathFunctionEnum,
+         mathFunctionString } from './datatype';
+import { PeriodWidth,
+         periodString,
+         startOfPeriod,
+         samePeriod } from '../shared/period';
 import '../shared/date.extensions';
 
 /**
@@ -97,6 +103,12 @@ export class DataPoint {
 export interface Filter {
   width: PeriodWidth;
   fn: MathFunctionEnum;
+}
+
+export function filterString(filter: Filter): string {
+  return mathFunctionString(filter.fn) +
+         ' ' +
+         periodString(filter.width).toLowerCase();
 }
 
 const DEFAULT_FILTER: Filter = {

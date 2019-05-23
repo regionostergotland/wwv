@@ -6,12 +6,16 @@
 <div mat-dialog-actions>
   <mat-form-field class="math-interval-select">
       <mat-select placeholder="Funktion" [(value)]="mathFunction">
-      <mat-option *ngFor="let option of mathOptions" value="{{option.value}}">{{option.description}}</mat-option>
+      <mat-option *ngFor="let option of mathOptions" value="{{option}}">
+        {{mathFunctionString(option)}}
+      </mat-option>
       </mat-select>
   </mat-form-field>
   <mat-form-field class="math-interval-select">
       <mat-select placeholder="Intervall" [(value)]="interval">
-      <mat-option *ngFor="let option of intervalOptions" value="{{option.value}}">{{option.description}}</mat-option>
+      <mat-option *ngFor="let option of intervalOptions" value="{{option}}">
+        {{periodString(option)}}
+      </mat-option>
       </mat-select>
   </mat-form-field>
 </div>
