@@ -3,17 +3,17 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CustomGoogleApiModule,
   GoogleApiService,
-  GoogleAuthService, } from '../../google-fit-config';
-import { ChartComponent } from './chart.component';
+  GoogleAuthService, } from 'src/app/google-fit-config';
+import { DataChartComponent } from './data-chart.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ChartComponent', () => {
-  let component: ChartComponent;
-  let fixture: ComponentFixture<ChartComponent>;
+  let component: DataChartComponent;
+  let fixture: ComponentFixture<DataChartComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChartComponent ],
+      declarations: [ DataChartComponent ],
       imports: [NgxChartsModule, CustomGoogleApiModule, BrowserAnimationsModule],
       providers: [
         HttpClient,
@@ -26,7 +26,7 @@ describe('ChartComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ChartComponent);
+    fixture = TestBed.createComponent(DataChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -2,26 +2,19 @@ import { NgModule } from '@angular/core';
 import { SourcesComponent } from './sources/sources.component';
 import { CommonModule } from '@angular/common';
 import { CategoryPickerComponent } from './category-picker/category-picker.component';
-import {
-  HealthListItemsComponent,
-} from './health-list-items/health-list-items.component';
-import { EditorComponent,
-         MathDialogComponent,
-         RemovalDialogComponent } from './editor/editor.component';
+
 import { InspectionComponent } from './inspection/inspection.component';
 import {
   BottomSheetCategoriesComponent,
   SidebarComponent,
 } from './sidebar/sidebar.component';
-import { AddDataPointComponent } from './add-data-point/add-data-point.component';
-import { ProgressBarComponent } from './progress-bar/progress-bar.component';
+import { DataViewerModule } from './data-viewer/data-viewer.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { AddNewDataModalComponent } from './sidebar/add-new-data-modal.component';
-import { ChartComponent } from './chart/chart.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+
 import {
   MatCardModule,
   MatButtonModule,
@@ -64,7 +57,7 @@ import {
 
 @NgModule({
   imports: [
-    NgxChartsModule,
+    DataViewerModule,
     FlexLayoutModule,
     ReactiveFormsModule,
     AmazingTimePickerModule,
@@ -114,26 +107,16 @@ import {
     MatTableModule,
   ],
   declarations: [
-    ChartComponent,
     SourcesComponent,
     CategoryPickerComponent,
     InspectionComponent,
     SidebarComponent,
-    AddDataPointComponent,
     BottomSheetCategoriesComponent,
-    HealthListItemsComponent,
-    RemovalDialogComponent,
-    EditorComponent,
-    MathDialogComponent,
     AddNewDataModalComponent,
   ],
   exports: [SourcesComponent],
   entryComponents: [
-    HealthListItemsComponent,
-    AddDataPointComponent,
     BottomSheetCategoriesComponent,
-    RemovalDialogComponent,
-    MathDialogComponent,
     AddNewDataModalComponent,
   ],
 })

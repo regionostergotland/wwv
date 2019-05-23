@@ -4,15 +4,15 @@ import {
   MAT_DIALOG_DATA,
   MatDialogRef,
 } from '@angular/material';
-import { Conveyor } from '../../conveyor.service';
+import { Conveyor } from 'src/app/conveyor.service';
 import {
   CategorySpec,
   DataTypeCodedText,
   DataTypeCodedTextOpt,
   DataTypeEnum,
   DataTypeQuantity,
-} from '../../ehr/datatype';
-import { DataPoint } from '../../ehr/datalist';
+} from 'src/app/ehr/datatype';
+import { DataPoint } from 'src/app/ehr/datalist';
 import { AmazingTimePickerService } from 'amazing-time-picker';
 import {
   FormControl,
@@ -38,11 +38,11 @@ interface DialogInput {
 }
 
 @Component({
-  selector: 'app-add-data-point',
-  templateUrl: './add-data-point.component.html',
-  styleUrls: ['./add-data-point.component.scss'],
+  selector: 'app-data-point-dialog',
+  templateUrl: './data-point-dialog.component.html',
+  styleUrls: ['./data-point-dialog.component.scss'],
 })
-export class AddDataPointComponent implements OnInit {
+export class DataPointDialogComponent implements OnInit {
   selectedCategory: string;
   dataTypeEnum = DataTypeEnum;
   pointData: Map<string, any>;
@@ -56,7 +56,7 @@ export class AddDataPointComponent implements OnInit {
   matcher = new MyErrorStateMatcher();
 
   constructor(
-    public dialogRef: MatDialogRef<AddDataPointComponent>,
+    public dialogRef: MatDialogRef<DataPointDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogInput,
     private conveyor: Conveyor,
     private atp: AmazingTimePickerService

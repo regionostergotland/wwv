@@ -3,98 +3,22 @@ import { MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@a
 import { DataPoint, Filter, filterString } from 'src/app/ehr/datalist';
 import { Conveyor } from 'src/app/conveyor.service';
 
-import { AddDataPointComponent } from '../add-data-point/add-data-point.component';
+import { DataPointDialogComponent } from '../data-point-dialog/data-point-dialog.component';
 import { MathFunctionEnum, mathFunctionString,
          CategorySpec } from 'src/app/ehr/datatype';
 import { PeriodWidth, periodString } from 'src/app/shared/period';
 
-@Component({
-  selector: 'app-removal-dialog',
-  templateUrl: 'removal-dialog.html',
-})
-export class RemovalDialogComponent {
+import { DataFilterDialogComponent } from '../data-filter-dialog/data-filter-dialog.component';
+import { DataRemovalDialogComponent } from '../data-removal-dialog/data-removal-dialog.component';
 
-  // This boolean is sent to the health-list-items-component if the
-  // user presses the remove button
-  remove = true;
 
-  constructor(
-    private conveyor: Conveyor,
-    public dialogRef: MatDialogRef<RemovalDialogComponent>
-  ) { }
-
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
-}
 
 @Component({
-  selector: 'app-math-dialog',
-  templateUrl: 'math-dialog.html',
-  styleUrls: ['./editor.component.scss']
+  selector: 'app-data-container',
+  templateUrl: './data-container.component.html',
+  styleUrls: ['./data-container.component.scss']
 })
-export class MathDialogComponent {
-  mathOptions: MathFunctionEnum[] = [
-    MathFunctionEnum.MAX,
-    MathFunctionEnum.MEAN,
-    MathFunctionEnum.MEDIAN,
-    MathFunctionEnum.MIN,
-    MathFunctionEnum.TOTAL,
-  ];
-  intervalOptions: PeriodWidth[] = [
-    PeriodWidth.HOUR,
-    PeriodWidth.DAY,
-    PeriodWidth.WEEK,
-    PeriodWidth.MONTH,
-    PeriodWidth.YEAR,
-  ];
-  mathFunctionString = mathFunctionString;
-  periodString = periodString;
-
-  selectedCategory: string;
-
-  constructor(
-    private conveyor: Conveyor,
-    public dialogRef: MatDialogRef<MathDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: string) {
-    this.selectedCategory = data;
-  }
-
-  closeDialog(): void {
-    this.dialogRef.close();
-  }
-
-  /**
-   * Calls the setInterval function in order to do math manipulations on the data
-   * @param intervalString A string containing a PeriodWidth enum, must be converted to int
-   * @param funcString A string containing a Mathfunction enum, must be converted to int
-   */
-  calculate(intervalString: string, funcString: string) {
-    if (intervalString && funcString) {
-      const filter: Filter = {
-        width: parseInt(intervalString, 10),
-        fn: parseInt(funcString, 10)
-      };
-      this.conveyor.getDataList(this.selectedCategory).addFilter(filter);
-      this.closeDialog();
-    }
-  }
-
-  /**
-   * Restores the datalist to the default settings
-   */
-  changeBack() {
-    this.conveyor.getDataList(this.selectedCategory).resetFilter();
-    this.closeDialog();
-  }
-}
-
-@Component({
-  selector: 'app-editor',
-  templateUrl: './editor.component.html',
-  styleUrls: ['./editor.component.scss']
-})
-export class EditorComponent implements OnInit {
+export class DataContainerComponent implements OnInit {
   PeriodWidth = PeriodWidth;
   filterString = filterString;
 
@@ -137,7 +61,7 @@ export class EditorComponent implements OnInit {
    * Opens the dialog to add an item in the list stored in the conveyor.
    */
   openDialog(): void {
-    const dialogRef = this.dialog.open(AddDataPointComponent, {
+    const dialogRef = this.dialog.open(DataPointDialogComponent, {
       data: { category: this.selectedCategory }
     });
 
@@ -151,7 +75,7 @@ export class EditorComponent implements OnInit {
    */
   openMathDialog(): void {
     // this.selection.clear();
-    const dialogRef = this.dialog.open(MathDialogComponent, {
+    const dialogRef = this.dialog.open(DataFilterDialogComponent, {
       data: this.selectedCategory
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -161,7 +85,7 @@ export class EditorComponent implements OnInit {
 
   openRemovalDialog() {
     if (this.selectedRows.length > 0) {
-      const dialogRef = this.dialog.open(RemovalDialogComponent);
+      const dialogRef = this.dialog.open(DataRemovalDialogComponent);
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed');
         // If result is true, that means the user pressed the button for removing selected values

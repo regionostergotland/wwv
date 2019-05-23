@@ -13,17 +13,11 @@ import {
   MatIconModule
 } from '@angular/material';
 import { InspectionComponent } from './inspection.component';
-import { EditorComponent } from '../editor/editor.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-
-import {HealthListItemsComponent} from '../health-list-items/health-list-items.component';
-
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ChartComponent } from '../chart/chart.component';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-
+import { DataViewerModule } from '../data-viewer/data-viewer.module';
 
 describe('InspectionComponent', () => {
   let component: InspectionComponent;
@@ -32,12 +26,10 @@ describe('InspectionComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        EditorComponent,
         InspectionComponent,
-        HealthListItemsComponent,
-        ChartComponent ],
+     ],
       imports: [
-        NgxChartsModule,
+        DataViewerModule,
         MatExpansionModule,
         RouterTestingModule,
         MatMenuModule,

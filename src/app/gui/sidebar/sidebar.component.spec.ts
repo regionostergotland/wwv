@@ -25,11 +25,8 @@ import { CustomGoogleApiModule,
          GoogleApiService,
          GoogleAuthService } from '../../google-fit-config';
 
-import { HealthListItemsComponent } from '../health-list-items/health-list-items.component';
-import { EditorComponent } from '../editor/editor.component';
-import { ChartComponent } from '../chart/chart.component';
+import { DataViewerModule } from '../data-viewer/data-viewer.module';
 
-import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -39,12 +36,10 @@ describe('SidebarComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         SidebarComponent,
-        EditorComponent,
-        HealthListItemsComponent,
         BottomSheetCategoriesComponent,
-        ChartComponent ],
+        ],
       imports: [
-        NgxChartsModule,
+        DataViewerModule,
         BrowserAnimationsModule,
         MatSelectModule,
         MatTableModule,

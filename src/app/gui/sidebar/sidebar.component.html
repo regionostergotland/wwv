@@ -26,13 +26,13 @@
       </div>
 
       <!-- EDITOR / TABLE -->
-      <app-editor
+      <app-data-container
         *ngIf="selectedCategory"
         [selectCategory]="selectedCategory"
         [editable]="true"
         style="text-align: left"
       >
-      </app-editor>
+      </app-data-container>
 
       <div class="next-button-container">
         <button

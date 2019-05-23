@@ -1,36 +1,20 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { ToolbarModule } from './gui/toolbar/ToolbarModule';
-import { HelpModule } from './gui/help/HelpModule';
-import { HomeModule } from './gui/home/HomeModule';
-import { InfoComponent } from './gui/info/info.component';
-import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';
-
-import { FooterComponent } from './gui/footer/footer.component';
-
-import {
-  MAT_DATE_LOCALE
-} from '@angular/material';
-
 import { NgModule } from '@angular/core';
-import { SourcesComponent } from './gui/sources/sources.component';
 import { CommonModule } from '@angular/common';
-import { CategoryPickerComponent } from './gui/category-picker/category-picker.component';
-
-import { InspectionComponent } from './gui/inspection/inspection.component';
 import {
-  BottomSheetCategoriesComponent,
-  SidebarComponent,
-} from './gui/sidebar/sidebar.component';
-import { DataViewerModule } from './gui/data-viewer/data-viewer.module';
+    DataTableComponent,
+} from './data-table/data-table.component';
+import { DataContainerComponent } from './data-container/data-container.component';
+import { DataFilterDialogComponent } from './data-filter-dialog/data-filter-dialog.component';
+import { DataRemovalDialogComponent } from './data-removal-dialog/data-removal-dialog.component';
+
+
+import { DataPointDialogComponent } from './data-point-dialog/data-point-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { AddNewDataModalComponent } from './gui/sidebar/add-new-data-modal.component';
-
+import { DataChartComponent } from './data-chart/data-chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import {
   MatCardModule,
   MatButtonModule,
@@ -71,24 +55,9 @@ import {
 } from '@angular/material';
 
 
-import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
-
-
 @NgModule({
-  declarations: [
-    AppComponent,
-    InfoComponent,
-    ProgressBarComponent,
-    FooterComponent,
-    SourcesComponent,
-    CategoryPickerComponent,
-    InspectionComponent,
-    SidebarComponent,
-    BottomSheetCategoriesComponent,
-    AddNewDataModalComponent,
-  ],
   imports: [
-    DataViewerModule,
+    NgxChartsModule,
     FlexLayoutModule,
     ReactiveFormsModule,
     AmazingTimePickerModule,
@@ -136,24 +105,22 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
     MatTreeModule,
     MatFormFieldModule,
     MatTableModule,
-    AmazingTimePickerModule,
-    BrowserAnimationsModule,
-    MatCardModule,
-    MatProgressBarModule,
-    MatButtonModule,
-    MatGridListModule,
-    BrowserModule,
-    HomeModule,
-    ToolbarModule,
-    AppRoutingModule,
-    HelpModule,
-    HttpClientModule,
-    CustomGoogleApiModule,
-    DataViewerModule
   ],
-  entryComponents: [ BottomSheetCategoriesComponent,
-    AddNewDataModalComponent],
-  providers: [{provide: MAT_DATE_LOCALE, useValue: 'sv-SE'}],
-  bootstrap: [AppComponent],
+  declarations: [
+    DataChartComponent,
+    DataPointDialogComponent,
+    DataTableComponent,
+    DataFilterDialogComponent,
+    DataContainerComponent,
+    DataRemovalDialogComponent,
+  ],
+  exports: [DataContainerComponent],
+  entryComponents: [
+    DataTableComponent,
+    DataContainerComponent,
+    DataPointDialogComponent,
+    DataFilterDialogComponent,
+    DataRemovalDialogComponent,
+  ],
 })
-export class AppModule { }
+export class DataViewerModule {}

@@ -15,11 +15,11 @@ interface ChartData {
 }
 
 @Component({
-  selector: 'app-chart',
-  templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.scss'],
+  selector: 'app-data-chart',
+  templateUrl: './data-chart.component.html',
+  styleUrls: ['./data-chart.component.scss'],
 })
-export class ChartComponent implements OnInit {
+export class DataChartComponent implements OnInit {
   @Input() width: PeriodWidth;
   @Input() category: string;
 

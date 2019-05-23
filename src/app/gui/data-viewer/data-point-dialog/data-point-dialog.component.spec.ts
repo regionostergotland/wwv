@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddDataPointComponent } from './add-data-point.component';
+import { DataPointDialogComponent } from './data-point-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import {
@@ -21,15 +21,15 @@ import {
   GoogleApiService,
   GoogleAuthService,
 } from 'ng-gapi';
-import { CustomGoogleApiModule } from '../../google-fit-config';
+import { CustomGoogleApiModule } from 'src/app/google-fit-config';
 
 describe('AddDataPointComponent', () => {
-  let component: AddDataPointComponent;
-  let fixture: ComponentFixture<AddDataPointComponent>;
+  let component: DataPointDialogComponent;
+  let fixture: ComponentFixture<DataPointDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AddDataPointComponent ],
+      declarations: [ DataPointDialogComponent ],
       imports: [
         FormsModule,
         ReactiveFormsModule,
@@ -55,7 +55,7 @@ describe('AddDataPointComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddDataPointComponent);
+    fixture = TestBed.createComponent(DataPointDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

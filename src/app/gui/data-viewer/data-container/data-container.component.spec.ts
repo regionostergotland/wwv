@@ -10,18 +10,18 @@ import {
   MatDialogModule,
 } from '@angular/material';
 
-import { EditorComponent } from './editor.component';
-import { HealthListItemsComponent } from '../health-list-items/health-list-items.component';
+import { DataContainerComponent } from './data-container.component';
+import { DataTableComponent } from '../data-table/data-table.component';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { ChartComponent } from '../chart/chart.component';
+import { DataChartComponent } from '../data-chart/data-chart.component';
 
 import { CustomGoogleApiModule,
          GoogleApiService,
-         GoogleAuthService, } from '../../google-fit-config';
+         GoogleAuthService, } from 'src/app/google-fit-config';
 
 describe('EditorComponent', () => {
-  let component: EditorComponent;
-  let fixture: ComponentFixture<EditorComponent>;
+  let component: DataContainerComponent;
+  let fixture: ComponentFixture<DataContainerComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -37,9 +37,9 @@ describe('EditorComponent', () => {
         CustomGoogleApiModule,
       ],
       declarations: [
-        EditorComponent,
-        HealthListItemsComponent,
-        ChartComponent
+        DataContainerComponent,
+        DataTableComponent,
+        DataChartComponent
       ],
       providers: [
         GoogleApiService,
@@ -52,7 +52,7 @@ describe('EditorComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(EditorComponent);
+    fixture = TestBed.createComponent(DataContainerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

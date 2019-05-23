@@ -34,14 +34,14 @@
       </ng-template>
       
       <!-- DATA LIST -->
-      <app-health-list-items
+      <app-data-table
         [width]="entry.key.width"
         [category]="selectedCategory"
         [isEditable]="editable"
         [dataList]="entry.value"
         (change)="updateSelected($event)"
       >
-      </app-health-list-items>
+      </app-data-table>
     </mat-tab>
 
     <!-- GRAPH -->
@@ -52,17 +52,17 @@
       </ng-template>
 
       <!-- DATA LIST -->
-      <app-chart
+      <app-data-chart
         [category]="selectedCategory"
         [data]="chartEntries"
       >
-      </app-chart>
+      </app-data-chart>
     </mat-tab>
   </mat-tab-group>
 </div>
 
 <!-- EDIT BUTTONS -->
-<div class="flex" *ngIf="editable">
+<div style="display: flex" *ngIf="editable">
   <button
     style="margin: 0;"
     mat-stroked-button

@@ -3,22 +3,22 @@ import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
          DataTypeEnum,
-         } from '../../ehr/datatype';
-import { DataPoint } from '../../ehr/datalist';
-import { PeriodWidth } from '../../shared/period';
-import {Conveyor} from '../../conveyor.service';
-import { AddDataPointComponent } from '../add-data-point/add-data-point.component';
+         } from 'src/app/ehr/datatype';
+import { DataPoint } from 'src/app/ehr/datalist';
+import { PeriodWidth } from 'src/app//shared/period';
+import {Conveyor} from 'src/app/conveyor.service';
+import { DataPointDialogComponent } from '../data-point-dialog/data-point-dialog.component';
 import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
 import {SelectionModel} from '@angular/cdk/collections';
-import '../../shared/date.extensions';
+import 'src/app/shared/date.extensions';
 import * as dayjs from 'dayjs';
 
 @Component({
-  selector: 'app-health-list-items',
-  templateUrl: './health-list-items.component.html',
-  styleUrls: ['./health-list-items.component.scss']
+  selector: 'app-data-table',
+  templateUrl: './data-table.component.html',
+  styleUrls: ['./data-table.component.scss']
 })
-export class HealthListItemsComponent implements OnInit {
+export class DataTableComponent implements OnInit {
 
   @Input() width: PeriodWidth;
 
@@ -270,7 +270,7 @@ export class HealthListItemsComponent implements OnInit {
   }
 
   openEditDialog(point: DataPoint, key: string, isEditable: boolean): void {
-    const dialogRef = this.dialog.open(AddDataPointComponent, {
+    const dialogRef = this.dialog.open(DataPointDialogComponent, {
       data: {category: this.category, point, isEditable}
     });
 

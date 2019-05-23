@@ -7,9 +7,7 @@ import { InfoComponent } from './gui/info/info.component';
 import { HelpComponent} from './gui/help/help.component';
 import { InspectionComponent} from './gui/inspection/inspection.component';
 import { SidebarComponent } from './gui/sidebar/sidebar.component';
-import {HealthListItemsComponent} from './gui/health-list-items/health-list-items.component';
-import { CompositionReceipt } from './ehr/ehr.service';
-
+import { DataViewerModule } from './gui/data-viewer/data-viewer.module';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'help', component: HelpComponent },
@@ -23,7 +21,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes), RouterModule ],
+  imports: [ RouterModule.forRoot(routes), RouterModule, DataViewerModule ],
   exports: [ RouterModule ]
 })
 export class AppRoutingModule {}

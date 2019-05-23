@@ -18,17 +18,17 @@ import {
   MatIconModule
 } from '@angular/material';
 
-import { HealthListItemsComponent } from './health-list-items.component';
+import { DataTableComponent } from './data-table.component';
 import { HttpClient, HttpHandler } from '@angular/common/http';
-import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';
+import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from 'src/app/google-fit-config';
 
-describe('HealthListItemsComponent', () => {
-  let component: HealthListItemsComponent;
-  let fixture: ComponentFixture<HealthListItemsComponent>;
+describe('DataTableComponent', () => {
+  let component: DataTableComponent;
+  let fixture: ComponentFixture<DataTableComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ HealthListItemsComponent ],
+      declarations: [ DataTableComponent ],
       imports: [
         RouterTestingModule,
         BrowserAnimationsModule,
@@ -60,7 +60,7 @@ describe('HealthListItemsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HealthListItemsComponent);
+    fixture = TestBed.createComponent(DataTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
