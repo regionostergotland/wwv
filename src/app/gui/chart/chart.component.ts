@@ -54,13 +54,13 @@ export class ChartComponent implements OnInit {
 
     if (this.chartData && this.category) {
       for (const [filter, points] of this.chartData) {
-        let filtStr =
+        const filtStr =
           filter.width && ' (' + filter.fn ? filterString(filter) + ')' : '';
         points.forEach(point => {
           Array.from(point.keys()).forEach(key => {
             const label = spec.dataTypes.get(key).label;
             const val = point.get(key);
-            const k = label + filtStr
+            const k = label + filtStr;
             if (typeof val === 'number') {
               if (!(k in res)) {
                 res[k] = [];
