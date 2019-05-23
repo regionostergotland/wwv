@@ -21,6 +21,8 @@ import {HealthListItemsComponent} from '../health-list-items/health-list-items.c
 
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';
 import { RouterTestingModule } from '@angular/router/testing';
+import { ChartComponent } from '../chart/chart.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 describe('InspectionComponent', () => {
@@ -32,8 +34,10 @@ describe('InspectionComponent', () => {
       declarations: [
         EditorComponent,
         InspectionComponent,
-        HealthListItemsComponent ],
+        HealthListItemsComponent,
+        ChartComponent ],
       imports: [
+        NgxChartsModule,
         MatExpansionModule,
         RouterTestingModule,
         MatMenuModule,

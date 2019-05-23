@@ -1,45 +1,64 @@
 <div *ngIf="editable">
-   <h5 *ngIf="isSmallScreen()" style="margin-top: 0px;
-                                      margin-bottom: 0px;
-                                      background-color: #efefef;
-                                      padding: 4px;
-                                      text-align: center;">
-    {{categorySpec.label}}
+  <h5
+    *ngIf="isSmallScreen()"
+    style="margin-top: 0px; margin-bottom: 0px; background-color: #efefef; padding: 4px; text-align: center;"
+  >
+    {{ categorySpec.label }}
   </h5>
-  <h1 *ngIf="!isSmallScreen()"
-    style="text-align: center;
-           margin-top: 0.1em;">
-    {{categorySpec.label}}
+  <h1
+    *ngIf="!isSmallScreen()"
+    style="text-align: center; margin-top: 0.1em;"
+  >
+    {{ categorySpec.label }}
   </h1>
 </div>
 
-<div class='table-container'>
-<mat-tab-group>
-<mat-tab *ngFor="let entry of dataList | keyvalue">
+<div class="table-container">
+  <mat-tab-group>
+    <!-- FILTER/TABLE TABS -->
+    <mat-tab *ngFor="let entry of dataList | keyvalue">
+      <!-- TAB LABEL -->
+      <ng-template *ngIf="entry.key.width === PeriodWidth.POINT" mat-tab-label>
+        Ofiltrerade värden
+      </ng-template>
+      <ng-template *ngIf="entry.key.width !== PeriodWidth.POINT" mat-tab-label>
+        {{ filterString(entry.key) }}
+        <button
+          *ngIf="editable"
+          mat-stroked-button
+          matTooltip="Ta bort filtrering"
+          (click)="removeFilter(entry.key)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </ng-template>
+      
+      <!-- DATA LIST -->
+      <app-health-list-items
+        [width]="entry.key.width"
+        [category]="selectedCategory"
+        [isEditable]="editable"
+        [dataList]="entry.value"
+        (change)="updateSelected($event)"
+      >
+      </app-health-list-items>
+    </mat-tab>
 
-<!-- TAB LABEL -->
-<ng-template *ngIf="entry.key.width === PeriodWidth.POINT" mat-tab-label>
-  Ofiltrerade värden
-</ng-template>
-<ng-template *ngIf="entry.key.width !== PeriodWidth.POINT" mat-tab-label>
-  {{filterString(entry.key)}}
-  <button *ngIf="editable" mat-stroked-button 
-      matTooltip="Ta bort filtrering"
-      (click)="removeFilter(entry.key)">
-    <mat-icon>delete</mat-icon>
-  </button>
-</ng-template>
+    <!-- GRAPH -->
+    <mat-tab>
+      <!-- TAB LABEL -->
+      <ng-template mat-tab-label>
+        Graf
+      </ng-template>
 
-<!-- DATA LIST -->
-<app-health-list-items
-    [width]="entry.key.width"
-    [category]="selectedCategory" 
-    [isEditable]="editable"
-    [dataList]="entry.value"
-    (change)="updateSelected($event)">
-</app-health-list-items>
-</mat-tab>
-</mat-tab-group>
+      <!-- DATA LIST -->
+      <app-chart
+        [category]="selectedCategory"
+        [data]="chartEntries"
+      >
+      </app-chart>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 
 <!-- EDIT BUTTONS -->

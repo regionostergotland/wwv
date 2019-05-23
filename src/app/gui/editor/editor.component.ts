@@ -113,12 +113,15 @@ export class EditorComponent implements OnInit {
   selectedCategory: string;
   dataList: Map<Filter, MatTableDataSource<DataPoint>>;
   selectedRows: DataPoint[];
+  chartEntries: Map<Filter, DataPoint[]>;
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.selectedRows = [];
     this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
+    // Needs to be a new map for the graph to update
+    this.chartEntries = new Map(this.conveyor.getDataList(this.selectedCategory).getPoints());
     for (const [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
       this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
     }
