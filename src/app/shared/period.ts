@@ -16,6 +16,7 @@ export enum PeriodWidth {
 
 export function periodString(period: PeriodWidth): string {
   const periods: Map<PeriodWidth, string> = new Map([
+    [PeriodWidth.POINT, 'Per punkt'],
     [PeriodWidth.HOUR, 'Per timme'],
     [PeriodWidth.DAY, 'Per dygn'],
     [PeriodWidth.WEEK, 'Per vecka'],

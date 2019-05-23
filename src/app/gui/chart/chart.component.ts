@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataPoint, Filter } from 'src/app/ehr/datalist';
+import { DataPoint, Filter, filterString } from 'src/app/ehr/datalist';
 import { PeriodWidth } from 'src/app/shared/period';
 import { Conveyor } from 'src/app/conveyor.service';
 import { MathFunctionEnum } from 'src/app/ehr/datatype';
@@ -21,34 +21,12 @@ interface ChartData {
 })
 export class ChartComponent implements OnInit {
   @Input() width: PeriodWidth;
-
   @Input() category: string;
-
-  @Input() isEditable: boolean;
 
   @Input() set data(points: Map<Filter, DataPoint[]>) {
     this.chartData = points;
     this.ngOnInit();
   }
-
-  mathOptions: Map<MathFunctionEnum, string> = new Map<
-    MathFunctionEnum,
-    string
-  >([
-    [MathFunctionEnum.MAX, 'Maximalt '],
-    [MathFunctionEnum.MEAN, 'Medelvärde '],
-    [MathFunctionEnum.MEDIAN, 'Median '],
-    [MathFunctionEnum.MIN, 'Minimalt '],
-    [MathFunctionEnum.TOTAL, 'Totalt '],
-  ]);
-
-  intervalOptions: Map<PeriodWidth, string> = new Map<PeriodWidth, string>([
-    [PeriodWidth.HOUR, 'per timme'],
-    [PeriodWidth.DAY, 'per dygn'],
-    [PeriodWidth.WEEK, 'per vecka'],
-    [PeriodWidth.MONTH, 'per månad'],
-    [PeriodWidth.YEAR, 'per år'],
-  ]);
 
   view: number[];
   chartData: Map<Filter, DataPoint[]>;
@@ -72,18 +50,17 @@ export class ChartComponent implements OnInit {
     const res = {};
     this.yAxisLabel = '';
 
+    const spec = this.conveyor.getCategorySpec(this.category);
+
     if (this.chartData && this.category) {
       for (const [filter, points] of this.chartData) {
-        let name = this.mathOptions.get(filter.fn)
-          ? this.mathOptions.get(filter.fn)
-          : '';
-        name += this.intervalOptions.get(filter.width)
-          ? this.intervalOptions.get(filter.width)
-          : '';
+        let filtStr =
+          filter.width && ' (' + filter.fn ? filterString(filter) + ')' : '';
         points.forEach(point => {
           Array.from(point.keys()).forEach(key => {
+            const label = spec.dataTypes.get(key).label;
             const val = point.get(key);
-            const k = name + key;
+            const k = label + filtStr
             if (typeof val === 'number') {
               if (!(k in res)) {
                 res[k] = [];

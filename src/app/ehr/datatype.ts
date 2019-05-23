@@ -50,6 +50,7 @@ export enum MathFunctionEnum {
 
 export function mathFunctionString(fn: MathFunctionEnum): string {
   const fns: Map<MathFunctionEnum, string> = new Map([
+    [MathFunctionEnum.ACTUAL, 'Faktiskt'],
     [MathFunctionEnum.MAX, 'Maximalt'],
     [MathFunctionEnum.MEAN, 'Medelvärde'],
     [MathFunctionEnum.MEDIAN, 'Median'],
