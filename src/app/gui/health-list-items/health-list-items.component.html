@@ -51,8 +51,8 @@
                 [value]="dataPoint.get(key)"
                 (selectionChange)="dataPoint.set(key, $event.value)"
               >
-                <mat-option 
-                [matTooltip]="'obestämd'" 
+                <mat-option
+                [matTooltip]="'obestämd'"
                 matTooltipPosition="left"
                   >-</mat-option
                 >
@@ -71,11 +71,14 @@
               <input
                 #textInput
                 matInput
+                maxlength="1000"
                 (change)="dataPoint.set(key, textInput.value)"
                 [value]="dataPoint.get(key) ? dataPoint.get(key) : ''"
                 placeholder="{{ categorySpec.dataTypes.get(key).label }}"
               />
+              <mat-hint align="end">{{textInput.value?.length || 0}}/1000</mat-hint>
             </mat-form-field>
+
 
             <div *ngSwitchCase="'text'" style="text-align: center">
               {{ getFormattedTextFromPoint(key, dataPoint) }}
@@ -87,7 +90,7 @@
       <div *ngIf="key.startsWith('mobile')">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let dataPoint" style="text-align: center;">
-          
+
           <button mat-button>
             <mat-icon *ngIf="isEditable" (click)="openEditDialog(dataPoint, key, isEditable)">
               edit

@@ -5,8 +5,9 @@
     <p>{{getLabel(key)}}:</p>
     <div *ngIf="getVisualType(key) === dataTypeEnum.TEXT">
       <mat-form-field class="example-full-width">
-        <input #textInput [formControl]="getFormControl(key)" [errorStateMatcher]="matcher" (change)="pointData.set(key, textInput.value)" matInput placeholder={{getLabel(key)}}>
+        <input #textInput maxlength="1000" [formControl]="getFormControl(key)" [errorStateMatcher]="matcher" (change)="pointData.set(key, textInput.value)" matInput placeholder={{getLabel(key)}}>
         <mat-error>Värde saknas</mat-error>
+        <mat-hint align="end">{{textInput.value?.length || 0}}/1000</mat-hint>
       </mat-form-field>
     </div>
     <div *ngIf="getVisualType(key) === dataTypeEnum.CODED_TEXT">
