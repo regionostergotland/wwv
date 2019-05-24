@@ -74,8 +74,8 @@
     style="text-align: center;"
     (click)="openDialog()"
   >
-    <div fxHide fxHide.lt-sm="true">Lägg till datavärde</div>
-    <div fxHide.lt-sm="false">Lägg till</div>
+    <div fxHide fxShow.gt-sm>Lägg till datavärde</div>
+    <div fxHide fxShow.lt-sm>Lägg till</div>
   </button>
   <button
     style="margin: 0;"
@@ -84,10 +84,12 @@
     style="text-align: center;"
     (click)="openRemovalDialog()"
   >
-    <div fxHide fxHide.lt-sm="true">
+    <div fxHide fxShow.gt-sm>
       Ta bort datavärden, {{ selectedRows.length }} valda
     </div>
-    <div fxHide.lt-sm="false">Ta bort ({{ selectedRows.length }})</div>
+    <div fxHide fxShow.lt-sm>
+      Ta bort ({{ selectedRows.length }})
+    </div>
   </button>
   <button
     style="margin: 0;"
@@ -96,7 +98,7 @@
     style="text-align: center;"
     (click)="openMathDialog()"
   >
-    <div fxHide fxHide.lt-sm="true">Sammanställ punkter</div>
-    <div fxHide.lt-sm="false">Sammanställ</div>
+    <div fxHide fxShow.gt-sm>Sammanställ punkter</div>
+    <div fxHide fxShow.lt-sm>Sammanställ</div>
   </button>
 </div>
