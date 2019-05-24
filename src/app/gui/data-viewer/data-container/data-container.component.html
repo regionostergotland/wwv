@@ -43,7 +43,7 @@
         [category]="selectedCategory"
         [isEditable]="editable"
         [dataList]="entry.value"
-        (change)="updateSelected($event)"
+        (selectedPoints)="updateSelected($event)"
       >
       </app-data-table>
     </mat-tab>
