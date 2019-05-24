@@ -13,7 +13,7 @@ const routes: Routes = [
   { path: 'help', component: HelpComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'platform-selection', component: PlatformSelectionComponent },
-  { path: 'pick-categories/:platform', component: CategorySelectionComponent },
+  { path: 'category-selection/:platform', component: CategorySelectionComponent },
   { path: 'info', component: InfoComponent },
   { path: 'inspection', component: InspectionComponent },
   { path: 'edit', component: SidebarComponent },

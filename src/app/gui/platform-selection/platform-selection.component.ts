@@ -11,7 +11,7 @@ interface Source {
 const googleFit = 'google-fit';
 const withings = 'withings';
 const dummy = 'dummy';
-const pickCategoriesLink = '/pick-categories';
+const pickCategoriesLink = '/category-selection';
 
 const availableSources: Map<string, Source> = new Map<string, Source>([
   [googleFit, {
@@ -63,6 +63,6 @@ export class PlatformSelectionComponent implements OnInit {
 
   async selectPlatform(platformId: string) {
     await this.conveyor.signIn(platformId);
-    this.router.navigate(['/pick-categories', platformId]);
+    this.router.navigate(['/category-selection', platformId]);
   }
 }
