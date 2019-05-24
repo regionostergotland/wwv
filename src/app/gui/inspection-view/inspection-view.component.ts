@@ -1,5 +1,5 @@
 import {Component,
-        OnInit} from '@angular/core';
+        OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 

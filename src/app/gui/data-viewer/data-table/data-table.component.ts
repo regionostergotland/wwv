@@ -35,8 +35,8 @@ export class DataTableComponent implements OnInit {
   @Input() set dataList(value: MatTableDataSource<DataPoint>) {
     this.data = value;
   }
-  // TODO rename to selectedPoints or similar?
-  @Output() change: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
+  @Output() selectedPoints: EventEmitter<DataPoint[]> =
+    new EventEmitter<DataPoint[]>();
 
   constructor(
     private conveyor: Conveyor,
@@ -238,12 +238,12 @@ export class DataTableComponent implements OnInit {
     this.isAllSelected() ?
         this.selection.clear() :
         this.data.data.forEach(row => this.selection.select(row));
-    this.change.emit(this.selection.selected);
+    this.selectedPoints.emit(this.selection.selected);
   }
 
   toggleRow(row) {
     this.selection.toggle(row);
-    this.change.emit(this.selection.selected);
+    this.selectedPoints.emit(this.selection.selected);
   }
 
   ngOnInit() {
