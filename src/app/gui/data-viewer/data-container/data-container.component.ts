@@ -66,6 +66,10 @@ export class DataContainerComponent implements OnInit {
     this.selectedRows = event;
   }
 
+  clearSelected() {
+    this.selectedRows = [];
+  }
+
   /**
    * Opens the dialog to add an item in the list stored in the conveyor.
    */
