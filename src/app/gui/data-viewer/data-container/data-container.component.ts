@@ -95,7 +95,6 @@ export class DataContainerComponent implements OnInit {
     if (this.selectedRows.length > 0) {
       const dialogRef = this.dialog.open(DataRemovalDialogComponent);
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
         // If result is true, that means the user pressed the button for
         // removing selected values
         if (result) {

@@ -131,7 +131,6 @@ export class GfitService extends Platform {
     sessionStorage.setItem(
       GfitService.SESSION_STORAGE_KEY, res.getAuthResponse().access_token
     );
-    console.log('access token updated');
   }
 
   public signOut(): void {
@@ -208,7 +207,6 @@ export class GfitService extends Platform {
     const startTime = String(start.getTime() * Math.pow(10, 6));
     const endTime = String(end.getTime() * Math.pow(10, 6));
     const dataSetId = startTime + '-' + endTime;
-    console.log(dataSetId);
     const tail: string = '/datasets/' +
                           dataSetId +
                           '?access_token=' +
