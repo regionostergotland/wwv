@@ -29,7 +29,7 @@ export class GfitService extends Platform {
   private devices: Set<any>;
 
   /* Maps common fields such as medical device and timestamp to a function that
-  *  extracts this data from the Google Fit JSON-response */
+   * extracts this data from the Google Fit JSON-response */
   private readonly commonDataTypes = new Map<string, (src: any) => any>(
     [
       [CommonFields.TIME,
@@ -62,36 +62,41 @@ export class GfitService extends Platform {
     ) {
     super();
     /* Maps all implemented categories to their datastream url and functions
-     * that
-     * extract data of interest from the Google Fit JSON-response */
+     * that extract data of interest from the Google Fit JSON-response */
+    const deriveUrl = 'derived:com.google';
     this.implementedCategories = new Map([
       [Categories.BLOOD_PRESSURE, {
-        url: 'derived:com.google.blood_pressure:com.google.android.gms:merged',
+        url: deriveUrl +
+             'blood_pressure:com.google.android.gms:merged',
         dataTypes: new Map<string, any>(
           Array.from(this.commonDataTypes.entries()))
           .set(BloodPressure.SYSTOLIC, src => src.value[0].fpVal)
           .set(BloodPressure.DIASTOLIC, src => src.value[1].fpVal)
       }],
       [Categories.BODY_WEIGHT, {
-        url: 'derived:com.google.weight:com.google.android.gms:merge_weight',
+        url: deriveUrl +
+             'weight:com.google.android.gms:merge_weight',
         dataTypes: new Map<string, any>(
           Array.from(this.commonDataTypes.entries()))
           .set(BodyWeight.WEIGHT, src => src.value[0].fpVal)
       }],
       [Categories.HEART_RATE, {
-        url: 'derived:com.google.heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm',
+        url: deriveUrl +
+             'heart_rate.bpm:com.google.android.gms:merge_heart_rate_bpm',
         dataTypes: new Map<string, any>(
           Array.from(this.commonDataTypes.entries()))
           .set(HeartRate.RATE, src => src.value[0].fpVal)
       }],
       [Categories.HEIGHT, {
-        url: 'derived:com.google.height:com.google.android.gms:merge_height',
+        url: deriveUrl +
+             'height:com.google.android.gms:merge_height',
         dataTypes: new Map<string, any>(
           Array.from(this.commonDataTypes.entries()))
           .set(Height.HEIGHT, src => src.value[0].fpVal * 100)
       }],
       [Categories.STEPS, {
-        url: 'derived:com.google.step_count.delta:com.google.android.gms:merge_step_deltas',
+        url: deriveUrl +
+             'step_count.delta:com.google.android.gms:merge_step_deltas',
         dataTypes: new Map<string, any>(
           Array.from(this.commonDataTypes.entries()))
           .set(Steps.STEPS, src => src.value[0].intVal)

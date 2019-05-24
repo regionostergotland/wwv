@@ -18,13 +18,15 @@ describe('workspace-project App', () => {
         expect(browser.driver.getCurrentUrl()).toContain('/help');
     });
 
-    it('Should redirect to the sources page when sources button is clicked', () => {
+    it('Should redirect to the sources page when sources button is clicked',
+       () => {
         const src = page.getSourcesButton();
         src.click();
         expect(browser.driver.getCurrentUrl()).toContain('/sources');
     });
 
-    it('Should redirect to the manual input page when the manual input button is clicked', () => {
+    it(`Should redirect to the manual input page when the manual input button
+       is clicked'`, () => {
         const input = page.getManualInputButton();
         input.click();
         expect(browser.driver.getCurrentUrl()).toContain('/edit');
