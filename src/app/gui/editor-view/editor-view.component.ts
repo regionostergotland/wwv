@@ -67,11 +67,11 @@ export class BottomSheetCategoriesComponent {
 }
 
 @Component({
-  selector: 'app-sidebar',
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  selector: 'app-editor-view',
+  templateUrl: './editor-view.component.html',
+  styleUrls: ['./editor-view.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class EditorViewComponent implements OnInit {
 
   title = 'Kategorier';
   selectedCategory: string = null;

@@ -22,14 +22,14 @@ import { CategorySelectionComponent } from './gui/category-selection/category-se
 import { InspectionComponent } from './gui/inspection/inspection.component';
 import {
   BottomSheetCategoriesComponent,
-  SidebarComponent,
-} from './gui/sidebar/sidebar.component';
+  EditorViewComponent,
+} from './gui/editor-view/editor-view.component';
 import { DataViewerModule } from './gui/data-viewer/data-viewer.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { AddNewDataModalComponent } from './gui/sidebar/add-new-data-modal.component';
+import { AddNewDataModalComponent } from './gui/editor-view/add-new-data-modal.component';
 
 import {
   MatCardModule,
@@ -83,7 +83,7 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
     PlatformSelectionComponent,
     CategorySelectionComponent,
     InspectionComponent,
-    SidebarComponent,
+    EditorViewComponent,
     BottomSheetCategoriesComponent,
     AddNewDataModalComponent,
   ],

@@ -6,14 +6,14 @@ import { CategorySelectionComponent } from './category-selection/category-select
 import { InspectionComponent } from './inspection/inspection.component';
 import {
   BottomSheetCategoriesComponent,
-  SidebarComponent,
-} from './sidebar/sidebar.component';
+  EditorViewComponent,
+} from './editor-view/editor-view.component';
 import { DataViewerModule } from './data-viewer/data-viewer.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { AddNewDataModalComponent } from './sidebar/add-new-data-modal.component';
+import { AddNewDataModalComponent } from './editor-view/add-new-data-modal.component';
 
 import {
   MatCardModule,
@@ -110,7 +110,7 @@ import {
     PlatformSelectionComponent,
     CategorySelectionComponent,
     InspectionComponent,
-    SidebarComponent,
+    EditorViewComponent,
     BottomSheetCategoriesComponent,
     AddNewDataModalComponent,
   ],

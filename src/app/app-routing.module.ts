@@ -6,7 +6,7 @@ import { CategorySelectionComponent } from './gui/category-selection/category-se
 import { InfoPageComponent } from './gui/info-page/info-page.component';
 import { HelpPageComponent} from './gui/help-page/help-page.component';
 import { InspectionComponent} from './gui/inspection/inspection.component';
-import { SidebarComponent } from './gui/sidebar/sidebar.component';
+import { EditorViewComponent } from './gui/editor-view/editor-view.component';
 import { DataViewerModule } from './gui/data-viewer/data-viewer.module';
 const routes: Routes = [
   { path: 'home', component: HomePageComponent },
@@ -16,7 +16,7 @@ const routes: Routes = [
   { path: 'category-selection/:platform', component: CategorySelectionComponent },
   { path: 'info', component: InfoPageComponent },
   { path: 'inspection', component: InspectionComponent },
-  { path: 'edit', component: SidebarComponent },
+  { path: 'edit', component: EditorViewComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 

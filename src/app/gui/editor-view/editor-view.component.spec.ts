@@ -18,7 +18,7 @@ import {
   MatDialogModule
 } from '@angular/material';
 import { BottomSheetCategoriesComponent,
-         SidebarComponent} from './sidebar.component';
+         EditorViewComponent} from './editor-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CustomGoogleApiModule,
@@ -28,14 +28,14 @@ import { CustomGoogleApiModule,
 import { DataViewerModule } from '../data-viewer/data-viewer.module';
 
 
-describe('SidebarComponent', () => {
-  let component: SidebarComponent;
-  let fixture: ComponentFixture<SidebarComponent>;
+describe('EditorViewComponent', () => {
+  let component: EditorViewComponent;
+  let fixture: ComponentFixture<EditorViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        SidebarComponent,
+        EditorViewComponent,
         BottomSheetCategoriesComponent,
         ],
       imports: [
@@ -70,7 +70,7 @@ describe('SidebarComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SidebarComponent);
+    fixture = TestBed.createComponent(EditorViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
