@@ -22,9 +22,9 @@ export class InspectionViewComponent implements OnInit {
   receipt: CompositionReceipt;
 
   constructor(
+    private router: Router,
     private snackBar: MatSnackBar,
     private conveyor: Conveyor,
-    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -69,7 +69,7 @@ export class InspectionViewComponent implements OnInit {
   getNumberOfValues(category: string) {
     let values = 0;
     const pointMap = this.conveyor.getDataList(category).getPoints();
-    for (const [_, points] of pointMap.entries()) {
+    for (const points of pointMap.values()) {
       values += points.length;
     }
     return values;
@@ -81,7 +81,10 @@ export class InspectionViewComponent implements OnInit {
   sendData(pnr: string) {
     this.conveyor.sendData(pnr).
       subscribe(
-        receipt => { this.dataSent = true; this.receipt = receipt; },
+        receipt => {
+          this.dataSent = true;
+          this.receipt = receipt;
+        },
         e => this.snackBar.open(
           'Inrapporteringen misslyckades. Fel: "' + e.statusText + '"', 'OK',
           {

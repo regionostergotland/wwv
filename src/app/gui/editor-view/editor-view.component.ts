@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { MatBottomSheet, MatDialog } from '@angular/material';
 import { Conveyor } from '../../conveyor.service';
 import { AddNewDataModalComponent } from './add-new-data-modal.component';
-import { BottomSheetCategoriesComponent } from './bottom-sheet-categories.component';
+import {
+  BottomSheetCategoriesComponent
+} from './bottom-sheet-categories.component';
 
 @Component({
   selector: 'app-editor-view',

@@ -180,6 +180,7 @@ export class EhrService {
       const root = composition.self_monitoring[spec.id];
 
       let pIndex = 0; /* index of current point in list */
+      // tslint:disable (fn shall be used when known how)
       for (const [fn, points] of list.getPoints()) {
         // TODO specify math function of events
         // how to specify??
