@@ -1,9 +1,13 @@
 {
-  "extends": ["tslint:recommended"/*, "tslint-sonarts"*/],
+  "extends": ["tslint:recommended", "tslint-sonarts", "tslint-etc"],
   "rulesDirectory": [
     "codelyzer"
   ],
   "rules": {
+    "cognitive-complexity": false,
+    "no-unused-declaration": true,
+    "no-unused-expression": true,
+    "no-unused-variable": true,
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {
