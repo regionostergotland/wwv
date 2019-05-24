@@ -4,6 +4,7 @@
     "codelyzer"
   ],
   "rules": {
+    "no-big-function": false,
     "cognitive-complexity": false,
     "no-unused-declaration": true,
     "no-unused-expression": true,
