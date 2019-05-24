@@ -5,7 +5,7 @@ import { EhrService } from './ehr/ehr.service';
 import { Platform } from './platform/platform.service';
 import { GfitService } from './platform/gfit.service';
 import { DummyPlatformService } from './platform/dummy.service';
-import { Observable, EMPTY, forkJoin } from 'rxjs';
+import { Observable, EMPTY } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CompositionReceipt } from './ehr/ehr.service';
 
