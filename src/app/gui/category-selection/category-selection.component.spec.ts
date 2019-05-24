@@ -19,7 +19,7 @@ import {
   MatTooltipModule
 } from '@angular/material';
 
-import { CategoryPickerComponent } from './category-picker.component';
+import { CategoryPickerComponent } from './category-selection.component';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';

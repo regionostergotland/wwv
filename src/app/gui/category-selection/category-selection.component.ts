@@ -7,9 +7,9 @@ import { CategorySpec } from '../../ehr/datatype';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
-  selector: 'app-category-picker',
-  templateUrl: './category-picker.component.html',
-  styleUrls: ['./category-picker.component.scss']
+  selector: 'app-category-selection',
+  templateUrl: './category-selection.component.html',
+  styleUrls: ['./category-selection.component.scss']
 })
 
 export class CategoryPickerComponent implements OnInit {

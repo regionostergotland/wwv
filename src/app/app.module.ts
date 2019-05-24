@@ -17,7 +17,7 @@ import {
 import { NgModule } from '@angular/core';
 import { SourcesComponent } from './gui/sources/sources.component';
 import { CommonModule } from '@angular/common';
-import { CategoryPickerComponent } from './gui/category-picker/category-picker.component';
+import { CategoryPickerComponent } from './gui/category-selection/category-selection.component';
 
 import { InspectionComponent } from './gui/inspection/inspection.component';
 import {

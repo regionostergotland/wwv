@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './gui/home/home.component';
 import { SourcesComponent } from './gui/sources/sources.component';
-import { CategoryPickerComponent } from './gui/category-picker/category-picker.component';
+import { CategoryPickerComponent } from './gui/category-selection/category-selection.component';
 import { InfoComponent } from './gui/info/info.component';
 import { HelpComponent} from './gui/help/help.component';
 import { InspectionComponent} from './gui/inspection/inspection.component';
