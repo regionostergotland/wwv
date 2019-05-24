@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { ToolbarModule } from './gui/toolbar/ToolbarModule';
 import { HelpModule } from './gui/help-page/HelpModule';
 import { HomeModule } from './gui/home/HomeModule';
-import { InfoComponent } from './gui/info/info.component';
+import { InfoPageComponent } from './gui/info-page/info-page.component';
 import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';
 
 import { FooterComponent } from './gui/footer/footer.component';
@@ -77,7 +77,7 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
 @NgModule({
   declarations: [
     AppComponent,
-    InfoComponent,
+    InfoPageComponent,
     ProgressBarComponent,
     FooterComponent,
     PlatformSelectionComponent,

@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MatCardTitle, MatCard } from '@angular/material';
 
 @Component({
-  selector: 'app-info',
-  templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss']
+  selector: 'app-info-page',
+  templateUrl: './info-page.component.html',
+  styleUrls: ['./info-page.component.scss']
 })
-export class InfoComponent implements OnInit {
+export class InfoPageComponent implements OnInit {
 
   constructor() { }
 

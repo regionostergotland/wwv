@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './gui/home/home.component';
 import { PlatformSelectionComponent } from './gui/platform-selection/platform-selection.component';
 import { CategorySelectionComponent } from './gui/category-selection/category-selection.component';
-import { InfoComponent } from './gui/info/info.component';
+import { InfoPageComponent } from './gui/info-page/info-page.component';
 import { HelpPageComponent} from './gui/help-page/help-page.component';
 import { InspectionComponent} from './gui/inspection/inspection.component';
 import { SidebarComponent } from './gui/sidebar/sidebar.component';
@@ -14,7 +14,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'platform-selection', component: PlatformSelectionComponent },
   { path: 'category-selection/:platform', component: CategorySelectionComponent },
-  { path: 'info', component: InfoComponent },
+  { path: 'info', component: InfoPageComponent },
   { path: 'inspection', component: InspectionComponent },
   { path: 'edit', component: SidebarComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }

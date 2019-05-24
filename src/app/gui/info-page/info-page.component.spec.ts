@@ -2,11 +2,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material';
 
-import { InfoComponent } from './info.component';
+import { InfoPageComponent } from './info-page.component';
 
-describe('InfoComponent', () => {
-  let component: InfoComponent;
-  let fixture: ComponentFixture<InfoComponent>;
+describe('InfoPageComponent', () => {
+  let component: InfoPageComponent;
+  let fixture: ComponentFixture<InfoPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -14,14 +14,14 @@ describe('InfoComponent', () => {
         MatCardModule,
       ],
       declarations: [
-        InfoComponent,
+        InfoPageComponent,
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoComponent);
+    fixture = TestBed.createComponent(InfoPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
