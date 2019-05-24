@@ -2,7 +2,7 @@
   <div class="progressBar" [ngClass]="{ hidden: getCurrentStep() === 0 }">
     <!-- FETCH -->
     <div class="item-container">
-      <button (click)="navigate('sources', 1)" [class]="getClass(1)">1</button>
+      <button (click)="navigate('platform-selection', 1)" [class]="getClass(1)">1</button>
       <div *ngIf="!onSmallScreen()">
         <p style="margin-left: 4px;">Hämtning</p>
       </div>
