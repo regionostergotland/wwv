@@ -16,6 +16,7 @@ import {
 import {
   DataRemovalDialogComponent
 } from '../data-removal-dialog/data-removal-dialog.component';
+import {SelectionModel} from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-data-container',
@@ -40,13 +41,17 @@ export class DataContainerComponent implements OnInit {
   categorySpec: CategorySpec;
   selectedCategory: string;
   dataList: Map<Filter, MatTableDataSource<DataPoint>>;
-  selectedRows: DataPoint[];
+  selectedRows: SelectionModel<DataPoint>;
+  selectedRowsLength: number;
   chartEntries: Map<Filter, DataPoint[]>;
 
   constructor(private conveyor: Conveyor, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.selectedRows = [];
+    this.selectedRowsLength = 0;
+    if (this.selectedRows) {
+      this.selectedRows.clear();
+    }
     this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
     // Needs to be a new map for the graph to update
     if (this.selectedCategory) {
@@ -64,10 +69,12 @@ export class DataContainerComponent implements OnInit {
 
   updateSelected(event) {
     this.selectedRows = event;
+    this.selectedRowsLength = this.selectedRows.selected.length;
   }
 
   clearSelected() {
-    this.selectedRows = [];
+    this.selectedRows.clear();
+    this.selectedRowsLength = 0;
   }
 
   /**
@@ -96,7 +103,7 @@ export class DataContainerComponent implements OnInit {
   }
 
   openRemovalDialog() {
-    if (this.selectedRows.length > 0) {
+    if (this.selectedRows.selected.length > 0) {
       const dialogRef = this.dialog.open(DataRemovalDialogComponent);
       dialogRef.afterClosed().subscribe(result => {
         // If result is true, that means the user pressed the button for
@@ -113,7 +120,7 @@ export class DataContainerComponent implements OnInit {
    */
   removeSelected() {
     this.conveyor.getDataList(this.selectedCategory)
-      .removePoints(this.selectedRows);
+      .removePoints(this.selectedRows.selected);
     this.ngOnInit();
   }
 
