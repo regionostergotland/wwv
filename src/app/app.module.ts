@@ -15,7 +15,7 @@ import {
 } from '@angular/material';
 
 import { NgModule } from '@angular/core';
-import { SourcesComponent } from './gui/sources/sources.component';
+import { PlatformSelectionComponent } from './gui/platform-selection/platform-selection.component';
 import { CommonModule } from '@angular/common';
 import { CategorySelectionComponent } from './gui/category-selection/category-selection.component';
 
@@ -80,7 +80,7 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
     InfoComponent,
     ProgressBarComponent,
     FooterComponent,
-    SourcesComponent,
+    PlatformSelectionComponent,
     CategorySelectionComponent,
     InspectionComponent,
     SidebarComponent,

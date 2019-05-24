@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './gui/home/home.component';
-import { SourcesComponent } from './gui/sources/sources.component';
+import { PlatformSelectionComponent } from './gui/platform-selection/platform-selection.component';
 import { CategorySelectionComponent } from './gui/category-selection/category-selection.component';
 import { InfoComponent } from './gui/info/info.component';
 import { HelpComponent} from './gui/help/help.component';
@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'help', component: HelpComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'sources', component: SourcesComponent },
+  { path: 'platform-selection', component: PlatformSelectionComponent },
   { path: 'pick-categories/:platform', component: CategorySelectionComponent },
   { path: 'info', component: InfoComponent },
   { path: 'inspection', component: InspectionComponent },

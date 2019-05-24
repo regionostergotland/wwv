@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { SourcesComponent } from './sources/sources.component';
+import { PlatformSelectionComponent } from './platform-selection/platform-selection.component';
 import { CommonModule } from '@angular/common';
 import { CategorySelectionComponent } from './category-selection/category-selection.component';
 
@@ -107,14 +107,14 @@ import {
     MatTableModule,
   ],
   declarations: [
-    SourcesComponent,
+    PlatformSelectionComponent,
     CategorySelectionComponent,
     InspectionComponent,
     SidebarComponent,
     BottomSheetCategoriesComponent,
     AddNewDataModalComponent,
   ],
-  exports: [SourcesComponent],
+  exports: [PlatformSelectionComponent],
   entryComponents: [
     BottomSheetCategoriesComponent,
     AddNewDataModalComponent,

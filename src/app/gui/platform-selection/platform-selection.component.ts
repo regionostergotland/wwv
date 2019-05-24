@@ -31,16 +31,17 @@ const availableSources: Map<string, Source> = new Map<string, Source>([
   }]]);
 
 @Component({
-  selector: 'app-sources',
-  templateUrl: './sources.component.html',
-  styleUrls: ['./sources.component.scss']
+  selector: 'app-platform-selection',
+  templateUrl: './platform-selection.component.html',
+  styleUrls: ['./platform-selection.component.scss']
 })
-export class SourcesComponent implements OnInit {
+export class PlatformSelectionComponent implements OnInit {
   sources: Source[] = [];
 
   constructor(
     private conveyor: Conveyor,
-    private router: Router) {
+    private router: Router
+  ) {
     const platforms = this.conveyor.getPlatforms();
     this.sources = [];
     for (const platform of platforms) {

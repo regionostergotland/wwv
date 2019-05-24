@@ -46,7 +46,7 @@ export class ProgressBarComponent implements OnInit {
    */
   getCurrentStep(): number {
     switch (this.router.url.split('/')[1]) {
-      case 'sources':
+      case 'platform-selection':
       case 'pick-categories':
         return 1;
       case 'edit':

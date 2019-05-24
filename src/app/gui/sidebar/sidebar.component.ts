@@ -86,7 +86,7 @@ export class SidebarComponent implements OnInit {
     const dialogRef = this.dialog.open(AddNewDataModalComponent);
     dialogRef.afterClosed().subscribe(result => {
       if (result === 'app') {
-        this.router.navigateByUrl('/sources');
+        this.router.navigateByUrl('/platform-selection');
       } else if (result === 'category') {
         this.openBottomSheet();
       }
