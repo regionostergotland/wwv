@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from '@angular/material';
-
+import { AppModule } from 'src/app/app.module';
 import { InfoPageComponent } from './info-page.component';
 
 describe('InfoPageComponent', () => {
@@ -10,10 +9,7 @@ describe('InfoPageComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        MatCardModule,
-      ],
-      declarations: [
-        InfoPageComponent,
+        AppModule,
       ]
     })
     .compileComponents();

@@ -1,12 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatGridListModule } from '@angular/material';
-import { RouterTestingModule } from '@angular/router/testing';
-import { RouterModule } from '@angular/router';
-import { HttpClient, HttpHandler } from '@angular/common/http';
+import { AppModule } from 'src/app/app.module';
 
-import { CustomGoogleApiModule,
-         GoogleApiService,
-         GoogleAuthService, } from '../../google-fit-config';
 import { ProgressBarComponent } from './progress-bar.component';
 
 describe('ProgressBarComponent', () => {
@@ -16,17 +10,7 @@ describe('ProgressBarComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ ProgressBarComponent ],
-      imports: [ MatGridListModule,
-        RouterTestingModule,
-        RouterModule,
-        CustomGoogleApiModule
-    ],
-
-   providers: [
-    GoogleAuthService,
-    GoogleApiService,
-    HttpClient,
-    HttpHandler]
+      imports: [AppModule]
     })
     .compileComponents();
   }));

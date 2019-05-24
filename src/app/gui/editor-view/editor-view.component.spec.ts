@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppModule } from 'src/app/app.module';
-import { EditorViewComponent} from './editor-view.component';
+import { EditorViewComponent } from './editor-view.component';
 
 describe('EditorViewComponent', () => {
   let component: EditorViewComponent;
@@ -8,9 +8,8 @@ describe('EditorViewComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [ AppModule ]
-    })
-    .compileComponents();
+      imports: [AppModule],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
