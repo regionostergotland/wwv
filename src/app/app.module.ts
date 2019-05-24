@@ -9,10 +9,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { InfoPageComponent } from './gui/info-page/info-page.component';
 import { HomePageComponent } from './gui/home-page/home-page.component';
 import { HelpModule } from './gui/help-page/HelpModule';
-import { 
+import {
   PlatformSelectionComponent
 } from './gui/platform-selection/platform-selection.component';
-import { 
+import {
   CategorySelectionComponent
 } from './gui/category-selection/category-selection.component';
 import {
