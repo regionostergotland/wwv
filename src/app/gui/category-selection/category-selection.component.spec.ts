@@ -19,20 +19,20 @@ import {
   MatTooltipModule
 } from '@angular/material';
 
-import { CategoryPickerComponent } from './category-selection.component';
+import { CategorySelectionComponent } from './category-selection.component';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';
 
 
-describe('CategoryPickerComponent', () => {
-  let component: CategoryPickerComponent;
-  let fixture: ComponentFixture<CategoryPickerComponent>;
+describe('CategorySelectionComponent', () => {
+  let component: CategorySelectionComponent;
+  let fixture: ComponentFixture<CategorySelectionComponent>;
   let ehrService: EhrService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CategoryPickerComponent ],
+      declarations: [ CategorySelectionComponent ],
       imports: [
         // NgModule,
         FormsModule,
@@ -64,7 +64,7 @@ describe('CategoryPickerComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CategoryPickerComponent);
+    fixture = TestBed.createComponent(CategorySelectionComponent);
     component = fixture.componentInstance;
     ehrService = TestBed.get(EhrService);
     fixture.detectChanges();

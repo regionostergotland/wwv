@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SourcesComponent } from './sources/sources.component';
 import { CommonModule } from '@angular/common';
-import { CategoryPickerComponent } from './category-selection/category-selection.component';
+import { CategorySelectionComponent } from './category-selection/category-selection.component';
 
 import { InspectionComponent } from './inspection/inspection.component';
 import {
@@ -108,7 +108,7 @@ import {
   ],
   declarations: [
     SourcesComponent,
-    CategoryPickerComponent,
+    CategorySelectionComponent,
     InspectionComponent,
     SidebarComponent,
     BottomSheetCategoriesComponent,

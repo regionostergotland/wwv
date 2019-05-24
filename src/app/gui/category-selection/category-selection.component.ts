@@ -12,7 +12,7 @@ import { Router, ActivatedRoute, ParamMap } from '@angular/router';
   styleUrls: ['./category-selection.component.scss']
 })
 
-export class CategoryPickerComponent implements OnInit {
+export class CategorySelectionComponent implements OnInit {
 
   constructor(private adapter: DateAdapter<any>,
               private conveyor: Conveyor,
