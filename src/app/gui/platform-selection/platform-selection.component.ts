@@ -12,7 +12,6 @@ interface Source {
 const googleFit = 'google-fit';
 const withings = 'withings';
 const dummy = 'dummy';
-const pickCategoriesLink = '/category-selection';
 
 const availableSources: Map<string, Source> = new Map<string, Source>([
   [googleFit, {

@@ -82,7 +82,6 @@ export class DataContainerComponent implements OnInit {
    * Opens the dialog for MathDialogComponent
    */
   openMathDialog(): void {
-    // this.selection.clear();
     const dialogRef = this.dialog.open(DataFilterDialogComponent, {
       data: this.selectedCategory
     });

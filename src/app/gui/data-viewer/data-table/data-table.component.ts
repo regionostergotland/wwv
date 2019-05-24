@@ -209,7 +209,6 @@ export class DataTableComponent implements OnInit {
    * @param key key of column
    * @returns string representing what type of element to use
    */
-
   getInputType(key: string) {
     if (key.startsWith('mobile')) {
       return key;
@@ -306,7 +305,6 @@ export class DataTableComponent implements OnInit {
    * which category it is.
    * @returns a list of labels for the specified category
    */
-
   getDisplayedColumns(): string[] {
     const result: string[] = [];
 
@@ -322,11 +320,19 @@ export class DataTableComponent implements OnInit {
           continue;
         } else if (column === 'time') {
           switch (this.width) {
-            case PeriodWidth.DAY: result.push('period_DAY'); break;
-            case PeriodWidth.MONTH: result.push('period_MONTH'); break;
-            case PeriodWidth.WEEK: result.push('period_WEEK'); break;
-            case PeriodWidth.YEAR: result.push('period_YEAR'); break;
-            default :
+            case PeriodWidth.DAY:
+              result.push('period_DAY');
+              break;
+            case PeriodWidth.MONTH:
+              result.push('period_MONTH');
+              break;
+            case PeriodWidth.WEEK:
+              result.push('period_WEEK');
+              break;
+            case PeriodWidth.YEAR:
+              result.push('period_YEAR');
+              break;
+            default:
               result.push('date');
               result.push('time');
           }
