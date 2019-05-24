@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatBottomSheet, MatBottomSheetRef, MatDialog } from '@angular/material';
+import { MatBottomSheet,
+         MatBottomSheetRef,
+         MatDialog } from '@angular/material';
 
 import { Conveyor } from '../../conveyor.service';
 import { DataList } from '../../ehr/datalist';

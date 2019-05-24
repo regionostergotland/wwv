@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import {
   MatSelectModule,
   MatFormFieldModule,
@@ -19,8 +19,10 @@ import {
 } from '@angular/material';
 
 import { DataTableComponent } from './data-table.component';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from 'src/app/google-fit-config';
+import { CustomGoogleApiModule,
+         GoogleApiService,
+         GoogleAuthService,
+} from 'src/app/google-fit-config';
 
 describe('DataTableComponent', () => {
   let component: DataTableComponent;

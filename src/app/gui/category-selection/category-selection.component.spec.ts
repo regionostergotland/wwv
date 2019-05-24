@@ -2,8 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { FormsModule } from '@angular/forms';
-import { EhrService } from '../../ehr/ehr.service';
-
+import { HttpClient, HttpHandler } from '@angular/common/http';
 import {
   MatSelectModule,
   MatFormFieldModule,
@@ -19,10 +18,13 @@ import {
   MatTooltipModule
 } from '@angular/material';
 
+import { EhrService } from '../../ehr/ehr.service';
 import { CategorySelectionComponent } from './category-selection.component';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-
-import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';
+import {
+  CustomGoogleApiModule,
+  GoogleApiService,
+  GoogleAuthService,
+} from '../../google-fit-config';
 
 
 describe('CategorySelectionComponent', () => {
@@ -88,7 +90,8 @@ describe('CategorySelectionComponent', () => {
 
   // it('checked box should add category to chosen', async(() => {
   //   const lengthBefore: number = component.chosenCategories.length;
-  //   const checkBoxElement: HTMLElement = fixture.debugElement.query(By.css('#check-box label')).nativeElement;
+  //   const checkBoxElement: HTMLElement = fixture.debugElement.query(
+  //     By.css('#check-box label')).nativeElement;
   //   checkBoxElement.click();
   //   fixture.detectChanges();
   //   // number of chosen categories should increase
