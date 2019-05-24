@@ -1,4 +1,15 @@
-import {Component, Input, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  Output,
+  EventEmitter,
+} from '@angular/core';
+import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
+import {SelectionModel} from '@angular/cdk/collections';
+import * as dayjs from 'dayjs';
+
 import { CategorySpec,
          DataTypeCodedText,
          DataTypeCodedTextOpt,
@@ -7,11 +18,10 @@ import { CategorySpec,
 import { DataPoint } from 'src/app/ehr/datalist';
 import { PeriodWidth } from 'src/app//shared/period';
 import {Conveyor} from 'src/app/conveyor.service';
-import { DataPointDialogComponent } from '../data-point-dialog/data-point-dialog.component';
-import {MatDialog, MatPaginator, MatTableDataSource} from '@angular/material';
-import {SelectionModel} from '@angular/cdk/collections';
+import {
+  DataPointDialogComponent
+} from '../data-point-dialog/data-point-dialog.component';
 import 'src/app/shared/date.extensions';
-import * as dayjs from 'dayjs';
 
 @Component({
   selector: 'app-data-table',
@@ -19,22 +29,19 @@ import * as dayjs from 'dayjs';
   styleUrls: ['./data-table.component.scss']
 })
 export class DataTableComponent implements OnInit {
-
   @Input() width: PeriodWidth;
-
   @Input() category: string;
-
   @Input() isEditable: boolean;
-
   @Input() set dataList(value: MatTableDataSource<DataPoint>) {
     this.data = value;
   }
-
-  // TODO rename to selected?
+  // TODO rename to selectedPoints or similar?
   @Output() change: EventEmitter<DataPoint[]> = new EventEmitter<DataPoint[]>();
 
-  constructor(private conveyor: Conveyor, public dialog: MatDialog) {
-  }
+  constructor(
+    private conveyor: Conveyor,
+    public dialog: MatDialog
+  ) {}
 
   dataTypeEnum = DataTypeEnum;
   categorySpec: CategorySpec;
@@ -73,9 +80,9 @@ export class DataTableComponent implements OnInit {
   }
 
   /**
-   * Checks whether the number of selected elements matches the total number of rows.
-   *
-   *  @returns a boolean, true of selected elements matches total number of rows
+   * Checks whether the number of selected elements matches the total number of
+   * rows.
+   * @returns a boolean, true of selected elements matches total number of rows
    */
   isAllSelected(): boolean {
     const numSelected = this.selection.selected.length;
@@ -143,7 +150,8 @@ export class DataTableComponent implements OnInit {
     if (this.categorySpec.dataTypes.has(key)) {
         const dt = this.categorySpec.dataTypes.get(key);
         switch (dt.type) {
-          case this.dataTypeEnum.DATE_TIME: return dayjs(point.get(key)).format('hh:mm');
+          case this.dataTypeEnum.DATE_TIME:
+            return dayjs(point.get(key)).format('hh:mm');
           case this.dataTypeEnum.QUANTITY:
             const s = this.displayCorrectNum(point.get(key));
             return this.isSmallScreen() ? s : s + this.getDataTypeUnit(key);
@@ -166,11 +174,10 @@ export class DataTableComponent implements OnInit {
   }
 
   /**
-   *  Uses a media-query to be in line with flex-layouts lt-sm, thats used throughout the
-   *  app.
+   *  Uses a media-query to be in line with flex-layouts lt-sm, thats used
+   *  throughout the app.
    *  https://github.com/angular/flex-layout/wiki/Responsive-API
    */
-
   isSmallScreen(): boolean {
     return window.matchMedia('(max-width: 599px)').matches;
   }
@@ -179,7 +186,6 @@ export class DataTableComponent implements OnInit {
    *  Determines if a category should be hidden from display on smaller screens
    *  @param key column name
    */
-
   shouldHide(key: string): boolean {
 
     if (key.startsWith('mobile')) {
@@ -254,8 +260,11 @@ export class DataTableComponent implements OnInit {
       // Fill options and visibleStrings
       for (const key of Array.from(this.categorySpec.dataTypes.keys())) {
         // Fill options
-        if (this.categorySpec.dataTypes.get(key).type === DataTypeEnum.CODED_TEXT) {
-          const datatypes: DataTypeCodedText = this.conveyor.getDataList(this.category).getDataType(key) as DataTypeCodedText;
+        if (this.categorySpec.dataTypes.get(key).type
+            === DataTypeEnum.CODED_TEXT) {
+          const datatypes: DataTypeCodedText =
+            this.conveyor.getDataList(this.category)
+              .getDataType(key) as DataTypeCodedText;
           this.options.set(key, datatypes.options);
         }
       }
@@ -280,9 +289,9 @@ export class DataTableComponent implements OnInit {
   }
 
   /*
-   * Used to make sure the tables don't display a bunch of decimals.
-   * Checks if num is an integer or float. If num is an integer, it simply returns the number.
-   * If num is a float, it returns a string containing only 1 decimal.
+   * Used to make sure the tables don't display a bunch of decimals.  Checks if
+   * num is an integer or float. If num is an integer, it simply returns the
+   * number.  If num is a float, it returns a string containing only 1 decimal.
    * @param num The original number to check
    */
   displayCorrectNum(num: number): any {
@@ -293,8 +302,8 @@ export class DataTableComponent implements OnInit {
   }
 
   /**
-   * Returns the columns which should be displayed in the table depending on which
-   * category it is.
+   * Returns the columns which should be displayed in the table depending on
+   * which category it is.
    * @returns a list of labels for the specified category
    */
 
@@ -335,5 +344,4 @@ export class DataTableComponent implements OnInit {
 
     return result;
   }
-
 }

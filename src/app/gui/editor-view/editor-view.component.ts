@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Conveyor } from '../../conveyor.service';
 import { Router } from '@angular/router';
 import { MatBottomSheet, MatBottomSheetRef, MatDialog } from '@angular/material';
+
+import { Conveyor } from '../../conveyor.service';
 import { DataList } from '../../ehr/datalist';
 import { AddNewDataModalComponent } from './add-new-data-modal.component';
 
@@ -10,7 +11,10 @@ import { AddNewDataModalComponent } from './add-new-data-modal.component';
   templateUrl: 'bottom-sheet-overview-example-sheet.html',
 })
 export class BottomSheetCategoriesComponent {
-  constructor(private bottomSheetRef: MatBottomSheetRef<BottomSheetCategoriesComponent>, private conveyor: Conveyor) {}
+  constructor(
+    private bottomSheetRef: MatBottomSheetRef<BottomSheetCategoriesComponent>,
+    private conveyor: Conveyor,
+  ) {}
 
   /**
    * Gets a list of the IDs of all categories available.
@@ -53,13 +57,17 @@ export class BottomSheetCategoriesComponent {
   }
 
   /**
-   * If the user selects a category, it is added to the conveyor and a new datalist is created.
+   * If the user selects a category, it is added to the conveyor and a new
+   * datalist is created.
    * @param event MouseEvent object contains information about user click.
    * @param categoryId the string ID of the user-selected category.
    */
   addCategory(event: MouseEvent, categoryId: string): void {
     if (!this.conveyor.hasCategoryId(categoryId)) {
-      this.conveyor.setDataList(categoryId, new DataList(this.conveyor.getCategorySpec(categoryId)));
+      this.conveyor.setDataList(
+        categoryId,
+        new DataList(this.conveyor.getCategorySpec(categoryId))
+      );
     }
     this.bottomSheetRef.dismiss();
     event.preventDefault();
@@ -78,9 +86,12 @@ export class EditorViewComponent implements OnInit {
   selectedColor = '#e7e7e7';
   showFiller = false;
 
-  constructor(private conveyor: Conveyor, private router: Router, private bottomSheet: MatBottomSheet, public dialog: MatDialog) {
-
-  }
+  constructor(
+    private conveyor: Conveyor,
+    private router: Router,
+    private bottomSheet: MatBottomSheet,
+    public dialog: MatDialog
+  ) {}
 
   openAddNewDataModal(): void {
     const dialogRef = this.dialog.open(AddNewDataModalComponent);
@@ -145,7 +156,8 @@ export class EditorViewComponent implements OnInit {
   }
 
   /**
-   * Return the color of the selected category and return an empty string if no category is selected.
+   * Return the color of the selected category and return an empty string if no
+   * category is selected.
    * @returns hex value of background color or empty string.
    */
   getTitleSelected(): string {

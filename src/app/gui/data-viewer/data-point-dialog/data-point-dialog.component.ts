@@ -113,7 +113,8 @@ export class DataPointDialogComponent implements OnInit {
       }
     }
 
-    // If a datapoint is provided, then prepare modal for editing instead of adding
+    // If a datapoint is provided, then prepare modal for editing instead of
+    // adding
     if (this.dataPoint) {
       this.setValues();
     }
@@ -132,15 +133,16 @@ export class DataPointDialogComponent implements OnInit {
   }
 
   /**
-   * The method to be fired when the dialog isn't clicked on but something else is clicked.
+   * The method to be fired when the dialog isn't clicked on but something else
+   * is clicked.
    */
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   /**
-   * Returns the columns which should be displayed in the table depending on which
-   * category it is.
+   * Returns the columns which should be displayed in the table depending on
+   * which category it is.
    * @returns a list of labels for the specified category
    */
   getDisplayedColumns(): string[] {
@@ -161,8 +163,8 @@ export class DataPointDialogComponent implements OnInit {
   }
 
   /**
-   * Gets the string from pointData with the given key, if no such key exist create a new Date.
-   * @param key the key identifier to get from.
+   * Gets the string from pointData with the given key, if no such key exist
+   * create a new Date.  @param key the key identifier to get from.
    */
   getDate(key): string {
     if (key === 'date') {
@@ -184,8 +186,8 @@ export class DataPointDialogComponent implements OnInit {
   }
 
   /**
-   * Gets the form control for the specified key, if no such key exist create one.
-   * @param key the key identifier to get from.
+   * Gets the form control for the specified key, if no such key exist create
+   * one.  @param key the key identifier to get from.
    */
   getFormControl(key: string): FormControl {
     if (!this.pointFormControl.has(key)) {
@@ -283,8 +285,9 @@ export class DataPointDialogComponent implements OnInit {
   }
 
   /**
-   * Creates a DataPoint and adds it to the DataList with all the components of this DialogComponent, if the values are not accepted as
-   * an input the value will not save and the dialog will not close.
+   * Creates a DataPoint and adds it to the DataList with all the components of
+   * this DialogComponent, if the values are not accepted as an input the value
+   * will not save and the dialog will not close.
    */
   createDataPoint() {
     // Are all required fields filled?
@@ -320,9 +323,11 @@ export class DataPointDialogComponent implements OnInit {
   }
 
   /**
-   * Sets the time of the DataType. This is the only exception to the DataType, as the key 'time' will be split into two, a 'date' and a
-   * 'time'. The 'date' will be saved separately and the 'time' will be added into the 'date'. When saved into the DataType, the Date object
-   * in 'date' will be saved in 'time'.
+   * Sets the time of the DataType. This is the only exception to the DataType,
+   * as the key 'time' will be split into two, a 'date' and a 'time'. The
+   * 'date' will be saved separately and the 'time' will be added into the
+   * 'date'. When saved into the DataType, the Date object in 'date' will be
+   * saved in 'time'.
    * @param time the time to set.
    */
   setTime(time: string) {

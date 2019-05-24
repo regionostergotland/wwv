@@ -59,12 +59,15 @@ export class Conveyor {
   }
 
   /**
-   * Fetches data from a specified timeinterval for a given category, from a given platform.
-   * @param platformId identifier for the platform which data is to be fetched from
+   * Fetches data from a specified timeinterval for a given category, from a
+   * given platform.
+   * @param platformId identifier for the platform which data is to be fetched
+   * from
    * @param categoryId identifier for the category of interest
    * @param start start of requested time interval
    * @param end end of requested time interval
-   * @returns an empty observable, notifying any listeners that the fetching is complete
+   * @returns an empty observable, notifying any listeners that the fetching is
+   * complete
    */
   public fetchData(platformId: string, categoryId: string,
                    start: Date, end: Date): Observable<any> {
