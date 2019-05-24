@@ -63,7 +63,7 @@ export class GfitService extends Platform {
     super();
     /* Maps all implemented categories to their datastream url and functions
      * that extract data of interest from the Google Fit JSON-response */
-    const deriveUrl = 'derived:com.google';
+    const deriveUrl = 'derived:com.google.';
     this.implementedCategories = new Map([
       [Categories.BLOOD_PRESSURE, {
         url: deriveUrl +
