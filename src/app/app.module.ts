@@ -3,7 +3,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { ToolbarModule } from './gui/toolbar/ToolbarModule';
-import { HelpModule } from './gui/help/HelpModule';
+import { HelpModule } from './gui/help-page/HelpModule';
 import { HomeModule } from './gui/home/HomeModule';
 import { InfoComponent } from './gui/info/info.component';
 import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';

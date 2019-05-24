@@ -4,13 +4,13 @@ import { HomeComponent } from './gui/home/home.component';
 import { PlatformSelectionComponent } from './gui/platform-selection/platform-selection.component';
 import { CategorySelectionComponent } from './gui/category-selection/category-selection.component';
 import { InfoComponent } from './gui/info/info.component';
-import { HelpComponent} from './gui/help/help.component';
+import { HelpPageComponent} from './gui/help-page/help-page.component';
 import { InspectionComponent} from './gui/inspection/inspection.component';
 import { SidebarComponent } from './gui/sidebar/sidebar.component';
 import { DataViewerModule } from './gui/data-viewer/data-viewer.module';
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  { path: 'help', component: HelpComponent },
+  { path: 'help', component: HelpPageComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'platform-selection', component: PlatformSelectionComponent },
   { path: 'category-selection/:platform', component: CategorySelectionComponent },

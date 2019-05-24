@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HelpComponent } from './help.component';
+import { HelpPageComponent } from './help-page.component';
 
 import {
     MatCardModule,
@@ -10,9 +10,9 @@ import {
     MatCardModule,
   ],
   declarations: [
-    HelpComponent
+    HelpPageComponent
   ],
-  exports: [ HelpComponent ],
-  entryComponents: [ HelpComponent ]
+  exports: [ HelpPageComponent ],
+  entryComponents: [ HelpPageComponent ]
 })
 export class HelpModule {}
