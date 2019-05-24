@@ -1,28 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import {
-  MatSelectModule,
-  MatFormFieldModule,
-  MatCardModule,
-  MatSidenavModule,
-  MatListModule,
-  MatTabsModule,
-  MatTableModule,
-  MatDialogModule,
-  MatDialogRef,
-  MatCheckboxModule,
-  MatTooltipModule,
-  MatPaginatorModule,
-  MatIconModule
-} from '@angular/material';
-
+import { DataViewerModule } from '../data-viewer.module';
 import { DataTableComponent } from './data-table.component';
-import { CustomGoogleApiModule,
-         GoogleApiService,
-         GoogleAuthService,
-} from 'src/app/google-fit-config';
 
 describe('DataTableComponent', () => {
   let component: DataTableComponent;
@@ -32,31 +10,8 @@ describe('DataTableComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ DataTableComponent ],
       imports: [
-        RouterTestingModule,
-        BrowserAnimationsModule,
-        MatSelectModule,
-        MatTableModule,
-        MatTabsModule,
-        MatFormFieldModule,
-        RouterTestingModule,
-        MatCardModule,
-        MatCheckboxModule,
-        MatSidenavModule,
-        MatListModule,
-        MatDialogModule,
-        MatTooltipModule,
-        MatPaginatorModule,
-        CustomGoogleApiModule,
-        MatIconModule
+        DataViewerModule
       ],
-
-     providers: [
-      GoogleAuthService,
-      GoogleApiService,
-      HttpClient,
-      HttpHandler,
-      {provide: MatDialogRef, useValue: {}}
-    ]
     })
     .compileComponents();
   }));

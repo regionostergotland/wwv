@@ -4,6 +4,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+
+import { CustomGoogleApiModule } from 'src/app/google-fit-config';
+import { HttpClientModule } from '@angular/common/http';
+
 import {
   MatCardModule,
   MatButtonModule,
@@ -111,6 +115,8 @@ import {
     MatTreeModule,
     MatFormFieldModule,
     MatTableModule,
+    HttpClientModule,
+    CustomGoogleApiModule
   ],
   declarations: [
     DataChartComponent,
