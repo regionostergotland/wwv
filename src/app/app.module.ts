@@ -88,7 +88,7 @@ import { FooterComponent } from './gui/footer/footer.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 
 /* Google Fit conifguration */
-import { CustomGoogleApiModule, } from './google-fit-config';
+import { CustomGoogleApiModule } from './google-fit-config';
 
 @NgModule({
   declarations: [

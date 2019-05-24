@@ -8,10 +8,7 @@ describe('DataTableComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DataTableComponent ],
-      imports: [
-        DataViewerModule
-      ],
+      imports: [ DataViewerModule ],
     })
     .compileComponents();
   }));

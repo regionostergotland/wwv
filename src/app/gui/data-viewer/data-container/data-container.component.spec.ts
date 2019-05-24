@@ -10,7 +10,6 @@ describe('EditorComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [DataViewerModule]
-
     })
     .compileComponents();
   }));

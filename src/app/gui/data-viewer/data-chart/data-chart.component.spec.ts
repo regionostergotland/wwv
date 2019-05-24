@@ -8,7 +8,6 @@ describe('ChartComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DataChartComponent ],
       imports: [ DataViewerModule ],
     })
     .compileComponents();

@@ -258,7 +258,6 @@ export class DataList {
 
   public removeFilter(filter: Filter) {
     this.processedPoints.delete(filter);
-    console.log(this.processedPoints.size);
     if (this.processedPoints.size === 0) {
       this.resetFilter();
     }

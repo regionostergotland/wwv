@@ -49,16 +49,17 @@ export class DataContainerComponent implements OnInit {
     this.selectedRows = [];
     this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
     // Needs to be a new map for the graph to update
-    this.chartEntries = new Map(
-      this.conveyor.getDataList(this.selectedCategory).getPoints()
-    );
-    const pts =
-      this.conveyor.getDataList(this.selectedCategory).getPoints().entries();
-    for (const [filter, points] of pts) {
-      this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
+    if (this.selectedCategory) {
+      this.chartEntries = new Map(
+        this.conveyor.getDataList(this.selectedCategory).getPoints()
+      );
+      const pts =
+        this.conveyor.getDataList(this.selectedCategory).getPoints().entries();
+      for (const [filter, points] of pts) {
+        this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
+      }
+      this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
     }
-
-    this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
   }
 
   updateSelected(event) {
@@ -94,7 +95,6 @@ export class DataContainerComponent implements OnInit {
     if (this.selectedRows.length > 0) {
       const dialogRef = this.dialog.open(DataRemovalDialogComponent);
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
         // If result is true, that means the user pressed the button for
         // removing selected values
         if (result) {
