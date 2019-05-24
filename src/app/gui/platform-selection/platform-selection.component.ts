@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Conveyor } from '../../conveyor.service';
 import { Router } from '@angular/router';
+
+import { Conveyor } from '../../conveyor.service';
 
 interface Source {
   id: string;

@@ -1,22 +1,30 @@
 <div class="centering">
 
-<div fxLayout="row" fxLayout.xs="column" fxLayout.lt-sm="column" fxFlex class="wrapper">
-<div layout="row"
-     layout-align="center center"
-     class="card-height"
-     *ngFor="let source of sources">
-  <mat-card class="home-card" (click)="selectPlatform(source.id)">
-    <mat-card-header>
-      <mat-card-title>{{source.name}}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content style="display:flex;">
-      <img src={{source.imageUrl}} style="width:70%" alt={{source.name}}/>
-    </mat-card-content>
-    <mat-card-actions>
-      <div style="text-align:center;">
-        <button mat-button>Välj</button>
-      </div>
-    </mat-card-actions>
-  </mat-card>
-</div>
+<div
+  fxLayout="row"
+  fxLayout.xs="column"
+  fxLayout.lt-sm="column"
+  fxFlex
+  class="wrapper"
+>
+  <div
+    layout="row"
+    layout-align="center center"
+    class="card-height"
+    *ngFor="let source of sources"
+  >
+    <mat-card class="home-card" (click)="selectPlatform(source.id)">
+      <mat-card-header>
+        <mat-card-title>{{source.name}}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content style="display:flex;">
+        <img src={{source.imageUrl}} style="width:70%" alt={{source.name}}/>
+      </mat-card-content>
+      <mat-card-actions>
+        <div style="text-align:center;">
+          <button mat-button>Välj</button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>
