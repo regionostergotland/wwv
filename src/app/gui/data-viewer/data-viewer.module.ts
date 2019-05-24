@@ -7,7 +7,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { CustomGoogleApiModule } from 'src/app/google-fit-config';
 import { HttpClientModule } from '@angular/common/http';
-
+import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {
   MatCardModule,
   MatButtonModule,
@@ -116,7 +116,7 @@ import {
     MatFormFieldModule,
     MatTableModule,
     HttpClientModule,
-    CustomGoogleApiModule
+    CustomGoogleApiModule,
   ],
   declarations: [
     DataChartComponent,
@@ -134,5 +134,9 @@ import {
     DataFilterDialogComponent,
     DataRemovalDialogComponent,
   ],
+
+  providers: [
+      {provide: MatDialogRef, useValue: {}},
+      { provide: MAT_DIALOG_DATA, useValue: {} },]
 })
 export class DataViewerModule {}

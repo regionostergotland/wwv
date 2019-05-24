@@ -51,16 +51,17 @@ export class DataContainerComponent implements OnInit {
     this.selectedRows = [];
     this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
     // Needs to be a new map for the graph to update
-    this.chartEntries = new Map(
-      this.conveyor.getDataList(this.selectedCategory).getPoints()
-    );
-    const pts =
-      this.conveyor.getDataList(this.selectedCategory).getPoints().entries();
-    for (const [filter, points] of pts) {
-      this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
+    if (this.selectedCategory) {
+      this.chartEntries = new Map(
+        this.conveyor.getDataList(this.selectedCategory).getPoints()
+      );
+      const pts =
+        this.conveyor.getDataList(this.selectedCategory).getPoints().entries();
+      for (const [filter, points] of pts) {
+        this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
+      }
+      this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
     }
-
-    this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
   }
 
   updateSelected(event) {
@@ -84,7 +85,6 @@ export class DataContainerComponent implements OnInit {
    * Opens the dialog for MathDialogComponent
    */
   openMathDialog(): void {
-    // this.selection.clear();
     const dialogRef = this.dialog.open(DataFilterDialogComponent, {
       data: this.selectedCategory
     });

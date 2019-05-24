@@ -10,7 +10,6 @@ describe('AddDataPointComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DataPointDialogComponent ],
       imports: [ DataViewerModule ],
     })
     .compileComponents();
