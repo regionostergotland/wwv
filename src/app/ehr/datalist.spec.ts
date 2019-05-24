@@ -148,10 +148,12 @@ describe('datalist', () => {
   /*
    * Test that datalist splits datapoints into span interval
    */
-  it('should split datapoints into one day intervals, producing three points', () => {
+  it('should split datapoints into one day intervals, producing three points',
+    () => {
     expect(dataList.getPoints().get(filter).length).toEqual(3);
   });
-  it('should create new datapoints with mean of the interval points fields', () => {
+  it('should create new datapoints with mean of the interval points fields',
+    () => {
     expect(
       dataList
         .getPoints()
