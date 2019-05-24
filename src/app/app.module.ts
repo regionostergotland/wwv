@@ -86,7 +86,7 @@ import {
 import { FooterComponent } from './gui/footer/footer.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 
-import { BottomSheetCategoriesComponent } from './gui/editor-view/bottom-sheet-categories.component'
+import { BottomSheetCategoriesComponent } from './gui/editor-view/bottom-sheet-categories.component';
 
 /* Google Fit conifguration */
 import { CustomGoogleApiModule } from './google-fit-config';
