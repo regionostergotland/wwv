@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DataTypeText, DataType,
+import { DataTypeText,
          DataTypeDateTime, DataTypeQuantity,
          DataTypeCodedText,
          MathFunctionEnum} from './datatype';

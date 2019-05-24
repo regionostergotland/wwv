@@ -1,4 +1,4 @@
-import { browser, by, element, promise, ElementFinder, ElementArrayFinder } from 'protractor';
+import { browser, by, element, ElementFinder } from 'protractor';
 export class HomePage {
   navigateTo() {
     return browser.get(browser.baseUrl) as Promise<any>;

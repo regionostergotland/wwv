@@ -1,7 +1,11 @@
 <div *ngIf="editable">
   <h5
     *ngIf="isSmallScreen()"
-    style="margin-top: 0px; margin-bottom: 0px; background-color: #efefef; padding: 4px; text-align: center;"
+    style="margin-top: 0px;
+           margin-bottom: 0px;
+           background-color: #efefef;
+           padding: 4px;
+           text-align: center;"
   >
     {{ categorySpec.label }}
   </h5>
@@ -32,7 +36,7 @@
           <mat-icon>delete</mat-icon>
         </button>
       </ng-template>
-      
+
       <!-- DATA LIST -->
       <app-data-table
         [width]="entry.key.width"

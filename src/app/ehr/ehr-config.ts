@@ -5,7 +5,6 @@ import { CategorySpec, DataType,
          DataTypeQuantity,
          DataTypeText,
          DataTypeCodedText } from './datatype';
-import { DataList, DataPoint } from './datalist';
 
 export enum Categories {
   BLOOD_PRESSURE = 'blood_pressure',

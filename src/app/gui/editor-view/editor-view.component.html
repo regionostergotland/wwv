@@ -80,7 +80,6 @@
       </mat-nav-list>
     </div>
 
-    
     <div style="height: 64px" *ngIf="getMode() === 'bottom'">
       <div class="sidebar-bar">
         <div class="bottom-bar">
@@ -111,54 +110,3 @@
     </div>
   </div>
 </div>
-
-<!--
-<mat-sidenav-container class="container">
-  <mat-sidenav [disableClose]="true" #sidenav #drawer mode="side" opened role="navigation" autosize class="example-sidenav">
-
-    <mat-nav-list>
-
-      <mat-list-item (click)="selectCategory(null)" [style.background-color]="getTitleSelected()">
-        <h2>{{title}}</h2>
-      </mat-list-item>
-
-      <mat-divider></mat-divider>
-
-      <div  *ngFor="let category of getUserCategories()">
-
-        <mat-list-item (click)="selectCategory(category)" [style.background-color]="getBackgroundColor(category)" >
-            <img class="sidebar-icon" [src]="(getCategoryIcon(category))"/>
-            {{getCategoryLabel(category)}}
-        </mat-list-item>
-        <mat-divider></mat-divider>
-      </div>
-    </mat-nav-list>
-
-    <button class="wide-button"  style="margin-top: 20px" mat-stroked-button color="accent" (click)="openBottomSheet()">
-      <mat-icon>add_box</mat-icon>
-      Lägg till egen kategori
-    </button>
-    <button class="wide-button" mat-stroked-button color="accent" routerLink='/platform-selection' >
-      <mat-icon>add_box</mat-icon>
-      Lägg till app-data
-    </button>
-
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <div *ngIf="!selectedCategory">
-      <h2>Här kan du redigera, komplettera och kommentera dina värden.</h2>
-      <p>- Granska och redigera varje kategori i sidomenyn</p>
-      <p>- Lägg till enga kategorier med egna värden</p>
-      <p>- Hämta ytterligare värden från en plattform</p>
-      <h3>Om inga ändringar önskas, gå vidare till nästa steg.</h3>
-    </div>
-    <app-editor *ngIf="selectedCategory"
-        [selectCategory]="selectedCategory"
-        [editable]="true" style="text-align: left">
-    </app-editor>
-    <button class='margin' mat-raised-button color='primary' routerLink='/inspection'>Nästa steg</button>
-
-  </mat-sidenav-content>
-</mat-sidenav-container>
--->

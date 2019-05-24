@@ -1,16 +1,14 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MatTableDataSource,
-         MatDialog,
-         MAT_DIALOG_DATA,
-         MatDialogRef } from '@angular/material';
+         MatDialog } from '@angular/material';
 
 import { Conveyor } from 'src/app/conveyor.service';
 import {
   DataPointDialogComponent
 } from '../data-point-dialog/data-point-dialog.component';
-import { MathFunctionEnum, mathFunctionString,
+import {
          CategorySpec } from 'src/app/ehr/datatype';
-import { PeriodWidth, periodString } from 'src/app/shared/period';
+import { PeriodWidth } from 'src/app/shared/period';
 import { DataPoint, Filter, filterString } from 'src/app/ehr/datalist';
 import {
   DataFilterDialogComponent

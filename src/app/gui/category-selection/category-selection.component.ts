@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { Observable, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Conveyor } from '../../conveyor.service';
 import { CategorySpec } from '../../ehr/datatype';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-category-selection',

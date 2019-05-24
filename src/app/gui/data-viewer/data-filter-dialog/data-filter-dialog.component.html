@@ -1,6 +1,8 @@
 <div class="flex">
   <p>Här kan du välja funktion och intervall</p>
-  <button mat-button color="primary" (click)="changeBack()">Återställ värden</button>
+  <button mat-button color="primary" (click)="changeBack()">
+      Återställ värden
+  </button>
 </div>
 
 <div mat-dialog-actions>
@@ -19,7 +21,15 @@
       </mat-select>
   </mat-form-field>
 </div>
+
 <div class="math-dialog-buttons">
-  <button mat-button (click)="closeDialog()">Avbryt</button>
-  <button mat-button color="primary" (click)="calculate(interval, mathFunction)">Verkställ</button>
+  <button mat-button (click)="closeDialog()">
+    Avbryt
+  </button>
+  <button
+    mat-button color="primary"
+    (click)="calculate(interval, mathFunction)"
+  >
+    Verkställ
+  </button>
 </div>

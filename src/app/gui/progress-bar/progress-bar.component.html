@@ -1,8 +1,16 @@
 <div class="container">
-  <div class="progressBar" [ngClass]="{ hidden: getCurrentStep() === 0 }">
+  <div
+    class="progressBar"
+    [ngClass]="{ hidden: getCurrentStep() === 0 }"
+  >
     <!-- FETCH -->
     <div class="item-container">
-      <button (click)="navigate('platform-selection', 1)" [class]="getClass(1)">1</button>
+      <button
+        (click)="navigate('platform-selection', 1)"
+        [class]="getClass(1)"
+      >
+        1
+      </button>
       <div *ngIf="!onSmallScreen()">
         <p style="margin-left: 4px;">Hämtning</p>
       </div>
@@ -10,13 +18,17 @@
 
     <!-- EDIT -->
     <div class="item-container">
-      <button (click)="navigate('edit', 2)" [class]="getClass(2)">2</button>
+      <button (click)="navigate('edit', 2)" [class]="getClass(2)">
+        2
+      </button>
       <div *ngIf="!onSmallScreen()"><p>Redigering</p></div>
     </div>
 
     <!-- REVIEW -->
     <div class="item-container">
-      <button (click)="navigate('inspection', 3)" [class]="getClass(3)">3</button>
+      <button (click)="navigate('inspection', 3)" [class]="getClass(3)">
+        3
+      </button>
       <div *ngIf="!onSmallScreen()"><p>Granskning</p></div>
     </div>
   </div>

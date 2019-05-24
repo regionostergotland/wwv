@@ -1,17 +1,10 @@
 import {Component,
-        OnInit,
-        AfterViewInit,
-        ViewChild,
-        ViewChildren,
-        QueryList} from '@angular/core';
+        OnInit} from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 
 import { CategorySpec,
-         DataTypeCodedText,
-         DataTypeCodedTextOpt,
          DataTypeEnum} from '../../ehr/datatype';
-import { DataPoint } from '../../ehr/datalist';
 import { Conveyor } from '../../conveyor.service';
 import { CompositionReceipt } from '../../ehr/ehr.service';
 
