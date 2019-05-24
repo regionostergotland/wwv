@@ -16,11 +16,11 @@ import { Conveyor } from '../../conveyor.service';
 import { CompositionReceipt } from '../../ehr/ehr.service';
 
 @Component({
-  selector: 'app-inspection',
-  templateUrl: './inspection.component.html',
-  styleUrls: ['./inspection.component.scss']
+  selector: 'app-inspection-view',
+  templateUrl: './inspection-view.component.html',
+  styleUrls: ['./inspection-view.component.scss']
 })
-export class InspectionComponent implements OnInit {
+export class InspectionViewComponent implements OnInit {
   categories: string[] = [];
   categorySpecs: Map<string, CategorySpec>;
   dataTypeEnum = DataTypeEnum;

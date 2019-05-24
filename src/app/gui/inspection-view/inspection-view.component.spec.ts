@@ -12,21 +12,21 @@ import {
   MatSelectModule,
   MatIconModule
 } from '@angular/material';
-import { InspectionComponent } from './inspection.component';
+import { InspectionViewComponent } from './inspection-view.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../../google-fit-config';
 import { RouterTestingModule } from '@angular/router/testing';
 import { DataViewerModule } from '../data-viewer/data-viewer.module';
 
-describe('InspectionComponent', () => {
-  let component: InspectionComponent;
-  let fixture: ComponentFixture<InspectionComponent>;
+describe('InspectionViewComponent', () => {
+  let component: InspectionViewComponent;
+  let fixture: ComponentFixture<InspectionViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        InspectionComponent,
+        InspectionViewComponent,
      ],
       imports: [
         DataViewerModule,
@@ -57,7 +57,7 @@ describe('InspectionComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InspectionComponent);
+    fixture = TestBed.createComponent(InspectionViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

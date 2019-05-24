@@ -5,7 +5,7 @@ import { PlatformSelectionComponent } from './gui/platform-selection/platform-se
 import { CategorySelectionComponent } from './gui/category-selection/category-selection.component';
 import { InfoPageComponent } from './gui/info-page/info-page.component';
 import { HelpPageComponent} from './gui/help-page/help-page.component';
-import { InspectionComponent} from './gui/inspection/inspection.component';
+import { InspectionViewComponent} from './gui/inspection-view/inspection-view.component';
 import { EditorViewComponent } from './gui/editor-view/editor-view.component';
 import { DataViewerModule } from './gui/data-viewer/data-viewer.module';
 const routes: Routes = [
@@ -15,7 +15,7 @@ const routes: Routes = [
   { path: 'platform-selection', component: PlatformSelectionComponent },
   { path: 'category-selection/:platform', component: CategorySelectionComponent },
   { path: 'info', component: InfoPageComponent },
-  { path: 'inspection', component: InspectionComponent },
+  { path: 'inspection', component: InspectionViewComponent },
   { path: 'edit', component: EditorViewComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];

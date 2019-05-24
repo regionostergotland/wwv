@@ -19,7 +19,7 @@ import { PlatformSelectionComponent } from './gui/platform-selection/platform-se
 import { CommonModule } from '@angular/common';
 import { CategorySelectionComponent } from './gui/category-selection/category-selection.component';
 
-import { InspectionComponent } from './gui/inspection/inspection.component';
+import { InspectionViewComponent } from './gui/inspection-view/inspection-view.component';
 import {
   BottomSheetCategoriesComponent,
   EditorViewComponent,
@@ -82,7 +82,7 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
     FooterComponent,
     PlatformSelectionComponent,
     CategorySelectionComponent,
-    InspectionComponent,
+    InspectionViewComponent,
     EditorViewComponent,
     BottomSheetCategoriesComponent,
     AddNewDataModalComponent,

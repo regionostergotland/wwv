@@ -3,7 +3,7 @@ import { PlatformSelectionComponent } from './platform-selection/platform-select
 import { CommonModule } from '@angular/common';
 import { CategorySelectionComponent } from './category-selection/category-selection.component';
 
-import { InspectionComponent } from './inspection/inspection.component';
+import { InspectionViewComponent } from './inspection-view/inspection-view.component';
 import {
   BottomSheetCategoriesComponent,
   EditorViewComponent,
@@ -109,7 +109,7 @@ import {
   declarations: [
     PlatformSelectionComponent,
     CategorySelectionComponent,
-    InspectionComponent,
+    InspectionViewComponent,
     EditorViewComponent,
     BottomSheetCategoriesComponent,
     AddNewDataModalComponent,
