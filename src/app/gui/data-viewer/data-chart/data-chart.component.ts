@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataPoint, Filter, filterString } from 'src/app/ehr/datalist';
 import { PeriodWidth } from 'src/app/shared/period';
 import { Conveyor } from 'src/app/conveyor.service';
-import { MathFunctionEnum } from 'src/app/ehr/datatype';
 
 interface ChartPoint {
   name: string;

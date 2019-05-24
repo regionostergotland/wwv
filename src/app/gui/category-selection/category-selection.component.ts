@@ -1,18 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { DateAdapter } from '@angular/material/core';
 import { Observable, forkJoin } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { Conveyor } from '../../conveyor.service';
 import { CategorySpec } from '../../ehr/datatype';
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-category-picker',
-  templateUrl: './category-picker.component.html',
-  styleUrls: ['./category-picker.component.scss']
+  selector: 'app-category-selection',
+  templateUrl: './category-selection.component.html',
+  styleUrls: ['./category-selection.component.scss']
 })
 
-export class CategoryPickerComponent implements OnInit {
+export class CategorySelectionComponent implements OnInit {
 
   constructor(private adapter: DateAdapter<any>,
               private conveyor: Conveyor,
@@ -31,7 +30,9 @@ export class CategoryPickerComponent implements OnInit {
   private platformId = '';
 
   allChosen = false; // True if all categories have been chosen
-  categoryMap: Map<string, boolean>; // Map  containing the categoryId:s and whether they have been chosen or not
+
+  // Map  containing the categoryId:s and whether they have been chosen or not
+  categoryMap: Map<string, boolean>;
 
   ngOnInit() {
     this.platformId = this.route.snapshot.paramMap.get('platform');
@@ -82,19 +83,21 @@ export class CategoryPickerComponent implements OnInit {
     const boxChecked: boolean = event.checked;
     this.categoryMap.set(category, boxChecked);
     if (boxChecked) {
-        // Add to the chosen categories as long as it isn't already chosen
-        if (this.chosenCategories.indexOf(category) === -1) {
-          this.chosenCategories.push(category);
-        }
-        // If all available categories are chosen, make the 'select all' checkbox checked
-        if (this.chosenCategories.length === this.categories.length) {
-          this.allChosen = true;
-        }
+      // Add to the chosen categories as long as it isn't already chosen
+      if (this.chosenCategories.indexOf(category) === -1) {
+        this.chosenCategories.push(category);
+      }
+      // If all available categories are chosen, make the 'select all'
+      // checkbox checked
+      if (this.chosenCategories.length === this.categories.length) {
+        this.allChosen = true;
+      }
     } else {
-        // As long as at least one category is unchecked, allChosen should be false
-        this.allChosen = false;
-        // Remove the category from chosenCategories
-        this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
+      // As long as at least one category is unchecked, allChosen should be
+      // false
+      this.allChosen = false;
+      // Remove the category from chosenCategories
+      this.chosenCategories.splice(this.chosenCategories.indexOf(category), 1);
     }
   }
 
@@ -109,11 +112,14 @@ export class CategoryPickerComponent implements OnInit {
   }
 
   /**
-   * Checks if the dates are in a valid interval and 1 or more categories is selected
+   * Checks if the dates are in a valid interval and 1 or more categories is
+   * selected
    * @returns Boolean for valid/invalid selections
    */
   validateSelections(): boolean {
-    return (this.startDate && this.endDate && this.chosenCategories.length > 0);
+    return (this.startDate &&
+            this.endDate &&
+            this.chosenCategories.length > 0);
   }
 
   /**

@@ -1,21 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AppModule } from 'src/app/app.module';
+import { EditorViewComponent } from './editor-view.component';
 
-import { ProgressBarComponent } from './progress-bar.component';
-
-describe('ProgressBarComponent', () => {
-  let component: ProgressBarComponent;
-  let fixture: ComponentFixture<ProgressBarComponent>;
+describe('EditorViewComponent', () => {
+  let component: EditorViewComponent;
+  let fixture: ComponentFixture<EditorViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [AppModule]
-    })
-    .compileComponents();
+      imports: [AppModule],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProgressBarComponent);
+    fixture = TestBed.createComponent(EditorViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

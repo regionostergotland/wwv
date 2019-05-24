@@ -1,16 +1,37 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row class="container-1">
-    <img src="../assets/logo.png" style="height:70%; cursor:pointer" alt="***REMOVED*** logo" routerLink="/home"/>
+    <img
+      src="../assets/logo.png"
+      style="height:70%; cursor:pointer"
+      alt="***REMOVED*** logo"
+      routerLink="/home"
+    />
     <span class="fill-remaining-space"></span>
     <div>
-        <div style="margin-right:0;" fxFlex fxShow="'true'" fxHide.lt-sm="'true'">
-          <button mat-button routerLink="/home" matTooltip="Gå till hemskärm">
+        <div
+          style="margin-right:0;"
+          fxFlex
+          fxShow="'true'"
+          fxHide.lt-sm="'true'"
+        >
+          <button
+            mat-button routerLink="/home"
+            matTooltip="Gå till hemskärm"
+          >
             <img src="../assets/home.svg" alt="home"/>
           </button>
-          <button mat-button routerLink="/help" matTooltip="Användarguide">
+          <button
+            mat-button
+            routerLink="/help"
+            matTooltip="Användarguide"
+          >
             <img src="../assets/help.svg"  alt="help"/>
           </button>
-          <button mat-button routerLink="/info" matTooltip="Information">
+          <button
+            mat-button
+            routerLink="/info"
+            matTooltip="Information"
+          >
             <img src="../assets/info.svg"  alt="info"/>
           </button>
         </div>
@@ -21,7 +42,12 @@
           <button mat-menu-item routerLink="/info">Information</button>
         </mat-menu>
 
-        <button mat-button [mat-menu-trigger-for]="menu" fxHide="true" fxShow.lt-sm>
+        <button
+          mat-button
+          [mat-menu-trigger-for]="menu"
+          fxHide="true"
+          fxShow.lt-sm
+        >
           <mat-icon>menu</mat-icon>
         </button>
     </div>

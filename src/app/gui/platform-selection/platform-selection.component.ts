@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Conveyor } from '../../conveyor.service';
 import { Router } from '@angular/router';
+
+import { Conveyor } from '../../conveyor.service';
 
 interface Source {
   id: string;
@@ -11,7 +12,6 @@ interface Source {
 const googleFit = 'google-fit';
 const withings = 'withings';
 const dummy = 'dummy';
-const pickCategoriesLink = '/pick-categories';
 
 const availableSources: Map<string, Source> = new Map<string, Source>([
   [googleFit, {
@@ -31,16 +31,17 @@ const availableSources: Map<string, Source> = new Map<string, Source>([
   }]]);
 
 @Component({
-  selector: 'app-sources',
-  templateUrl: './sources.component.html',
-  styleUrls: ['./sources.component.scss']
+  selector: 'app-platform-selection',
+  templateUrl: './platform-selection.component.html',
+  styleUrls: ['./platform-selection.component.scss']
 })
-export class SourcesComponent implements OnInit {
+export class PlatformSelectionComponent implements OnInit {
   sources: Source[] = [];
 
   constructor(
     private conveyor: Conveyor,
-    private router: Router) {
+    private router: Router
+  ) {
     const platforms = this.conveyor.getPlatforms();
     this.sources = [];
     for (const platform of platforms) {
@@ -62,6 +63,6 @@ export class SourcesComponent implements OnInit {
 
   async selectPlatform(platformId: string) {
     await this.conveyor.signIn(platformId);
-    this.router.navigate(['/pick-categories', platformId]);
+    this.router.navigate(['/category-selection', platformId]);
   }
 }

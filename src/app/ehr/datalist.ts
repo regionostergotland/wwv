@@ -70,10 +70,9 @@ export class DataPoint {
    */
   public equals(p: DataPoint, dataTypes: Map<string, DataType>): boolean {
     for (const [typeId, dataType] of dataTypes.entries()) {
-      if (dataType.required) {
-        if (!dataType.equal(this.get(typeId), p.get(typeId))) {
-          return false;
-        }
+      if (dataType.required &&
+          !dataType.equal(this.get(typeId), p.get(typeId))) {
+        return false;
       }
     }
     return true;
@@ -90,9 +89,9 @@ export class DataPoint {
    */
   public compareTo(p: DataPoint, dataTypes: Map<string, DataType>): number {
     for (const [typeId, dataType] of dataTypes.entries()) {
-      if (dataType.required) {
-        const comp = dataType.compare(this.get(typeId), p.get(typeId));
-        if (comp !== 0) { return comp; }
+      const cmp: number = dataType.compare(this.get(typeId), p.get(typeId));
+      if (dataType.required && cmp !== 0) {
+        return cmp;
       }
     }
     return 0;
@@ -213,7 +212,8 @@ export class DataList {
   }
 
   /**
-   * Removes points from list by checking for equality against given points to be removed.
+   * Removes points from list by checking for equality against given points to
+   * be removed.
    * @param points: a list of datapoints marked to be removed.
    */
   public removePoints(points: DataPoint[]): void {
@@ -232,6 +232,7 @@ export class DataList {
   /**
    * Get all data points for every applied math function.
    */
+  // tslint:disable (caching is encapsulated)
   public getPoints(): Map<Filter, DataPoint[]> {
     return this.processedPoints;
   }
@@ -257,7 +258,6 @@ export class DataList {
 
   public removeFilter(filter: Filter) {
     this.processedPoints.delete(filter);
-    console.log(this.processedPoints.size);
     if (this.processedPoints.size === 0) {
       this.resetFilter();
     }

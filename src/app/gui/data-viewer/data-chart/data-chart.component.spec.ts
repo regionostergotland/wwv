@@ -1,26 +1,14 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { HttpClient, HttpHandler } from '@angular/common/http';
-import { CustomGoogleApiModule,
-  GoogleApiService,
-  GoogleAuthService, } from 'src/app/google-fit-config';
+import { DataViewerModule } from '../data-viewer.module';
 import { DataChartComponent } from './data-chart.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-describe('ChartComponent', () => {
+describe('DataChartComponent', () => {
   let component: DataChartComponent;
   let fixture: ComponentFixture<DataChartComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DataChartComponent ],
-      imports: [NgxChartsModule, CustomGoogleApiModule, BrowserAnimationsModule],
-      providers: [
-        HttpClient,
-        HttpHandler,
-        GoogleAuthService,
-        GoogleApiService
-      ]
+      imports: [ DataViewerModule ],
     })
     .compileComponents();
   }));

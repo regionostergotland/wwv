@@ -1,17 +1,21 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
-import { MatTableDataSource, MatDialog, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { DataPoint, Filter, filterString } from 'src/app/ehr/datalist';
+import { Component, OnInit, Input } from '@angular/core';
+import { MatTableDataSource,
+         MatDialog } from '@angular/material';
+
 import { Conveyor } from 'src/app/conveyor.service';
-
-import { DataPointDialogComponent } from '../data-point-dialog/data-point-dialog.component';
-import { MathFunctionEnum, mathFunctionString,
+import {
+  DataPointDialogComponent
+} from '../data-point-dialog/data-point-dialog.component';
+import {
          CategorySpec } from 'src/app/ehr/datatype';
-import { PeriodWidth, periodString } from 'src/app/shared/period';
-
-import { DataFilterDialogComponent } from '../data-filter-dialog/data-filter-dialog.component';
-import { DataRemovalDialogComponent } from '../data-removal-dialog/data-removal-dialog.component';
-
-
+import { PeriodWidth } from 'src/app/shared/period';
+import { DataPoint, Filter, filterString } from 'src/app/ehr/datalist';
+import {
+  DataFilterDialogComponent
+} from '../data-filter-dialog/data-filter-dialog.component';
+import {
+  DataRemovalDialogComponent
+} from '../data-removal-dialog/data-removal-dialog.component';
 
 @Component({
   selector: 'app-data-container',
@@ -45,12 +49,17 @@ export class DataContainerComponent implements OnInit {
     this.selectedRows = [];
     this.dataList = new Map<Filter, MatTableDataSource<DataPoint>>();
     // Needs to be a new map for the graph to update
-    this.chartEntries = new Map(this.conveyor.getDataList(this.selectedCategory).getPoints());
-    for (const [filter, points] of this.conveyor.getDataList(this.selectedCategory).getPoints().entries()) {
-      this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
+    if (this.selectedCategory) {
+      this.chartEntries = new Map(
+        this.conveyor.getDataList(this.selectedCategory).getPoints()
+      );
+      const pts =
+        this.conveyor.getDataList(this.selectedCategory).getPoints().entries();
+      for (const [filter, points] of pts) {
+        this.dataList.set(filter, new MatTableDataSource<DataPoint>(points));
+      }
+      this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
     }
-
-    this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
   }
 
   updateSelected(event) {
@@ -74,7 +83,6 @@ export class DataContainerComponent implements OnInit {
    * Opens the dialog for MathDialogComponent
    */
   openMathDialog(): void {
-    // this.selection.clear();
     const dialogRef = this.dialog.open(DataFilterDialogComponent, {
       data: this.selectedCategory
     });
@@ -87,8 +95,8 @@ export class DataContainerComponent implements OnInit {
     if (this.selectedRows.length > 0) {
       const dialogRef = this.dialog.open(DataRemovalDialogComponent);
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed');
-        // If result is true, that means the user pressed the button for removing selected values
+        // If result is true, that means the user pressed the button for
+        // removing selected values
         if (result) {
           this.removeSelected();
         }

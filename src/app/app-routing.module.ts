@@ -1,22 +1,33 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from './gui/home/home.component';
-import { SourcesComponent } from './gui/sources/sources.component';
-import { CategoryPickerComponent } from './gui/category-picker/category-picker.component';
-import { InfoComponent } from './gui/info/info.component';
-import { HelpComponent} from './gui/help/help.component';
-import { InspectionComponent} from './gui/inspection/inspection.component';
-import { SidebarComponent } from './gui/sidebar/sidebar.component';
+import { HomePageComponent } from './gui/home-page/home-page.component';
+import { InfoPageComponent } from './gui/info-page/info-page.component';
+import { HelpPageComponent} from './gui/help-page/help-page.component';
+import {
+  PlatformSelectionComponent
+} from './gui/platform-selection/platform-selection.component';
+import {
+  CategorySelectionComponent
+} from './gui/category-selection/category-selection.component';
+import {
+  EditorViewComponent
+} from './gui/editor-view/editor-view.component';
+import {
+  InspectionViewComponent
+} from './gui/inspection-view/inspection-view.component';
+
 import { DataViewerModule } from './gui/data-viewer/data-viewer.module';
+
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: 'help', component: HelpComponent },
+  { path: 'home', component: HomePageComponent },
+  { path: 'help', component: HelpPageComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' },
-  { path: 'sources', component: SourcesComponent },
-  { path: 'pick-categories/:platform', component: CategoryPickerComponent },
-  { path: 'info', component: InfoComponent },
-  { path: 'inspection', component: InspectionComponent },
-  { path: 'edit', component: SidebarComponent },
+  { path: 'platform-selection', component: PlatformSelectionComponent },
+  { path: 'category-selection/:platform',
+    component: CategorySelectionComponent },
+  { path: 'info', component: InfoPageComponent },
+  { path: 'inspection', component: InspectionViewComponent },
+  { path: 'edit', component: EditorViewComponent },
   { path: '', redirectTo: '/home', pathMatch: 'full' }
 ];
 

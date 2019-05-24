@@ -1,26 +1,19 @@
 import {Component,
-        OnInit,
-        AfterViewInit,
-        ViewChild,
-        ViewChildren,
-        QueryList} from '@angular/core';
+        OnInit} from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 
 import { CategorySpec,
-         DataTypeCodedText,
-         DataTypeCodedTextOpt,
          DataTypeEnum} from '../../ehr/datatype';
-import { DataPoint } from '../../ehr/datalist';
 import { Conveyor } from '../../conveyor.service';
 import { CompositionReceipt } from '../../ehr/ehr.service';
 
 @Component({
-  selector: 'app-inspection',
-  templateUrl: './inspection.component.html',
-  styleUrls: ['./inspection.component.scss']
+  selector: 'app-inspection-view',
+  templateUrl: './inspection-view.component.html',
+  styleUrls: ['./inspection-view.component.scss']
 })
-export class InspectionComponent implements OnInit {
+export class InspectionViewComponent implements OnInit {
   categories: string[] = [];
   categorySpecs: Map<string, CategorySpec>;
   dataTypeEnum = DataTypeEnum;
@@ -29,9 +22,9 @@ export class InspectionComponent implements OnInit {
   receipt: CompositionReceipt;
 
   constructor(
+    private router: Router,
     private snackBar: MatSnackBar,
     private conveyor: Conveyor,
-    private router: Router,
   ) {}
 
   ngOnInit() {
@@ -76,7 +69,7 @@ export class InspectionComponent implements OnInit {
   getNumberOfValues(category: string) {
     let values = 0;
     const pointMap = this.conveyor.getDataList(category).getPoints();
-    for (const [_, points] of pointMap.entries()) {
+    for (const points of pointMap.values()) {
       values += points.length;
     }
     return values;
@@ -88,7 +81,10 @@ export class InspectionComponent implements OnInit {
   sendData(pnr: string) {
     this.conveyor.sendData(pnr).
       subscribe(
-        receipt => { this.dataSent = true; this.receipt = receipt; },
+        receipt => {
+          this.dataSent = true;
+          this.receipt = receipt;
+        },
         e => this.snackBar.open(
           'Inrapporteringen misslyckades. Fel: "' + e.statusText + '"', 'OK',
           {

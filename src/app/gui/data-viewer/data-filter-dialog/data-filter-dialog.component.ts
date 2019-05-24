@@ -44,9 +44,12 @@ export class DataFilterDialogComponent {
   }
 
   /**
-   * Calls the setInterval function in order to do math manipulations on the data
-   * @param intervalString A string containing a PeriodWidth enum, must be converted to int
-   * @param funcString A string containing a Mathfunction enum, must be converted to int
+   * Calls the setInterval function in order to do math manipulations on the
+   * data
+   * @param intervalString A string containing a PeriodWidth enum, must be
+   * converted to int
+   * @param funcString A string containing a Mathfunction enum, must be
+   * converted to int
    */
   calculate(intervalString: string, funcString: string) {
     if (intervalString && funcString) {

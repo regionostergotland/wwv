@@ -2,26 +2,25 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule } from '@angular/material';
 
-import { InfoComponent } from './info.component';
+import { HelpPageComponent } from './help-page.component';
 
-describe('InfoComponent', () => {
-  let component: InfoComponent;
-  let fixture: ComponentFixture<InfoComponent>;
+describe('HelpPageComponent', () => {
+  let component: HelpPageComponent;
+  let fixture: ComponentFixture<HelpPageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      declarations: [ HelpPageComponent ],
       imports: [
-        MatCardModule,
-      ],
-      declarations: [
-        InfoComponent,
+        BrowserAnimationsModule,
+        MatCardModule
       ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InfoComponent);
+    fixture = TestBed.createComponent(HelpPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
