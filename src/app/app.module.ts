@@ -91,18 +91,22 @@ import { CustomGoogleApiModule,
 @NgModule({
   declarations: [
     AppComponent,
+    /* pages */
     HomePageComponent,
     InfoPageComponent,
     HelpPageComponent,
+    /* static components */
     ProgressBarComponent,
     FooterComponent,
+    ToolbarComponent,
+    /* views */
     PlatformSelectionComponent,
     CategorySelectionComponent,
-    InspectionViewComponent,
     EditorViewComponent,
+    InspectionViewComponent,
+    /* editor view components */
     BottomSheetCategoriesComponent,
     AddNewDataModalComponent,
-    ToolbarComponent,
   ],
   imports: [
     DataViewerModule,
