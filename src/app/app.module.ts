@@ -2,13 +2,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
-import { ToolbarModule } from './gui/toolbar/ToolbarModule';
 import { HelpModule } from './gui/help-page/HelpModule';
 import { HomeModule } from './gui/home-page/HomeModule';
 import { InfoPageComponent } from './gui/info-page/info-page.component';
 import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';
 
 import { FooterComponent } from './gui/footer/footer.component';
+import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 
 import {
   MAT_DATE_LOCALE
@@ -86,6 +86,7 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
     EditorViewComponent,
     BottomSheetCategoriesComponent,
     AddNewDataModalComponent,
+    ToolbarComponent,
   ],
   imports: [
     DataViewerModule,
@@ -144,15 +145,16 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
     MatGridListModule,
     BrowserModule,
     HomeModule,
-    ToolbarModule,
     AppRoutingModule,
     HelpModule,
     HttpClientModule,
     CustomGoogleApiModule,
-    DataViewerModule
+    DataViewerModule,
   ],
-  entryComponents: [ BottomSheetCategoriesComponent,
-    AddNewDataModalComponent],
+  entryComponents: [
+    BottomSheetCategoriesComponent,
+    AddNewDataModalComponent
+  ],
   providers: [{provide: MAT_DATE_LOCALE, useValue: 'sv-SE'}],
   bootstrap: [AppComponent],
 })
