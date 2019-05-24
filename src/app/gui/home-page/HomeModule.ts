@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HomeComponent } from './home.component';
+import { HomePageComponent } from './home-page.component';
 import { RouterModule } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -16,9 +16,9 @@ import {
     FlexLayoutModule
   ],
   declarations: [
-    HomeComponent
+    HomePageComponent
   ],
-  exports: [ HomeComponent ],
-  entryComponents: [ HomeComponent ]
+  exports: [ HomePageComponent ],
+  entryComponents: [ HomePageComponent ]
 })
 export class HomeModule {}

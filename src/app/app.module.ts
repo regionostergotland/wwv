@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { ToolbarModule } from './gui/toolbar/ToolbarModule';
 import { HelpModule } from './gui/help-page/HelpModule';
-import { HomeModule } from './gui/home/HomeModule';
+import { HomeModule } from './gui/home-page/HomeModule';
 import { InfoPageComponent } from './gui/info-page/info-page.component';
 import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';
 
