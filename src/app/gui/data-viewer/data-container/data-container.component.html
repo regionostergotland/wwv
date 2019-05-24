@@ -87,10 +87,10 @@
     (click)="openRemovalDialog()"
   >
     <div fxHide fxShow.gt-sm>
-      Ta bort datavärden, {{ selectedRows.length }} valda
+      Ta bort datavärden, {{ selectedRowsLength }} valda
     </div>
     <div fxHide fxShow.lt-sm>
-      Ta bort ({{ selectedRows.length }})
+      Ta bort ({{ selectedRowsLength }})
     </div>
   </button>
   <button
