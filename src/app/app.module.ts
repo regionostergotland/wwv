@@ -70,6 +70,9 @@ import {
 import {
   AddNewDataModalComponent
 } from './gui/editor-view/add-new-data-modal.component';
+import {
+  BottomSheetCategoriesComponent
+} from './gui/editor-view/bottom-sheet-categories.component';
 
 /* Inspection */
 import {
@@ -85,8 +88,6 @@ import {
 } from './gui/progress-bar/progress-bar.component';
 import { FooterComponent } from './gui/footer/footer.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
-
-import { BottomSheetCategoriesComponent } from './gui/editor-view/bottom-sheet-categories.component';
 
 /* Google Fit conifguration */
 import { CustomGoogleApiModule } from './google-fit-config';

@@ -22,7 +22,7 @@ export class InspectionViewComponent implements OnInit {
   receipt: CompositionReceipt;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private snackBar: MatSnackBar,
     private conveyor: Conveyor,
   ) {}

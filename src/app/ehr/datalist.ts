@@ -232,7 +232,7 @@ export class DataList {
   /**
    * Get all data points for every applied math function.
    */
-  // tslint:disable (caching is encapsulated)
+  // tslint:disable-next-line
   public getPoints(): Map<Filter, DataPoint[]> {
     return this.processedPoints;
   }

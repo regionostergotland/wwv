@@ -11,7 +11,7 @@
     fxFlex
     class="wrapper"
   >
-    <mat-card class="home-card source">
+    <mat-card class="home-card source" routerLink="/platform-selection">
       <mat-card-title>
         Skicka in data
       </mat-card-title>
@@ -28,7 +28,6 @@
           <button
             id="home-nav-src"
             mat-button
-            routerLink="/platform-selection"
             style="font-family: Tahoma, Verdana, Segoe, sans-serif;"
           >
             Välj källa
@@ -38,7 +37,7 @@
       </mat-card-actions>
     </mat-card>
 
-    <mat-card class="home-card man">
+    <mat-card class="home-card man" routerLink="/edit">
       <mat-card-title>
         Egen inmatning
       </mat-card-title>
@@ -55,7 +54,6 @@
           <button
             id="home-nav-input"
             mat-button
-            routerLink="/edit"
             style="font-family: Tahoma, Verdana, Segoe, sans-serif;"
           >
             Egen inmatning
@@ -65,7 +63,7 @@
       </mat-card-actions>
     </mat-card>
 
-    <mat-card class="home-card help">
+    <mat-card class="home-card help" routerLink="/help">
       <mat-card-title>
         Hjälp
       </mat-card-title>
@@ -79,7 +77,6 @@
           <button
             id="home-nav-help"
             mat-button
-            routerLink="/help"
             style="font-family: Tahoma, Verdana, Segoe, sans-serif;"
           >
             Hjälp

@@ -11,8 +11,6 @@ describe('datatype', () => {
     ]
   }));
 
-  // TODO debug missing last value on truncation
-
   /**
    * Test that valid DataTypeQuantity values pass validity check
    */
