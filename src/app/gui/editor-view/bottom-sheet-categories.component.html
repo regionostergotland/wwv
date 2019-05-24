@@ -1,0 +1,10 @@
+<mat-nav-list>
+  <a *ngFor="let category of getAllCategories()"
+    href="https://keep.google.com/"
+    mat-list-item
+    (click)="addCategory($event, category)"
+  >
+    <span mat-line>{{getCategoryLabel(category)}}</span>
+    <span mat-line>{{getCategoryDescription(category)}}</span>
+  </a>
+</mat-nav-list>

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DataTypeText, DataType,
+import { DataTypeText,
          DataTypeDateTime, DataTypeQuantity,
          DataTypeCodedText,
          MathFunctionEnum} from './datatype';
@@ -10,8 +10,6 @@ describe('datatype', () => {
     providers: [
     ]
   }));
-
-  // TODO debug missing last value on truncation
 
   /**
    * Test that valid DataTypeQuantity values pass validity check

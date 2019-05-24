@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Conveyor } from '../../conveyor.service';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-progress-bar',
@@ -7,7 +6,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./progress-bar.component.scss'],
 })
 export class ProgressBarComponent implements OnInit {
-  constructor(private conveyor: Conveyor, private router: Router) {}
+  constructor(
+    private router: Router
+  ) {}
 
   ngOnInit() {}
 
@@ -40,18 +41,19 @@ export class ProgressBarComponent implements OnInit {
     }
   }
 
+  /**
+   * Checks for the current step in the app-progress through the url
+   * @returns a number of the current step in the progress
+   */
   getCurrentStep(): number {
-    switch (this.router.url) {
-      case '/sources':
+    switch (this.router.url.split('/')[1]) {
+      case 'platform-selection':
+      case 'category-selection':
         return 1;
-      case '/pick-categories':
-        return 1;
-      case '/edit':
+      case 'edit':
         return 2;
-      case '/inspection':
+      case 'inspection':
         return 3;
-      case '/confirmation':
-        return 4;
       default: {
         return 0;
       }

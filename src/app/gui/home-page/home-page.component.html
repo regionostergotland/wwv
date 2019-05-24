@@ -1,0 +1,89 @@
+<div></div>
+<h1 style="text-align: center">
+  Välkommen!
+</h1>
+
+<div class="centering" class="container">
+  <div
+    fxLayout="row"
+    fxLayout.xs="column"
+    fxLayout.lt-sm="column"
+    fxFlex
+    class="wrapper"
+  >
+    <mat-card class="home-card source" routerLink="/platform-selection">
+      <mat-card-title>
+        Skicka in data
+      </mat-card-title>
+      <mat-card-content style="display:flex">
+        <p>
+          Skicka hälsodata till ***REMOVED***s Digitaliseringsplattform.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <div
+          style="text-align:center;
+                 font-family: Tahoma, Verdana, Segoe, sans-serif;"
+        >
+          <button
+            id="home-nav-src"
+            mat-button
+            style="font-family: Tahoma, Verdana, Segoe, sans-serif;"
+          >
+            Välj källa
+            <img src="../../assets/flaticon/diagonal-arrow.png">
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="home-card man" routerLink="/edit">
+      <mat-card-title>
+        Egen inmatning
+      </mat-card-title>
+      <mat-card-content>
+        <p>
+          Lägg till egna värden.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <div
+          style="text-align:center;
+                 font-family: Tahoma, Verdana, Segoe, sans-serif;"
+        >
+          <button
+            id="home-nav-input"
+            mat-button
+            style="font-family: Tahoma, Verdana, Segoe, sans-serif;"
+          >
+            Egen inmatning
+            <img src="../../assets/flaticon/edit.png">
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+
+    <mat-card class="home-card help" routerLink="/help">
+      <mat-card-title>
+        Hjälp
+      </mat-card-title>
+      <mat-card-content>
+        <p>
+          Behöver du en hjälpande hand? Ta en titt på vår guide.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <div style="text-align:center;">
+          <button
+            id="home-nav-help"
+            mat-button
+            style="font-family: Tahoma, Verdana, Segoe, sans-serif;"
+          >
+            Hjälp
+            <img src="../../assets/flaticon/question.png">
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

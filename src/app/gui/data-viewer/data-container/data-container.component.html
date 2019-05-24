@@ -1,0 +1,106 @@
+<div *ngIf="editable">
+  <h5
+    *ngIf="isSmallScreen()"
+    style="margin-top: 0px;
+           margin-bottom: 0px;
+           background-color: #efefef;
+           padding: 4px;
+           text-align: center;"
+  >
+    {{ categorySpec.label }}
+  </h5>
+  <h1
+    *ngIf="!isSmallScreen()"
+    style="text-align: center; margin-top: 0.1em;"
+  >
+    {{ categorySpec.label }}
+  </h1>
+</div>
+
+<div class="table-container">
+  <mat-tab-group [selectedIndex]="dataList.size - 1"
+  (selectedIndexChange)="clearSelected()"
+  >
+    <!-- FILTER/TABLE TABS -->
+    <mat-tab *ngFor="let entry of dataList | keyvalue">
+      <!-- TAB LABEL -->
+      <ng-template *ngIf="entry.key.width === PeriodWidth.POINT" mat-tab-label>
+        Ofiltrerade värden
+      </ng-template>
+      <ng-template *ngIf="entry.key.width !== PeriodWidth.POINT" mat-tab-label>
+        {{ filterString(entry.key) }}
+        <button
+          *ngIf="editable"
+          mat-stroked-button
+          matTooltip="Ta bort filtrering"
+          (click)="removeFilter(entry.key)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </ng-template>
+
+      <!-- DATA LIST -->
+      <app-data-table
+        [width]="entry.key.width"
+        [category]="selectedCategory"
+        [isEditable]="editable"
+        [dataList]="entry.value"
+        (selectedPoints)="updateSelected($event)"
+      >
+      </app-data-table>
+    </mat-tab>
+
+    <!-- GRAPH -->
+    <mat-tab>
+      <!-- TAB LABEL -->
+      <ng-template mat-tab-label>
+        Graf
+      </ng-template>
+
+      <!-- DATA LIST -->
+      <app-data-chart
+        [category]="selectedCategory"
+        [data]="chartEntries"
+      >
+      </app-data-chart>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<!-- EDIT BUTTONS -->
+<div style="display: flex" *ngIf="editable">
+  <button
+    style="margin: 0;"
+    mat-stroked-button
+    color="accent"
+    style="text-align: center;"
+    (click)="openDialog()"
+  >
+    <div fxHide fxShow.gt-sm>Lägg till datavärde</div>
+    <div fxHide fxShow.lt-sm>Lägg till</div>
+  </button>
+  <button
+    style="margin: 0;"
+    mat-stroked-button
+    color="accent"
+    style="text-align: center;"
+    (click)="openRemovalDialog()"
+  >
+    <div fxHide fxShow.gt-sm>
+      Ta bort datavärden, {{ selectedRows.length }} valda
+    </div>
+    <div fxHide fxShow.lt-sm>
+      Ta bort ({{ selectedRows.length }})
+    </div>
+  </button>
+  <button
+    style="margin: 0;"
+    mat-stroked-button
+    color="accent"
+    style="text-align: center;"
+    (click)="openMathDialog()"
+  >
+    <div fxHide fxShow.gt-sm>Sammanställ punkter</div>
+    <div fxHide fxShow.lt-sm>Sammanställ</div>
+  </button>
+</div>

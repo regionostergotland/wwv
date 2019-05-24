@@ -1,0 +1,108 @@
+<h2 mat-dialog-title>{{getCategoryLabel()}}</h2>
+
+<mat-dialog-content>
+  <div *ngFor="let key of getDisplayedColumns()">
+    <p>{{getLabel(key)}}:</p>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.TEXT">
+      <mat-form-field class="example-full-width">
+        <input #textInput
+          maxlength="1000"
+          [formControl]="getFormControl(key)"
+          [errorStateMatcher]="matcher"
+          (change)="pointData.set(key, textInput.value)"
+          matInput placeholder={{getLabel(key)}}
+        >
+        <mat-error>Värde saknas</mat-error>
+        <mat-hint align="end">{{textInput.value?.length || 0}}/1000</mat-hint>
+      </mat-form-field>
+    </div>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.CODED_TEXT">
+      <mat-form-field>
+        <mat-select
+          [formControl]="getFormControl(key)"
+          [errorStateMatcher]="matcher"
+          (selectionChange)="pointData.set(key, $event.value)"
+          placeholder={{getLabel(key)}}
+        >
+          <mat-option>-</mat-option>
+          <mat-option *ngFor="let option of getOptions(key)"
+            [value]="option.code"
+          >
+            {{option.label}}
+          </mat-option>
+        </mat-select>
+        <mat-error>Värde saknas</mat-error>
+      </mat-form-field>
+    </div>
+    <div
+      *ngIf="getVisualType(key) === dataTypeEnum.DATE_TIME && key === 'date'"
+    >
+      <mat-form-field>
+        <input
+          [formControl]="getFormControl(key)"
+          [ngModel]="getDate(key)"
+          [errorStateMatcher]="matcher"
+          (dateChange)="pointData.set('time', $event.value); setTime(clockTime)"
+          matInput
+          [matDatepicker]="start"
+          placeholder={{getLabel(key)}}
+        >
+        <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+        <mat-datepicker #start></mat-datepicker>
+        <mat-error>Värde saknas</mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.DATE_TIME &&
+                key === 'time'"
+    >
+      <mat-form-field>
+        <input
+          #time
+          [formControl]="getFormControl(key)"
+          (click)="openTimePicker()"
+          matInput
+          [(ngModel)]="clockTime"
+        />
+        <mat-error>Värde saknas</mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.DATE_TIME &&
+                key != 'time' && key != 'date'"
+    >
+      <mat-form-field>
+        <input
+          [formControl]="getFormControl(key)"
+          [errorStateMatcher]="matcher"
+          (dateChange)="pointData.set(key, $event.value)"
+          matInput
+          [matDatepicker]="start"
+          placeholder={{getLabel(key)}}
+        >
+        <mat-datepicker-toggle matSuffix [for]="start"></mat-datepicker-toggle>
+        <mat-datepicker #start></mat-datepicker>
+        <mat-error>Värde saknas</mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="getVisualType(key) === dataTypeEnum.QUANTITY">
+      <mat-form-field>
+        <input #quantity
+          [formControl]="getFormControl(key)"
+          [errorStateMatcher]="matcher"
+          (change)="pointData.set(key, +quantity.value)"
+          matInput
+          type="number"
+          placeholder={{getLabel(key)}}
+          min={{getMinOfRange(key)}}
+          max={{getMaxOfRange(key)}}
+        >
+        <mat-error>Värde saknas</mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<div mat-dialog-actions class="action-button">
+  <button mat-flat-button color="primary" (click)="createDataPoint()">
+    {{getActionButtonText()}}
+  </button>
+</div>

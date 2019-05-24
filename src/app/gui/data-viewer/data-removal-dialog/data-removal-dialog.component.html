@@ -1,0 +1,12 @@
+<div mat-dialog-content>
+  <p>Är du säker på att du vill ta bort mätvärden?</p>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="closeDialog()">
+    Avbryt
+  </button>
+  <button mat-button style="color: red" [mat-dialog-close]="remove">
+    Ta bort
+  </button>
+</div>

@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CategorySpec, DataTypeEnum } from '../ehr/datatype';
+import { DataTypeEnum } from '../ehr/datatype';
 import { DataPoint } from '../ehr/datalist';
 import { EhrService } from '../ehr/ehr.service';
 import { Platform } from './platform.service';
-import { Observable, of, observable, forkJoin, EMPTY } from 'rxjs';
-import { catchError, map, tap, filter, mergeMap, merge } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 
 import {
   Categories,
@@ -82,7 +81,7 @@ export class DummyPlatformService extends Platform {
    * @param start start of time interval for which data is to be fetched
    * @param end end of time interval for which data is to fetched
    * @returns an observable containing data that has been converted to
-   * our internal format
+   * the internal format
    */
   public getData(categoryId: string,
                  start: Date, end: Date): Observable<DataPoint[]> {

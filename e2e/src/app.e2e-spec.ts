@@ -14,7 +14,7 @@ describe('workspace-project App', () => {
   });
 
   it('k2.5: klicka på ta bort data och data tas bort', () => {
-    page.navigateTo('sources');
+    page.navigateTo('platform-selection');
     expect(page.getCardTitleText()).toContain('Google Fit');
   });
 

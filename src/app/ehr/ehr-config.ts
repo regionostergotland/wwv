@@ -5,7 +5,6 @@ import { CategorySpec, DataType,
          DataTypeQuantity,
          DataTypeText,
          DataTypeCodedText } from './datatype';
-import { DataList, DataPoint } from './datalist';
 
 export enum Categories {
   BLOOD_PRESSURE = 'blood_pressure',
@@ -123,7 +122,7 @@ const DeviceManufacturerField: [string, DataType] = [
 
 export interface EhrConfig {
   /**
-   * Identifier used to specify category.
+   * Base part of the url which is used in all EHR-related HTTP-requests.
    */
   baseUrl: string;
 
@@ -139,9 +138,8 @@ export interface EhrConfig {
 }
 
 export const ehrConfig: EhrConfig = {
-  baseUrl: 'https://rest.ehrscape.com/rest/v1/composition',
+  baseUrl: 'https://rest.ehrscape.com/rest/v1/',
   templateId : 'self-reporting',
-// TODO generate these specifications automatically from templates in ehr
   categories: [
     {
       id : Categories.BLOOD_PRESSURE,
