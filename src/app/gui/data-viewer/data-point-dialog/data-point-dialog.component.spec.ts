@@ -4,7 +4,7 @@ import { DataPointDialogComponent } from './data-point-dialog.component';
 import { DataViewerModule } from '../data-viewer.module';
 
 
-describe('AddDataPointComponent', () => {
+describe('DataPointDialog', () => {
   let component: DataPointDialogComponent;
   let fixture: ComponentFixture<DataPointDialogComponent>;
 

@@ -3,7 +3,7 @@ import { DataViewerModule } from '../data-viewer.module';
 import { DataContainerComponent } from './data-container.component';
 
 
-describe('EditorComponent', () => {
+describe('DataContainer', () => {
   let component: DataContainerComponent;
   let fixture: ComponentFixture<DataContainerComponent>;
 

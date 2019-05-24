@@ -11,7 +11,6 @@ describe('PlatformSelectionComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ PlatformSelectionComponent ],
       imports: [
         RouterTestingModule,
         AppModule

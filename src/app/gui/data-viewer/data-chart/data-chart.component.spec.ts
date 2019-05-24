@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DataViewerModule } from '../data-viewer.module';
 import { DataChartComponent } from './data-chart.component';
 
-describe('ChartComponent', () => {
+describe('DataChartComponent', () => {
   let component: DataChartComponent;
   let fixture: ComponentFixture<DataChartComponent>;
 
