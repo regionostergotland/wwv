@@ -18,7 +18,7 @@
 </div>
 
 <div class="table-container">
-  <mat-tab-group>
+  <mat-tab-group [selectedIndex]="dataList.size - 1">
     <!-- FILTER/TABLE TABS -->
     <mat-tab *ngFor="let entry of dataList | keyvalue">
       <!-- TAB LABEL -->
@@ -43,7 +43,7 @@
         [category]="selectedCategory"
         [isEditable]="editable"
         [dataList]="entry.value"
-        (change)="updateSelected($event)"
+        (selectedPoints)="updateSelected($event)"
       >
       </app-data-table>
     </mat-tab>
