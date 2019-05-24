@@ -1,12 +1,30 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module';
-import { HelpModule } from './gui/help-page/HelpModule';
-import { HomeModule } from './gui/home-page/HomeModule';
-import { InfoPageComponent } from './gui/info-page/info-page.component';
-import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';
 
+/* Main component */
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
+
+/* Page / view components */
+import { InfoPageComponent } from './gui/info-page/info-page.component';
+import { HomePageComponent } from './gui/home-page/home-page.component';
+import { HelpModule } from './gui/help-page/HelpModule';
+import { 
+  PlatformSelectionComponent
+} from './gui/platform-selection/platform-selection.component';
+import { 
+  CategorySelectionComponent
+} from './gui/category-selection/category-selection.component';
+import {
+  BottomSheetCategoriesComponent,
+  EditorViewComponent,
+} from './gui/editor-view/editor-view.component';
+import {
+  InspectionViewComponent
+} from './gui/inspection-view/inspection-view.component';
+
+/* Static components */
+import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';
 import { FooterComponent } from './gui/footer/footer.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 
@@ -15,15 +33,8 @@ import {
 } from '@angular/material';
 
 import { NgModule } from '@angular/core';
-import { PlatformSelectionComponent } from './gui/platform-selection/platform-selection.component';
 import { CommonModule } from '@angular/common';
-import { CategorySelectionComponent } from './gui/category-selection/category-selection.component';
 
-import { InspectionViewComponent } from './gui/inspection-view/inspection-view.component';
-import {
-  BottomSheetCategoriesComponent,
-  EditorViewComponent,
-} from './gui/editor-view/editor-view.component';
 import { DataViewerModule } from './gui/data-viewer/data-viewer.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AmazingTimePickerModule } from 'amazing-time-picker';
@@ -77,6 +88,7 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
 @NgModule({
   declarations: [
     AppComponent,
+    HomePageComponent,
     InfoPageComponent,
     ProgressBarComponent,
     FooterComponent,
@@ -144,7 +156,6 @@ import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './
     MatButtonModule,
     MatGridListModule,
     BrowserModule,
-    HomeModule,
     AppRoutingModule,
     HelpModule,
     HttpClientModule,
