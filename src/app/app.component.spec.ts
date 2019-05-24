@@ -1,17 +1,22 @@
 import { TestBed, async } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { ToolbarComponent } from './gui/toolbar/toolbar.component';
-import { ProgressBarComponent} from './gui/progress-bar/progress-bar.component';
-import { MatToolbarModule, MatGridListModule, MatMenuModule, MatIconModule, MatDialogModule } from '@angular/material';
+import { MatToolbarModule,
+         MatGridListModule,
+         MatMenuModule,
+         MatIconModule,
+         MatDialogModule } from '@angular/material';
 import { HttpClient, HttpHandler } from '@angular/common/http';
 import { FooterComponent } from './gui/footer/footer.component';
-import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from './google-fit-config';
+import { ToolbarComponent } from './gui/toolbar/toolbar.component';
+import { ProgressBarComponent} from './gui/progress-bar/progress-bar.component';
+import { CustomGoogleApiModule,
+         GoogleApiService,
+         GoogleAuthService, } from './google-fit-config';
 
-// describe what is being tested
-// describe(xComponent)
 describe('AppComponent', () => {
-  // The purpose of the async is to let all the possible asynchronous code to finish before continuing.
+  // The purpose of the async is to let all the possible asynchronous code to
+  // finish before continuing.
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [ // add all modules used in this component

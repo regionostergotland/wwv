@@ -213,7 +213,8 @@ export class DataList {
   }
 
   /**
-   * Removes points from list by checking for equality against given points to be removed.
+   * Removes points from list by checking for equality against given points to
+   * be removed.
    * @param points: a list of datapoints marked to be removed.
    */
   public removePoints(points: DataPoint[]): void {

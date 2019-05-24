@@ -1,7 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { GfitService } from './gfit.service';
-import { CustomGoogleApiModule,  GoogleApiService, GoogleAuthService, } from '../google-fit-config';
 import { HttpClient, HttpHandler } from '@angular/common/http';
+
+import { GfitService } from './gfit.service';
+import { CustomGoogleApiModule,
+         GoogleApiService,
+         GoogleAuthService, } from '../google-fit-config';
 
 describe('GfitService', () => {
   beforeEach(() =>
@@ -9,7 +12,12 @@ describe('GfitService', () => {
       imports: [
         CustomGoogleApiModule
       ],
-      providers: [GoogleAuthService, GoogleApiService, HttpClient, HttpHandler]
+      providers: [
+        GoogleAuthService,
+        GoogleApiService,
+        HttpClient,
+        HttpHandler
+      ]
     })
   );
 

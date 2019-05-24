@@ -68,7 +68,9 @@ import {
   BottomSheetCategoriesComponent,
   EditorViewComponent,
 } from './gui/editor-view/editor-view.component';
-import { AddNewDataModalComponent } from './gui/editor-view/add-new-data-modal.component';
+import {
+  AddNewDataModalComponent
+} from './gui/editor-view/add-new-data-modal.component';
 
 /* Inspection */
 import {
@@ -79,7 +81,9 @@ import {
 import { DataViewerModule } from './gui/data-viewer/data-viewer.module';
 
 /* Static components */
-import { ProgressBarComponent } from './gui/progress-bar/progress-bar.component';
+import {
+  ProgressBarComponent
+} from './gui/progress-bar/progress-bar.component';
 import { FooterComponent } from './gui/footer/footer.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 
