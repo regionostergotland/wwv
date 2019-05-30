@@ -18,8 +18,10 @@
 </div>
 
 <div class="table-container">
-  <mat-tab-group [selectedIndex]="dataList.size - 1"
+  <mat-tab-group 
+  [selectedIndex]="dataList.size - 1"
   (selectedIndexChange)="clearSelected()"
+  [animationDuration]="'0ms'"
   >
     <!-- FILTER/TABLE TABS -->
     <mat-tab *ngFor="let entry of dataList | keyvalue">

@@ -13,60 +13,65 @@
 </div>
 
 <div *ngIf="hasData()">
-<div *ngIf="!dataSent" class="center">
-  <p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
+  <div *ngIf="!dataSent" class="center">
+    <p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
 
-  <div class="panel-container">
-    <mat-expansion-panel *ngFor="let category of categories" class="panel">
-      <mat-expansion-panel-header *ngIf="!isCategoryEmpty(category)">
-        <mat-panel-title>{{
-          categorySpecs.get(category).label
-        }}
-        </mat-panel-title>
-        <mat-panel-description
-          >Antal mätvärden:
-          {{ getNumberOfValues(category) }}</mat-panel-description
-        >
-      </mat-expansion-panel-header>
+    <div class="panel-container">
+      <mat-expansion-panel *ngFor="let category of categories" class="panel">
+        <mat-expansion-panel-header *ngIf="!isCategoryEmpty(category)">
+          <mat-panel-title
+            >{{ categorySpecs.get(category).label }}
+          </mat-panel-title>
+          <mat-panel-description
+            >Antal mätvärden:
+            {{ getNumberOfValues(category) }}</mat-panel-description
+          >
+        </mat-expansion-panel-header>
 
-      <app-data-container
-        [editable]="false"
-        [selectCategory]="category"
-      >
-      </app-data-container>
-    </mat-expansion-panel>
+        <app-data-container [editable]="false" [selectCategory]="category">
+        </app-data-container>
+      </mat-expansion-panel>
+    </div>
+
+    <div class="auth-form">
+      <label>Personnummer:</label> <input #pnr />
+      <label>Användare:</label> <input #username /> 
+      <label>Lösenord: </label><input type="password" #password />
+    </div>
+
+  <div style="display: flex; flex-direction: row">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="router.navigateByUrl('edit')"
+    >
+      Tillbaka
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="authenticate(username.value, password.value); sendData(pnr.value)"
+    >
+      Godkänn och skicka
+    </button>
   </div>
-
-  <div class="auth-buttons">
-    <label>Personnummer <input #pnr /> </label>
-    <label>Användare: <input #username /> </label>
-    <label>Lösenord: <input type="password" #password /> </label>
-  </div>
-
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="authenticate(username.value, password.value); sendData(pnr.value)"
-  >
-    Godkänn och skicka
-  </button>
 </div>
 
-<div *ngIf="dataSent" class="center">
-  <h1 style="text-align: center">
-    Data skickat!
-  </h1>
-  <mat-card style="text-align: left">
-    <b>Personnummer:</b> {{receipt.pnr}}<br>
-    <b>EHR-ID:</b> {{receipt.ehrId}}<br>
-    <b>Composition UID:</b> {{receipt.compUid}}
-  </mat-card>
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="router.navigateByUrl('/home')"
-  >
-    Tillbaka hem
-  </button>
-</div>
+  <div *ngIf="dataSent" class="center">
+    <h1 style="text-align: center">
+      Data skickat!
+    </h1>
+    <mat-card style="text-align: left">
+      <b>Personnummer:</b> {{ receipt.pnr }}<br />
+      <b>EHR-ID:</b> {{ receipt.ehrId }}<br />
+      <b>Composition UID:</b> {{ receipt.compUid }}
+    </mat-card>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="router.navigateByUrl('/home')"
+    >
+      Tillbaka hem
+    </button>
+  </div>
 </div>

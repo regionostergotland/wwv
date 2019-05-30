@@ -1,5 +1,10 @@
-<div class="centering">
+<h2>Val av plattform</h2>
+<p>
+  Välj en plattform att hämta data ifrån eller självinmatning för att mata in
+  egna värden.
+</p>
 
+<div class="centering">
 <div
   fxLayout="row"
   fxLayout.xs="column"
@@ -7,24 +12,43 @@
   fxFlex
   class="wrapper"
 >
-  <div
-    layout="row"
-    layout-align="center center"
-    class="card-height"
-    *ngFor="let source of sources"
+  <!-- PLATFORM -->
+  <mat-card *ngFor="let source of sources"
+    class="home-card"
+    (click)="selectPlatform(source.id)"
   >
-    <mat-card class="home-card" (click)="selectPlatform(source.id)">
-      <mat-card-header>
-        <mat-card-title>{{source.name}}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content style="display:flex;">
-        <img src={{source.imageUrl}} style="width:70%" alt={{source.name}}/>
-      </mat-card-content>
-      <mat-card-actions>
-        <div style="text-align:center;">
-          <button mat-button>Välj</button>
-        </div>
-      </mat-card-actions>
-    </mat-card>
-  </div>
+    <mat-card-header>
+      <mat-card-title>{{source.name}}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content style="display:flex;">
+      <img src={{source.imageUrl}} style="width:70%" alt={{source.name}}/>
+    </mat-card-content>
+    <mat-card-actions>
+      <div style="text-align:center;">
+        <button mat-button>Hämta data</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+
+  <!-- INPUT DATA -->
+  <mat-card class="home-card" (click)="router.navigateByUrl('/edit')">
+    <mat-card-header>
+      <mat-card-title>Självinmatning</mat-card-title>
+    </mat-card-header>
+    <mat-card-content style="display:flex;">
+      <mat-icon
+        style="width: 100%;
+               height: 100%;
+               text-align: center;
+               font-size: 600%;
+               user-select: none"
+      >input</mat-icon>
+    </mat-card-content>
+    <mat-card-actions>
+      <div style="text-align:center;">
+        <button mat-button>Mata in egen data</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>
 </div>

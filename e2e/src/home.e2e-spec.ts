@@ -25,13 +25,6 @@ describe('workspace-project App', () => {
     expect(browser.driver.getCurrentUrl()).toContain('/platform-selection');
   });
 
-  it(`Should redirect to the manual input page when the manual input button
-    is clicked'`, () => {
-    const input = page.getManualInputButton();
-    input.click();
-    expect(browser.driver.getCurrentUrl()).toContain('/edit');
-  });
-
   afterEach(async () => {
     // Assert that there are no errors emitted from the browser
     const logs = await browser.manage().logs().get(logging.Type.BROWSER);

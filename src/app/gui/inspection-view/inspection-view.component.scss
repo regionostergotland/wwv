@@ -2,6 +2,10 @@ table {
     width: 100%;
 }
 
+button {
+  margin: 20px 20px;
+}
+
 .center {
     text-align: center;
     display: flex;
@@ -20,15 +24,20 @@ table {
     text-align: center;
 }
 
-.auth-buttons {
+.auth-form {
     margin-bottom: 10px;
-    display:flex;
-    flex-direction: column;
-    width: 310px;
-
+    display: grid;
+    grid-template-columns: auto-fit 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-areas: ". ." ". ." ". .";
+    grid-column-gap: 5px;
 }
 
-.auth-buttons label {
+.auth-col {
+    display:flex;
+    flex-direction: column;
+}
+.auth-form label {
     margin-bottom: 5px;
     display:flex;
     flex-direction: row;

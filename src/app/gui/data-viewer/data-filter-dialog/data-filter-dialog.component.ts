@@ -29,6 +29,10 @@ export class DataFilterDialogComponent {
   mathFunctionString = mathFunctionString;
   periodString = periodString;
 
+  mathFunction: string;
+  interval: string;
+
+
   selectedCategory: string;
 
   constructor(

@@ -16,7 +16,7 @@ export class CategorySelectionComponent implements OnInit {
   constructor(private adapter: DateAdapter<any>,
               private conveyor: Conveyor,
               private route: ActivatedRoute,
-              private router: Router) {
+              public router: Router) {
     this.adapter.setLocale('sv');
   }
 

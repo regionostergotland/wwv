@@ -44,7 +44,7 @@ export class PlatformSelectionComponent implements OnInit {
 
   constructor(
     private conveyor: Conveyor,
-    private router: Router
+    public router: Router
   ) {
     const platforms = this.conveyor.getPlatforms();
     this.sources = [];

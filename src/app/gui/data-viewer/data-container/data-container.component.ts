@@ -67,6 +67,7 @@ export class DataContainerComponent implements OnInit {
     }
   }
 
+
   updateSelected(event) {
     this.selectedRows = event;
     this.selectedRowsLength = this.selectedRows.selected.length;
