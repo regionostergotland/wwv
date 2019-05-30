@@ -43,13 +43,22 @@
     <label>Lösenord: <input type="password" #password /> </label>
   </div>
 
-  <button
-    mat-raised-button
-    color="primary"
-    (click)="authenticate(username.value, password.value); sendData(pnr.value)"
-  >
-    Godkänn och skicka
-  </button>
+  <div style="display: flex; flex-direction: row">
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="router.navigateByUrl('edit')"
+    >
+      Tillbaka
+    </button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="authenticate(username.value, password.value); sendData(pnr.value)"
+    >
+      Godkänn och skicka
+    </button>
+  </div>
 </div>
 
 <div *ngIf="dataSent" class="center">
