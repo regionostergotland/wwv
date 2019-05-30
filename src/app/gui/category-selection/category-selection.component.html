@@ -1,5 +1,9 @@
+<h2>Val av kategorier</h2>
+<p>
+  Välj vilken typ av data du vill importera och mellan vilka datum
+</p>
+
 <div class="column">
-  <p>Välj vilken typ av data du vill importera och mellan vilka datum</p>
   <div class="centering">
     <div
       fxLayout="row"
@@ -65,18 +69,22 @@
           </section>
         </mat-card-content>
       </mat-card>
-
-      <div class="next-button">
-        <!-- TODO change routerlink to what it should be (not home)   -->
-        <button
-          [disabled]="!validateSelections()"
-          mat-raised-button
-          color="primary"
-          (click)="getData()"
-        >
-          Nästa steg
-        </button>
-      </div>
     </div>
+    <!-- TODO change routerlink to what it should be (not home)   -->
   </div>
 </div>
+<button
+  mat-raised-button
+  color="primary"
+  (click)="router.navigateByUrl('/platform-selection')"
+>
+  Tillbaka
+</button>
+<button
+  [disabled]="!validateSelections()"
+  mat-raised-button
+  color="primary"
+  (click)="getData()"
+>
+  Nästa steg
+</button>
