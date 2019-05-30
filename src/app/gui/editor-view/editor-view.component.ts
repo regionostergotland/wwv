@@ -21,7 +21,7 @@ export class EditorViewComponent implements OnInit {
 
   constructor(
     private conveyor: Conveyor,
-    private router: Router,
+    public router: Router,
     private bottomSheet: MatBottomSheet,
     public dialog: MatDialog
   ) {}
