@@ -41,7 +41,7 @@ export class DataContainerComponent implements OnInit {
   categorySpec: CategorySpec;
   selectedCategory: string;
   dataList: Map<Filter, MatTableDataSource<DataPoint>>;
-  selectedRows: SelectionModel<DataPoint>;
+  selectedRows: SelectionModel<DataPoint> = new SelectionModel<DataPoint>();
   selectedRowsLength: number;
   chartEntries: Map<Filter, DataPoint[]>;
 

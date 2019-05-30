@@ -154,7 +154,7 @@ export class DataTableComponent implements OnInit {
             return dayjs(point.get(key)).format('hh:mm');
           case this.dataTypeEnum.QUANTITY:
             const s = this.displayCorrectNum(point.get(key));
-            return this.isSmallScreen() ? s : s + this.getDataTypeUnit(key);
+            return this.isSmallScreen() ? s : s + ' ' + this.getDataTypeUnit(key);
           case this.dataTypeEnum.TEXT: return point.get(key);
           case this.dataTypeEnum.CODED_TEXT:
             for (const option of this.options.get(key)) {

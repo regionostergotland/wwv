@@ -34,7 +34,6 @@
         <th
           mat-header-cell
           *matHeaderCellDef
-          style="text-align: center;"
           [matTooltip]="getCategoryTooltip(key)"
         >
           <div style="display: flex; flex-direction: column;">
@@ -82,7 +81,7 @@
             </mat-form-field>
 
 
-            <div *ngSwitchCase="'text'" style="text-align: center">
+            <div *ngSwitchCase="'text'">
               {{ getFormattedTextFromPoint(key, dataPoint) }}
             </div>
           </div>
@@ -91,7 +90,7 @@
 
       <div *ngIf="key.startsWith('mobile')">
         <th mat-header-cell *matHeaderCellDef></th>
-        <td mat-cell *matCellDef="let dataPoint" style="text-align: center;">
+        <td mat-cell *matCellDef="let dataPoint">
 
           <button mat-button>
             <mat-icon *ngIf="isEditable"
