@@ -49,8 +49,6 @@ export class DataContainerComponent implements OnInit {
 
   ngOnInit() {
     this.selectedRowsLength = 0;
-
-    console.log('ngOnInit');
     if (this.selectedRows) {
       this.selectedRows.clear();
     }
