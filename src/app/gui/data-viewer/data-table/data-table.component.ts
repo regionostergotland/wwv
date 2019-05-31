@@ -29,19 +29,19 @@ import 'src/app/shared/date.extensions';
   styleUrls: ['./data-table.component.scss']
 })
 export class DataTableComponent implements OnInit {
-  @Input() width: PeriodWidth;
-  @Input() category: string;
-  @Input() isEditable: boolean;
   @Input() set dataList(value: MatTableDataSource<DataPoint>) {
     this.data = value;
   }
-  @Output() selectedPoints: EventEmitter<SelectionModel<DataPoint>> =
-    new EventEmitter<SelectionModel<DataPoint>>();
 
   constructor(
     private conveyor: Conveyor,
     public dialog: MatDialog
   ) {}
+  @Input() width: PeriodWidth;
+  @Input() category: string;
+  @Input() isEditable: boolean;
+  @Output() selectedPoints: EventEmitter<SelectionModel<DataPoint>> =
+    new EventEmitter<SelectionModel<DataPoint>>();
 
   dataTypeEnum = DataTypeEnum;
   categorySpec: CategorySpec;
@@ -77,6 +77,35 @@ export class DataTableComponent implements OnInit {
    */
   static setOption(key: string, point: DataPoint, option: string) {
     point.set(key, option);
+  }
+
+  /**
+   * Adds a correct translation of the range label of the paginator
+   */
+  customRangeLabel(page: number, pageSize: number, length: number) {
+    if (length === 0 || pageSize === 0) { return `0 av ${length}`; }
+    length = Math.max(length, 0);
+    const startIndex = page * pageSize;
+
+    const endIndex = startIndex < length ?
+      Math.min(startIndex + pageSize, length) :
+      startIndex + pageSize;
+
+    return `${startIndex + 1} - ${endIndex} av ${length}`;
+  }
+
+  /**
+   * Add pagination to the tables, with correct translations
+   */
+  addPaginator() {
+    // Translations for the table paginator
+    this.paginator._intl.itemsPerPageLabel = 'Antal per sida';
+    this.paginator._intl.firstPageLabel = 'Första sida';
+    this.paginator._intl.previousPageLabel = 'Föregående sida';
+    this.paginator._intl.nextPageLabel = 'Nästa sida';
+    this.paginator._intl.lastPageLabel = 'Sista sida';
+    this.paginator._intl.getRangeLabel = this.customRangeLabel;
+    this.data.paginator = this.paginator;
   }
 
   /**
@@ -251,7 +280,7 @@ export class DataTableComponent implements OnInit {
     if (this.category) {
       // Reset all the internal lists.
       this.categorySpec = this.conveyor.getCategorySpec(this.category);
-      this.data.paginator = this.paginator;
+      this.addPaginator();
       this.displayedColumns = this.getDisplayedColumns();
 
       this.options = new Map<string, DataTypeCodedTextOpt[]>();
