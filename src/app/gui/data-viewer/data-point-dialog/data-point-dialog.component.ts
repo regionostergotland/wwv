@@ -151,9 +151,9 @@ export class DataPointDialogComponent implements OnInit {
         if (column === 'time') {
           result.push('date');
           result.push('time');
-        } else if (dataType.visible ||
-                   !this.dataPoint ||
-                   this.dataPoint.get(column)) {
+        } else if (!this.dataPoint ||
+                   this.dataPoint.get(column) ||
+                   (this.isEditable && dataType.visible)) {
           result.push(column);
         }
       }
