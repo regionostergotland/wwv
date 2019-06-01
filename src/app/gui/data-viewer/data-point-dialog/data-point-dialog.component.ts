@@ -88,8 +88,13 @@ export class DataPointDialogComponent implements OnInit {
         controller.disable();
       }
     }
-
     this.getFormControl('date').disable();
+
+    if (!this.isEditable) {
+      for (let key of this.categorySpec.dataTypes.keys()) {
+       this.getFormControl(key).disable();
+      }
+    }
   }
 
   ngOnInit() {
