@@ -142,11 +142,13 @@ export class DataPointDialogComponent implements OnInit {
   getDisplayedColumns(): string[] {
     const result: string[] = [];
     if (this.conveyor.getCategoryIds().includes(this.selectedCategory)) {
-      for (const column of Array.from(this.categorySpec.dataTypes.keys())) {
+      for (const [column, dataType] of this.categorySpec.dataTypes.entries()) {
         if (column === 'time') {
           result.push('date');
           result.push('time');
-        } else {
+        } else if (dataType.visible ||
+                   !this.dataPoint ||
+                   this.dataPoint.get(column)) {
           result.push(column);
         }
       }
