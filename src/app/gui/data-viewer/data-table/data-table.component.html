@@ -88,21 +88,15 @@
         </td>
       </div>
 
-      <div *ngIf="key.startsWith('mobile')">
+      <div *ngIf="key === 'dialog'">
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let dataPoint">
-
-          <button mat-button>
-            <mat-icon *ngIf="isEditable"
-              (click)="openEditDialog(dataPoint, key, isEditable)"
-            >
-              edit
-            </mat-icon>
-            <mat-icon *ngIf="!isEditable"
-              (click)="openEditDialog(dataPoint, key, isEditable)"
-            >
-              info
-            </mat-icon>
+          <button
+            mat-button
+            (click)="openEditDialog(dataPoint, isEditable)"
+          >
+            <mat-icon *ngIf="isEditable && isSmallScreen()">edit</mat-icon>
+            <mat-icon *ngIf="!isEditable || !isSmallScreen()">info</mat-icon>
         </button>
         </td>
       </div>

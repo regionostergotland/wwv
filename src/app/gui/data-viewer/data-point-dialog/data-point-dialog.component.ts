@@ -74,28 +74,22 @@ export class DataPointDialogComponent implements OnInit {
    *  Sets the form values, and disables the controllers
    *  for values that shouldn't be able to be edited.
    */
-
   setValues(): void {
     this.categorySpec = this.conveyor.getCategorySpec(this.selectedCategory);
     for (const [key, value] of Array.from(this.dataPoint.entries())) {
       const controller = this.getFormControl(key);
-
       controller.setValue(value);
-      if (this.requiredFields.includes(key) || !this.isEditable) {
-        controller.disable();
-      }
-
       if (value) {
         this.pointData.set(key, value);
+      }
+      if (!this.isEditable ||
+          this.categorySpec.dataTypes.get(key).required ||
+          !this.categorySpec.dataTypes.get(key).visible) {
+        controller.disable();
       }
     }
 
     this.getFormControl('date').disable();
-    if (!this.isEditable) {
-      Array.from(this.categorySpec.dataTypes.keys()).forEach(key => {
-        this.getFormControl(key).disable();
-      });
-    }
   }
 
   ngOnInit() {
@@ -149,9 +143,7 @@ export class DataPointDialogComponent implements OnInit {
     const result: string[] = [];
     if (this.conveyor.getCategoryIds().includes(this.selectedCategory)) {
       for (const column of Array.from(this.categorySpec.dataTypes.keys())) {
-        if (!this.categorySpec.dataTypes.get(column).visible) {
-          continue;
-        } else if (column === 'time') {
+        if (column === 'time') {
           result.push('date');
           result.push('time');
         } else {

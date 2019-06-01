@@ -217,8 +217,7 @@ export class DataTableComponent implements OnInit {
    *  @param key column name
    */
   shouldHide(key: string): boolean {
-
-    if (key.startsWith('mobile')) {
+    if (key === 'dialog') {
       return true;
     }
 
@@ -240,7 +239,7 @@ export class DataTableComponent implements OnInit {
    * @returns string representing what type of element to use
    */
   getInputType(key: string) {
-    if (key.startsWith('mobile')) {
+    if (key === 'dialog') {
       return key;
     }
 
@@ -307,7 +306,7 @@ export class DataTableComponent implements OnInit {
     return item ? index : undefined;
   }
 
-  openEditDialog(point: DataPoint, key: string, isEditable: boolean): void {
+  openEditDialog(point: DataPoint, isEditable: boolean): void {
     const dialogRef = this.dialog.open(DataPointDialogComponent, {
       data: {category: this.category, point, isEditable}
     });
@@ -372,10 +371,8 @@ export class DataTableComponent implements OnInit {
           }
         }
       }
-      // Add edit button for mobile screens
-      if (this.isSmallScreen()) {
-        result.push(this.isEditable ? 'mobile-edit' : 'mobile-inspect');
-      }
+      // Add info/edit button
+      result.push('dialog');
     }
 
     return result;
