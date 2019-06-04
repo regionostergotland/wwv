@@ -91,7 +91,7 @@ export class DataPointDialogComponent implements OnInit {
     this.getFormControl('date').disable();
 
     if (!this.isEditable) {
-      for (let key of this.categorySpec.dataTypes.keys()) {
+      for (const key of this.categorySpec.dataTypes.keys()) {
        this.getFormControl(key).disable();
       }
     }
