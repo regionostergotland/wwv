@@ -102,6 +102,10 @@ export class Conveyor {
     this.categories.set(categoryId, list);
   }
 
+  public clearData() {
+    this.categories = new Map<string, DataList>();
+  }
+
   public getCategorySpec(categoryId: string) {
     return this.ehrService.getCategorySpec(categoryId);
   }

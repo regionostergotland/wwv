@@ -3,7 +3,7 @@ import {Component,
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 
-import { CategorySpec,
+import {
          DataTypeEnum} from '../../ehr/datatype';
 import { Conveyor } from '../../conveyor.service';
 import { CompositionReceipt } from '../../ehr/ehr.service';
@@ -14,11 +14,9 @@ import { CompositionReceipt } from '../../ehr/ehr.service';
   styleUrls: ['./inspection-view.component.scss']
 })
 export class InspectionViewComponent implements OnInit {
-  categories: string[] = [];
-  categorySpecs: Map<string, CategorySpec>;
   dataTypeEnum = DataTypeEnum;
 
-  dataSent: boolean;
+  dataSent = false;
   receipt: CompositionReceipt;
 
   constructor(
@@ -29,18 +27,12 @@ export class InspectionViewComponent implements OnInit {
 
   ngOnInit() {
     this.dataSent = false;
-
-    // Reset all the internal lists.
-    this.categories = this.conveyor.getCategoryIds();
-    this.categorySpecs = new Map<string, CategorySpec>();
-    for (const category of this.categories) {
-      this.categorySpecs.set(category, this.conveyor.getCategorySpec(category));
-    }
   }
 
   hasData(): boolean {
-    if (this.categories.length > 0) {
-      for (const cat of this.categories) {
+    const categories = this.conveyor.getCategoryIds();
+    if (categories.length > 0) {
+      for (const cat of categories) {
         if (!this.isCategoryEmpty(cat)) {
           return true;
         }
@@ -84,6 +76,7 @@ export class InspectionViewComponent implements OnInit {
         receipt => {
           this.dataSent = true;
           this.receipt = receipt;
+          this.conveyor.clearData();
         },
         e => this.snackBar.open(
           'Inrapporteringen misslyckades. Fel: "' + e.statusText + '"', 'OK',
