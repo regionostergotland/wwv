@@ -1,0 +1,109 @@
+\documentclass[techdoc/techdoc.tex]{subfiles}
+
+\begin{document}
+
+\section{Inledning} \label{sec:1_intro}
+Detta dokument syftar till att ge en inblick i hur webbapplikationen för
+inrapportering av hälsodata är strukturerad och vilka utvecklingsmöjligheter
+som finns för produkten. Produkten är skapad av en grupp på sju studenter som
+en del av deras kandidatarbete på uppdrag av Region Östergötland och har skett
+i samråd med dem.
+
+% TODO mer om bakgrund?
+
+\subsection{Syfte}
+Denna tekniska dokumentation ämnar att underlätta vid underhåll och
+vidareutveckling av webbapplikationen för att rapportera in hälsodata. En
+översiktlig arkitektur kommer presenteras som tolkningsstöd av koden och
+specifika exempel för vidareutveckling kommer beskrivas. Dessa exempel baseras
+på vad den ursprungliga utvecklingsgruppen ansåg vara mest centralt vid
+vidareutveckling.
+%och vara centrala för att följa applikationens ordinarie syfte.
+
+Den tänkta målgruppen för detta dokument är utvecklare som inte tidigare
+arbetat med applikationen. Därför läggs fokus först på att ge en överblick som
+ska tillåta läsaren att snabbt sätta sig in i strukturen som beskrivs i sektion
+\ref{sec:3_overview}. I sektion \ref{sec:5_develop} följer sedan konkreta
+guider av de steg i vidareutvecklingsprocessen som originalutvecklarna anser
+behöver en djupare beskrivning.
+
+\subsection{Installation och användning}
+Applikationen är byggd med ramverket Angular och använder därmed dess
+uppsättning av verktyg känt som \emph{Angular CLI} för byggning och testning.
+Applikationen använder \emph{npm} för att hantera paket.  Kommentarer i koden
+är formaterade så att TypeDoc går att använda för att generera dokumentation.
+
+\subsubsection{Bygga applikationen}
+För att först installera alla paket som behövs körs kommandot
+\begin{lstlisting}[language=sh]
+    npm install
+\end{lstlisting}
+i rotmappen av projektet. Det skapar en mapp \texttt{node\_modules} som
+innehåller alla dependencies till applikationen.
+
+Därefter kan \emph{Angular CLI} användas för att kompilera applikationen. För
+att skapa en distruerbar kompilerad version används kommandot
+\begin{lstlisting}
+    ng build
+\end{lstlisting}
+i rotmappen. Då skapas en kompilerad variant och läggs i mappen \texttt{dist}
+med endast statiska filer.
+
+\subsubsection{Utveckling}
+För utveckling och felsökning går det att använda kommandot
+\begin{lstlisting}
+    ng serve
+\end{lstlisting}
+som bygger applikationen och serverar den på \texttt{localhost:4200} så att
+applikationen går att komma åt med en webbläsare. Om någon av filerna ändras
+byggs applikationen om automatiskt och sidan laddas om.
+
+Kommandot
+\begin{lstlisting}
+    ng test
+\end{lstlisting}
+används för att köra alla enhets- och integrationstester.
+
+För mer övergripande tester körs kommandot
+\begin{lstlisting}
+    ng e2e
+\end{lstlisting}
+som används för att köra alla end-to-end tester.
+
+För att visa och eventuellt fixa kodstilsfel används kommandot
+\begin{lstlisting}
+    ng lint --fix
+\end{lstlisting}
+i applikationens rotmapp. Kodens stilguide och lintingens regler konfigureras i
+filen \texttt{tslint.json}
+
+\subsubsection{Dokumentation}
+Kommentarerna i koden kan genereras till dokumentation med hjälp av TypeDoc.
+Detta utförs genom att anropa kommandot
+\begin{lstlisting}
+    npm run docs
+\end{lstlisting}
+i applikationens rotmapp. Därefter läggs dokumentationen i mappen \texttt{docs}
+som kan läsas genom att öppna \texttt{docs/index.html} med en webbläsare.
+Konfiguration till TypeDoc finns i \texttt{typedoc.json} i projektets rotmapp.
+% TODO hur gör man för att generera pdf?
+
+\subsubsection{Google API key}
+För nuvarande används en API-nyckel som skapats på ett konto som specifikt
+användes för olika testningssyften under projektet. Id:t för API-nyckeln
+återfinns i \texttt{google-fit-config.ts}. Eftersom denna nyckel används för
+att definiera vilka URL:er som är auktoriserade att användas för hemsidan kan
+det vara av intresse att skapa en ny API-nyckel där nya URL:er kan
+auktoriseras. Detta görs enklast genom att följa stegen på
+\url{https://developers.google.com/maps/documentation/javascript/get-api-key}.
+Därefter måste \texttt{client\_id}-fältet i \texttt{google-fit-config.ts}
+ändras till det genererade id:t.
+
+\subsubsection{Konfiguration av EHR}
+Filen \texttt{ehr/ehr-config.ts} innehåller ett EhrConfig-objekt som väljer
+inställningar till journalsystemet. I objektet finns ett fält \texttt{baseURL}
+som ska sättas till den URL som API-anropen för journalsystemet ska göras mot.
+Det finns även ett fält \texttt{templateId} som specificerar vilken
+\emph{template} som ska användas för att skapa kompositioner.
+
+\end{document}

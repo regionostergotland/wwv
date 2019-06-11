@@ -1,0 +1,141 @@
+\documentclass[techdoc/techdoc.tex]{subfiles}
+
+\begin{document}
+
+\section{Teori och referenser}
+De resterande kapitlena av dokumentet är skrivna utifrån att läsaren är bekant
+med openEHR och ramverket Angular. Om det inte är fallet följer i det här
+kapitlet en kort beskrivning av viktiga koncept och referenser till mer
+detaljerad dokumentation.
+
+\subsection{openEHR}
+OpenEHR är en väldigt stor standard men det här projektet behandlar endast en
+liten del av den. Alla standardens olika delar går att läsa på
+\url{https://specifications.openehr.org/}.
+Koncept som är centrala för applikationen är framförallt kompositioner,
+arketyper, \emph{templates} och elements datatyper.
+
+Standarden är uppdelade i flera komponenter. Det här projektet behandlar
+framförallt ``Reference Model'' (RM) och ``Archetype Model'' (AM). Mer
+information om standardens arkitektur finns i openEHR:s
+arkitekturöversikt.\footnote{
+    \url{https://specifications.openehr.org/releases/BASE/latest/architecture_overview.html}
+}
+
+\paragraph{Arketyper} är datastrukturer som definierar hur all data ska
+struktureras i en journal. Arketyper för noteringar (\emph{entry}) kan vara av
+typen \emph{observable}, \emph{evaluation}, \emph{instruction} och
+\emph{action}. Eftersom applikationen använder sig av självrapporterad data är
+det endast \emph{observable} som används för noteringar. Ett exempel på en
+\emph{observable} som används är ``Blood pressure''. Arketyper kan också
+beskriva kompositioner. Arketyper definieras väldigt allmänt och är tänkta att
+användas på global nivå. Arketyper definieras i AM.\footnote{
+    \url{https://specifications.openehr.org/releases/AM/latest/Overview.html}
+}
+
+\paragraph{Kompositioner} är ett inlägg i en journal. En komposition består av
+en kompositionarketyp som kan innehålla noteringar såsom ``Blood pressure''. I
+applikationen används endast arketypen ``Self monitoring'' eftersom all data är
+självrapporterad. Kompositioner defineras i RM.\footnote{
+    \url{https://specifications.openehr.org/releases/RM/latest/ehr.html\#_compositions}
+}
+
+\paragraph{Templates} bestämmer vad en komposition kan och ska innehålla. Den
+sätter ytterligare begränsningar på kompositionen än vad arketyperna gör.
+Exempelvis har en \emph{template} använts i projektet som lägger till en
+\emph{observable}-arketyp för varje tillgänglig kategori och därefter tar bort
+alla element som inte är relevanta. \emph{Templates} definieras i AM.\footnote{
+    \url{https://specifications.openehr.org/releases/AM/latest/AOM2.html\#_templates}
+}
+
+\paragraph{Datatyper} definierar hur individuella element av arketyper kan se
+ut. Exempel på datatyper är \texttt{DV\_QUANTITY} och \texttt{DV\_TEXT} som
+representerar kvantiteter och strängar som exempelvis en vikt eller en
+kommentar. Datatyper är definerade i ``Data Types Information Model'' som är
+del av RM.\footnote{
+    \url{https://specifications.openehr.org/releases/RM/latest/data_types.html}
+}
+
+
+\subsection{Angular} \label{sec:ng}
+Projektets applikation är byggd i ramverket Angular. Nedan följer en kort
+beskrivning av de koncept från Angular som använts mycket i projektet.
+Referenser till vidare dokumentation tillhandahålls också ifall mer information
+eftersökes.
+
+% TODO material biblioteket
+% TODO moduler?
+
+\subsubsection{Components och services}
+Applikationer består av \emph{Components} eller komponenter som definierar
+skärmelement som modifieras enligt komponentens logik. Varje komponent beskrivs
+med hjälp av TypeScript, HTML och CSS. Applikationer har även \emph{services}
+eller tjänster som komponenter kan använda för funktionalitet som inte är
+direkt specifik till den komponenten, exempelvis HTTP-förfrågningar. Ett
+exempel på en komponent i applikationen är \texttt{toolbar} som bestämmer hur
+panelen i toppen av applikationen ska se ut och fungera. Ett exempel på en
+tjänst är \texttt{EhrService} som hanterar kommunikation mot journalen.
+
+Vidare information om komponenter och tjänster finns i Angulars officiella
+dokumentation om dess arkitektur.\footnote{
+    \url{https://angular.io/guide/architecture}
+}
+
+\subsubsection{Dependency Injection}
+För att kunna använda en tjänst måste komponenten injicera den. Detta är ett
+mönster inom Angular som kallas för \texttt{Dependency Injection}. Injicering
+sker genom att lägga till tjänsten som ett argument till konstruktorn och
+därefter tilldela den till en instansvariabel så att metoder kan komma åt den.
+Mer information om mönstret finns i Angulars dokumention.\footnote{
+    \url{https://angular.io/guide/dependency-injection}
+}
+
+\subsubsection{Filstruktur}
+Angular har starka åsikter och konventioner. En av dessa konventioner som
+upprätthålls av Angular och som utvecklare tvingas följa är applikationens
+filstruktur.
+
+Varje kompontent består av åtminstone tre filer; exempelvis
+\texttt{toolbar.component.html},\\ % force newline to avoid overfull hbox
+\texttt{toolbar.component.scss},
+\texttt{toolbar.component.ts}
+som innehåller komponentens HTML, CSS respektive TypeScript. CSS kan även
+beskrivas med en \texttt{.css}-fil men i det här projektet används SASS.
+Tjänster består av åtminstone en fil såsom
+\texttt{ehr.service.ts}.
+
+Nästan alla applikationens komponenter och tjänster har även en motsvarande
+specifikationsfil såsom
+\texttt{toolbar.component.spec.ts} och
+\texttt{ehr.service.spec.ts}.
+Dessa filer specificerar enhetstester för komponenten eller tjänsten.
+Integrationstester definieras i mappen
+\texttt{e2e/src}.
+
+Mer detaljer om Angulars filstruktur finns i Angulars stilguide.\footnote{
+    \url{https://angular.io/guide/styleguide}
+}
+
+\subsubsection{RxJS och Observable}
+Angular använder sig av ett bibliotek som heter RxJS (Reactive Extensions for
+JavaScript) för att hantera asynkron programmering. RxJS använder sig av så den
+så kallade reaktiva programmeringsparadigmen. Projektet använder sig av
+\texttt{Observable}-objekt från RxJS för att utföra HTTP-förfrågningar till
+hälsoplattformar och till journalsystemet.
+
+När en metod måste utföra en HTTP-förfrågan för att utföra sin uppgift
+returneras alltid en \texttt{Observable}. Ett exempel är \texttt{getPartyId} i
+\texttt{ehr/ehr.service.ts} som ska få tag på ett \texttt{partyId} utifrån ett
+personnummer. Metoden utför inte sin förfrågan och returnerar strängen direkt.
+Istället skapar den en \texttt{Observable} som anroparen kan prenumerera till
+genom att anropa dess metod \texttt{subscribe}. Först när
+\texttt{Observable}-objektet prenumereras på utförs förfrågan och strängen
+returneras.
+
+För mer information om RxJS hänvisas läsaren till Angulars introduktion till
+RxJS\footnote{\url{https://angular.io/guide/rx-library}}
+samt utvecklargruppens egna dokumentation som finns tillgänglig på deras
+hemsida \url{http://reactivex.io/}
+
+
+\end{document}

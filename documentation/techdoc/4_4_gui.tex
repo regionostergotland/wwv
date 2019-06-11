@@ -1,0 +1,219 @@
+\documentclass[techdoc/techdock.tex]{subfiles}
+
+% Sidor:
+%     home
+%     help
+%     info
+%
+% Statiska:
+%     footer
+%     toolbar
+%
+% Flöde:
+%     progress-bar
+%     sources (source-select)
+%  -> category-picker (category-select)
+%  -> sidebar (editor)
+%         add-new-data-modal
+%         bottom-sheet
+%  -> inspection (review)
+%
+%     Gemensamma komponenter:
+%         editor (data viewer)
+%             health-list-items (data-table)
+%             chart (data-chart)
+%             add-data-point (datapoint-dialog)
+%             math-dialog
+%             remove-dialog
+
+% beskriva implementation och struktur
+
+\begin{document}
+
+\subsection{GUI: grafiskt gränssnitt}
+Alla grafiska element i applikationen består av Angular-komponenter. Hela sidan
+som visas är applikationens AppComponent. Den innehåller statiska komponenter
+som syns hela tiden såsom menypanelen. Den innehåller också en Routing-modul
+som innehåller olika komponenter beroende på vilken URL som användaren befinner
+sig på. Routingmodulen kan innehålla komponenter för huvudsidor eller vyer i
+inrapporteringsflödet.
+
+Det finns även en modul DataViewer som innehåller komponenter som används i
+flera vyer. DataViewer ansvarar för att visualisera och interagera med
+användarens data och används i både redigeringsvyn och inspektionsvyn.
+
+Det grafiska gränssnittet använder sig till stor del av biblioteket Angular
+Material för att få färdigbyggda komponenter. När en specifik komponent föregås
+av prefixet \texttt{Mat} betyder det att det tillhör Material-biblioteket
+(t.ex. \texttt{MatCard, MatDialog} o.s.v.).
+
+\subsubsection{Statiska komponenter}
+Applikationen har tre komponenter som alltid ligger i AppComponent oberoende av
+nuvarande URL.
+
+\paragraph{progress-bar}
+ProgressBarComponent visar hur långt man kommit i inrapporteringsstegen och
+vilka steg som återstår och syns då man startat en inrapporteringsprocess. Den
+finns alltid i AppComponent men döljs om användaren inte befinner sig i
+inrapporteringsflödet.
+
+Den består av 3 knappar med motsvarande beskrivning. Knapparnas färg indikerar
+vilket steg man är på och vilka steg som gjorts. Den använder nuvarande URL för
+att bestämma vilket steg användaren är på.
+
+\paragraph{ToolbarComponent}
+visas alltid högst upp i applikationen, och innehåller en logogtyp samt länkar
+till start, info och hjälpsidan. Består av en \texttt{MatToolbar} som
+innehåller en logotyp och knappar som länkar till de olika sidorna.
+
+\paragraph{FooterComponent}
+är applikationens permanenta sidfot och innehåller för tillfället information
+om licenser för ikoner.
+
+\subsubsection{Komponenter för huvudsidor}
+Applikationen har tre huvudsidor som ej är del av inrapporteringsflödet.
+
+\paragraph{HomePageComponent}
+är applikationens startsida. Härifrån kan man navigera till plattformsväljaren
+(se \textit{sources}) för att välja hälsoplattform eller välja att gå till en
+hjälpsida som förklarar hur hemsidan fungerar (se \textit{help}).
+
+\paragraph{HelpPageComponent}
+innehåller helt enkelt en kort användarguide som beskriver de olika stegen
+en användare behöver göra för att skicka hälsodata.
+
+\paragraph{InfoPageComponent}
+är tänkt att visa information om applikationen, till exempel info om GDPR och
+eventuellt kontaktuppgifter.
+
+\subsubsection{Komponenter för inrapporteringsflöde}
+Applikationen har fyra olika vyer och därmed fyra olika komponenter för
+inrapporteringsflödet.
+
+\paragraph{platform-selection}
+visar vilka hälsoplattformar som finns tillgängliga så att användare kan välja
+vilken plattform (t.ex. Google Fit) de vill hämta data ifrån.
+
+För varje tillgänglig plattform visas ett \texttt{MatCard} med namnet på
+plattformen samt dess logotyp. När man klickar på ett sådant \texttt{MatCard}
+kallas typescriptfunktionen \textit{selectPlatform}, som då använder Conveyor
+för att sköta inloggning till den valda plattformen.
+
+Använder Conveyor för att hämta de hälsoplattformar som är tillgängliga samt
+för att sköta inloggning då användare valt en plattform att hämta data.
+
+\paragraph{category-selection} används för att välja de kategorier som ska
+hämtas från en källa. Den använder sig av \texttt{Conveyor} för att hämta de
+kategorier som finns tillgängliga att välja mellan, och sparar de id:n som är
+valda i de checkboxes som ritas ut. Den väljer automatiskt en månad bakåt i
+tiden som det tidsintervall för vilket data ska hämtas.
+
+Komponenten består av två \texttt{MatCard}, en för att visa alla
+valbara kategorier, och en för att välja datum. Kategorierna ritas ut m.h.a.
+en for-loop som går igenom de kategorier som har hämtats från \texttt{Conveyor}.
+
+\paragraph{editor-view}
+hanterar vyn som tillåter användaren att redigera och komplettera sin
+hälsodata. Den låter användaren redigera och se sin data genom att inkludera en
+DataContainerComponent från DataViewerModule för varje kategori som användaren
+har hämtat data för.
+
+Dess AddNewDataModalComponent innehåller knappar för att lägga till kategorier
+eller hämta ny data. Dess BottomSheetCategoriesComponent används för att välja
+vilken kategori att lägga till om användaren vill mata in egen data.
+
+\paragraph{inspection-view} är den komponent som ger granskningsvyn, det sista
+steget innan man skickar in hälsodata till RÖD. Här kan man se all den data man
+är på väg att skicka in, men man kan ej göra några ändringar. Alla kategorier
+som man har fyllt med data visas i paneler som kan expanderas för att visa en
+lista med all den data som lagts in på den kategorin. Denna komponent
+innehåller även funktionalitet för autentisering mot RÖD. Här är tanken att
+autentiseringen ska ske via BankID, men i nuläget sker den helt enkelt med
+vanligt användarnamn och lösenord.
+
+Består av en \texttt{mat-expansion-panel} för varje kategori som innehåller
+data. I varje panels \texttt{mat\-expansion-panel-header} visas både namnet på
+kategorin och hur många datavärden den innehåller. När en användare klickar på
+en panel så expanderas den och visar en lista med alla datavärden för den
+aktuella kategorin. Listan med data utgörs helt enkelt av en
+DataContainerComponent, men med \texttt{editable} satt till false så att man ej
+kan manipulera datavärdena på något sätt.
+
+Resten av komponenten består av inputs för användarnamn och lösenord samt en
+knapp som kallar på autentiseringsfunktionen i Conveyor med det användarnamn
+och lösenord som fyllts i, samt funktionen \textit{sendData} i Conveyor.
+
+Använder sig av Conveyor för att kunna hämta kategorier, se om en viss kategori
+innehåller data eller ej, autentisera mot RÖD samt skicka hälsodata.
+
+\subsubsection{DataViewerModule}
+DataViewerModule innehåller komponenter för att visa och redigera hälsodata.
+DataViewerModule inkluderar komponententerna DataTableComponent,
+DataChartComponent och DataContationerComponent.
+
+\paragraph{data-table} är den lista som visar alla datapunkter från en vald
+kategori. Listan kan bli satt \texttt{editable}, för att kunna ändra på
+kommentarer och dylikt.  Listan har en \texttt{paginator} för att den inte ska
+bli allt för stor, samt beskrivningar av allt den visar upp som hints.
+
+Komponenten består av en \texttt{MatTable} med en \texttt{paginator}.
+Komponenten använder en for-loop för att få fram alla kolumner. Komponenter
+använder en for-loop för att sätta visningen av alla datavärden, om det är
+text, datum, drop-down-lista m.m.. Dessa är även olika om värdena är
+\texttt{editable} eller ej. För att bestämma visningstyp används if-satser.
+
+Komponenten hämtar \texttt{CategorySpec} från \texttt{Conveyor} och sätter
+dessa i \texttt{displayedColumns} som används för uppritning.
+
+\paragraph{data-chart}
+är ett diagram som ritar ut alla numeriska värden för varje filter i den givna
+kategorin.
+
+\paragraph{data-container}
+består av flikar där varje flik består av en DataTableComponent för varje
+filter som användaren valt. En av flikarna är också en DataChartComponent som
+visualiserar värdena för alla filter.
+
+Komponenten innehåller också knappar för att lägga till, ta bort eller filtrera
+punkter.
+
+\paragraph{data-point-dialog} används som en pop-up, den är en
+\texttt{MatDialog} och öppnas när användare vill lägga till eller modifiera en
+datapunkt i en kategori.
+
+Eftersom \texttt{data-point-dialog} är en \texttt{MatDialog} används MatDialogs
+header, content, och footer. I headern visas kategorins titel. I content finns
+ett antal if-satser som kollar vilken sorts data som ska matas in och visar
+rätt sorts input. I footern finns två knappar: en för att lägga till data, och
+en för att avbryta inmatningen, vilket även stänger komponenten.
+
+DataPointDialogCompenent använder sig av en \texttt{CategorySpec} för att veta
+vilka sorters data som ska läggas in i varje kategori. Kategorinamnet injekteras
+av den komponent som använder sig av \texttt{data-point\-dialog}, där
+\texttt{data-point-dialog} sedan använder sig av det namnet för att hämta
+\texttt{CategorySpec} från \texttt{Conveyor}. Det finns en
+\texttt{ErrorStateMatcher} som används för att skicka error-meddelanden till de
+input-fält som inte är ifyllda.
+
+\subsubsection{Responsiv design}
+För att implementera en responsiv design användes till viss del Angulars Flex-Layout
+bibliotek. Detta används genom att sätta attribut i HTML taggarna. 
+t.ex. kommer \texttt{<div fxHide fxShow.lt-sm>small screen</div>} gömmas som default, och visas
+när enhetens skärm uppfyller lt-sm (vilket motsvarar mediaQuerien \texttt{screen and (max-width: 599px)}).
+Mer info om olika storlekar finns här \url{https://github.com/angular/flex-layout/wiki/Responsive-API}.
+Ett problem som uppstod med denna taktik var t.ex. i tabellen. På den mobila versionen 
+behövde vissa kolumner tas bort, för att visas i en modal istället. Att använda fxHide gömmer 
+endast elementet, vilket i och för sig är intuitivt men detta gjorde att kolumnerna som
+skulle flyttas till modalen fortfarande dök upp, dock med gömda element. 
+Istället slopades kolumntitlarna i TypeScript filen genom kolla ifall ovanstående villkor 
+uppfylldes. I HTML-komponenten användes istället Angulars inbyggda villkorliga utritning
+ngIf som använde samma taktik för att bestämma ifall ett element skulle ritas ut.  
+
+Ett problem som kvarstår för den mobila vyn är att det på vissa enhter ej är uppenbart 
+att huvudytan (mellan header och kategorimenyn längst ned) är scrollbar, och att det 
+finns knappar under huvudtabllen. Det hittades ingen bra lösning på detta, förutom att möjligen
+inkludera det i instruktionenerna som visas när användaren först laddar denna vy. 
+
+
+
+\end{document}

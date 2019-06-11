@@ -1,0 +1,21 @@
+"self_monitoring": {
+  "body_weight": [
+    {
+      "any_event": [
+        {
+          "body_weight": [
+            {
+              "|magnitude": 79.85,
+              "|unit": "kg"
+            }
+          ],
+          "state_of_dress": [
+            {
+              "|code": "at0011"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

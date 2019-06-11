@@ -1,0 +1,20 @@
+src
+|-- app
+|   |-- app.component.ts|html|scss|spec
+|   |-- conveyor.service.ts|spec
+|   |-- ehr
+|   |   |-- datalist.ts|spec
+|   |   |-- datatype.ts|spec
+|   |   |-- ehr-config.ts
+|   |   `-- ehr.service.ts|spec
+|   |-- gui
+|   |   `-- ..
+|   |-- platform
+|   |   |-- dummy.service.ts
+|   |   |-- gfit.service.ts|spec
+|   |   `-- platform.service.ts
+|   `-- shared
+|       `-- ..
+|-- index.html
+|-- main.ts
+`-- ..

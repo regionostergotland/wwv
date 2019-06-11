@@ -1,0 +1,32 @@
+\begin{tikzpicture}[font=\footnotesize]
+    \tikzstyle{service}=[rectangle,draw,minimum height=3em,minimum width=5em];
+    \tikzstyle{component}=[rectangle,draw,fill=gray!20,minimum height=3em,minimum width=5em];
+    \tikzstyle{flow}=[->,font=\scriptsize,text width=2cm,align=center];
+    \tikzstyle{group}=[dotted,thick];
+    \tikzstyle{grouplabel}=[font=\bfseries];
+
+    \node[service] (plat1) at (-4.5, 0.8) {Platform 1};
+    \node[] (platdots) at (-4.5, 0) {$\vdots$};
+    \node[service] (platn) at (-4.5, -1) {Platform $n$};
+
+    \node[service] (conv) at (0,0) {Conveyor};
+    \node[component] (gui) at (0, -2.5) {GUI};
+    \node[service] (ehr) at (4.6, 0) {EhrService};
+
+    \draw[flow] (plat1.east) -- node[above=2mm,xshift=-2.5mm] {hälsodata} (conv);
+    \draw[flow] (platn.east) -- node[above=1mm,xshift=-2.5mm] {hälsodata} (conv);
+
+    \draw[flow] ([xshift=-3mm]gui.north) -- node[xshift=-8mm] {kommandon} (conv);
+    \draw[flow,<->] (conv) -- node[xshift=7mm] {hälsodata} ([xshift=3mm]gui.north);
+
+    \draw[flow] ([yshift=3mm]ehr.west) -- node[above,xshift=2mm] {mallar} (conv);
+    \draw[flow] (conv) -- node[below,xshift=2mm] {bearbetad hälsodata} ([yshift=-3mm]ehr.west);
+
+    \draw[group] (-5.8,-2.3) rectangle (-3.2, 1.5);
+    \draw[group] (-1.8,-1) rectangle (1.8, 1.5);
+    \draw[group] (3.2,-1) rectangle (6, 1.5);
+
+    \node[grouplabel] at (-4.5,-2) {hämtning};
+    \node[grouplabel] at (0,1.1) {bearbetning};
+    \node[grouplabel] at (4.6,1.1) {inrapportering};
+\end{tikzpicture}
