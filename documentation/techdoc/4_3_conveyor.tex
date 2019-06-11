@@ -1,0 +1,56 @@
+\documentclass[techdoc/techdoc.tex]{subfiles}
+
+\begin{document}
+
+\subsection{Conveyor}
+Conveyor är en service som sköter all interaktion mellan EHR-modulen,
+plattformsmodulen och gränssnittet. Den kallas Conveyor eftersom den kan liknas
+lite till ett rullband. Hälsodata kommer från plattformar och lagras i
+Conveyor. Därefter behandlas och modifieras datan medan den är i Conveyor.
+Slutligen tas hälsodatan från Conveyor till EHR-modulen där den skickas vidare
+till journalen.
+
+Eftersom Conveyor endast överför och lagrar data består en av en väldigt liten
+implementation. Conveyor är nästan helt agnostisk till de implementerade
+plattformar. Conveyor behöver endast injicera varje plattform och därefter
+kommunicera med det gränssnitt som är gemensamt för alla plattformar. Detta
+gränssnitt beskrivs närmre i avsnitt \ref{sec:platform}. Conveyor är även helt
+oberoende av vilka kategorier som är implementerade eftersom den endast lagrar
+och överför datalistor som själva implementerar behandling och modifiering.
+
+\subsubsection{Gränssnitt}
+Metoden \texttt{getPlatforms} returnerar ett id i form av en sträng för varje
+plattform som har injicerats av Conveyor och som går att använda. Det är det
+här id:t som alltid används i gränssnittet för att specificera en plattform
+till någon av metoderna hos Conveyor.
+
+När en tillgänglig plattform väl är vald kan metoden \texttt{signIn} anropas
+för att autentisera mot den givna plattformen. I fallet av Google Fit öppnas
+här en extern pop-up som användaren kan logga in genom.
+
+%TODO hur vet man när signIn är färdig?
+När autentiseringen är genomförd går det att anropa
+\texttt{getAvailableCategories} för att få reda på vilka kategorier som finns
+tillgängliga hos den inloggade användaren på den valda plattformen. Även här
+ges ett id i form av en sträng för varje tillgänglig kategori som används för
+att specificera kategorin.
+
+För att därefter hämta hälsodatan används funktionen \texttt{fetchData} som tar
+emot plattformens id, \emph{ett} id för en kategori samt ett tidsintervall.
+Metoden hämtar då en \texttt{Observable} från plattformen i fråga. Den binder
+därefter den i en ny \texttt{Observable} som inte innehåller något och
+returnerar den. När den sedan exekveras utförs hämtningen av hälsodatan och
+lagras därefter i Conveyor. Klienten kan därmed få reda på när hämtningen är
+klar, men datan sparas hos Conveyor istället för hos klienten. Klienten kan
+sedan få en referens till datan genom att anropa \texttt{getDataList} med
+kategorins id som inparameter.
+
+Därefter kan klienten modifera datan fritt. Modifieringen av data sker ej via
+Conveyor, utan görs direkt utifrån datalistan som Conveyor returnerar en
+referens till när \texttt{getDataList} anropas.
+
+När klienten väl är färdig med hämtning och modifiering kan den använda
+\texttt{authenticateBasic} och \texttt{sendData} för att skicka vidare datan
+till journalen.
+
+\end{document}

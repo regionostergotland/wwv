@@ -1,0 +1,148 @@
+\documentclass[techdoc/techdoc.tex]{subfiles}
+
+% beskriva hur alla moduler fungerar, hur de är implementerade och varför
+
+\begin{document}
+
+\subsection{EHR: mot journal}
+EHR-modulen hanterar framförallt inskickning av hälsodata till journalen. Den
+innehåller också datastrukturer och funktioner som är baserade på
+openEHR-standardens datatyper. Totalt innehåller modulen fyra filer:
+\texttt{datatype.ts}, \texttt{datalist.ts}, \texttt{ehr.service.ts} och
+\texttt{ehr-config.ts} som beskrivs i detalj i den här sektionen.
+
+
+\subsubsection{datatype.ts} \label{sec:sys-datatype}
+Filen \texttt{datatype.ts} definierar de datatyper som är baserade på openEHR.
+Det finns två huvudsakliga objekt: den abstrakta klassen \texttt{DataType} och
+gränssnittet \texttt{CategorySpec}.
+
+\paragraph{DataType} definierar vad en datatyp ska innehålla och hur den
+hanteras. Varje underklass motsvarar en DataType i openEHR.  Exempelvis
+motsvaras \texttt{DV\_QUANTITY} och \texttt{DV\_DATE\_TIME} av underklasserna
+\texttt{DataTypeQuantity} och \texttt{DataTypeDateTime}.  \texttt{DataType} har
+metoder som \texttt{isValid} som avgör om ett visst värde är ett giltigt värde
+för den datatypen. För \texttt{DataTypeQuantity} ser den till värdet är ett tal
+inom det angivna intervallet. Datatypsklassen sköter även hur värden jämförs
+med \texttt{equal} och \texttt{compare} samt hur värden konverteras till JSON
+med \texttt{toRest}.
+
+Instanser av datatypsklasser motsvarar ett element i en arketyp eller
+kompositions-\emph{template}. Elementets egenskaper anges vid instansiering. Olika
+datatyper kan ha olika egenskaper: \texttt{DataTypeCodedText} måste exempelvis
+ha en lista av möjliga koder medan \texttt{DataTypeQuantity} måste ha en enhet
+och ett intervall. Det finns också egenskaper som är gemensamma för alla
+datatyper, bland annat namn, beskrivning och plats i \emph{template}. Alla gemensamma
+egenskaper läggs först in i en \texttt{DataTypeSettings} och skickas därefter
+till konstruktorn för datatypen tillsammans med de specifika egenskaperna.
+
+Figur \ref{fig:dt_diastolic} visar ett exempel på en instansiering av elementet
+för det diastoliska trycket inom blodtrycksarketypen. Här anges att elementet
+ligger direkt under \texttt{any\_event}, borde visas som ``Diastoliskt'' samt
+en beskrivning. Det anges också att elementet måste finnas, och att det kan
+finnas fler än ett, samt att det ska vara synligt i tabellen för användaren.
+Eftersom det är en kvantitet anges även att enheten är ``mm[Hg]'' och måste
+ligga mellan 0 och 1000.
+
+\begin{figure}[H]
+    \lstinputlisting[language=java]{techdoc/lst/datatype_diastolic.ts}
+    \caption{Instantiering av en datatype för diastoliskt tryck.}
+    \label{fig:dt_diastolic}
+\end{figure}
+
+\paragraph{CategorySpec} är ett gränssnitt som motsvarar en \textit{template}
+eller del av \textit{template} i openEHR. Varje instans av \texttt{CategorySpec}
+representerar en kategori av hälsodata, såsom blodtryck. En instans innehåller
+huvudsakligen en lista av instansierade datatyper som motsvarar element men även
+namn, beskrivning och en identifierande sträng.
+
+Ett exempel på en instansiering av en kategorispecifikation kan ses i figur
+\ref{fig:spec_bp}. Här anges kategorins ID, namn, beskrivning samt ett antal
+element som kategorin innehåller.
+
+\begin{figure}[H]
+    \lstinputlisting[language=java]{techdoc/lst/spec_bloodpressure.ts}
+    \caption{Instantiering av en kategorispecifikation för blodtryck.}
+    \label{fig:spec_bp}
+\end{figure}
+
+Notera att tid här tolkas som ett element, men det är egentligen del av
+\texttt{Event}-objektet i arketypen. Alla kategorier innehåller därmed ett
+element för tid. Detta är dels på grund av hur JSON-formatet för inskickning är
+strukturerat, samt för att det är enklare att arbeta med generella element än
+att hantera tid specifikt.
+
+
+\subsubsection{datalist.ts}
+Filen \texttt{datalist.ts} innehåller de två klasserna \texttt{DataPoint} och
+\texttt{DataList}.
+
+\paragraph{DataPoint} En instans av en datapunkt motsvarar ett mätvärde för
+en kategori. Varje datapunkt innehåller ett värde för varje fält som kategorin
+har. En datapunkt för blodtryckskategorin i figur \ref{fig:spec_bp} innehåller
+därmed en tidpunkt, ett diastoliskt värde, ett systoliskt värde och en
+position. Eftersom positionsfältet inte är markerat som \texttt{required} kan
+det värdet vara tomt.
+
+Implementationen av \texttt{DataPoint} är en endast en \texttt{Map} som mappar
+fältens ID mot fältens värde. Klassen har även metoderna \texttt{equals} och
+\texttt{compareTo} som jämför punktens alla fält med en annan punkts
+motsvarande fält.
+
+\paragraph{DataList} är en lista av datapunkter. En \texttt{DataList} kan
+därmed tolkas som en stor matris eller tabell av mätvärden. Varje datalista har
+en kategorispecifikation som definerar vilka fält som listan kan innehålla.
+Klassen är enkapsulerad och klienter måste använda metoder för att komma åt
+eller modifiera dess innehåll. Punkter läggs till med \texttt{addPoint} eller
+\texttt{addPoints} och deras giltighet verifieras enligt kategorins datatyper.
+
+En datalista har även egenskaper som \texttt{width} och \texttt{mathFunction}
+som bestämmer hur värdena ska filtreras eller sammansättas. Om exempelvis
+\texttt{width} är \texttt{DAY} och \texttt{mathFunction} är \texttt{MEAN} så
+sammanställs alla punkter för varje dag till det genomsnittliga värdet för den
+dagen.
+
+Implementationen av \texttt{DataList} innehåller två listor vilket möjliggör
+att filtreringar kan återställas. Instansens fält \texttt{points} innehåller de
+ursprungliga punkterna som lagts till medan \texttt{processedPoints} innehåller
+filtrerade punkter. Listan returnerar endast de behandlade punkterna med
+metoden \texttt{getPoints} medan de ursprungliga punkterna ej är åtkomliga
+utifrån.
+
+
+\subsubsection{EHR service}
+EHR-tjänsten agerar som en fasad mot EHR-modulen. Det finns två uppgifter för
+EHR Service: tillhandahålla kategorispecifikationer för programmet samt skicka
+in hälsodata till journalen.
+
+\paragraph{Kategorispecifikationer} hämtas genom att först anropa metoden
+\texttt{getCategories} för att se vilka kategorier som finns tillgängliga.
+Därefter hämtas kategorispecifikationen för en given kategori med hjälp av
+\texttt{getCategorySpec}.
+
+För tillfället finns samtliga implementerade kategorier i
+\texttt{ehr-config.ts} och hämtas helt enkelt därifrån.
+
+\paragraph{Inskickning} utförs genom att först autentisera med
+\texttt{authenticateBasic} och därefter anropa \texttt{sendData} med en
+\texttt{DataList} och personnummer som inparameter och prenumerera till
+\texttt{Observable}-objektet som den returnerar. \texttt{sendData} skapar en
+JSON-formaterad komposition utifrån datalistan med hjälp av bland annat
+datatypernas \texttt{toRest}-metoder.
+
+\texttt{Observable}-objektet som \texttt{sendData} returnerar utför totalt tre
+anrop mot journalen. Först måste ett \texttt{partyID} hittas genom att söka på
+individer som har det givna personnumret med en \texttt{GET}-förfrågan till
+\texttt{/demographics/party/query}. Därefter kan ett \texttt{ehrId} fås genom
+att göra en \texttt{GET}-förfrågan till \texttt{/ehr}. När ett \texttt{ehrId}
+väl har mottagits går det att skicka den skapade kompositionen med en
+\texttt{POST}-förfrågan till \texttt{/composition}.
+
+
+\subsubsection{ehr-config.ts}
+Filen \texttt{ehr-config.ts} innehåller alla inställningar som är specifika
+till det journalsystem som används. Just nu inkluderar detta ID:t till den \emph{template}
+som används för alla inskickade kompositioner, URL:en till journalens REST-API
+samt \emph{template}:s struktur beskriven med instanser av \texttt{CategorySpec}.
+
+\end{document}

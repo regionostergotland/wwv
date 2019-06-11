@@ -1,0 +1,65 @@
+\documentclass[techdoc/techdoc.tex]{subfiles}
+
+\begin{document}
+
+\subsection{Platform: mot hälsoplattformar} \label{sec:platform}
+Plattformsmodulen sköter all kommunikation mot hälsoplattformar. Dess
+huvudsakliga uppgift är att hämta data från hälsoplattformar och konvertera det
+till instanser av \texttt{DataPoint}.
+
+Eftersom olika plattformar har olika API:er och dataformat måste varje
+hälsoplattform implementeras separat. Varje implementation för en
+hälsoplattform är en service som är en underklass till \texttt{Platform}.
+
+\subsubsection{Platform service} \label{sec:sys-platform}
+\texttt{Platform} är den superklass som definierar det gemensamma gränssnittet
+för alla plattformar. Utåt finns det fyra metoder tillgängliga;
+\texttt{signIn}, \texttt{signOut}, \texttt{getAvailable} och \texttt{getData}.
+
+Metoden \texttt{signIn} är tänkt att autentisera användaren, och bör anropas
+när användaren väljer en specifik plattform. Väljer användaren Google Fit
+kommer en pop-up där användaren loggar in på Google och blir förfrågad om att
+dela med sig av sin hälsodata. Först när denna autentisering är klar kommer
+nästa sida att laddas. Med anledning av detta behov för att vänta in metodens
+exekvering så är \texttt{signIn} just nu märkt med \texttt{async}-prefixet,
+vilket innebär att det är en asynkron funktion.
+När autentiseringen väl har skett kan \texttt{getAvailable} anropas för att
+avgöra för vilka kategorier som användaren har tillgänglig hälsodata som går
+att hämta. Slutligen kan \texttt{getData} användas för att hämta all hälsodata
+från en viss kategori inom ett visst tidsintervall.
+
+\texttt{Platform} innehåller ett fält \texttt{implementedCategories} som är
+ämnat att innehålla plattformsspecifika detaljer om varje kategori som är
+implementerad, exempelvis motsvarande id hos plattformen. Fältet består av en
+\texttt{Map} som mappar varje kategori-id till ett
+\texttt{CategoryProperties}-objekt. Det objektet mappar i sin tur olika
+datatyper för de olika kategorierna till de funktioner som används för att
+hämta ut och konvertera datan från HTTP-förfrågan till det interna formatet.
+
+\subsubsection{Google Fit service}
+Klassen \texttt{GfitService} är en implementation för hälsoplattformen Google
+Fit. Utöver de fält som nämns i \ref{sec:sys-platform} så har
+\texttt{GfitService} två mappar av intresse: \texttt{commonDataTypes} som
+mappar vanligt förekommande datatyper såsom datum och enhet till den funktion
+som konverterar dem till det interna formatet, samt
+\texttt{categoryDataTypeNames} som mappar Googles namn på datatyper till de
+interna namnen.
+
+I konstruktorn initieras sedan \texttt{implementedCategories}, och url:erna för
+de olika kategoriernas dataströmmar kopplas till ett
+\texttt{CategoryProperties}-objekt. Förutom vilken ström data ska hämtas ifrån
+så definieras även funktioner för att konvertera data till det interna formatet
+här.
+
+För att hämta hälsodata från Google Fit så används i ett första steg metadata
+för användaren. Denna metadata hämtas och analyseras i \texttt{getAvailable}.
+Från metadatan extraheras alla tillgängliga kategorier och använda enheter.
+Efter detta kan \texttt{getData} användas för att hämta data för en
+implementerad kategori via en HTTP-förfrågan. I samband med hämtning av
+kategoridata kallas även funktionen \texttt{convertData}, som använder sig av
+\texttt{CategoryProperties}-objektet för att konvertera all hämtad data till
+det interna formatet.
+
+% TODO
+
+\end{document}
