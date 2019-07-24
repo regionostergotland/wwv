@@ -180,7 +180,7 @@ export class DataTableComponent implements OnInit {
         const dt = this.categorySpec.dataTypes.get(key);
         switch (dt.type) {
           case this.dataTypeEnum.DATE_TIME:
-            return dayjs(point.get(key)).format('hh:mm');
+            return dayjs(point.get(key)).format('HH:mm');
           case this.dataTypeEnum.QUANTITY:
             const s = this.displayCorrectNum(point.get(key));
             return this.isSmallScreen() ? s : s + ' '

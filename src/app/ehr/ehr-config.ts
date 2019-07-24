@@ -122,24 +122,12 @@ const DeviceManufacturerField: [string, DataType] = [
 
 export interface EhrConfig {
   /**
-   * Base part of the url which is used in all EHR-related HTTP-requests.
-   */
-  baseUrl: string;
-
-  /**
-   * ID for template containing archetypes for all categories of data.
-   */
-  templateId: string;
-
-  /**
    * Specifications for all available categories.
    */
   categories: CategorySpec[];
 }
 
 export const ehrConfig: EhrConfig = {
-  baseUrl: 'https://rest.ehrscape.com/rest/v1/',
-  templateId : 'self-reporting',
   categories: [
     {
       id : Categories.BLOOD_PRESSURE,

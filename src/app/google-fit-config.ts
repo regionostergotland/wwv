@@ -12,7 +12,7 @@ import {
  * Defines the client id and google fit scopes
  */
 const gapiClientConfig: NgGapiClientConfig = {
-    client_id: '***REMOVED***' +
+    client_id: '52520226417-mpajcch4ts121f3rmvnbhodeup261st5' +
                '.apps.googleusercontent.com',
     discoveryDocs: [
       'https://analyticsreporting.googleapis.com/$discovery/rest?version=v4'

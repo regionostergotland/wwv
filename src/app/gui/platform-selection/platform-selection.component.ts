@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ConfigService } from 'src/app/config.service';
 import { Conveyor } from '../../conveyor.service';
 
 interface Source {
@@ -10,29 +11,7 @@ interface Source {
 }
 
 const googleFit = 'google-fit';
-const withings = 'withings';
 const dummy = 'dummy';
-
-const availableSources: Map<string, Source> = new Map<string, Source>([
-  [googleFit, {
-    id: googleFit,
-    name: 'Google Fit',
-    imageUrl:
-      'https://www.gstatic.com/images/branding/product/1x/gfit_512dp.png',
-  }],
-  [dummy, {
-    id: dummy,
-    name: 'Dummy service',
-    imageUrl: '../assets/wwv.png',
-  }],
-  [withings, {
-    id: withings,
-    name: 'Withings',
-    imageUrl:
-      'http://resources.mynewsdesk.com' +
-      '/image/upload/c_limit,dpr_1.0,f_auto,h_700,q_auto,w_690/' +
-      'jymhygjz5t7hzld9qe6j.jpg',
-  }]]);
 
 @Component({
   selector: 'app-platform-selection',
@@ -43,10 +22,27 @@ export class PlatformSelectionComponent implements OnInit {
   sources: Source[] = [];
 
   constructor(
+    private cfg: ConfigService,
     private conveyor: Conveyor,
     public router: Router
   ) {
+    const availableSources: Map<string, Source> = new Map<string, Source>([
+      [googleFit, {
+        id: googleFit,
+        name: 'Google Fit',
+        imageUrl:
+          'https://www.gstatic.com/images/branding/product/1x/gfit_512dp.png',
+          /* TODO use locally provided logo? */
+      }],
+      [dummy, {
+        id: dummy,
+        name: 'Dummy service',
+        imageUrl: this.cfg.getAssetUrl() + 'wwv.png',
+      }],
+    ]);
+
     const platforms = this.conveyor.getPlatforms();
+
     this.sources = [];
     for (const platform of platforms) {
       let source: Source;

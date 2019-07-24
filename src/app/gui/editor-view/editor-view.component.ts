@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatBottomSheet, MatDialog } from '@angular/material';
-import { Conveyor } from '../../conveyor.service';
+import { Conveyor } from 'src/app/conveyor.service';
 import { AddNewDataModalComponent } from './add-new-data-modal.component';
+import { ConfigService } from 'src/app/config.service';
 import {
   BottomSheetCategoriesComponent
 } from './bottom-sheet-categories.component';
@@ -14,17 +15,21 @@ import {
 })
 export class EditorViewComponent implements OnInit {
 
+  assetUrl: string;
   title = 'Kategorier';
   selectedCategory: string = null;
   selectedColor = '#e7e7e7';
   showFiller = false;
 
   constructor(
+    private cfg: ConfigService,
     private conveyor: Conveyor,
-    public router: Router,
     private bottomSheet: MatBottomSheet,
+    public router: Router,
     public dialog: MatDialog
-  ) {}
+    ) {
+      this.assetUrl = cfg.getAssetUrl();
+    }
 
   openAddNewDataModal(): void {
     const dialogRef = this.dialog.open(AddNewDataModalComponent);
@@ -84,7 +89,7 @@ export class EditorViewComponent implements OnInit {
    * @returns the project path to the icon image.
    */
   getCategoryIcon(categoryId: string): string {
-    const baseUrl = '../../assets/flaticon/';
+    const baseUrl = this.cfg.getAssetUrl() + 'flaticon/';
     return baseUrl + this.conveyor.getCategorySpec(categoryId).id + '.png';
   }
 

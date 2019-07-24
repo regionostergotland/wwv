@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material';
 import { DataList } from '../../ehr/datalist';
 import { Conveyor } from '../../conveyor.service';
+import { ConfigService } from 'src/app/config.service';
 
 @Component({
   selector: 'app-bottom-sheet-categories',
@@ -9,6 +10,7 @@ import { Conveyor } from '../../conveyor.service';
 })
 export class BottomSheetCategoriesComponent {
   constructor(
+    private cfg: ConfigService,
     private bottomSheetRef: MatBottomSheetRef<BottomSheetCategoriesComponent>,
     private conveyor: Conveyor
   ) {}
@@ -49,7 +51,7 @@ export class BottomSheetCategoriesComponent {
    * @returns the project path to the icon image.
    */
   getCategoryIcon(categoryId: string): string {
-    const baseUrl = '../../assets/flaticon/';
+    const baseUrl = this.cfg.getAssetUrl + 'flaticon/';
     return baseUrl + this.conveyor.getCategorySpec(categoryId).id + '.png';
   }
 

@@ -1,0 +1,26 @@
+<h1>Logga in</h1>
+
+<div *ngIf="method===AuthenticationMethod.BASIC">
+  <div class="auth-form">
+    <label>Personnummer:</label> <input #pnr />
+    <label>Användare:</label> <input #username />
+    <label>Lösenord:</label> <input type="password" #password />
+  </div>
+
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="basic(username.value, password.value, pnr.value)">
+    Logga in
+  </button>
+</div>
+
+<div *ngIf="method===AuthenticationMethod.ASSISTED_TOKEN">
+  <button
+      mat-raised-button
+      color="primary"
+      (click)="assistedToken()"
+    >
+    Logga in med BankId
+  </button>
+</div>

@@ -7,6 +7,7 @@ import {
          DataTypeEnum} from '../../ehr/datatype';
 import { Conveyor } from '../../conveyor.service';
 import { CompositionReceipt } from '../../ehr/ehr.service';
+import { ConfigService } from 'src/app/config.service';
 
 @Component({
   selector: 'app-inspection-view',
@@ -21,6 +22,7 @@ export class InspectionViewComponent implements OnInit {
 
   constructor(
     public router: Router,
+    private cfg: ConfigService,
     private snackBar: MatSnackBar,
     private conveyor: Conveyor,
   ) {}
@@ -71,29 +73,20 @@ export class InspectionViewComponent implements OnInit {
    * Send all the data stored in the conveyor.
    */
   sendData(pnr: string) {
-    this.conveyor.sendData(pnr).
+    this.conveyor.sendData().
       subscribe(
         receipt => {
           this.dataSent = true;
           this.receipt = receipt;
           this.conveyor.clearData();
         },
-        e => this.snackBar.open(
-          'Inrapporteringen misslyckades. Fel: "' + e.statusText + '"', 'OK',
-          {
-            duration: 100000000,
-            panelClass: ['error-snackbar']
-          })
-        // TODO fix snackbar styling
+        e => {
+          if (this.cfg.getIsDebug()) { console.log(e); }
+          this.snackBar.open(
+            'Inrapporteringen misslyckades. Fel: "' + e.statusText + '"', 'OK',
+            { duration: 100000000 }
+          );
+        }
     );
-  }
-
-  /**
-   * Calls the conveyor authenticate method
-   * @param String for username
-   * @param String for user password
-   */
-  authenticate(user: string, pass: string): void {
-    this.conveyor.authenticateBasic(user, pass);
   }
 }

@@ -1,12 +1,30 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row class="container-1">
     <img
-      src="../assets/logo.png"
+      src="{{assetUrl}}/logo.png"
       style="height:70%; cursor:pointer"
-      alt="***REMOVED*** logo"
+      alt="Region Östergötland logo"
       routerLink="/home"
     />
+
     <span class="fill-remaining-space"></span>
+
+    <div *ngIf="isAuthenticated()">
+      <p matTooltip="{{pnr()}}">
+        {{fullName()}}
+      </p>
+    </div>
+    <div *ngIf="isAuthenticated()">
+      <button style="margin: 10px"
+        mat-raised-button
+        (click)="signOut()"
+      >
+        Logga ut
+      </button>
+    </div>
+
+    <span class="fill-remaining-space"></span>
+
     <div>
         <div
           style="margin-right:0;"
@@ -18,21 +36,21 @@
             mat-button routerLink="/home"
             matTooltip="Gå till hemskärm"
           >
-            <img src="../assets/home.svg" alt="home"/>
+            <img src="{{assetUrl}}/home.svg" alt="home"/>
           </button>
           <button
             mat-button
             routerLink="/help"
             matTooltip="Användarguide"
           >
-            <img src="../assets/help.svg"  alt="help"/>
+            <img src="{{assetUrl}}/help.svg"  alt="help"/>
           </button>
           <button
             mat-button
             routerLink="/info"
             matTooltip="Information"
           >
-            <img src="../assets/info.svg"  alt="info"/>
+            <img src="{{assetUrl}}/info.svg"  alt="info"/>
           </button>
         </div>
 

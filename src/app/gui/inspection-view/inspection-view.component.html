@@ -32,30 +32,25 @@
 </div>
 
 <div *ngIf="hasData()">
-    <div *ngIf="!dataSent" class="center">
-      <p>Kontrollera dina värden innan du skickar in till ***REMOVED***</p>
-      <div class="panel-container">
-        <mat-expansion-panel *ngFor="let category of conveyor.getCategoryIds()" class="panel">
-          <mat-expansion-panel-header *ngIf="!isCategoryEmpty(category)">
-            <mat-panel-title
-              >{{ conveyor.getCategorySpec(category).label }}
-            </mat-panel-title>
-            <mat-panel-description
-              >Antal mätvärden:
-              {{ getNumberOfValues(category) }}</mat-panel-description
-            >
-          </mat-expansion-panel-header>
+  <div *ngIf="!dataSent" class="center">
+    <p>Kontrollera dina värden innan du skickar in till RÖD</p>
+    <div class="panel-container">
+      <mat-expansion-panel *ngFor="let category of conveyor.getCategoryIds()"
+                           class="panel">
+        <mat-expansion-panel-header *ngIf="!isCategoryEmpty(category)">
+          <mat-panel-title
+            >{{ conveyor.getCategorySpec(category).label }}
+          </mat-panel-title>
+          <mat-panel-description
+            >Antal mätvärden:
+            {{ getNumberOfValues(category) }}</mat-panel-description
+          >
+        </mat-expansion-panel-header>
 
-          <app-data-container [editable]="false" [selectCategory]="category">
-          </app-data-container>
-        </mat-expansion-panel>
-      </div>
-
-      <div class="auth-form">
-        <label>Personnummer:</label> <input #pnr />
-        <label>Användare:</label> <input #username />
-        <label>Lösenord: </label><input type="password" #password />
-      </div>
+        <app-data-container [editable]="false" [selectCategory]="category">
+        </app-data-container>
+      </mat-expansion-panel>
+    </div>
 
     <div style="display: flex; flex-direction: row">
       <button
@@ -68,7 +63,7 @@
       <button
         mat-raised-button
         color="primary"
-        (click)="authenticate(username.value, password.value); sendData(pnr.value)"
+        (click)="sendData()"
       >
         Godkänn och skicka
       </button>

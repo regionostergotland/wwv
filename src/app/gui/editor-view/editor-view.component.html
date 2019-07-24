@@ -19,7 +19,7 @@
             class="arrow"
             stroke="gray"
             fill="gray"
-            src="../../../assets/arrow5.svg"
+            src="{{assetUrl}}/arrow5.svg"
           />
           <div class="arrow-text">Börja här!</div>
         </div>
@@ -70,12 +70,12 @@
 
         <mat-list-item (click)="openBottomSheet()">
           <mat-icon class="sidebar-icon">add_box</mat-icon>
-          Lägg till egen kategori
+          Lägg till kategori
         </mat-list-item>
         <mat-divider></mat-divider>
         <mat-list-item (click)="router.navigateByUrl('/platform-selection')">
           <mat-icon class="sidebar-icon">add_box</mat-icon>
-          Lägg till värden från app
+          Hämta värden från plattform
         </mat-list-item>
       </mat-nav-list>
     </div>

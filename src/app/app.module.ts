@@ -50,6 +50,8 @@ import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
+import { LoginComponent } from './gui/login/login.component';
+
 /* Page / view components */
 import { InfoPageComponent } from './gui/info-page/info-page.component';
 import { HomePageComponent } from './gui/home-page/home-page.component';
@@ -89,12 +91,13 @@ import {
 import { FooterComponent } from './gui/footer/footer.component';
 import { ToolbarComponent } from './gui/toolbar/toolbar.component';
 
-/* Google Fit conifguration */
+/* Google Fit configuration */
 import { CustomGoogleApiModule } from './google-fit-config';
 
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent,
     /* pages */
     HomePageComponent,
     InfoPageComponent,
@@ -177,7 +180,9 @@ import { CustomGoogleApiModule } from './google-fit-config';
     BottomSheetCategoriesComponent,
     AddNewDataModalComponent
   ],
-  providers: [{provide: MAT_DATE_LOCALE, useValue: 'sv-SE'}],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'sv-SE' },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

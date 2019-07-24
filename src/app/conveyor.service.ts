@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
+import { Observable, EMPTY } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 import { DataList } from './ehr/datalist';
 import { EhrService } from './ehr/ehr.service';
+import { CompositionReceipt } from './ehr/ehr.service';
+
 import { Platform } from './platform/platform.service';
 import { GfitService } from './platform/gfit.service';
 import { DummyPlatformService } from './platform/dummy.service';
-import { Observable, EMPTY } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { CompositionReceipt } from './ehr/ehr.service';
 
 @Injectable({
   providedIn: 'root'
@@ -110,14 +111,10 @@ export class Conveyor {
     return this.ehrService.getCategorySpec(categoryId);
   }
 
-  public authenticateBasic(username: string, password: string) {
-    this.ehrService.authenticateBasic(username, password);
-  }
-
-  public sendData(pnr: string): Observable<CompositionReceipt> {
+  public sendData(): Observable<CompositionReceipt> {
     const composition = this.ehrService.createComposition(
       Array.from(this.categories.values())
     );
-    return this.ehrService.sendComposition(pnr, composition);
+    return this.ehrService.sendComposition(composition);
   }
 }

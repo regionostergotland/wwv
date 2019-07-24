@@ -12,7 +12,7 @@
         1
       </button>
       <div *ngIf="!onSmallScreen()">
-        <p style="margin-left: 4px;">Hämtning</p>
+        <p style="margin-left: 4px;">Hämta</p>
       </div>
     </div>
 
@@ -21,7 +21,7 @@
       <button (click)="navigate('edit', 2)" [class]="getClass(2)">
         2
       </button>
-      <div *ngIf="!onSmallScreen()"><p>Redigering</p></div>
+      <div *ngIf="!onSmallScreen()"><p>Redigera</p></div>
     </div>
 
     <!-- REVIEW -->
@@ -29,7 +29,7 @@
       <button (click)="navigate('inspection', 3)" [class]="getClass(3)">
         3
       </button>
-      <div *ngIf="!onSmallScreen()"><p>Granskning</p></div>
+      <div *ngIf="!onSmallScreen()"><p>Granska och skicka</p></div>
     </div>
   </div>
 </div>

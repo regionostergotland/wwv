@@ -1,11 +1,13 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
+import { ConfigService } from 'src/app/config.service';
 import { EHR_CONFIG, EhrConfig } from './ehr-config';
 import { CategorySpec } from './datatype';
 import { DataList } from './datalist';
+import { AuthService } from 'src/app/auth.service';
 
 /* Receipt for composition creation */
 export interface CompositionReceipt {
@@ -23,115 +25,31 @@ interface CompositionResponse {
   meta: {};
 }
 
-/* Response from ehr API call */
-interface EhrResponse {
-  ehrId: string;
-  ehrStatus: {
-    modifiable: boolean,
-    queryable: boolean,
-    subjectId: string,
-    subjectNamespace: string
-  };
-  meta: {};
-}
-
-/* Response from demographic API call */
-interface DemographicResponse {
-  action: string;
-  meta: {};
-  parties: [Party];
-}
-
-/* Representation of individual in EHR */
-interface Party {
-  additionalInfo: {
-    Personnummer: string,
-    civilstånd: string,
-  };
-  dateOfBirth: string;
-  firstNames: string;
-  gender: string;
-  id: string;
-  lastNames: string;
-  version: number;
-}
-
-// TODO use newly available openEHR standard instead of THINKEHR
-
 @Injectable({
   providedIn: 'root',
 })
 export class EhrService {
-  private basicCredentials: string;
-
   constructor(
-    @Inject(EHR_CONFIG) private config: EhrConfig,
-    private http: HttpClient
+    @Inject(EHR_CONFIG) private ehrConfig: EhrConfig,
+    private cfg: ConfigService,
+    private auth: AuthService,
   ) {}
 
   /* Get the specification of an available category.
    * @param id of category returned by getCategories.
    */
   public getCategorySpec(categoryId: string): CategorySpec {
-    return this.config.categories.find(e => e.id === categoryId);
+    return this.ehrConfig.categories.find(e => e.id === categoryId);
   }
 
   /* Get a list of available categories of data. */
   public getCategories(): string[] {
     const cats = [];
 
-    for (const cat of this.config.categories) {
+    for (const cat of this.ehrConfig.categories) {
       cats.push(cat.id);
     }
     return cats;
-  }
-
-  /*
-   * Perform a GET request to a given API call with the given parameters.
-   * @param call URL to API call excluding base URL
-   * @param params HttpParams object
-   */
-  private get<T>(call: string, params: HttpParams): Observable<T> {
-    const options = {
-      params,
-      headers: new HttpHeaders({
-        Authorization: 'Basic ' + this.basicCredentials
-      })
-    };
-    return this.http.get<T>(this.config.baseUrl + call, options);
-  }
-
-  /*
-   * Perform a POST request to a given API call with the given parameters and
-   * the given body
-   * @param call URL to API call excluding base URL
-   * @param params HttpParams object
-   * @param body JSON object to send as body
-   */
-  private post<T>(call: string, params: HttpParams, body): Observable<T> {
-    const options = {
-      params,
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: 'Basic ' + this.basicCredentials
-      })
-    };
-    return this.http.post<T>(this.config.baseUrl + call, body, options);
-  }
-
-  /* Get party ID by personal identity number (personnummer) */
-  private getPartyId(pnr: string): Observable<any> {
-    const params = new HttpParams().set('personnummer', pnr);
-    return this.get<DemographicResponse>('demographics/party/query', params)
-      .pipe(map(
-        res => {
-          if (res && res.parties.length > 0) {
-            return res.parties[0].id; // assume only one person with pnr
-          } else {
-            throw new Error('no individual with given pnr');
-          }
-        }
-    ));
   }
 
   /*
@@ -143,24 +61,11 @@ export class EhrService {
       Observable<CompositionResponse> {
     const params = new HttpParams()
       .set('ehrId', ehrId)
-      .set('templateId', this.config.templateId)
+      .set('templateId', this.cfg.getEhrTemplateId())
       .set('format', 'STRUCTURED');
-    return this.post<CompositionResponse>('composition', params, composition);
-  }
-
-  /* Get party ID by partyID */
-  private getEhrId(partyId: string): Observable<string> {
-    const params = new HttpParams()
-      .set('subjectId', partyId)
-      .set('subjectNamespace', 'default');
-    return this.get<EhrResponse>('ehr', params).pipe(map(
-        res => res.ehrId
-    ));
-  }
-
-  /* Authenticate to EHR with username and password */
-  public authenticateBasic(user: string, pass: string) {
-    this.basicCredentials = btoa(user + ':' + pass);
+    return this.auth.postAuthenticated<CompositionResponse>(
+      'composition', composition, params
+    );
   }
 
   /* Create a composition of given data lists */
@@ -220,13 +125,11 @@ export class EhrService {
   }
 
   /*
-   * Send a composition to the EHR of individual with given pnr.
-   * @param pnr Personal identity number of individual associated with ehr the
-   * composition is created in.
+   * Send a composition to the EHR of individual with given configured pnr.
    * @param composition Composition created using createComposition method
    */
-  public sendComposition(pnr: string,
-                         composition: {}): Observable<CompositionReceipt> {
+  public sendComposition(composition: {}): Observable<CompositionReceipt> {
+    const pnr = this.auth.getUser().pnr;
     const receipt: CompositionReceipt = {
       pnr,
       composition,
@@ -234,15 +137,7 @@ export class EhrService {
       ehrId: '',
       compUid: '',
     };
-    return this.getPartyId(pnr)
-      .pipe(switchMap((partyId: string) => {
-          receipt.partyId = partyId;
-          return this.getEhrId(partyId);
-        }))
-      .pipe(switchMap((ehrId: string) => {
-          receipt.ehrId = ehrId;
-          return this.postComposition(ehrId, composition);
-        }))
+    return this.postComposition(this.auth.getUser().ehrId, composition)
       .pipe(map((res: CompositionResponse) => {
           receipt.compUid = res.compositionUid;
           return receipt;
