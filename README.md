@@ -1,7 +1,12 @@
+# Wwv 
+Wwv är en förkortning av atudentprojektet egenvalda namn "World Wide Vård" som genomfördes som gemensamt kandidatarbete och del i en kurs i programutvecklingsmetodik för civilingenjörer vid Linköpings universiet på uppdrag av Region Östergötland.
 
-# Wwv
+* Projektrapport/kandidatarbeten: http://urn.kb.se/resolve?urn=urn%3Anbn%3Ase%3Aliu%3Adiva-157977
+* Teknisk dokumentation (PDF): https://github.com/regionostergotland/wwv/raw/master/documentation/build/techdoc.pdf
 
- Angular CLI verison 7.3.4.
+Uppdateringar:
+- Sommaren 2019; En av Wwv-projektets deltagare, Noah Hellman, sommarjobbade hos Region Östergötland (RÖ) och skapade en version av projetet med Bank-ID-inlogg m.m.som kunde kopplas till RÖs interna servrar ochy IDP-lösning. Han hjälpte också till att skapa fler openEHR-arketyper för registrering av fysisk aktivitet, se https://github.com/regionostergotland/Physical_activity
+- Vårterminen 2020; en studentgrupp från utbildningen Innovativ Programmering vid Linköpings universitet vidareutvecklar, förbättar och utökar funktionaliteten, se presentation av uppdrag på https://drive.google.com/file/d/1YtftRxhyIiBVuXFA4__K5ZNQ-RY5RUQ9/view?usp=sharing resultat kommer länkas till även härifrån när projektet är avslutat.
 
 ## Stilguide
 
@@ -87,3 +92,7 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+## Diverse
+ Angular CLI verison 7.3.4.
+
