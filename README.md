@@ -1,12 +1,18 @@
-# Wwv 
-Wwv är en förkortning av studentprojektets egenvalda namn "World Wide Vård" som genomfördes som gemensamt kandidatarbete och del i en kurs i programutvecklingsmetodik för civilingenjörer vid Linköpings universiet på uppdrag av Region Östergötland.
+# Wwv
+Ett verktyg för att hantera egen hälsodata från mobiler, smartklockor etc. (inledningsvis endast via Google Fit) samt manuellt inmatad data. 
+Data kan sedan efter egenvald filtrering delas med vårdgivare om så önskas. Under våren 2020 utökas detta till att kunna spara
+datat till egen PHR (Personal Health Record). 
 
 * Projektrapport/kandidatarbeten: http://urn.kb.se/resolve?urn=urn%3Anbn%3Ase%3Aliu%3Adiva-157977
 * Teknisk dokumentation (PDF): https://github.com/regionostergotland/wwv/raw/master/documentation/build/techdoc.pdf
 
-Uppdateringar:
-- Sommaren 2019; En av Wwv-projektets deltagare, Noah Hellman, sommarjobbade hos Region Östergötland (RÖ) och skapade en version av projetet med Bank-ID-inlogg m.m.som kunde kopplas till RÖs interna servrar ochy IDP-lösning. Han hjälpte också till att skapa fler openEHR-arketyper för registrering av fysisk aktivitet, se https://github.com/regionostergotland/Physical_activity
-- Vårterminen 2020; en studentgrupp från utbildningen Innovativ Programmering vid Linköpings universitet vidareutvecklar, förbättar och utökar funktionaliteten, se presentation av uppdrag på https://drive.google.com/file/d/1YtftRxhyIiBVuXFA4__K5ZNQ-RY5RUQ9/view?usp=sharing resultat kommer länkas till även härifrån när projektet är avslutat.
+Wwv är en förkortning av studentprojektets egenvalda namn "World Wide Vård" som genomfördes som gemensamt kandidatarbete 
+och del i en kurs i programutvecklingsmetodik för civilingenjörer vid Linköpings universiet på uppdrag av Region Östergötland.
+Vad applikationen och tillhörande tjänster kommer hete är ännu inte bestämt.
+
+## Uppdateringar:
+- **Sommaren 2019;** En av Wwv-projektets deltagare, Noah Hellman, sommarjobbade hos Region Östergötland (RÖ) och skapade en version av projetet med Bank-ID-inlogg m.m.som kunde kopplas till RÖs interna servrar ochy IDP-lösning. Han hjälpte också till att skapa fler openEHR-arketyper för registrering av fysisk aktivitet, se https://github.com/regionostergotland/Physical_activity
+- **Vårterminen 2020;** en studentgrupp från utbildningen Innovativ Programmering vid Linköpings universitet vidareutvecklar, förbättar och utökar funktionaliteten, se presentation av uppdrag på https://drive.google.com/file/d/1YtftRxhyIiBVuXFA4__K5ZNQ-RY5RUQ9/view?usp=sharing resultat kommer länkas till även härifrån när projektet är avslutat.
 
 ## Stilguide
 
