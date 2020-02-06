@@ -1,5 +1,5 @@
 # Wwv 
-Wwv är en förkortning av atudentprojektet egenvalda namn "World Wide Vård" som genomfördes som gemensamt kandidatarbete och del i en kurs i programutvecklingsmetodik för civilingenjörer vid Linköpings universiet på uppdrag av Region Östergötland.
+Wwv är en förkortning av studentprojektets egenvalda namn "World Wide Vård" som genomfördes som gemensamt kandidatarbete och del i en kurs i programutvecklingsmetodik för civilingenjörer vid Linköpings universiet på uppdrag av Region Östergötland.
 
 * Projektrapport/kandidatarbeten: http://urn.kb.se/resolve?urn=urn%3Anbn%3Ase%3Aliu%3Adiva-157977
 * Teknisk dokumentation (PDF): https://github.com/regionostergotland/wwv/raw/master/documentation/build/techdoc.pdf
